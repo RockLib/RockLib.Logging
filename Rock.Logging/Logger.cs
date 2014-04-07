@@ -16,7 +16,24 @@ namespace Rock.Logging
         public Logger(ILoggerConfiguration configuration, IEnumerable<IContextProvider> contextProviders)
         {
             _configuration = configuration;
-            _contextProviders = contextProviders.ToList();
+            _contextProviders = GetContextProviders(contextProviders);
+        }
+
+        private IEnumerable<IContextProvider> GetContextProviders(IEnumerable<IContextProvider> contextProviders)
+        {
+            // This behavior might not be completely intuitive - it probably needs good documentation.
+            // "Logger itself does not implement IContextProvider, but if a subclass of Logger does,
+            // then this instance's .AddContextData method will be called when the other context
+            // providers' .AddContextData methods are called."
+            var contextProviderList = contextProviders.ToList();
+
+            var thisContextProvider = this as IContextProvider;
+            if (thisContextProvider != null)
+            {
+                contextProviderList.Insert(0, thisContextProvider);
+            }
+
+            return contextProviderList;
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -31,7 +48,7 @@ namespace Rock.Logging
                 return;
             }
 
-            foreach (var contextProvider in GetContextProviders())
+            foreach (var contextProvider in _contextProviders)
             {
                 contextProvider.AddContextData(logEntry);
             }
@@ -59,11 +76,6 @@ namespace Rock.Logging
             //logEntry["ApplicationId"] = _configuration.ApplicationId;
             //logEntry["Message"] = message;
             //logEntry["ServerName"] = "blah";
-        }
-
-        protected virtual IEnumerable<IContextProvider> GetContextProviders()
-        {
-            return _contextProviders;
         }
     }
 }

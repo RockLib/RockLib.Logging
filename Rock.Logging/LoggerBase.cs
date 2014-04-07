@@ -1,49 +1,33 @@
 using System.Collections.Generic;
-using System.Linq;
-using Rock.Framework;
 
 namespace Rock.Logging
 {
     /// <summary>
-    /// Legacy support. Includes protected virtual method, `AddContextData`.
+    /// Legacy support. Allows for custom context data to be added via inheritence.
     /// </summary>
-    public abstract class LoggerBase : Logger
+    public abstract class LoggerBase : Logger, IContextProvider
     {
-        private readonly IEnumerable<IContextProvider> _contextProviders;
-
         protected LoggerBase()
         {
-            _contextProviders = new LoggerBaseContextProvider(this).Concat(base.GetContextProviders()).ToList();
         }
 
-        protected LoggerBase(ILoggerConfiguration configuration, IEnumerable<IContextProvider> contextProviders)
-            : base(configuration, contextProviders)
+        protected LoggerBase(ILoggerConfiguration configuration, IEnumerable<IContextProvider> contextProviders, ILogEntryProcessor logEntryProcessor)
+            : base(configuration, contextProviders, logEntryProcessor)
         {
-            _contextProviders = new LoggerBaseContextProvider(this).Concat(base.GetContextProviders()).ToList();
+        }
+
+        void IContextProvider.AddContextData(LogEntry entry)
+        {
+            AddContextData(entry);
+            OnPreLogSync(entry);
         }
 
         protected virtual void AddContextData(LogEntry entry)
         {
         }
 
-        protected override IEnumerable<IContextProvider> GetContextProviders()
+        protected virtual void OnPreLogSync(LogEntry entry)
         {
-            return _contextProviders;
-        }
-
-        private class LoggerBaseContextProvider : IContextProvider
-        {
-            private readonly LoggerBase _loggerBase;
-
-            public LoggerBaseContextProvider(LoggerBase loggerBase)
-            {
-                _loggerBase = loggerBase;
-            }
-
-            public void AddContextData(LogEntry logEntry)
-            {
-                _loggerBase.AddContextData(logEntry);
-            }            
         }
     }
 }
