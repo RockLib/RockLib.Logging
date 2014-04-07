@@ -7,15 +7,17 @@ namespace Rock.Logging
     {
         private readonly ILoggerConfiguration _configuration;
         private readonly IEnumerable<IContextProvider> _contextProviders;
+        private readonly ILogEntryProcessor _logEntryProcessor;
 
         public Logger()
-            : this(Default.LoggerConfiguration, Default.ContextProviders)
+            : this(Default.LoggerConfiguration, Default.ContextProviders, Default.LogEntryProcessor)
         {
         }
 
-        public Logger(ILoggerConfiguration configuration, IEnumerable<IContextProvider> contextProviders)
+        public Logger(ILoggerConfiguration configuration, IEnumerable<IContextProvider> contextProviders, ILogEntryProcessor logEntryProcessor)
         {
             _configuration = configuration;
+            _logEntryProcessor = logEntryProcessor;
             _contextProviders = GetContextProviders(contextProviders);
         }
 
@@ -52,6 +54,8 @@ namespace Rock.Logging
             {
                 contextProvider.AddContextData(logEntry);
             }
+
+            _logEntryProcessor.Process(logEntry);
 
             // The logger should have a way to set its properties. A "property setter" object. One
             // that would have access to the application id, the machine name, user name, etc. It

@@ -16,5 +16,10 @@ namespace Rock.Logging
                 yield break;
             }
         }
+
+        public static ILogEntryProcessor LogEntryProcessor
+        {
+            get { throw new System.NotImplementedException(); }
+        }
     }
 }

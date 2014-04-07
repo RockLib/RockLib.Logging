@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Default.cs" />
     <Compile Include="IContextProvider.cs" />
+    <Compile Include="ILogEntryProcessor.cs" />
     <Compile Include="LogEntry.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ILoggerConfiguration.cs" />
