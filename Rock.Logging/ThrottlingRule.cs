@@ -4,6 +4,8 @@ namespace Rock.Logging
 {
     public interface IThrottlingRuleConfiguration
     {
+        string Name { get; }
+
         /// <summary>
         /// Gets the minimum time interval between logging the same <see cref="Rock.Logging.LogEntry"/>.
         /// </summary>
@@ -61,6 +63,8 @@ namespace Rock.Logging
     /// </example>
     public class ThrottlingRuleConfiguration : IThrottlingRuleConfiguration
     {
+        public string Name { get; set; }
+
         /// <summary>
         /// Gets or sets the minimum time interval between logging the same <see cref="Rock.Logging.LogEntry"/>.
         /// </summary>

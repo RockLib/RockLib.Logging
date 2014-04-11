@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Rock.Collections;
 
 namespace Rock.Logging
 {
@@ -12,9 +13,9 @@ namespace Rock.Logging
 
     public interface ILoggerFactoryConfiguration : ILoggerConfiguration
     {
-        IEnumerable<ICategory> Categories { get; }
-        IEnumerable<ILogFormatter> Formatters { get; }
-        IEnumerable<IThrottlingRuleConfiguration> ThrottlingRules { get; }
+        IKeyedEnumerable<string, ICategory> Categories { get; }
+        IKeyedEnumerable<string, ILogFormatter> Formatters { get; }
+        IKeyedEnumerable<string, IThrottlingRuleConfiguration> ThrottlingRules { get; }
     }
 
     public interface ILogFormatter

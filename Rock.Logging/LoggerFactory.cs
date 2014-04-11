@@ -142,7 +142,7 @@ namespace Rock.Logging
 
         private static IThrottlingRuleEvaluator CreateThrottlingRuleEvaluator(string category, ILoggerFactoryConfiguration config)
         {
-            var throttlingRule = config.Categories.Single(c => c.Name == category).ThrottlingRule;
+            var throttlingRule = config.Categories[category].ThrottlingRule;
 
             if (throttlingRule != null)
             {
@@ -160,7 +160,7 @@ namespace Rock.Logging
 
         private static IEnumerable<ILogProvider> CreateLogProviders(string category, ILoggerFactoryConfiguration config)
         {
-            foreach (var logProviderConfiguration in config.Categories.Single(c => c.Name == category).Providers)
+            foreach (var logProviderConfiguration in config.Categories[category].Providers)
             {
                 var template = GetLogProviderTemplate(config, logProviderConfiguration);
             }
@@ -176,9 +176,9 @@ namespace Rock.Logging
                 return LogProvider.DefaultTemplate;
             }
 
-            var formatter = config.Formatters.FirstOrDefault(f => f.Name == providerConfig.FormatterName);
-            if (formatter != null)
+            if (config.Formatters.Contains(providerConfig.FormatterName))
             {
+                var formatter = config.Formatters[providerConfig.FormatterName];
                 return formatter.Template;
             }
 
