@@ -59,7 +59,7 @@
     <Compile Include="ThrottlingRule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Rock.Core\Rock.Core.csproj">
+    <ProjectReference Include="..\..\Rock.Core\Rock.Core\Rock.Core.csproj">
       <Project>{0feb58cd-b15c-4cdc-83d6-7621c1db98c7}</Project>
       <Name>Rock.Core</Name>
     </ProjectReference>

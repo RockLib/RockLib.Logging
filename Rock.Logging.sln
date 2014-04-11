@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.Logging.UnitTests", "Rock.Logging.UnitTests\Rock.Logging.UnitTests.csproj", "{F990C0AA-01CD-4055-8669-8ABEE50347CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.Core", "Rock.Core\Rock.Core.csproj", "{0FEB58CD-B15C-4CDC-83D6-7621C1DB98C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.Core", "..\Rock.Core\Rock.Core\Rock.Core.csproj", "{0FEB58CD-B15C-4CDC-83D6-7621C1DB98C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.Logging", "Rock.Logging\Rock.Logging.csproj", "{D33F6AA7-D13F-4904-B02E-EAF09D133E19}"
 EndProject
