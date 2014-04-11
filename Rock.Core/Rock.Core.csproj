@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Default.cs" />
+    <Compile Include="DependencyInjection\AutoContainer.cs" />
+    <Compile Include="DependencyInjection\IResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DependencyInjection\ResolverSetValueExtensions.cs" />
+    <Compile Include="DependencyInjection\ResolverTryGetExtensions.cs" />
     <Compile Include="NoneOfTheseFilesBelongHereGiveThemAHome\IConvertObjectsTo.cs" />
     <Compile Include="NoneOfTheseFilesBelongHereGiveThemAHome\IEnumerableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

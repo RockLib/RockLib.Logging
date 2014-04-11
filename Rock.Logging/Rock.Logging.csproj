@@ -43,9 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Default.cs" />
     <Compile Include="IContextProvider.cs" />
     <Compile Include="ILogEntryProcessor.cs" />
+    <Compile Include="ILogProvider.cs" />
     <Compile Include="LogEntry.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ILoggerConfiguration.cs" />
@@ -53,8 +53,10 @@
     <Compile Include="LoggerBase.cs" />
     <Compile Include="LoggerExtensions\Exception.cs" />
     <Compile Include="LoggerExtensions\Message.cs" />
+    <Compile Include="LoggerFactory.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ThrottlingRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rock.Core\Rock.Core.csproj">

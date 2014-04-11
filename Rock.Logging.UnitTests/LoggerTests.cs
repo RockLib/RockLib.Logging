@@ -82,7 +82,7 @@ namespace Rock.Logging.UnitTests
             private void RunTest(LogLevel logLevelParameter, LogLevel configuredLogLevel, bool expected)
             {
                 _mocker.GetMock<ILoggerConfiguration>()
-                    .Setup(m => m.LogLevel)
+                    .Setup(m => m.LoggingLevel)
                     .Returns(configuredLogLevel);
 
                 var logger = _mocker.Get<Logger>();
