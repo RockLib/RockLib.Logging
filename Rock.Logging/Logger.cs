@@ -8,33 +8,43 @@ namespace Rock.Logging
 {
     public class Logger : ILogger
     {
-        private bool _isInitialized;
-
         private ILoggerConfiguration _configuration;
         private IThrottlingRuleEvaluator _throttlingRuleEvaluator;
         private ILogProvider _auditLogProvider;
         private IEnumerable<ILogProvider> _logProviders;
         private IEnumerable<IContextProvider> _contextProviders;
 
-        public virtual void Init(IResolver container)
+        public Logger(
+            ILoggerConfiguration configuration,
+            IThrottlingRuleEvaluator throttlingRuleEvaluator,
+            ILogProvider auditLogProvider,
+            IEnumerable<ILogProvider> logProviders,
+            IEnumerable<IContextProvider> contextProviders)
         {
-            if (!_isInitialized)
+            if (configuration == null)
             {
-                _isInitialized = true;
-
-                container.SetValueFor(out _configuration);
-                container.SetValueFor(out _configuration);
-                container.SetValueFor(out _throttlingRuleEvaluator);
-                container.SetValueFor(out _auditLogProvider, null);
-                container.SetValueFor(out _logProviders);
-                container.SetValueFor(out _contextProviders, Enumerable.Empty<IContextProvider>);
+                throw new ArgumentNullException("configuration");
             }
+
+            if (throttlingRuleEvaluator == null)
+            {
+                throw new ArgumentNullException("throttlingRuleEvaluator");
+            }
+
+            if (logProviders == null)
+            {
+                throw new ArgumentNullException("logProviders");
+            }
+
+            _configuration = configuration;
+            _throttlingRuleEvaluator = throttlingRuleEvaluator;
+            _auditLogProvider = auditLogProvider;
+            _logProviders = logProviders;
+            _contextProviders = contextProviders ?? Enumerable.Empty<IContextProvider>();
         }
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            CheckInitialization();
-
             return
                 _configuration.IsLoggingEnabled
                 && logLevel != LogLevel.None
@@ -43,8 +53,6 @@ namespace Rock.Logging
 
         public async Task Log(LogEntry logEntry)
         {
-            CheckInitialization();
-
             if (!IsEnabled(logEntry.LogLevel)
                 || (_throttlingRuleEvaluator != null && !_throttlingRuleEvaluator.ShouldLog(logEntry)))
             {
@@ -64,14 +72,6 @@ namespace Rock.Logging
             else
             {
                 await Task.WhenAll(_logProviders.Select(logProvider => logProvider.Write(logEntry)));
-            }
-        }
-
-        private void CheckInitialization()
-        {
-            if (!_isInitialized)
-            {
-                throw new Exception("Attempting to use Logger before Init() was called."); // TODO: better message, exception type
             }
         }
 
@@ -116,7 +116,10 @@ namespace Rock.Logging
                     return _logger.Log(logEntry);
                 }
 
+                // We're synchronous, so wait on the task to complete.
                 _logger.Log(logEntry).Wait();
+
+                // Then return a task that is already completed.
                 return _completedTask;
             }
         }
