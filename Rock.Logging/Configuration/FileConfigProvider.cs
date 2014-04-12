@@ -28,7 +28,7 @@ namespace Rock.Logging.Configuration
         {
             foreach (FormatterElement formatter in settings.Formatters)
             {
-                config.Formatters.Add(new LogFormatter { Name = formatter.Name, Template = formatter.Template });
+                config.Formatters.Add(new LogFormatterConfiguration { Name = formatter.Name, Template = formatter.Template });
             }
         }
 
@@ -77,7 +77,7 @@ namespace Rock.Logging.Configuration
                 var type = Type.GetType(provider.ProviderType);
                 if (type == null)
                 {
-                    throw new ArgumentNullException("The type " + provider.ProviderType + "was not specified correctly in the config file.");
+                    throw new ArgumentNullException("The type " + provider.ProviderType + " was not specified correctly in the config file.");
                 }
 
                 var config = new LogProviderConfiguration { ProviderType = type, FormatterName = provider.Formatter };

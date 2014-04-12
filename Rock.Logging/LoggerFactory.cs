@@ -79,7 +79,7 @@ namespace Rock.Logging
         /// <typeparam name="TLogger">Custom logger that implements <see cref="ILogger"/>.</typeparam>
         /// <param name="category">The category.</param>
         /// <param name="config">The config.</param>
-        /// <param name="container">An <see cref="IResolver"/> that retrieves objects. For use by a logger's <see cref="Logger.Init"/> method.</param>
+        /// <param name="container">An <see cref="IResolver"/> that retrieves objects. To be used in order to resolve dependencies for the specified logger type.</param>
         /// <returns>Returns a <see cref="ILogger"/>.</returns>
         /// <remarks>
         /// Developers can create their own logger specific to their applications that
@@ -114,8 +114,8 @@ namespace Rock.Logging
             IResolver container = null)
             where TLogger : ILogger
         {
-            category = category ?? GetFirstCategory(config);
             config = config ?? ConfigProvider.GetConfiguration();
+            category = category ?? GetFirstCategory(config);
 
             return (TLogger)_loggerCache.GetOrAdd(
                 Tuple.Create(category, typeof(TLogger)),
@@ -130,8 +130,8 @@ namespace Rock.Logging
         {
             var throttlingRuleEvaluator = CreateThrottlingRuleEvaluator(category, config);
             var auditLogProvider = CreateAuditLogProvider(category, config, container);
-            var logProviders = CreateLogProviders(category, config, container);
-            var contextProviders = CreateContextProviders(category, config);
+            var logProviders = CreateLogProviders(category, config, container).ToList();
+            var contextProviders = CreateContextProviders(category, config).ToList();
 
             var autoContainer = new AutoContainer(config, throttlingRuleEvaluator, auditLogProvider, logProviders, contextProviders);
             var mergedContainer = container == null ? autoContainer : container.MergeWith(autoContainer);
@@ -166,23 +166,23 @@ namespace Rock.Logging
         {
             return
                 from providerConfig in config.Categories[category ?? ""].Providers
-                let formatter = GetLogFormatter(config, providerConfig)
-                let autoContainer = new AutoContainer(formatter)
+                let formatterFactory = GetLogFormatterFactory(config, providerConfig)
+                let autoContainer = new AutoContainer(formatterFactory)
                 let container = originalContainer == null ? autoContainer : originalContainer.MergeWith(autoContainer)
                 select (ILogProvider)container.Get(providerConfig.ProviderType);
         }
 
-        private static ILogFormatter GetLogFormatter(ILoggerFactoryConfiguration config, ILogProviderConfiguration providerConfig)
+        private static ILogFormatterFactory GetLogFormatterFactory(ILoggerFactoryConfiguration config, ILogProviderConfiguration providerConfig)
         {
             if (string.IsNullOrEmpty(providerConfig.FormatterName))
             {
-                return LogProvider.DefaultLogFormatter;
+                return new LogFormatterFactory(LogProvider.DefaultLogFormatterConfiguration);
             }
 
             if (config.Formatters.Contains(providerConfig.FormatterName))
             {
-                var formatter = config.Formatters[providerConfig.FormatterName];
-                return formatter;
+                var formatterConfig = config.Formatters[providerConfig.FormatterName];
+                return new LogFormatterFactory(formatterConfig);
             }
 
             throw new /*LogConfiguration*/Exception("Unable to determine formatter template for the provider " + providerConfig.ProviderType.Name);

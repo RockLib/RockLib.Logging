@@ -1,6 +1,6 @@
 namespace Rock.Logging
 {
-    public interface ILogFormatter
+    public interface ILogFormatterConfiguration
     {
         /// <summary>
         /// Gets the name of the log formatter.

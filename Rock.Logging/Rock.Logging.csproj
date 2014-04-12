@@ -47,9 +47,10 @@
     <Compile Include="Category.cs" />
     <Compile Include="Configuration\FileConfigProvider.cs" />
     <Compile Include="Configuration\IConfigProvider.cs" />
+    <Compile Include="ConsoleLogProvider.cs" />
     <Compile Include="ICategory.cs" />
     <Compile Include="IContextProvider.cs" />
-    <Compile Include="ILogFormatter.cs" />
+    <Compile Include="ILogFormatterConfiguration.cs" />
     <Compile Include="ILoggerFactoryConfiguration.cs" />
     <Compile Include="ILogProvider.cs" />
     <Compile Include="ILogProviderConfiguration.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="ILogger.cs" />
     <Compile Include="ILoggerConfiguration.cs" />
     <Compile Include="LogFormatter.cs" />
+    <Compile Include="LogFormatterConfiguration.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoggerExtensions\Exception.cs" />
     <Compile Include="LoggerExtensions\Message.cs" />

@@ -11,7 +11,7 @@ Extended Properties: {extendedProperties({key} {value})}Exception: {exception}
 
 ";
 
-        public static readonly ILogFormatter DefaultLogFormatter = new LogFormatter();
+        public static readonly ILogFormatterConfiguration DefaultLogFormatterConfiguration = new LogFormatterConfiguration();
 
         private readonly LogLevel _loggingLevel;
         private readonly string _template;
@@ -22,7 +22,7 @@ Extended Properties: {extendedProperties({key} {value})}Exception: {exception}
             _template = template;
         }
 
-        private class LogFormatter : ILogFormatter
+        private class LogFormatterConfiguration : ILogFormatterConfiguration
         {
             public string Name
             {
