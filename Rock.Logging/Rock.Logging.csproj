@@ -35,6 +35,7 @@
       <HintPath>..\packages\Reflectinator.0.0.8\lib\net40\Reflectinator.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,6 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
+    <Compile Include="Configuration\FileConfigProvider.cs" />
+    <Compile Include="Configuration\IConfigProvider.cs" />
     <Compile Include="ICategory.cs" />
     <Compile Include="IContextProvider.cs" />
     <Compile Include="ILogFormatter.cs" />
@@ -55,12 +58,15 @@
     <Compile Include="LogEntry.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ILoggerConfiguration.cs" />
+    <Compile Include="LogFormatter.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoggerExtensions\Exception.cs" />
     <Compile Include="LoggerExtensions\Message.cs" />
     <Compile Include="LoggerFactory.cs" />
+    <Compile Include="LoggerFactoryConfiguration.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogProvider.cs" />
+    <Compile Include="LogProviderConfiguration.cs" />
     <Compile Include="NullInstances.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions\Sync.cs" />

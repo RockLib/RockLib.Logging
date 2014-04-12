@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Rock.Collections;
 
 namespace Rock.Logging
@@ -10,7 +9,10 @@ namespace Rock.Logging
     /// </summary>
     public class Category : ICategory
     {
-        /// <summary>
+        private readonly KeyedCollection<string, LogProviderConfiguration> _providers = new FunctionalKeyedCollection<string, LogProviderConfiguration>(c => c.FormatterName);
+
+        /// <summary
+        /// >
         /// Gets or sets the name of the category.
         /// </summary>
         /// <remarks>At least one category is required.</remarks>
@@ -21,12 +23,25 @@ namespace Rock.Logging
         /// Gets or sets the collection of log providers specified.
         /// </summary>
         /// <value>The providers.</value>
-        public IKeyedEnumerable<string, ILogProviderConfiguration> Providers { get; set; }
+        IKeyedEnumerable<string, ILogProviderConfiguration> ICategory.Providers
+        {
+            get { return Providers; }
+        }
+
+        public KeyedCollection<string, LogProviderConfiguration> Providers
+        {
+            get { return _providers; }
+        }
 
         /// <summary>
         /// Gets or sets the throttling rule.
         /// </summary>
         /// <value>The throttling rule.</value>
-        public IThrottlingRuleConfiguration ThrottlingRule { get; set; }
+        IThrottlingRuleConfiguration ICategory.ThrottlingRule
+        {
+            get { return ThrottlingRule; }
+        }
+
+        public ThrottlingRuleConfiguration ThrottlingRule { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Rock.DependencyInjection;
+using Rock.Logging.Configuration;
 
 namespace Rock.Logging
 {
@@ -10,27 +11,27 @@ namespace Rock.Logging
     {
         private static readonly ConcurrentDictionary<Tuple<string, Type>, ILogger> _loggerCache = new ConcurrentDictionary<Tuple<string, Type>, ILogger>();
 
-        private static readonly Lazy<ILoggerFactoryConfiguration> _defaultLoggerConfiguration; 
-        private static Lazy<ILoggerFactoryConfiguration> _loggerConfiguration;
+        private static readonly Lazy<IConfigProvider> _defaultConfigProvider;
+        private static Lazy<IConfigProvider> _configProvider;
 
         static LoggerFactory()
         {
-            _defaultLoggerConfiguration = new Lazy<ILoggerFactoryConfiguration>(() => null); // TODO: actually give it the default
-            _loggerConfiguration = _defaultLoggerConfiguration;
+            _defaultConfigProvider = new Lazy<IConfigProvider>(() => new FileConfigProvider());
+            _configProvider = _defaultConfigProvider;
         }
 
-        public static ILoggerFactoryConfiguration LoggerConfiguration
+        public static IConfigProvider ConfigProvider
         {
-            get { return _loggerConfiguration.Value; }
+            get { return _configProvider.Value; }
             set
             {
                 if (value == null)
                 {
-                    _loggerConfiguration = _defaultLoggerConfiguration;
+                    _configProvider = _defaultConfigProvider;
                 }
-                else if (!CurrentLoggerConfigurationIsSameAs(value))
+                else if (!CurrentConfigProviderIsSameAs(value))
                 {
-                    _loggerConfiguration = new Lazy<ILoggerFactoryConfiguration>(() => value);
+                    _configProvider = new Lazy<IConfigProvider>(() => value);
                 }
             }
         }
@@ -114,7 +115,7 @@ namespace Rock.Logging
             where TLogger : ILogger
         {
             category = category ?? GetFirstCategory(config);
-            config = config ?? LoggerConfiguration;
+            config = config ?? ConfigProvider.GetConfiguration();
 
             return (TLogger)_loggerCache.GetOrAdd(
                 Tuple.Create(category, typeof(TLogger)),
@@ -206,9 +207,9 @@ namespace Rock.Logging
             return firstCategory.Name;
         }
 
-        private static bool CurrentLoggerConfigurationIsSameAs(ILoggerFactoryConfiguration value)
+        private static bool CurrentConfigProviderIsSameAs(IConfigProvider value)
         {
-            return _loggerConfiguration.IsValueCreated && ReferenceEquals(_loggerConfiguration.Value, value);
+            return _configProvider.IsValueCreated && ReferenceEquals(_configProvider.Value, value);
         }
     }
 }
