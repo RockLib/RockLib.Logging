@@ -43,20 +43,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Category.cs" />
+    <Compile Include="ICategory.cs" />
     <Compile Include="IContextProvider.cs" />
-    <Compile Include="ILogEntryProcessor.cs" />
+    <Compile Include="ILogFormatter.cs" />
+    <Compile Include="ILoggerFactoryConfiguration.cs" />
     <Compile Include="ILogProvider.cs" />
+    <Compile Include="ILogProviderConfiguration.cs" />
+    <Compile Include="IThrottlingRuleConfiguration.cs" />
+    <Compile Include="IThrottlingRuleEvaluator.cs" />
     <Compile Include="LogEntry.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ILoggerConfiguration.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="LoggerBase.cs" />
     <Compile Include="LoggerExtensions\Exception.cs" />
     <Compile Include="LoggerExtensions\Message.cs" />
     <Compile Include="LoggerFactory.cs" />
     <Compile Include="LogLevel.cs" />
+    <Compile Include="LogProvider.cs" />
+    <Compile Include="NullInstances.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThrottlingRule.cs" />
+    <Compile Include="LoggerExtensions\Sync.cs" />
+    <Compile Include="ThrottlingRuleConfiguration.cs" />
+    <Compile Include="ThrottlingRuleEvaluator.cs" />
+    <Compile Include="ToThrottlingRuleEvaluatorExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Rock.Core\Rock.Core\Rock.Core.csproj">

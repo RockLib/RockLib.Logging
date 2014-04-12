@@ -128,15 +128,14 @@ namespace Rock.Logging
             where TLogger : ILogger
         {
             var throttlingRuleEvaluator = CreateThrottlingRuleEvaluator(category, config);
-            var auditLogProvider = CreateAuditLogProvider(category, config);
-            var logProviders = CreateLogProviders(category, config);
+            var auditLogProvider = CreateAuditLogProvider(category, config, container);
+            var logProviders = CreateLogProviders(category, config, container);
             var contextProviders = CreateContextProviders(category, config);
 
-            container =
-                container.MergeWith(
-                    new AutoContainer(config, throttlingRuleEvaluator, auditLogProvider, logProviders, contextProviders));
-            var logger = container.Get<TLogger>();
-            
+            var autoContainer = new AutoContainer(config, throttlingRuleEvaluator, auditLogProvider, logProviders, contextProviders);
+            var mergedContainer = container == null ? autoContainer : container.MergeWith(autoContainer);
+
+            var logger = mergedContainer.Get<TLogger>();
             return logger;
         }
 
@@ -144,42 +143,45 @@ namespace Rock.Logging
         {
             var throttlingRule = config.Categories[category].ThrottlingRule;
 
-            if (throttlingRule != null)
-            {
-                return new ThrottlingRuleEvaluator(throttlingRule);
-            }
-
-            return null;
+            return
+                throttlingRule != null
+                    ? new ThrottlingRuleEvaluator(throttlingRule)
+                    : null;
         }
 
-        private static ILogProvider CreateAuditLogProvider(string category, ILoggerFactoryConfiguration config)
+        private static ILogProvider CreateAuditLogProvider(
+            string category,
+            ILoggerFactoryConfiguration config,
+            IResolver originalContainer)
         {
             // TODO: Implement
             return null;
         }
 
-        private static IEnumerable<ILogProvider> CreateLogProviders(string category, ILoggerFactoryConfiguration config)
+        private static IEnumerable<ILogProvider> CreateLogProviders(
+            string category,
+            ILoggerFactoryConfiguration config,
+            IResolver originalContainer)
         {
-            foreach (var logProviderConfiguration in config.Categories[category].Providers)
-            {
-                var template = GetLogProviderTemplate(config, logProviderConfiguration);
-            }
-
-            // TODO: Implement
-            return null;
+            return
+                from providerConfig in config.Categories[category ?? ""].Providers
+                let formatter = GetLogFormatter(config, providerConfig)
+                let autoContainer = new AutoContainer(formatter)
+                let container = originalContainer == null ? autoContainer : originalContainer.MergeWith(autoContainer)
+                select (ILogProvider)container.Get(providerConfig.ProviderType);
         }
 
-        private static string GetLogProviderTemplate(ILoggerFactoryConfiguration config, ILogProviderConfiguration providerConfig)
+        private static ILogFormatter GetLogFormatter(ILoggerFactoryConfiguration config, ILogProviderConfiguration providerConfig)
         {
             if (string.IsNullOrEmpty(providerConfig.FormatterName))
             {
-                return LogProvider.DefaultTemplate;
+                return LogProvider.DefaultLogFormatter;
             }
 
             if (config.Formatters.Contains(providerConfig.FormatterName))
             {
                 var formatter = config.Formatters[providerConfig.FormatterName];
-                return formatter.Template;
+                return formatter;
             }
 
             throw new /*LogConfiguration*/Exception("Unable to determine formatter template for the provider " + providerConfig.ProviderType.Name);

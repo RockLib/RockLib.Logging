@@ -16,25 +16,4 @@ namespace Rock.Logging
         /// <param name="entry">The entry.</param>
         Task Write(LogEntry entry);
     }
-
-    public abstract class LogProvider
-    {
-        public const string DefaultTemplate = 
-            @"ApplicationID: {applicationId}
-Date: {createTime}
-Message: {message}
-Level: {level}
-Extended Properties: {extendedProperties({key} {value})}Exception: {exception}
-
-";
-
-        private readonly LogLevel _loggingLevel;
-        private readonly string _template;
-
-        protected LogProvider(LogLevel loggingLevel, string template)
-        {
-            _loggingLevel = loggingLevel;
-            _template = template;
-        }
-    }
 }
