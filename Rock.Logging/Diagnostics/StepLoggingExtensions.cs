@@ -32,6 +32,27 @@ namespace Rock.Logging.Diagnostics
             return value;
         }
 
+        public static T LogValue<T, TValue>(this T t, IStepLogger stepLogger, Func<T, TValue> getValue, string label = "Value")
+            where TValue : struct
+        {
+            if (stepLogger != NullStepLogger.Instance)
+            {
+                stepLogger.AddStep(new LogValueStep<TValue>(getValue(t), label));
+            }
+
+            return t;
+        }
+
+        public static T LogValue<T>(this T t, IStepLogger stepLogger, Func<T, string> getValue, string label = "Value")
+        {
+            if (stepLogger != NullStepLogger.Instance)
+            {
+                stepLogger.AddStep(new LogValueStep(getValue(t), label));
+            }
+            
+            return t;
+        }
+
         public static void LogMessage(this IStepLogger stepLogger, string message)
         {
             if (stepLogger != NullStepLogger.Instance)
