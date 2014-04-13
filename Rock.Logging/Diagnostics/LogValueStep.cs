@@ -2,7 +2,7 @@ using System.Text;
 
 namespace Rock.Logging.Diagnostics
 {
-    public class LogValueStep<T> : IStep, IStepSnapshot
+    public class LogValueStep<T> : IStep
         where T : struct
     {
         private readonly T _value;
@@ -14,18 +14,13 @@ namespace Rock.Logging.Diagnostics
             _identifier = identifier;
         }
 
-        public IStepSnapshot GetSnapshot()
-        {
-            return this;
-        }
-
         public void AddToReport(StringBuilder report)
         {
             report.AppendLine(string.Format("{0}: {1}", _identifier, _value));
         }
     }
 
-    public class LogValueStep : IStep, IStepSnapshot
+    public class LogValueStep : IStep
     {
         private readonly string _value;
         private readonly string _identifier;
@@ -34,11 +29,6 @@ namespace Rock.Logging.Diagnostics
         {
             _value = value;
             _identifier = identifier;
-        }
-
-        public IStepSnapshot GetSnapshot()
-        {
-            return this;
         }
 
         public void AddToReport(StringBuilder report)

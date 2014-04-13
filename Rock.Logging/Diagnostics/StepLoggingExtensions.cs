@@ -11,22 +11,22 @@ namespace Rock.Logging.Diagnostics
                 : new StepLogger(logger, logLevel, message);
         }
 
-        public static T LogValue<T>(this T value, IStepLogger stepLogger, string identifier = "Value")
+        public static T LogValue<T>(this T value, IStepLogger stepLogger, string label = "Value")
             where T : struct 
         {
             if (stepLogger != NullStepLogger.Instance)
             {
-                stepLogger.AddStep(new LogValueStep<T>(value, identifier));
+                stepLogger.AddStep(new LogValueStep<T>(value, label));
             }
             
             return value;
         }
 
-        public static string LogValue(this string value, IStepLogger stepLogger, string identifier = "Value")
+        public static string LogValue(this string value, IStepLogger stepLogger, string label = "Value")
         {
             if (stepLogger != NullStepLogger.Instance)
             {
-                stepLogger.AddStep(new LogValueStep(value, identifier));
+                stepLogger.AddStep(new LogValueStep(value, label));
             }
 
             return value;
@@ -48,25 +48,26 @@ namespace Rock.Logging.Diagnostics
                     : new Stopwatch(stepLogger);
         }
 
-        public static IStopwatch LogElapsed(this IStopwatch stopwatch, string identifier = null)
+        public static IStopwatch LogElapsed(this IStopwatch stopwatch, string label = null)
         {
             if (stopwatch != NullStopwatch.Instance)
             {
                 var elapsed = stopwatch.Elapsed;
+
                 stopwatch.AddStep(
                     new LogValueStep<TimeSpan>(
                         elapsed,
-                        string.IsNullOrWhiteSpace(identifier) ? "Elapsed" : identifier));
+                        string.IsNullOrWhiteSpace(label) ? "Elapsed" : label));
             }
 
             return stopwatch;
         }
 
-        public static IStopwatch LogElapsedAndRestart(IStopwatch stopwatch, string identifier = null)
+        public static IStopwatch LogElapsedAndRestart(IStopwatch stopwatch, string label = null)
         {
             if (stopwatch != NullStopwatch.Instance)
             {
-                return stopwatch.Stop().LogElapsed(identifier).Start();
+                return stopwatch.Stop().LogElapsed(label).Start();
             }
 
             return stopwatch;

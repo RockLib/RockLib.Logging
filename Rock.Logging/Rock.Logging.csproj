@@ -50,7 +50,6 @@
     <Compile Include="ConsoleLogProvider.cs" />
     <Compile Include="Diagnostics\IStep.cs" />
     <Compile Include="Diagnostics\IStepLogger.cs" />
-    <Compile Include="Diagnostics\IStepSnapshot.cs" />
     <Compile Include="Diagnostics\IStopwatch.cs" />
     <Compile Include="Diagnostics\LogValueStep.cs" />
     <Compile Include="Diagnostics\MessageStep.cs" />

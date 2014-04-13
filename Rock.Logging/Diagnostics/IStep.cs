@@ -1,7 +1,9 @@
+using System.Text;
+
 namespace Rock.Logging.Diagnostics
 {
     public interface IStep
     {
-        IStepSnapshot GetSnapshot();
+        void AddToReport(StringBuilder report);
     }
 }

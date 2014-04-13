@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +10,9 @@ namespace Rock.Logging.Diagnostics
         private readonly string _message;
         private readonly System.Diagnostics.Stopwatch _stopwatch;
 
-        private readonly List<IStepSnapshot> _snapshots = new List<IStepSnapshot>(); 
+        private bool _isDisposed;
+
+        private readonly List<IStep> _steps = new List<IStep>(); 
 
         public StepLogger(ILogger logger, LogLevel logLevel, string message)
         {
@@ -23,35 +24,36 @@ namespace Rock.Logging.Diagnostics
 
         public void AddStep(IStep step)
         {
-            _snapshots.Add(step.GetSnapshot());
-        }
-
-        public void Flush()
-        {
-            _stopwatch.Stop();
-
-            var sb = new StringBuilder();
-            foreach (var snapshot in _snapshots)
-            {
-                snapshot.AddToReport(sb);
-            }
-
-            sb.AppendLine().AppendLine("Total Elapsed Time: " + _stopwatch.Elapsed);
-
-            var logEntry = new LogEntry
-            {
-                LogLevel = _logLevel,
-                Message = "Step Report" + (String.IsNullOrWhiteSpace(_message) ? "" : (": " + _message)),
-            };
-
-            logEntry.ExtendedProperties.Add("Step Report", sb.ToString());
-
-            _logger.Log(logEntry);
+            _steps.Add(step);
         }
 
         public void Dispose()
         {
-            Flush();
+            if (_isDisposed)
+            {
+                return;
+            }
+
+            _stopwatch.Stop();
+            _isDisposed = true;
+
+            var report = new StringBuilder();
+            foreach (var step in _steps)
+            {
+                step.AddToReport(report);
+            }
+
+            report.AppendLine().AppendLine("Total Elapsed Time: " + _stopwatch.Elapsed);
+
+            var logEntry = new LogEntry
+            {
+                LogLevel = _logLevel,
+                Message = _message ?? "Step Report",
+            };
+
+            logEntry.ExtendedProperties.Add("Step Report", report.ToString());
+
+            _logger.Log(logEntry);
         }
     }
 }
