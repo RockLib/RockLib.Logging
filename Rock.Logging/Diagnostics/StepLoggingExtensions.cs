@@ -4,11 +4,22 @@ namespace Rock.Logging.Diagnostics
 {
     public static class StepLoggingExtensions
     {
+        public static readonly Func<ILogger, LogLevel, string, IStepLogger> DefaultStepLoggerFactory =
+            (logger, level, message) => new StepLogger(logger, level, message);
+
+        private static Func<ILogger, LogLevel, string, IStepLogger> _stepLoggerFactory = DefaultStepLoggerFactory;
+
+        public static Func<ILogger, LogLevel, string, IStepLogger> StepLoggerFactory
+        {
+            get { return _stepLoggerFactory; }
+            set { _stepLoggerFactory = value ?? DefaultStepLoggerFactory; }
+        }
+
         public static IStepLogger RecordSteps(this ILogger logger, LogLevel logLevel, string message = null)
         {
             return !logger.IsEnabled(logLevel)
                 ? NullStepLogger.Instance
-                : new StepLogger(logger, logLevel, message);
+                : StepLoggerFactory(logger, logLevel, message);
         }
 
         public static T LogValue<T>(this T value, IStepLogger stepLogger, string label = "Value")
