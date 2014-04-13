@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 
 namespace Rock.Logging.Diagnostics
@@ -10,7 +9,7 @@ namespace Rock.Logging.Diagnostics
         private readonly ILogger _logger;
         private readonly LogLevel _logLevel;
         private readonly string _message;
-        private readonly Stopwatch _stopwatch;
+        private readonly System.Diagnostics.Stopwatch _stopwatch;
 
         private readonly List<IStepSnapshot> _snapshots = new List<IStepSnapshot>(); 
 
@@ -19,7 +18,7 @@ namespace Rock.Logging.Diagnostics
             _logger = logger;
             _logLevel = logLevel;
             _message = message;
-            _stopwatch = Stopwatch.StartNew();
+            _stopwatch = System.Diagnostics.Stopwatch.StartNew();
         }
 
         public void AddStep(IStep step)
