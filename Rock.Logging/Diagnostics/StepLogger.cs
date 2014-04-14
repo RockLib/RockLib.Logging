@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Rock.Logging.Diagnostics
@@ -8,18 +9,18 @@ namespace Rock.Logging.Diagnostics
         private readonly ILogger _logger;
         private readonly LogLevel _logLevel;
         private readonly string _message;
-        private readonly System.Diagnostics.Stopwatch _stopwatch;
+        private readonly List<IStep> _steps;
+        private readonly Stopwatch _stopwatch;
 
         private bool _isDisposed;
-
-        private readonly List<IStep> _steps = new List<IStep>(); 
 
         public StepLogger(ILogger logger, LogLevel logLevel, string message)
         {
             _logger = logger;
             _logLevel = logLevel;
             _message = message;
-            _stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            _steps = new List<IStep>();
+            _stopwatch = Stopwatch.StartNew();
         }
 
         public void AddStep(IStep step)
@@ -40,10 +41,10 @@ namespace Rock.Logging.Diagnostics
             var report = new StringBuilder();
             foreach (var step in _steps)
             {
-                step.AddToReport(report);
+                step.AddToReport(report.Append("-"));
             }
 
-            report.AppendLine().AppendLine("Total Elapsed Time: " + _stopwatch.Elapsed);
+            report.AppendLine("Total Elapsed: " + _stopwatch.Elapsed);
 
             var logEntry = new LogEntry
             {

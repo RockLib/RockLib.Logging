@@ -50,13 +50,13 @@
     <Compile Include="ConsoleLogProvider.cs" />
     <Compile Include="Diagnostics\IStep.cs" />
     <Compile Include="Diagnostics\IStepLogger.cs" />
-    <Compile Include="Diagnostics\IStopwatch.cs" />
+    <Compile Include="Diagnostics\IStopwatchLogger.cs" />
     <Compile Include="Diagnostics\LogValueStep.cs" />
     <Compile Include="Diagnostics\MessageStep.cs" />
     <Compile Include="Diagnostics\NullStepLogger.cs" />
-    <Compile Include="Diagnostics\NullStopwatch.cs" />
+    <Compile Include="Diagnostics\NullStopwatchLogger.cs" />
     <Compile Include="Diagnostics\StepLogger.cs" />
-    <Compile Include="Diagnostics\Stopwatch.cs" />
+    <Compile Include="Diagnostics\StopwatchLogger.cs" />
     <Compile Include="ICategory.cs" />
     <Compile Include="IContextProvider.cs" />
     <Compile Include="ILogFormatterConfiguration.cs" />

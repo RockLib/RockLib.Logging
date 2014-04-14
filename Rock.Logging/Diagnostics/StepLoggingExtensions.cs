@@ -72,37 +72,35 @@ namespace Rock.Logging.Diagnostics
             }
         }
 
-        public static IStopwatch GetStopwatch(this IStepLogger stepLogger)
+        public static void LogMessage(this IStepLogger stepLogger, Func<string> getMessage)
+        {
+            if (stepLogger != NullStepLogger.Instance)
+            {
+                stepLogger.AddStep(new MessageStep(getMessage()));
+            }
+        }
+
+        public static IStopwatchLogger GetStopwatch(this IStepLogger stepLogger)
         {
             return
                 stepLogger == NullStepLogger.Instance
-                    ? NullStopwatch.Instance
-                    : new Stopwatch(stepLogger);
+                    ? NullStopwatchLogger.Instance
+                    : new StopwatchLogger(stepLogger);
         }
 
-        public static IStopwatch LogElapsed(this IStopwatch stopwatch, string label = null)
+
+        /// <summary>
+        /// Log the elapsed time of the stopwatch. The stopwatch will be stopped while logging is taking place, then
+        /// started again once logging is complete. If <paramref name="andRestartStopwatch"/> is true, then the
+        /// stopwatch is reset before it is started again.
+        /// </summary>
+        /// <param name="stopwatchLogger">This instance of <see cref="StopwatchLogger"/>.</param>
+        /// <param name="label">A label to identify the elapsed time value.</param>
+        /// <param name="andRestartStopwatch">Whether to reset the stopwatch before it is started back up.</param>
+        /// <returns>This instance of <see cref="StopwatchLogger"/>.</returns>
+        public static IStopwatchLogger LogElapsed(this IStopwatchLogger stopwatchLogger, string label = null, bool andRestartStopwatch = false)
         {
-            if (stopwatch != NullStopwatch.Instance)
-            {
-                var elapsed = stopwatch.Elapsed;
-
-                stopwatch.AddStep(
-                    new LogValueStep<TimeSpan>(
-                        elapsed,
-                        string.IsNullOrWhiteSpace(label) ? "Elapsed" : label));
-            }
-
-            return stopwatch;
-        }
-
-        public static IStopwatch LogElapsedAndRestart(IStopwatch stopwatch, string label = null)
-        {
-            if (stopwatch != NullStopwatch.Instance)
-            {
-                return stopwatch.Stop().LogElapsed(label).Start();
-            }
-
-            return stopwatch;
+            return stopwatchLogger.LogElapsed(label, andRestartStopwatch);
         }
     }
 }
