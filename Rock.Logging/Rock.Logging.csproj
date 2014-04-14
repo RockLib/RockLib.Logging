@@ -59,7 +59,9 @@
     <Compile Include="Diagnostics\StopwatchLogger.cs" />
     <Compile Include="ICategory.cs" />
     <Compile Include="IContextProvider.cs" />
+    <Compile Include="ILogFormatter.cs" />
     <Compile Include="ILogFormatterConfiguration.cs" />
+    <Compile Include="ILogFormatterFactory.cs" />
     <Compile Include="ILoggerFactoryConfiguration.cs" />
     <Compile Include="ILogProvider.cs" />
     <Compile Include="ILogProviderConfiguration.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="ILoggerConfiguration.cs" />
     <Compile Include="LogFormatter.cs" />
     <Compile Include="LogFormatterConfiguration.cs" />
+    <Compile Include="LogFormatterFactory.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoggerExtensions\Exception.cs" />
     <Compile Include="LoggerExtensions\Message.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="LoggerFactoryConfiguration.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogProvider.cs" />
+    <Compile Include="LogProviderBase.cs" />
     <Compile Include="LogProviderConfiguration.cs" />
     <Compile Include="NullInstances.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,7 +88,6 @@
     <Compile Include="Diagnostics\StepLoggingExtensions.cs" />
     <Compile Include="ThrottlingRuleConfiguration.cs" />
     <Compile Include="ThrottlingRuleEvaluator.cs" />
-    <Compile Include="ToThrottlingRuleEvaluatorExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Rock.Core\Rock.Core\Rock.Core.csproj">
