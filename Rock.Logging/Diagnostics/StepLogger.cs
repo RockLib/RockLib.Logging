@@ -9,16 +9,32 @@ namespace Rock.Logging.Diagnostics
         private readonly ILogger _logger;
         private readonly LogLevel _logLevel;
         private readonly string _message;
+
+        private readonly string _callerMemberName;
+        private readonly string _callerFilePath;
+        private readonly int _callerLineNumber;
+
         private readonly List<IStep> _steps;
         private readonly Stopwatch _stopwatch;
 
         private bool _isDisposed;
 
-        public StepLogger(ILogger logger, LogLevel logLevel, string message)
+        public StepLogger(
+            ILogger logger,
+            LogLevel logLevel,
+            string message,
+            string callerMemberName,
+            string callerFilePath,
+            int callerLineNumber)
         {
             _logger = logger;
             _logLevel = logLevel;
             _message = message;
+
+            _callerMemberName = callerMemberName;
+            _callerFilePath = callerFilePath;
+            _callerLineNumber = callerLineNumber;
+
             _steps = new List<IStep>();
             _stopwatch = Stopwatch.StartNew();
         }
@@ -26,6 +42,11 @@ namespace Rock.Logging.Diagnostics
         public void AddStep(IStep step)
         {
             _steps.Add(step);
+        }
+
+        public void Flush()
+        {
+            Dispose();
         }
 
         public void Dispose()

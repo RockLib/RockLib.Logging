@@ -5,8 +5,8 @@ namespace Rock.Logging
 {
     public class ConsoleLogProvider : LogProviderBase
     {
-        public ConsoleLogProvider(ILogFormatterFactory factory)
-            : base(factory)
+        public ConsoleLogProvider(ILogFormatterFactory logFormatterFactory)
+            : base(logFormatterFactory)
         {
         }
 

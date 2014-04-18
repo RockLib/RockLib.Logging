@@ -77,7 +77,14 @@ namespace Rock.Logging.Configuration
                 var type = Type.GetType(provider.ProviderType);
                 if (type == null)
                 {
-                    throw new ArgumentNullException("The type " + provider.ProviderType + " was not specified correctly in the config file.");
+                    // TODO: better exception and message.
+                    throw new Exception("The type " + provider.ProviderType + " was not specified correctly in the config file.");
+                }
+
+                if (!typeof(ILogProvider).IsAssignableFrom(type))
+                {
+                    // TODO: better exception and message.
+                    throw new Exception("The type " + type + " does not implement ILogProvider.");
                 }
 
                 var config = new LogProviderConfiguration { ProviderType = type, FormatterName = provider.Formatter };

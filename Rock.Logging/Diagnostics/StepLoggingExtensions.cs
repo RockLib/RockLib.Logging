@@ -1,28 +1,36 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Rock.Logging.Diagnostics
 {
     public static class StepLoggingExtensions
     {
-        public static readonly Func<ILogger, LogLevel, string, IStepLogger> DefaultStepLoggerFactory =
-            (logger, level, message) => new StepLogger(logger, level, message);
+        public static readonly Func<ILogger, LogLevel, string, string, string, int, IStepLogger> DefaultStepLoggerFactory =
+            (logger, level, message, callerMemberName, callerFilePath, callerLineNumber) =>
+                new StepLogger(logger, level, message, callerMemberName, callerFilePath, callerLineNumber);
 
-        private static Func<ILogger, LogLevel, string, IStepLogger> _stepLoggerFactory = DefaultStepLoggerFactory;
+        private static Func<ILogger, LogLevel, string, string, string, int, IStepLogger> _stepLoggerFactory = DefaultStepLoggerFactory;
 
-        public static Func<ILogger, LogLevel, string, IStepLogger> StepLoggerFactory
+        public static Func<ILogger, LogLevel, string, string, string, int, IStepLogger> StepLoggerFactory
         {
             get { return _stepLoggerFactory; }
             set { _stepLoggerFactory = value ?? DefaultStepLoggerFactory; }
         }
 
-        public static IStepLogger RecordSteps(this ILogger logger, LogLevel logLevel, string message = null)
+        public static IStepLogger CreateStepLogger(
+            this ILogger logger,
+            LogLevel logLevel,
+            string message = null,
+            [CallerMemberName] string callerMemberName = LoggerExtensions.CallerMemberNameNotSet,
+            [CallerFilePath] string callerFilePath = LoggerExtensions.CallerFilePathNotSet,
+            [CallerLineNumber] int callerLineNumber = LoggerExtensions.CallerLineNumberNotSet)
         {
             return !logger.IsEnabled(logLevel)
                 ? NullStepLogger.Instance
-                : StepLoggerFactory(logger, logLevel, message);
+                : StepLoggerFactory(logger, logLevel, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static T LogValue<T>(this T value, IStepLogger stepLogger, string label = "Value")
+        public static T AddValueTo<T>(this T value, IStepLogger stepLogger, string label = "Value")
             where T : struct 
         {
             if (stepLogger != NullStepLogger.Instance)
@@ -64,19 +72,11 @@ namespace Rock.Logging.Diagnostics
             return t;
         }
 
-        public static void LogMessage(this IStepLogger stepLogger, string message)
+        public static void AddMessage(this IStepLogger stepLogger, string message)
         {
             if (stepLogger != NullStepLogger.Instance)
             {
                 stepLogger.AddStep(new MessageStep(message));
-            }
-        }
-
-        public static void LogMessage(this IStepLogger stepLogger, Func<string> getMessage)
-        {
-            if (stepLogger != NullStepLogger.Instance)
-            {
-                stepLogger.AddStep(new MessageStep(getMessage()));
             }
         }
 
@@ -86,21 +86,6 @@ namespace Rock.Logging.Diagnostics
                 stepLogger == NullStepLogger.Instance
                     ? NullStopwatchLogger.Instance
                     : new StopwatchLogger(stepLogger);
-        }
-
-
-        /// <summary>
-        /// Log the elapsed time of the stopwatch. The stopwatch will be stopped while logging is taking place, then
-        /// started again once logging is complete. If <paramref name="andRestartStopwatch"/> is true, then the
-        /// stopwatch is reset before it is started again.
-        /// </summary>
-        /// <param name="stopwatchLogger">This instance of <see cref="StopwatchLogger"/>.</param>
-        /// <param name="label">A label to identify the elapsed time value.</param>
-        /// <param name="andRestartStopwatch">Whether to reset the stopwatch before it is started back up.</param>
-        /// <returns>This instance of <see cref="StopwatchLogger"/>.</returns>
-        public static IStopwatchLogger LogElapsed(this IStopwatchLogger stopwatchLogger, string label = null, bool andRestartStopwatch = false)
-        {
-            return stopwatchLogger.LogElapsed(label, andRestartStopwatch);
         }
     }
 }

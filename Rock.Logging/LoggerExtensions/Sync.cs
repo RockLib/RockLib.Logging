@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Rock.Logging
@@ -30,7 +31,11 @@ namespace Rock.Logging
                 return _logger.IsEnabled(logLevel);
             }
 
-            public Task Log(LogEntry logEntry)
+            public Task Log(
+                LogEntry logEntry,
+                [CallerMemberName] string callerMemberName = null,
+                [CallerFilePath] string callerFilePath = null,
+                [CallerLineNumber] int callerLineNumber = 0)
             {
                 if (!_synchronous)
                 {

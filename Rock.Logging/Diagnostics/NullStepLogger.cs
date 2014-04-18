@@ -12,6 +12,10 @@ namespace Rock.Logging.Diagnostics
         {
         }
 
+        public void Flush()
+        {
+        }
+
         public void Dispose()
         {
         }

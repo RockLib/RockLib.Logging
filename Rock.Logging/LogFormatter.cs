@@ -8,30 +8,21 @@ namespace Rock.Logging
 {
     public class LogFormatter : ILogFormatter
     {
-        #region Properties
-
         private static readonly Dictionary<string, Func<LogEntry, string>> simpleTokenHandlers = new Dictionary<string, Func<LogEntry, string>>();
         private static readonly Dictionary<string, Func<LogEntry, string, string>> dictionaryTokenHandlers = new Dictionary<string, Func<LogEntry, string, string>>();
-        private static Regex s_regexExtendedProperties = new Regex(@"{extendedProperties\(([^{]*{([^}]*)}(\??)?[^{]*{value}[^}]*)\)}", RegexOptions.Compiled);
-        private static Regex s_regexCreateTime = new Regex(@"{createTime(\(([^}]*)\))?}", RegexOptions.Compiled);
+        private static readonly Regex s_regexExtendedProperties = new Regex(@"{extendedProperties\(([^{]*{([^}]*)}(\??)?[^{]*{value}[^}]*)\)}", RegexOptions.Compiled);
+        private static readonly Regex s_regexCreateTime = new Regex(@"{createTime(\(([^}]*)\))?}", RegexOptions.Compiled);
 
         // it will check for html encoded tags to detetect
-        private static Regex s_regexLookForHtmlEncodedTags = new Regex("&lt;.+&gt;", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+        private static readonly Regex _containsHtmlTagsRegex = new Regex("&lt;.+&gt;", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
         private static bool _isHtmlEncoded;
 
-        private static readonly CultureInfo s_cultureInfo = new CultureInfo("en-US");
+        private static readonly CultureInfo _culture = new CultureInfo("en-US");
         private string _template;
 
         public LogFormatter(string template)
         {
-            //_template = HttpUtility.HtmlDecode(value);
-            _template = template;
-
-            _isHtmlEncoded = false;
-            if (template != null)
-            {
-                _isHtmlEncoded = s_regexLookForHtmlEncodedTags.IsMatch(template);
-            }
+            Template = template;
         }
 
         /// <summary>
@@ -46,17 +37,11 @@ namespace Rock.Logging
                 //_template = HttpUtility.HtmlDecode(value);
                 _template = value;
 
-                _isHtmlEncoded = false;
-                if (value != null)
-                {
-                    _isHtmlEncoded = s_regexLookForHtmlEncodedTags.IsMatch(value);
-                }
+                _isHtmlEncoded =
+                    value != null
+                    && _containsHtmlTagsRegex.IsMatch(value);
             }
         }
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes the <see cref="LogFormatter"/> class.
@@ -80,28 +65,25 @@ namespace Rock.Logging
             //simpleTokenHandlers["affectedSystem"] = (l) => l.AffectedSystem;
             //simpleTokenHandlers["level"] = (l) => l.Level.ToString();
             //simpleTokenHandlers["userScreenName"] = (l) => l.UserScreenName;
-            simpleTokenHandlers["exception"] = (l) => l.Exception != null ? l.Exception.ToString() : "";
-            simpleTokenHandlers["newLine"] = (l) => System.Environment.NewLine;
+            simpleTokenHandlers["exception"] = (l) => l.Exception != null ? l.Exception.ToString() : null;
+            simpleTokenHandlers["newLine"] = (l) => Environment.NewLine;
             //simpleTokenHandlers["category"] = (l) => l.CategoryId.ToString(CultureInfo.CurrentCulture);
             //simpleTokenHandlers["environment"] = (l) => Environment.Current.ToString();
 
             dictionaryTokenHandlers["extendedProperties"] = (l, t) => ExtendedPropertiesHandler(l.ExtendedProperties, t);
             //dictionaryTokenHandlers["createTime"] = (l, t) => FormattedDateTimeHandler(l.CreateTime, t);
 
-            simpleTokenHandlers["className"] = (l) => FormatLocationInfo(l, "ClassName");
+            //simpleTokenHandlers["className"] = (l) => FormatLocationInfo(l, "ClassName");
             simpleTokenHandlers["fileName"] = (l) => FormatLocationInfo(l, "FileName");
             simpleTokenHandlers["lineNumber"] = (l) => FormatLocationInfo(l, "LineNumber");
             simpleTokenHandlers["methodName"] = (l) => FormatLocationInfo(l, "MethodName");
-            simpleTokenHandlers["fullInfo"] = (l) => FormatLocationInfo(l, "FullInfo");
-            simpleTokenHandlers["threadName"] = (l) => FormatLocationInfo(l, "ThreadName");
-            simpleTokenHandlers["threadId"] = (l) => FormatLocationInfo(l, "ThreadId");
+            //simpleTokenHandlers["fullInfo"] = (l) => FormatLocationInfo(l, "FullInfo");
+            //simpleTokenHandlers["threadName"] = (l) => FormatLocationInfo(l, "ThreadName");
+            //simpleTokenHandlers["threadId"] = (l) => FormatLocationInfo(l, "ThreadId");
 
 
         }
 
-        #endregion
-
-        #region Private Methods
         private static string FormatLocationInfo(LogEntry logEntry, string property)
         {
             //LocationInfo stackTraceInfo;
@@ -140,11 +122,11 @@ namespace Rock.Logging
                     string replacement;
                     if (String.IsNullOrEmpty(match.Groups[2].Value))
                     {
-                        replacement = dateToFormat.ToString("f", s_cultureInfo);
+                        replacement = dateToFormat.ToString("f", _culture);
                     }
                     else
                     {
-                        replacement = dateToFormat.ToString(match.Groups[2].Value, s_cultureInfo);
+                        replacement = dateToFormat.ToString(match.Groups[2].Value, _culture);
                     }
                     template = s_regexCreateTime.Replace(template, replacement, 1);
                 }
@@ -209,10 +191,10 @@ namespace Rock.Logging
                             replacement = match.Groups[1].Value.Replace("{key}?", String.Empty).Replace("{value}", "{1}");
                         }
 
-                        StringBuilder sb = new StringBuilder();
-                        foreach (KeyValuePair<string, string> property in extendedProperties)
+                        var sb = new StringBuilder();
+                        foreach (var property in extendedProperties)
                         {
-                            string value = property.Value;
+                            var value = property.Value;
                             if (_isHtmlEncoded)
                             {
                                 //value = HttpUtility.HtmlEncode(value);
@@ -229,10 +211,6 @@ namespace Rock.Logging
 
             return template;
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Formats the specified log entry.
@@ -255,7 +233,5 @@ namespace Rock.Logging
 
             return toReturn;
         }
-
-        #endregion
     }
 }

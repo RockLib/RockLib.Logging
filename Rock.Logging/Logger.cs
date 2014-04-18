@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Rock.Logging
@@ -40,7 +41,7 @@ namespace Rock.Logging
 
             _configuration = configuration;
             _logProviders = logProviders;
-            _auditLogProvider = auditLogProvider ?? logProviders.First(); // TODO: This needs review from CORE. Is it appropriate to write audit logs to the first provider if no audit provider was supplied?
+            _auditLogProvider = auditLogProvider ?? logProviders.First(); // TODO: If no audit log provider was specified, send audit logs to all of the configured log providers.
             _throttlingRuleEvaluator = throttlingRuleEvaluator ?? Null.ThrottlingRuleEvaluator;
             _contextProviders = (contextProviders ?? Enumerable.Empty<IContextProvider>()).ToList();
         }
@@ -53,13 +54,24 @@ namespace Rock.Logging
                 && logLevel != LogLevel.None;
         }
 
-        public async Task Log(LogEntry logEntry)
+        public async Task Log(
+            LogEntry logEntry,
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
-            if (!IsEnabled(logEntry.LogLevel)
+            if (!IsEnabled(logEntry.LogLevel) // TODO: don't throttle audit logs
                 || (_throttlingRuleEvaluator != null && !_throttlingRuleEvaluator.ShouldLog(logEntry)))
             {
                 return;
             }
+
+            if (logEntry.SearchKey == null)
+            {
+                logEntry.SearchKey = Guid.NewGuid().ToString();
+            }
+
+            logEntry.AddCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
 
             AddContextData(logEntry);
             foreach (var contextProvider in _contextProviders)
@@ -73,6 +85,8 @@ namespace Rock.Logging
             }
             else
             {
+                // TODO: What happens when one log provider fails?
+                //       Currently, if there' a failure, the log entry is sent to the system event log.
                 await Task.WhenAll(_logProviders.Select(logProvider => logProvider.Write(logEntry)));
             }
         }

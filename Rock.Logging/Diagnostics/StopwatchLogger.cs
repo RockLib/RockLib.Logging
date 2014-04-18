@@ -40,7 +40,7 @@ namespace Rock.Logging.Diagnostics
         /// <param name="label">A label to identify the elapsed time value.</param>
         /// <param name="andRestartStopwatch">Whether to reset the stopwatch before it is started back up.</param>
         /// <returns>This instance of <see cref="StopwatchLogger"/>.</returns>
-        public IStopwatchLogger LogElapsed(string label, bool andRestartStopwatch)
+        public IStopwatchLogger RecordElapsed(string label, bool andRestartStopwatch)
         {
             _stopwatch.Stop();
 

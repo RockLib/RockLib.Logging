@@ -1,8 +1,17 @@
-﻿namespace Rock.Logging
+﻿using System.Runtime.CompilerServices;
+
+namespace Rock.Logging
 {
     public static partial class LoggerExtensions
     {
-        public static void Log(this ILogger logger, LogLevel logLevel, string message)
+        // ReSharper disable ExplicitCallerInfoArgument
+        public static void Log(
+            this ILogger logger,
+            LogLevel logLevel,
+            string message,
+            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
+            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
+            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
         {
             var logEntry = new LogEntry
             {
@@ -10,37 +19,68 @@
                 Message = message
             };
 
-            logger.Log(logEntry);
+            logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Debug(this ILogger logger, string message)
+        public static void Debug(
+            this ILogger logger,
+            string message,
+            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
+            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
+            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
         {
-            logger.Log(LogLevel.Debug, message);
+            logger.Log(LogLevel.Debug, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Info(this ILogger logger, string message)
+        public static void Info(
+            this ILogger logger,
+            string message,
+            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
+            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
+            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
         {
-            logger.Log(LogLevel.Info, message);
+            logger.Log(LogLevel.Info, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Warn(this ILogger logger, string message)
+        public static void Warn(
+            this ILogger logger,
+            string message,
+            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
+            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
+            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
         {
-            logger.Log(LogLevel.Warn, message);
+            logger.Log(LogLevel.Warn, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Error(this ILogger logger, string message)
+        public static void Error(
+            this ILogger logger,
+            string message,
+            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
+            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
+            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
         {
-            logger.Log(LogLevel.Error, message);
+            logger.Log(LogLevel.Error, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Fatal(this ILogger logger, string message)
+        public static void Fatal(
+            this ILogger logger,
+            string message,
+            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
+            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
+            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
         {
-            logger.Log(LogLevel.Fatal, message);
+            logger.Log(LogLevel.Fatal, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Audit(this ILogger logger, string message)
+        public static void Audit(
+            this ILogger logger,
+            string message,
+        [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
+        [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
+        [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
         {
-            logger.Log(LogLevel.Audit, message);
+            logger.Log(LogLevel.Audit, message, callerMemberName, callerFilePath, callerLineNumber);
         }
+        // ReSharper restore ExplicitCallerInfoArgument
     }
 }

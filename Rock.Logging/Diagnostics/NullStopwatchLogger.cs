@@ -23,7 +23,7 @@ namespace Rock.Logging.Diagnostics
             return this;
         }
 
-        public IStopwatchLogger LogElapsed(string label, bool andResetStopwatch)
+        public IStopwatchLogger RecordElapsed(string label, bool andResetStopwatch)
         {
             return this;
         }

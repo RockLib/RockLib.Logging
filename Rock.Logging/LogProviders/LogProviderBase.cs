@@ -6,16 +6,16 @@ namespace Rock.Logging
     {
         protected static readonly Task _completedTask = Task.FromResult(0);
 
-        private readonly ILogFormatterFactory _factory;
+        private readonly ILogFormatterFactory _logFormatterFactory;
 
-        protected LogProviderBase(ILogFormatterFactory factory)
+        protected LogProviderBase(ILogFormatterFactory logFormatterFactory)
         {
-            _factory = factory;
+            _logFormatterFactory = logFormatterFactory;
         }
 
         public async Task Write(LogEntry entry)
         {
-            var formatter = _factory.GetInstance();
+            var formatter = _logFormatterFactory.GetInstance();
             await Write(formatter.Format(entry));
         }
 

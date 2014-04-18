@@ -161,31 +161,33 @@ namespace Rock.Logging
 
         private static IEnumerable<ILogProvider> CreateLogProviders(
             string category,
-            ILoggerFactoryConfiguration config,
+            ILoggerFactoryConfiguration loggerFactoryConfiguration,
             IResolver originalContainer)
         {
             return
-                from providerConfig in config.Categories[category ?? ""].Providers
-                let formatterFactory = GetLogFormatterFactory(config, providerConfig)
+                from logProviderConfiguration in loggerFactoryConfiguration.Categories[category ?? ""].Providers
+                let formatterFactory = GetLogFormatterFactory(loggerFactoryConfiguration, logProviderConfiguration)
                 let autoContainer = new AutoContainer(formatterFactory)
                 let container = originalContainer == null ? autoContainer : originalContainer.MergeWith(autoContainer)
-                select (ILogProvider)container.Get(providerConfig.ProviderType);
+                select (ILogProvider)container.Get(logProviderConfiguration.ProviderType);
         }
 
-        private static ILogFormatterFactory GetLogFormatterFactory(ILoggerFactoryConfiguration config, ILogProviderConfiguration providerConfig)
+        private static ILogFormatterFactory GetLogFormatterFactory(
+            ILoggerFactoryConfiguration loggerFactoryConfiguration,
+            ILogProviderConfiguration logProviderConfiguration)
         {
-            if (string.IsNullOrEmpty(providerConfig.FormatterName))
+            if (string.IsNullOrEmpty(logProviderConfiguration.FormatterName))
             {
-                return new LogFormatterFactory(LogProvider.DefaultLogFormatterConfiguration);
+                return new LogFormatterFactory(LogFormatterConfiguration.Default);
             }
 
-            if (config.Formatters.Contains(providerConfig.FormatterName))
+            if (loggerFactoryConfiguration.Formatters.Contains(logProviderConfiguration.FormatterName))
             {
-                var formatterConfig = config.Formatters[providerConfig.FormatterName];
+                var formatterConfig = loggerFactoryConfiguration.Formatters[logProviderConfiguration.FormatterName];
                 return new LogFormatterFactory(formatterConfig);
             }
 
-            throw new /*LogConfiguration*/Exception("Unable to determine formatter template for the provider " + providerConfig.ProviderType.Name);
+            throw new /*LogConfiguration*/Exception("Unable to determine formatter template for the provider " + logProviderConfiguration.ProviderType.Name);
         }
 
         private static IEnumerable<IContextProvider> CreateContextProviders(string category, ILoggerFactoryConfiguration config)

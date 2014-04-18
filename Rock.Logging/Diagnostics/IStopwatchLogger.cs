@@ -16,6 +16,6 @@ namespace Rock.Logging.Diagnostics
         /// <param name="label">A label to identify the elapsed time value.</param>
         /// <param name="andRestartStopwatch">Whether to reset the stopwatch before it is started back up.</param>
         /// <returns>This instance of <see cref="StopwatchLogger"/>.</returns>
-        IStopwatchLogger LogElapsed(string label, bool andRestartStopwatch);
+        IStopwatchLogger RecordElapsed(string label = null, bool andRestartStopwatch = false);
     }
 }

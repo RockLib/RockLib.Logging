@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Rock.Collections;
 
 namespace Rock.Logging
