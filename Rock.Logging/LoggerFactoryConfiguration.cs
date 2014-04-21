@@ -11,7 +11,7 @@ namespace Rock.Logging
 
         public bool IsLoggingEnabled { get; set; }
         public LogLevel LoggingLevel { get; set; }
-        public Type AuditProviderType { get; set; }
+        public ILogProviderConfiguration AuditLogProvider { get; set; }
 
         public KeyedCollection<string, Category> Categories
         {

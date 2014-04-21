@@ -41,7 +41,7 @@ namespace Rock.Logging
 
             _configuration = configuration;
             _logProviders = logProviders;
-            _auditLogProvider = auditLogProvider ?? logProviders.First(); // TODO: If no audit log provider was specified, send audit logs to all of the configured log providers.
+            _auditLogProvider = auditLogProvider; // NOTE: this can be null, and is expected.
             _throttlingRuleEvaluator = throttlingRuleEvaluator ?? Null.ThrottlingRuleEvaluator;
             _contextProviders = (contextProviders ?? Enumerable.Empty<IContextProvider>()).ToList();
         }
@@ -79,7 +79,8 @@ namespace Rock.Logging
                 contextProvider.AddContextData(logEntry);
             }
 
-            if (logEntry.LogLevel == LogLevel.Audit)
+            // If an audit log provider wasn't provided, log to all configured log providers.
+            if (logEntry.LogLevel == LogLevel.Audit && _auditLogProvider != null)
             {
                 await _auditLogProvider.Write(logEntry);
             }

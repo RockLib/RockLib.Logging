@@ -17,7 +17,11 @@ namespace Rock.Logging.Configuration
 
             config.IsLoggingEnabled = settings.IsLoggingEnabled;
             config.LoggingLevel = (LogLevel)Enum.Parse(typeof(LogLevel), settings.LoggingLevel);
-            //config.AuditProviderType = ???; // TODO: figure out what to do with auditing.
+
+            if (settings.AuditLogProvider != null)
+            {
+                config.AuditLogProvider = CreateLogProviderConfiguration(settings.AuditLogProvider);
+            }
 
             LoadFormatters(config, settings);
             LoadThrottlingRules(config, settings);
@@ -67,23 +71,25 @@ namespace Rock.Logging.Configuration
                     }
                 }
 
+                category.Providers =
+                    (from ProviderElement provider in categoryElement.Providers
+                     select CreateLogProviderConfiguration(provider)).ToList();
+
                 config.Categories.Add(category);
-                LoadProviders(categoryElement, category);
             }
         }
 
-        private static void LoadProviders(CategoryElement categoryElement, Category category)
+        private static LogProviderConfiguration CreateLogProviderConfiguration(ProviderElement provider)
         {
-            category.Providers =
-                (from ProviderElement provider in categoryElement.Providers
-                 let providerType = GetProviderType(provider)
-                 let mappers = GetMappers(provider, providerType)
-                 select new LogProviderConfiguration
-                 {
-                     ProviderType = providerType,
-                     FormatterName = provider.Formatter,
-                     Mappers = mappers.ToList()
-                 }).ToList();
+            var providerType = GetProviderType(provider);
+            var mappers = GetMappers(provider, providerType);
+
+            return new LogProviderConfiguration
+            {
+                ProviderType = providerType,
+                FormatterName = provider.Formatter,
+                Mappers = mappers.ToList()
+            };
         }
 
         private static IEnumerable<IMapper> GetMappers(ProviderElement provider, Type providerType)
