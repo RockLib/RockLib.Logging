@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Rock.Collections;
 
 namespace Rock.Logging
@@ -15,7 +16,7 @@ namespace Rock.Logging
         /// Gets the collection of log providers specified.
         /// </summary>
         /// <value>The providers.</value>
-        IKeyedEnumerable<string, ILogProviderConfiguration> Providers { get; }
+        IEnumerable<ILogProviderConfiguration> Providers { get; }
 
         /// <summary>
         /// Gets the throttling rule.

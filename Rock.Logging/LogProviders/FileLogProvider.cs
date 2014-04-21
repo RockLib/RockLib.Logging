@@ -7,7 +7,7 @@ namespace Rock.Logging
 {
     public class FileLogProvider : FormattableLogProvider, IDisposable
     {
-        private const string DefaultFile = @"C:\TEMP\MyAppLog.txt";
+        private const string DefaultFile = @"C:\temp\MyAppLog.txt";
 
         private string _file;
         private Mutex _mutex;

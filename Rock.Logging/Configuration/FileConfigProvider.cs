@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using Rock.Configuration;
 
 namespace Rock.Logging.Configuration
@@ -72,24 +74,47 @@ namespace Rock.Logging.Configuration
 
         private static void LoadProviders(CategoryElement categoryElement, Category category)
         {
-            foreach (ProviderElement provider in categoryElement.Providers)
+            category.Providers =
+                (from ProviderElement provider in categoryElement.Providers
+                 let providerType = GetProviderType(provider)
+                 let mappers = GetMappers(provider, providerType)
+                 select new LogProviderConfiguration
+                 {
+                     ProviderType = providerType,
+                     FormatterName = provider.Formatter,
+                     Mappers = mappers.ToList()
+                 }).ToList();
+        }
+
+        private static IEnumerable<IMapper> GetMappers(ProviderElement provider, Type providerType)
+        {
+            foreach (PropertyMapperElement propertyMapper in provider.PropertyMappers)
             {
-                var type = Type.GetType(provider.ProviderType);
-                if (type == null)
+                var property = providerType.GetProperty(propertyMapper.Property);
+                if (property == null)
                 {
-                    // TODO: better exception and message.
-                    throw new Exception("The type " + provider.ProviderType + " was not specified correctly in the config file.");
+                    throw new /*LogConfiguration*/ Exception("The parameters for the provider are misconfigured.");
                 }
 
-                if (!typeof(ILogProvider).IsAssignableFrom(type))
-                {
-                    // TODO: better exception and message.
-                    throw new Exception("The type " + type + " does not implement ILogProvider.");
-                }
-
-                var config = new LogProviderConfiguration { ProviderType = type, FormatterName = provider.Formatter };
-                category.Providers.Add(config);
+                yield return new Mapper(property, propertyMapper.Value);
             }
+        }
+
+        private static Type GetProviderType(ProviderElement provider)
+        {
+            var type = Type.GetType(provider.ProviderType);
+            if (type == null)
+            {
+                // TODO: better exception and message.
+                throw new Exception("The type " + provider.ProviderType + " was not specified correctly in the config file.");
+            }
+
+            if (!typeof(ILogProvider).IsAssignableFrom(type))
+            {
+                // TODO: better exception and message.
+                throw new Exception("The type " + type + " does not implement ILogProvider.");
+            }
+            return type;
         }
     }
 }

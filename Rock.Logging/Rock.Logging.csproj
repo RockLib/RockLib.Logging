@@ -80,7 +80,9 @@
     <Compile Include="LoggerFactoryConfiguration.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogProviders\FormattableLogProvider.cs" />
+    <Compile Include="LogProviders\IMapper.cs" />
     <Compile Include="LogProviders\LogProviderConfiguration.cs" />
+    <Compile Include="LogProviders\Mapper.cs" />
     <Compile Include="NullInstances.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions\Sync.cs" />

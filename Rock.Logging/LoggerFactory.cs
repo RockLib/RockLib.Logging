@@ -169,7 +169,21 @@ namespace Rock.Logging
                 let formatterFactory = GetLogFormatterFactory(loggerFactoryConfiguration, logProviderConfiguration)
                 let autoContainer = new AutoContainer(formatterFactory)
                 let container = originalContainer == null ? autoContainer : originalContainer.MergeWith(autoContainer)
-                select (ILogProvider)container.Get(logProviderConfiguration.ProviderType);
+                select CreateAndInitializeLogProvider(container, logProviderConfiguration);
+        }
+
+        private static ILogProvider CreateAndInitializeLogProvider(
+            IResolver container,
+            ILogProviderConfiguration logProviderConfiguration)
+        {
+            var logProvider = (ILogProvider)container.Get(logProviderConfiguration.ProviderType);
+            
+            foreach (var mapper in logProviderConfiguration.Mappers)
+            {
+                mapper.SetValue(logProvider);
+            }
+
+            return logProvider;
         }
 
         private static ILogFormatterFactory GetLogFormatterFactory(

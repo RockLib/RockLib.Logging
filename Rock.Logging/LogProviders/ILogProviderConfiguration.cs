@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Rock.Logging
 {
@@ -6,5 +7,6 @@ namespace Rock.Logging
     {
         string FormatterName { get; }
         Type ProviderType { get; }
+        IEnumerable<IMapper> Mappers { get; }
     }
 }
