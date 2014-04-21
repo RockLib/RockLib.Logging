@@ -11,36 +11,15 @@ namespace Rock.Logging
     {
         private static readonly ConcurrentDictionary<Tuple<string, Type>, ILogger> _loggerCache = new ConcurrentDictionary<Tuple<string, Type>, ILogger>();
 
-        private static readonly Lazy<IConfigProvider> _defaultConfigProvider;
-        private static Lazy<IConfigProvider> _configProvider;
-
-        static LoggerFactory()
-        {
-            _defaultConfigProvider = new Lazy<IConfigProvider>(() => new FileConfigProvider());
-            _configProvider = _defaultConfigProvider;
-        }
-
-        public static IConfigProvider ConfigProvider
-        {
-            get { return _configProvider.Value; }
-            set
-            {
-                if (value == null)
-                {
-                    _configProvider = _defaultConfigProvider;
-                }
-                else if (!CurrentConfigProviderIsSameAs(value))
-                {
-                    _configProvider = new Lazy<IConfigProvider>(() => value);
-                }
-            }
-        }
-
         /// <summary>
         /// Gets an instance of <see cref="ILogger"/> by category and custom configuration.
         /// </summary>
-        /// <param name="category">The category.</param>
-        /// <param name="config">The config.</param>
+        /// <param name="category">The optional category of the logger to be returned.</param>
+        /// <param name="config">
+        /// Various settings required by <see cref="LoggerFactory"/>. If null or not provided, the
+        /// configuration returned by the <see cref="IConfigProvider.GetConfiguration"/>
+        /// method from <see cref="ConfigProvider.Current"/> will be used.
+        /// </param>
         /// <returns>Returns a <see cref="ILogger"/>.</returns>
         /// <example>
         /// <code>
@@ -77,8 +56,12 @@ namespace Rock.Logging
         /// custom API configuration by category.
         /// </summary>
         /// <typeparam name="TLogger">Custom logger that implements <see cref="ILogger"/>.</typeparam>
-        /// <param name="category">The category.</param>
-        /// <param name="config">The config.</param>
+        /// <param name="category">The optional category of the logger to be returned.</param>
+        /// <param name="config">
+        /// Various settings required by <see cref="LoggerFactory"/>. If null or not provided, the
+        /// configuration returned by the <see cref="IConfigProvider.GetConfiguration"/>
+        /// method from <see cref="ConfigProvider.Current"/> will be used.
+        /// </param>
         /// <param name="container">An <see cref="IResolver"/> that retrieves objects. To be used in order to resolve dependencies for the specified logger type.</param>
         /// <returns>Returns a <see cref="ILogger"/>.</returns>
         /// <remarks>
@@ -114,7 +97,7 @@ namespace Rock.Logging
             IResolver container = null)
             where TLogger : ILogger
         {
-            config = config ?? ConfigProvider.GetConfiguration();
+            config = config ?? ConfigProvider.Current.GetConfiguration();
             category = category ?? GetFirstCategory(config);
 
             return (TLogger)_loggerCache.GetOrAdd(
@@ -129,7 +112,7 @@ namespace Rock.Logging
             where TLogger : ILogger
         {
             var throttlingRuleEvaluator = CreateThrottlingRuleEvaluator(category, config);
-            var auditLogProvider = CreateAuditLogProvider(category, config, container);
+            var auditLogProvider = CreateAuditLogProvider(config, container);
             var logProviders = CreateLogProviders(category, config, container).ToList();
             var contextProviders = CreateContextProviders(category, config).ToList();
 
@@ -151,31 +134,36 @@ namespace Rock.Logging
         }
 
         private static ILogProvider CreateAuditLogProvider(
-            string category,
             ILoggerFactoryConfiguration config,
-            IResolver originalContainer)
+            IResolver providedContainer)
         {
-            // TODO: Implement
-            return null;
+            if (config.AuditLogProvider == null)
+            {
+                return null;
+            }
+
+            return CreateLogProvider(providedContainer, config, config.AuditLogProvider);
         }
 
         private static IEnumerable<ILogProvider> CreateLogProviders(
             string category,
-            ILoggerFactoryConfiguration loggerFactoryConfiguration,
-            IResolver originalContainer)
+            ILoggerFactoryConfiguration config,
+            IResolver providedContainer)
         {
             return
-                from logProviderConfiguration in loggerFactoryConfiguration.Categories[category ?? ""].Providers
-                let formatterFactory = GetLogFormatterFactory(loggerFactoryConfiguration, logProviderConfiguration)
-                let autoContainer = new AutoContainer(formatterFactory)
-                let container = originalContainer == null ? autoContainer : originalContainer.MergeWith(autoContainer)
-                select CreateAndInitializeLogProvider(container, logProviderConfiguration);
+                from logProviderConfig in config.Categories[category ?? ""].Providers
+                select CreateLogProvider(providedContainer, config, logProviderConfig);
         }
 
-        private static ILogProvider CreateAndInitializeLogProvider(
-            IResolver container,
+        private static ILogProvider CreateLogProvider(
+            IResolver providedContainer,
+            ILoggerFactoryConfiguration loggerFactoryConfiguration,
             ILogProviderConfiguration logProviderConfiguration)
         {
+            var formatterFactory = GetLogFormatterFactory(loggerFactoryConfiguration, logProviderConfiguration);
+            var autoContainer = new AutoContainer(formatterFactory);
+            var container = providedContainer == null ? autoContainer : providedContainer.MergeWith(autoContainer);
+
             var logProvider = (ILogProvider)container.Get(logProviderConfiguration.ProviderType);
             
             foreach (var mapper in logProviderConfiguration.Mappers)
@@ -221,11 +209,6 @@ namespace Rock.Logging
             }
 
             return firstCategory.Name;
-        }
-
-        private static bool CurrentConfigProviderIsSameAs(IConfigProvider value)
-        {
-            return _configProvider.IsValueCreated && ReferenceEquals(_configProvider.Value, value);
         }
     }
 }

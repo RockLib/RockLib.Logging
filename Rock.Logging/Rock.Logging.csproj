@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
+    <Compile Include="Configuration\ConfigProvider.cs" />
     <Compile Include="Configuration\File\CategoryElement.cs" />
     <Compile Include="Configuration\File\CategoryElementCollection.cs" />
     <Compile Include="Configuration\File\FormatterCollection.cs" />
