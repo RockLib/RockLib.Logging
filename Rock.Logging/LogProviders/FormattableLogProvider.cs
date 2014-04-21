@@ -2,13 +2,13 @@
 
 namespace Rock.Logging
 {
-    public abstract class LogProviderBase : ILogProvider
+    public abstract class FormattableLogProvider : ILogProvider
     {
-        protected static readonly Task _completedTask = Task.FromResult(0);
+        protected static readonly Task CompletedTask = Task.FromResult(0);
 
         private readonly ILogFormatterFactory _logFormatterFactory;
 
-        protected LogProviderBase(ILogFormatterFactory logFormatterFactory)
+        protected FormattableLogProvider(ILogFormatterFactory logFormatterFactory)
         {
             _logFormatterFactory = logFormatterFactory;
         }

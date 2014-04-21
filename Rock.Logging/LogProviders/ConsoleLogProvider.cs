@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Rock.Logging
 {
-    public class ConsoleLogProvider : LogProviderBase
+    public class ConsoleLogProvider : FormattableLogProvider
     {
         public ConsoleLogProvider(ILogFormatterFactory logFormatterFactory)
             : base(logFormatterFactory)
@@ -13,7 +13,7 @@ namespace Rock.Logging
         protected override Task Write(string formattedLogEntry)
         {
             Console.WriteLine(formattedLogEntry);
-            return _completedTask;
+            return CompletedTask;
         }
     }
 }
