@@ -42,8 +42,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Category.cs" />
+    <Compile Include="Configuration\File\CategoryElement.cs" />
+    <Compile Include="Configuration\File\CategoryElementCollection.cs" />
+    <Compile Include="Configuration\File\FormatterCollection.cs" />
+    <Compile Include="Configuration\File\FormatterElement.cs" />
+    <Compile Include="Configuration\File\LoggerSectionGroup.cs" />
+    <Compile Include="Configuration\File\LoggerSettingsSection.cs" />
+    <Compile Include="Configuration\File\PropertyMapperCollection.cs" />
+    <Compile Include="Configuration\File\PropertyMapperElement.cs" />
+    <Compile Include="Configuration\File\ProviderElement.cs" />
+    <Compile Include="Configuration\File\ThrottlingRuleCollection.cs" />
+    <Compile Include="Configuration\File\ThrottlingRuleElement.cs" />
     <Compile Include="LogFormatterConfiguration.Default.cs" />
-    <Compile Include="Configuration\FileConfigProvider.cs" />
+    <Compile Include="Configuration\File\FileConfigProvider.cs" />
     <Compile Include="Configuration\IConfigProvider.cs" />
     <Compile Include="LoggerExtensions\AddCallerInfoExtension.cs" />
     <Compile Include="LogProviders\ConsoleLogProvider.cs" />

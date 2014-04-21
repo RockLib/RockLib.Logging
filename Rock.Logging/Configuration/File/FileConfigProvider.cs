@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Rock.Configuration;
 
 namespace Rock.Logging.Configuration
 {
@@ -12,8 +11,7 @@ namespace Rock.Logging.Configuration
         {
             var config = new LoggerFactoryConfiguration();
 
-            var rockSettings = (RockFrameworkSection)ConfigurationManager.GetSection("rock.framework");
-            var settings = rockSettings.LoggerSettings.LoggerSettings;
+            var settings = (LoggerSettingsSection)ConfigurationManager.GetSection("rock.logging");
 
             config.IsLoggingEnabled = settings.IsLoggingEnabled;
             config.LoggingLevel = (LogLevel)Enum.Parse(typeof(LogLevel), settings.LoggingLevel);
