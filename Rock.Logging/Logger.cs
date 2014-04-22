@@ -48,7 +48,7 @@ namespace Rock.Logging
 
         public bool IsEnabled(LogLevel logLevel)
         {
-            return // TODO: this needs review from CORE. Should we always process audit logs, even if logging as a whole is configured to be disabled? Or do audit logs only always process when logging is configured to be enabled?
+            return
                 _configuration.IsLoggingEnabled
                 && logLevel >= _configuration.LoggingLevel
                 && logLevel != LogLevel.None;
@@ -60,8 +60,9 @@ namespace Rock.Logging
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            if (!IsEnabled(logEntry.LogLevel) // TODO: don't throttle audit logs
-                || (_throttlingRuleEvaluator != null && !_throttlingRuleEvaluator.ShouldLog(logEntry)))
+            if (logEntry.LogLevel != LogLevel.Audit
+                && (!IsEnabled(logEntry.LogLevel)
+                    || (_throttlingRuleEvaluator != null && !_throttlingRuleEvaluator.ShouldLog(logEntry))))
             {
                 return;
             }
@@ -79,17 +80,24 @@ namespace Rock.Logging
                 contextProvider.AddContextData(logEntry);
             }
 
-            // If an audit log provider wasn't provided, log to all configured log providers.
+            Task writeTask;
+
             if (logEntry.LogLevel == LogLevel.Audit && _auditLogProvider != null)
             {
-                await _auditLogProvider.Write(logEntry);
+                writeTask = _auditLogProvider.Write(logEntry);
             }
             else
             {
-                // TODO: What happens when one log provider fails?
-                //       Currently, if there' a failure, the log entry is sent to the system event log.
-                await Task.WhenAll(_logProviders.Select(logProvider => logProvider.Write(logEntry)));
+                writeTask = Task.WhenAll(_logProviders.Select(logProvider => logProvider.Write(logEntry)));
             }
+
+            await writeTask.ContinueWith(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    // TODO: send log entry and exception(s) to system event log.
+                }
+            });
         }
 
         protected virtual void AddContextData(LogEntry entry)

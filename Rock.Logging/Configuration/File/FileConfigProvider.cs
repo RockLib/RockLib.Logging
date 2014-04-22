@@ -64,8 +64,7 @@ namespace Rock.Logging.Configuration
                     }
                     else
                     {
-                        // TODO: Implement LogConfigurationException
-                        throw new /*LogConfiguration*/Exception("The throttlingRule " + categoryElement.ThrottlingRule + " specified for the category " + categoryElement.Name + " to use was not found.");
+                        throw new LogConfigurationException(string.Format("The throttlingRule {0} specified for the category {1} to use was not found.", categoryElement.ThrottlingRule, categoryElement.Name));
                     }
                 }
 
@@ -97,7 +96,7 @@ namespace Rock.Logging.Configuration
                 var property = providerType.GetProperty(propertyMapper.Property);
                 if (property == null)
                 {
-                    throw new /*LogConfiguration*/ Exception("The parameters for the provider are misconfigured.");
+                    throw new LogConfigurationException("The parameters for the provider are misconfigured.");
                 }
 
                 yield return new Mapper(property, propertyMapper.Value);
@@ -109,14 +108,12 @@ namespace Rock.Logging.Configuration
             var type = Type.GetType(provider.ProviderType);
             if (type == null)
             {
-                // TODO: better exception and message.
-                throw new Exception("The type " + provider.ProviderType + " was not specified correctly in the config file.");
+                throw new LogConfigurationException("The type " + provider.ProviderType + " was not specified correctly in the config file.");
             }
 
             if (!typeof(ILogProvider).IsAssignableFrom(type))
             {
-                // TODO: better exception and message.
-                throw new Exception("The type " + type + " does not implement ILogProvider.");
+                throw new LogConfigurationException("The type " + type + " does not implement ILogProvider.");
             }
             return type;
         }

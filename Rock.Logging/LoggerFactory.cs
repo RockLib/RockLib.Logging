@@ -189,7 +189,7 @@ namespace Rock.Logging
                 return new LogFormatterFactory(formatterConfig);
             }
 
-            throw new /*LogConfiguration*/Exception("Unable to determine formatter template for the provider " + logProviderConfiguration.ProviderType.Name);
+            throw new LogConfigurationException("Unable to determine formatter template for the provider " + logProviderConfiguration.ProviderType.Name);
         }
 
         private static IEnumerable<IContextProvider> CreateContextProviders(string category, ILoggerFactoryConfiguration config)
@@ -204,8 +204,7 @@ namespace Rock.Logging
 
             if (firstCategory == null)
             {
-                // TODO: Implement LogConfigurationException
-                throw new /*LogConfiguration*/Exception("There are no categories specified in configuration.");
+                throw new LogConfigurationException("There are no categories specified in configuration.");
             }
 
             return firstCategory.Name;

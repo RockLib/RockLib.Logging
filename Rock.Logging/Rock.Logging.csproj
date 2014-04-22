@@ -54,6 +54,7 @@
     <Compile Include="Configuration\File\ProviderElement.cs" />
     <Compile Include="Configuration\File\ThrottlingRuleCollection.cs" />
     <Compile Include="Configuration\File\ThrottlingRuleElement.cs" />
+    <Compile Include="Configuration\LogConfigurationException.cs" />
     <Compile Include="LogFormatterConfiguration.Default.cs" />
     <Compile Include="Configuration\File\FileConfigProvider.cs" />
     <Compile Include="Configuration\IConfigProvider.cs" />
