@@ -10,7 +10,7 @@ namespace Rock.Logging
         {
         }
 
-        protected override Task Write(string formattedLogEntry)
+        protected override Task Write(LogEntry entry, string formattedLogEntry)
         {
             Console.WriteLine(formattedLogEntry);
             return CompletedTask;

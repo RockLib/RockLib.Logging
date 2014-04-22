@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -9,38 +10,24 @@ namespace Rock.Logging
     public class LogFormatter : ILogFormatter
     {
         private static readonly Dictionary<string, Func<LogEntry, string>> simpleTokenHandlers = new Dictionary<string, Func<LogEntry, string>>();
-        private static readonly Dictionary<string, Func<LogEntry, string, string>> dictionaryTokenHandlers = new Dictionary<string, Func<LogEntry, string, string>>();
-        private static readonly Regex s_regexExtendedProperties = new Regex(@"{extendedProperties\(([^{]*{([^}]*)}(\??)?[^{]*{value}[^}]*)\)}", RegexOptions.Compiled);
-        private static readonly Regex s_regexCreateTime = new Regex(@"{createTime(\(([^}]*)\))?}", RegexOptions.Compiled);
+        private static readonly Dictionary<string, Func<LogEntry, string, bool, string>> dictionaryTokenHandlers = new Dictionary<string, Func<LogEntry, string, bool, string>>();
 
-        // it will check for html encoded tags to detetect
+        private static readonly Regex _extendedPropertiesRegex = new Regex(@"{extendedProperties\(([^{]*{([^}]*)}(\??)?[^{]*{value}[^}]*)\)}", RegexOptions.Compiled);
+        private static readonly Regex _createTimeRegex = new Regex(@"{createTime(\(([^}]*)\))?}", RegexOptions.Compiled);
         private static readonly Regex _containsHtmlTagsRegex = new Regex("&lt;.+&gt;", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
-        private static bool _isHtmlEncoded;
-
+        
         private static readonly CultureInfo _culture = new CultureInfo("en-US");
-        private string _template;
+        
+        private readonly bool _isHtmlEncoded;
+        private readonly string _template;
 
         public LogFormatter(string template)
         {
-            Template = template;
-        }
+            _template = WebUtility.HtmlDecode(template);
 
-        /// <summary>
-        /// Gets or sets the template.
-        /// </summary>
-        /// <value>The template.</value>
-        public string Template
-        {
-            get { return _template; }
-            set
-            {
-                //_template = HttpUtility.HtmlDecode(value);
-                _template = value;
-
-                _isHtmlEncoded =
-                    value != null
-                    && _containsHtmlTagsRegex.IsMatch(value);
-            }
+            _isHtmlEncoded =
+                template != null
+                && _containsHtmlTagsRegex.IsMatch(template);
         }
 
         /// <summary>
@@ -49,39 +36,37 @@ namespace Rock.Logging
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         static LogFormatter()
         {
-            simpleTokenHandlers["message"] = (l) => l.Message;
-            //simpleTokenHandlers["userDisplayName"] = (l) => l.UserDisplayName;
-            //simpleTokenHandlers["applicationId"] = (l) => l.ApplicationId.ToString();
-            //simpleTokenHandlers["userCommonId"] = (l) => l.UserCommonId.ToString();
-            //simpleTokenHandlers["machineName"] = (l) => l.MachineName;
-            //simpleTokenHandlers["userName"] = (l) => l.UserName;
-            //simpleTokenHandlers["userIPAddress"] = (l) => l.UserIPAddress;
-            //simpleTokenHandlers["userDisrupted"] = (l) => l.IsUserDisrupted.ToString();
-            //simpleTokenHandlers["userAgentBrowser"] = (l) => l.UserAgentBrowser;
-            //simpleTokenHandlers["url"] = (l) => l.Url;
-            //simpleTokenHandlers["referrer"] = (l) => l.Referrer;
-            //simpleTokenHandlers["machineIPAddress"] = (l) => l.MachineIPAddress;
-            //simpleTokenHandlers["requestMethod"] = (l) => l.RequestMethod;
-            //simpleTokenHandlers["affectedSystem"] = (l) => l.AffectedSystem;
-            //simpleTokenHandlers["level"] = (l) => l.Level.ToString();
-            //simpleTokenHandlers["userScreenName"] = (l) => l.UserScreenName;
-            simpleTokenHandlers["exception"] = (l) => l.Exception != null ? l.Exception.ToString() : null;
-            simpleTokenHandlers["newLine"] = (l) => Environment.NewLine;
-            //simpleTokenHandlers["category"] = (l) => l.CategoryId.ToString(CultureInfo.CurrentCulture);
-            //simpleTokenHandlers["environment"] = (l) => Environment.Current.ToString();
+            simpleTokenHandlers["message"] = logEntry => logEntry.Message;
+            //simpleTokenHandlers["userDisplayName"] = logEntry => logEntry.UserDisplayName;
+            //simpleTokenHandlers["applicationId"] = logEntry => logEntry.ApplicationId.ToString();
+            //simpleTokenHandlers["userCommonId"] = logEntry => logEntry.UserCommonId.ToString();
+            //simpleTokenHandlers["machineName"] = logEntry => logEntry.MachineName;
+            //simpleTokenHandlers["userName"] = logEntry => logEntry.UserName;
+            //simpleTokenHandlers["userIPAddress"] = logEntry => logEntry.UserIPAddress;
+            //simpleTokenHandlers["userDisrupted"] = logEntry => logEntry.IsUserDisrupted.ToString();
+            //simpleTokenHandlers["userAgentBrowser"] = logEntry => logEntry.UserAgentBrowser;
+            //simpleTokenHandlers["url"] = logEntry => logEntry.Url;
+            //simpleTokenHandlers["referrer"] = logEntry => logEntry.Referrer;
+            //simpleTokenHandlers["machineIPAddress"] = logEntry => logEntry.MachineIPAddress;
+            //simpleTokenHandlers["requestMethod"] = logEntry => logEntry.RequestMethod;
+            //simpleTokenHandlers["affectedSystem"] = logEntry => logEntry.AffectedSystem;
+            //simpleTokenHandlers["level"] = logEntry => logEntry.Level.ToString();
+            //simpleTokenHandlers["userScreenName"] = logEntry => logEntry.UserScreenName;
+            simpleTokenHandlers["exception"] = logEntry => logEntry.Exception != null ? logEntry.Exception.ToString() : null;
+            simpleTokenHandlers["newLine"] = logEntry => Environment.NewLine;
+            //simpleTokenHandlers["category"] = logEntry => logEntry.CategoryId.ToString(CultureInfo.CurrentCulture);
+            //simpleTokenHandlers["environment"] = logEntry => Environment.Current.ToString();
 
-            dictionaryTokenHandlers["extendedProperties"] = (l, t) => ExtendedPropertiesHandler(l.ExtendedProperties, t);
-            //dictionaryTokenHandlers["createTime"] = (l, t) => FormattedDateTimeHandler(l.CreateTime, t);
+            dictionaryTokenHandlers["extendedProperties"] = (logEntry, template, isHtmlEncoded) => ExtendedPropertiesHandler(logEntry.ExtendedProperties, template, isHtmlEncoded);
+            //dictionaryTokenHandlers["createTime"] = (logEntry, t) => FormattedDateTimeHandler(logEntry.CreateTime, t);
 
-            //simpleTokenHandlers["className"] = (l) => FormatLocationInfo(l, "ClassName");
-            simpleTokenHandlers["fileName"] = (l) => FormatLocationInfo(l, "FileName");
-            simpleTokenHandlers["lineNumber"] = (l) => FormatLocationInfo(l, "LineNumber");
-            simpleTokenHandlers["methodName"] = (l) => FormatLocationInfo(l, "MethodName");
-            //simpleTokenHandlers["fullInfo"] = (l) => FormatLocationInfo(l, "FullInfo");
-            //simpleTokenHandlers["threadName"] = (l) => FormatLocationInfo(l, "ThreadName");
-            //simpleTokenHandlers["threadId"] = (l) => FormatLocationInfo(l, "ThreadId");
-
-
+            //simpleTokenHandlers["className"] = logEntry => FormatLocationInfo(logEntry, "ClassName");
+            simpleTokenHandlers["fileName"] = logEntry => FormatLocationInfo(logEntry, "FileName");
+            simpleTokenHandlers["lineNumber"] = logEntry => FormatLocationInfo(logEntry, "LineNumber");
+            simpleTokenHandlers["methodName"] = logEntry => FormatLocationInfo(logEntry, "MethodName");
+            //simpleTokenHandlers["fullInfo"] = logEntry => FormatLocationInfo(logEntry, "FullInfo");
+            //simpleTokenHandlers["threadName"] = logEntry => FormatLocationInfo(logEntry, "ThreadName");
+            //simpleTokenHandlers["threadId"] = logEntry => FormatLocationInfo(logEntry, "ThreadId");
         }
 
         private static string FormatLocationInfo(LogEntry logEntry, string property)
@@ -113,7 +98,7 @@ namespace Rock.Logging
 
         private static string FormattedDateTimeHandler(DateTime dateToFormat, string template)
         {
-            MatchCollection matches = s_regexCreateTime.Matches(template);
+            MatchCollection matches = _createTimeRegex.Matches(template);
 
             if (matches.Count > 0)
             {
@@ -128,7 +113,7 @@ namespace Rock.Logging
                     {
                         replacement = dateToFormat.ToString(match.Groups[2].Value, _culture);
                     }
-                    template = s_regexCreateTime.Replace(template, replacement, 1);
+                    template = _createTimeRegex.Replace(template, replacement, 1);
                 }
             }
 
@@ -137,9 +122,9 @@ namespace Rock.Logging
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object,System.Object)")]
-        private static string ExtendedPropertiesHandler(IDictionary<string, string> extendedProperties, string template)
+        private static string ExtendedPropertiesHandler(IDictionary<string, string> extendedProperties, string template, bool isHtmlEncoded)
         {
-            MatchCollection matches = s_regexExtendedProperties.Matches(template);
+            MatchCollection matches = _extendedPropertiesRegex.Matches(template);
             if (matches.Count > 0)
             {
                 foreach (Match match in matches)
@@ -154,9 +139,9 @@ namespace Rock.Logging
                             valueToUse = extendedProperties[keyName];
                         }
 
-                        if (_isHtmlEncoded)
+                        if (isHtmlEncoded)
                         {
-                            //valueToUse = HttpUtility.HtmlEncode(valueToUse);
+                            valueToUse = WebUtility.HtmlEncode(valueToUse);
                         }
 
                         // to avoid a situaltions where using dollar sign inadvertently is used
@@ -171,13 +156,11 @@ namespace Rock.Logging
                         else // we have a ? after the key which indicates that the key should not be displayed
                         {
                             replacement = match.Groups[1].Value.Replace("{" + keyName + "}?", String.Empty).Replace("{value}", valueToUse);
-
                         }
 
                         replacement = replacement.Replace("$", "$$");
 
-                        template = s_regexExtendedProperties.Replace(template, replacement, 1);
-
+                        template = _extendedPropertiesRegex.Replace(template, replacement, 1);
                     }
                     else
                     {
@@ -195,16 +178,16 @@ namespace Rock.Logging
                         foreach (var property in extendedProperties)
                         {
                             var value = property.Value;
-                            if (_isHtmlEncoded)
+                            if (isHtmlEncoded)
                             {
-                                //value = HttpUtility.HtmlEncode(value);
+                                value = WebUtility.HtmlEncode(value);
                             }
 
                             sb.Append(string.Format(replacement + System.Environment.NewLine, property.Key, value));
                         }
 
                         sb.Replace("$", "$$");
-                        template = s_regexExtendedProperties.Replace(template, sb.ToString(), 1);
+                        template = _extendedPropertiesRegex.Replace(template, sb.ToString(), 1);
                     }
                 }
             }
@@ -219,7 +202,7 @@ namespace Rock.Logging
         /// <returns>Return the template formatted to the message.</returns>
         public string Format(LogEntry logEntry)
         {
-            StringBuilder sb = new StringBuilder(Template);
+            StringBuilder sb = new StringBuilder(_template);
 
             foreach (var tokenHandler in simpleTokenHandlers)
                 sb.Replace("{" + tokenHandler.Key + "}", tokenHandler.Value(logEntry));
@@ -228,7 +211,7 @@ namespace Rock.Logging
 
             foreach (var tokenHandler in dictionaryTokenHandlers)
             {
-                toReturn = tokenHandler.Value(logEntry, toReturn);
+                toReturn = tokenHandler.Value(logEntry, toReturn, _isHtmlEncoded);
             }
 
             return toReturn;

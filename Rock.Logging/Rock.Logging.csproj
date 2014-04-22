@@ -75,6 +75,7 @@
     <Compile Include="ILogFormatterConfiguration.cs" />
     <Compile Include="ILogFormatterFactory.cs" />
     <Compile Include="ILoggerFactoryConfiguration.cs" />
+    <Compile Include="LogProviders\EmailLogProvider.cs" />
     <Compile Include="LogProviders\FileLogProvider.cs" />
     <Compile Include="LogProviders\ILogProvider.cs" />
     <Compile Include="LogProviders\ILogProviderConfiguration.cs" />

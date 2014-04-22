@@ -20,9 +20,9 @@ namespace Rock.Logging
         public async Task Write(LogEntry entry)
         {
             var formatter = _logFormatterFactory.GetInstance();
-            await Write(formatter.Format(entry));
+            await Write(entry, formatter.Format(entry));
         }
 
-        protected abstract Task Write(string formattedLogEntry);
+        protected abstract Task Write(LogEntry entry, string formattedLogEntry);
     }
 }
