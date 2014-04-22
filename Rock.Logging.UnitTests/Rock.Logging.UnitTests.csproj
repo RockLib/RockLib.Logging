@@ -37,6 +37,10 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rock.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rock.Core.0.0.1\lib\net45\Rock.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Sprache, Version=1.10.0.36, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Sprache.1.10.0.36\lib\net40\Sprache.dll</HintPath>
@@ -73,10 +77,6 @@
     <ProjectReference Include="..\Rock.Logging\Rock.Logging.csproj">
       <Project>{d33f6aa7-d13f-4904-b02e-eaf09d133e19}</Project>
       <Name>Rock.Logging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Rock.Core\Rock.Core\Rock.Core.csproj">
-      <Project>{0feb58cd-b15c-4cdc-83d6-7621c1db98c7}</Project>
-      <Name>Rock.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
