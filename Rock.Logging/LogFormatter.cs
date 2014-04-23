@@ -9,8 +9,8 @@ namespace Rock.Logging
 {
     public class LogFormatter : ILogFormatter
     {
-        private static readonly Dictionary<string, Func<LogEntry, string>> simpleTokenHandlers = new Dictionary<string, Func<LogEntry, string>>();
-        private static readonly Dictionary<string, Func<LogEntry, string, bool, string>> dictionaryTokenHandlers = new Dictionary<string, Func<LogEntry, string, bool, string>>();
+        private static readonly Dictionary<string, Func<LogEntry, string>> _simpleTokenHandlers = new Dictionary<string, Func<LogEntry, string>>();
+        private static readonly Dictionary<string, Func<LogEntry, string, bool, string>> _dictionaryTokenHandlers = new Dictionary<string, Func<LogEntry, string, bool, string>>();
 
         private static readonly Regex _extendedPropertiesRegex = new Regex(@"{extendedProperties\(([^{]*{([^}]*)}(\??)?[^{]*{value}[^}]*)\)}", RegexOptions.Compiled);
         private static readonly Regex _createTimeRegex = new Regex(@"{createTime(\(([^}]*)\))?}", RegexOptions.Compiled);
@@ -36,37 +36,69 @@ namespace Rock.Logging
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
         static LogFormatter()
         {
-            simpleTokenHandlers["message"] = logEntry => logEntry.Message;
-            //simpleTokenHandlers["userDisplayName"] = logEntry => logEntry.UserDisplayName;
-            //simpleTokenHandlers["applicationId"] = logEntry => logEntry.ApplicationId.ToString();
-            //simpleTokenHandlers["userCommonId"] = logEntry => logEntry.UserCommonId.ToString();
-            //simpleTokenHandlers["machineName"] = logEntry => logEntry.MachineName;
-            //simpleTokenHandlers["userName"] = logEntry => logEntry.UserName;
-            //simpleTokenHandlers["userIPAddress"] = logEntry => logEntry.UserIPAddress;
-            //simpleTokenHandlers["userDisrupted"] = logEntry => logEntry.IsUserDisrupted.ToString();
-            //simpleTokenHandlers["userAgentBrowser"] = logEntry => logEntry.UserAgentBrowser;
-            //simpleTokenHandlers["url"] = logEntry => logEntry.Url;
-            //simpleTokenHandlers["referrer"] = logEntry => logEntry.Referrer;
-            //simpleTokenHandlers["machineIPAddress"] = logEntry => logEntry.MachineIPAddress;
-            //simpleTokenHandlers["requestMethod"] = logEntry => logEntry.RequestMethod;
-            //simpleTokenHandlers["affectedSystem"] = logEntry => logEntry.AffectedSystem;
-            //simpleTokenHandlers["level"] = logEntry => logEntry.Level.ToString();
-            //simpleTokenHandlers["userScreenName"] = logEntry => logEntry.UserScreenName;
-            simpleTokenHandlers["exception"] = logEntry => logEntry.Exception != null ? logEntry.Exception.ToString() : null;
-            simpleTokenHandlers["newLine"] = logEntry => Environment.NewLine;
-            //simpleTokenHandlers["category"] = logEntry => logEntry.CategoryId.ToString(CultureInfo.CurrentCulture);
-            //simpleTokenHandlers["environment"] = logEntry => Environment.Current.ToString();
+            AddSimpleTokenHandler("message", logEntry => logEntry.Message);
+            //AddSimpleTokenHandler("userDisplayName", logEntry => logEntry.UserDisplayName);
+            //AddSimpleTokenHandler("applicationId", logEntry => logEntry.ApplicationId.ToString());
+            //AddSimpleTokenHandler("userCommonId", logEntry => logEntry.UserCommonId.ToString());
+            //AddSimpleTokenHandler("machineName", logEntry => logEntry.MachineName);
+            //AddSimpleTokenHandler("userName", logEntry => logEntry.UserName);
+            //AddSimpleTokenHandler("userIPAddress", logEntry => logEntry.UserIPAddress);
+            //AddSimpleTokenHandler("userDisrupted", logEntry => logEntry.IsUserDisrupted.ToString());
+            //AddSimpleTokenHandler("userAgentBrowser", logEntry => logEntry.UserAgentBrowser);
+            //AddSimpleTokenHandler("url", logEntry => logEntry.Url);
+            //AddSimpleTokenHandler("referrer", logEntry => logEntry.Referrer);
+            //AddSimpleTokenHandler("machineIPAddress", logEntry => logEntry.MachineIPAddress);
+            //AddSimpleTokenHandler("requestMethod", logEntry => logEntry.RequestMethod);
+            //AddSimpleTokenHandler("affectedSystem", logEntry => logEntry.AffectedSystem);
+            //AddSimpleTokenHandler("level", logEntry => logEntry.Level.ToString());
+            //AddSimpleTokenHandler("userScreenName", logEntry => logEntry.UserScreenName);
+            AddSimpleTokenHandler("exception", logEntry => logEntry.Exception != null ? logEntry.Exception.ToString() : null);
+            AddSimpleTokenHandler("newLine", logEntry => Environment.NewLine);
+            //AddSimpleTokenHandler("category", logEntry => logEntry.CategoryId.ToString(CultureInfo.CurrentCulture));
+            //AddSimpleTokenHandler("environment", logEntry => Environment.Current.ToString());
 
-            dictionaryTokenHandlers["extendedProperties"] = (logEntry, template, isHtmlEncoded) => ExtendedPropertiesHandler(logEntry.ExtendedProperties, template, isHtmlEncoded);
-            //dictionaryTokenHandlers["createTime"] = (logEntry, t) => FormattedDateTimeHandler(logEntry.CreateTime, t);
+            AddComplexTokenHandler("extendedProperties", (logEntry, template, isHtmlEncoded) => ExtendedPropertiesHandler(logEntry.ExtendedProperties, template, isHtmlEncoded));
+            //AddComplexTokenHandler("createTime", (logEntry, template, isHtmlEncoded) => FormattedDateTimeHandler(logEntry.CreateTime, template);
 
-            //simpleTokenHandlers["className"] = logEntry => FormatLocationInfo(logEntry, "ClassName");
-            simpleTokenHandlers["fileName"] = logEntry => FormatLocationInfo(logEntry, "FileName");
-            simpleTokenHandlers["lineNumber"] = logEntry => FormatLocationInfo(logEntry, "LineNumber");
-            simpleTokenHandlers["methodName"] = logEntry => FormatLocationInfo(logEntry, "MethodName");
-            //simpleTokenHandlers["fullInfo"] = logEntry => FormatLocationInfo(logEntry, "FullInfo");
-            //simpleTokenHandlers["threadName"] = logEntry => FormatLocationInfo(logEntry, "ThreadName");
-            //simpleTokenHandlers["threadId"] = logEntry => FormatLocationInfo(logEntry, "ThreadId");
+            //AddSimpleTokenHandler("className", logEntry => FormatLocationInfo(logEntry, "ClassName"));
+            AddSimpleTokenHandler("fileName", logEntry => FormatLocationInfo(logEntry, "FileName"));
+            AddSimpleTokenHandler("lineNumber", logEntry => FormatLocationInfo(logEntry, "LineNumber"));
+            AddSimpleTokenHandler("methodName", logEntry => FormatLocationInfo(logEntry, "MethodName"));
+            //AddSimpleTokenHandler("fullInfo", logEntry => FormatLocationInfo(logEntry, "FullInfo"));
+            //AddSimpleTokenHandler("threadName", logEntry => FormatLocationInfo(logEntry, "ThreadName"));
+            //AddSimpleTokenHandler("threadId", logEntry => FormatLocationInfo(logEntry, "ThreadId"));
+        }
+
+        public static void AddSimpleTokenHandler(string key, Func<LogEntry, string> getTokenReplacement)
+        {
+            _simpleTokenHandlers[key] = getTokenReplacement;
+        }
+
+        public static void AddSimpleTokenHandler<TLogEntry>(string key, Func<TLogEntry, string> getTokenReplacement)
+            where TLogEntry : LogEntry
+        {
+            _simpleTokenHandlers[key] =
+                logEntry =>
+                {
+                    var tLogEntry = logEntry as TLogEntry;
+                    return tLogEntry == null ? null : getTokenReplacement(tLogEntry);
+                };
+        }
+
+        public static void AddComplexTokenHandler(string key, Func<LogEntry, string, bool, string> getTokenReplacement)
+        {
+            _dictionaryTokenHandlers[key] = getTokenReplacement;
+        }
+
+        public static void AddComplexTokenHandler<TLogEntry>(string key, Func<TLogEntry, string, bool, string> getTokenReplacement)
+            where TLogEntry : LogEntry
+        {
+            _dictionaryTokenHandlers[key] =
+                (logEntry, template, isHtmlEncoded) =>
+                {
+                    var tLogEntry = logEntry as TLogEntry;
+                    return tLogEntry == null ? null : getTokenReplacement(tLogEntry, template, isHtmlEncoded);
+                };
         }
 
         private static string FormatLocationInfo(LogEntry logEntry, string property)
@@ -204,12 +236,12 @@ namespace Rock.Logging
         {
             StringBuilder sb = new StringBuilder(_template);
 
-            foreach (var tokenHandler in simpleTokenHandlers)
+            foreach (var tokenHandler in _simpleTokenHandlers)
                 sb.Replace("{" + tokenHandler.Key + "}", tokenHandler.Value(logEntry));
 
             string toReturn = sb.ToString();
 
-            foreach (var tokenHandler in dictionaryTokenHandlers)
+            foreach (var tokenHandler in _dictionaryTokenHandlers)
             {
                 toReturn = tokenHandler.Value(logEntry, toReturn, _isHtmlEncoded);
             }

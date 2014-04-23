@@ -5,29 +5,17 @@ namespace Rock.Logging.Diagnostics
 {
     public static class StepLoggingExtensions
     {
-        public static readonly Func<ILogger, LogLevel, string, string, string, int, IStepLogger> DefaultStepLoggerFactory =
-            (logger, level, message, callerMemberName, callerFilePath, callerLineNumber) =>
-                new StepLogger(logger, level, message, callerMemberName, callerFilePath, callerLineNumber);
-
-        private static Func<ILogger, LogLevel, string, string, string, int, IStepLogger> _stepLoggerFactory = DefaultStepLoggerFactory;
-
-        public static Func<ILogger, LogLevel, string, string, string, int, IStepLogger> StepLoggerFactory
-        {
-            get { return _stepLoggerFactory; }
-            set { _stepLoggerFactory = value ?? DefaultStepLoggerFactory; }
-        }
-
         public static IStepLogger CreateStepLogger(
             this ILogger logger,
             LogLevel logLevel,
             string message = null,
-            [CallerMemberName] string callerMemberName = LoggerExtensions.CallerMemberNameNotSet,
-            [CallerFilePath] string callerFilePath = LoggerExtensions.CallerFilePathNotSet,
-            [CallerLineNumber] int callerLineNumber = LoggerExtensions.CallerLineNumberNotSet)
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             return !logger.IsEnabled(logLevel)
                 ? NullStepLogger.Instance
-                : StepLoggerFactory(logger, logLevel, message, callerMemberName, callerFilePath, callerLineNumber);
+                : Default.StepLoggerFactory.CreateStepLogger(logger, logLevel, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         public static T AddValueTo<T>(this T value, IStepLogger stepLogger, string label = "Value")

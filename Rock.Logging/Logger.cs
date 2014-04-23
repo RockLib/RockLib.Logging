@@ -42,7 +42,7 @@ namespace Rock.Logging
             _configuration = configuration;
             _logProviders = logProviders;
             _auditLogProvider = auditLogProvider; // NOTE: this can be null, and is expected.
-            _throttlingRuleEvaluator = throttlingRuleEvaluator ?? Null.ThrottlingRuleEvaluator;
+            _throttlingRuleEvaluator = throttlingRuleEvaluator ?? NullThrottlingRuleEvaluator.Instance;
             _contextProviders = (contextProviders ?? Enumerable.Empty<IContextProvider>()).ToList();
         }
 

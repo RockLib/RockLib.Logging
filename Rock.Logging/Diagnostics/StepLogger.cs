@@ -67,12 +67,10 @@ namespace Rock.Logging.Diagnostics
 
             report.AppendLine("Total Elapsed: " + _stopwatch.Elapsed);
 
-            var logEntry = new LogEntry
-            {
-                LogLevel = _logLevel,
-                Message = _message ?? "Step Report",
-            };
+            var logEntry = Default.LogEntryFactory.CreateLogEntry();
 
+            logEntry.LogLevel = _logLevel;
+            logEntry.Message = _message ?? "Step Report";
             logEntry.ExtendedProperties.Add("Step Report", report.ToString());
 
             _logger.Log(logEntry);

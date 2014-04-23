@@ -97,7 +97,7 @@ namespace Rock.Logging
             IResolver container = null)
             where TLogger : ILogger
         {
-            config = config ?? ConfigProvider.Current.GetConfiguration();
+            config = config ?? Default.ConfigProvider.GetConfiguration();
             category = category ?? GetFirstCategory(config);
 
             return (TLogger)_loggerCache.GetOrAdd(
@@ -194,8 +194,7 @@ namespace Rock.Logging
 
         private static IEnumerable<IContextProvider> CreateContextProviders(string category, ILoggerFactoryConfiguration config)
         {
-            // TODO: Implement
-            yield break;
+            return Default.ContextProviders; // TODO: append context providers from configuration.
         }
 
         private static string GetFirstCategory(ILoggerFactoryConfiguration config)

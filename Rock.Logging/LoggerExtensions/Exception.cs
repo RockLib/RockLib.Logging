@@ -11,22 +11,20 @@ namespace Rock.Logging
             LogLevel logLevel,
             Exception exception,
             string message = null,
-            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
-            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
-            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             if (exception == null)
             {
                 throw new ArgumentNullException("exception");
             }
 
-            var logEntry =
-                new LogEntry
-                {
-                    LogLevel = logLevel,
-                    Exception = exception,
-                    Message = message ?? exception.Message
-                };
+            var logEntry = Default.LogEntryFactory.CreateLogEntry();
+
+            logEntry.LogLevel = logLevel;
+            logEntry.Exception = exception;
+            logEntry.Message = message ?? exception.Message;
 
             logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
         }
@@ -35,9 +33,9 @@ namespace Rock.Logging
             this ILogger logger,
             Exception exception,
             string message = null,
-            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
-            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
-            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             logger.Log(LogLevel.Debug, exception, message, callerMemberName, callerFilePath, callerLineNumber);
         }
@@ -46,9 +44,9 @@ namespace Rock.Logging
             this ILogger logger,
             Exception exception,
             string message = null,
-            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
-            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
-            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             logger.Log(LogLevel.Info, exception, message, callerMemberName, callerFilePath, callerLineNumber);
         }
@@ -57,9 +55,9 @@ namespace Rock.Logging
             this ILogger logger,
             Exception exception,
             string message = null,
-            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
-            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
-            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             logger.Log(LogLevel.Warn, exception, message, callerMemberName, callerFilePath, callerLineNumber);
         }
@@ -68,9 +66,9 @@ namespace Rock.Logging
             this ILogger logger,
             Exception exception,
             string message = null,
-            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
-            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
-            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             logger.Log(LogLevel.Error, exception, message, callerMemberName, callerFilePath, callerLineNumber);
         }
@@ -79,9 +77,9 @@ namespace Rock.Logging
             this ILogger logger,
             Exception exception,
             string message = null,
-            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
-            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
-            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             logger.Log(LogLevel.Fatal, exception, message, callerMemberName, callerFilePath, callerLineNumber);
         }
@@ -90,9 +88,9 @@ namespace Rock.Logging
             this ILogger logger,
             Exception exception,
             string message = null,
-            [CallerMemberName] string callerMemberName = CallerMemberNameNotSet,
-            [CallerFilePath] string callerFilePath = CallerFilePathNotSet,
-            [CallerLineNumber] int callerLineNumber = CallerLineNumberNotSet)
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             logger.Log(LogLevel.Audit, exception, message, callerMemberName, callerFilePath, callerLineNumber);
         }

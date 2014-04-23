@@ -1,13 +1,7 @@
-﻿using System.Globalization;
-
-namespace Rock.Logging
+﻿namespace Rock.Logging
 {
     public static partial class LoggerExtensions
     {
-        public const string CallerMemberNameNotSet = null;
-        public const string CallerFilePathNotSet = null;
-        public const int CallerLineNumberNotSet = -1;
-
         public static LogEntry AddCallerInfo(
             this LogEntry logEntry,
             string callerMemberName,
