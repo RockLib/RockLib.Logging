@@ -30,9 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rock.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rock.Core.0.0.1\lib\net45\Rock.Core.dll</HintPath>
+    <Reference Include="Rock.Core">
+      <HintPath>..\packages\Rock.Core.0.0.12\lib\net45\Rock.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -58,6 +57,7 @@
     <Compile Include="Configuration\File\ThrottlingRuleCollection.cs" />
     <Compile Include="Configuration\File\ThrottlingRuleElement.cs" />
     <Compile Include="Configuration\LogConfigurationException.cs" />
+    <Compile Include="ContextProvider.cs" />
     <Compile Include="Default.cs" />
     <Compile Include="Diagnostics\DefaultStepLoggerFactory.cs" />
     <Compile Include="Diagnostics\IStepLoggerFactory.cs" />
