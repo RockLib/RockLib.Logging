@@ -6,8 +6,6 @@ namespace Rock.Logging
 {
     public static class Default
     {
-        private static bool _locked;
-
         private static readonly Lazy<ILogEntryFactory> _defaultLogEntryFactory;
         private static Lazy<ILogEntryFactory> _logEntryFactory;
 
@@ -21,13 +19,13 @@ namespace Rock.Logging
 
         static Default()
         {
-            _defaultLogEntryFactory = new Lazy<ILogEntryFactory>(() => LockThenReturn(new LogEntryFactory()));
+            _defaultLogEntryFactory = new Lazy<ILogEntryFactory>(() => new LogEntryFactory());
             _logEntryFactory = _defaultLogEntryFactory;
 
-            _defaultConfigProvider = new Lazy<IConfigProvider>(() => LockThenReturn(new FileConfigProvider()));
+            _defaultConfigProvider = new Lazy<IConfigProvider>(() => new FileConfigProvider());
             _configProvider = _defaultConfigProvider;
 
-            _defaultStepLoggerFactory = new Lazy<IStepLoggerFactory>(() => LockThenReturn(new DefaultStepLoggerFactory()));
+            _defaultStepLoggerFactory = new Lazy<IStepLoggerFactory>(() => new DefaultStepLoggerFactory());
             _stepLoggerFactory = _defaultStepLoggerFactory;
         }
 
@@ -36,18 +34,13 @@ namespace Rock.Logging
             get { return _logEntryFactory.Value; }
             set
             {
-                if (_locked)
-                {
-                    return;
-                }
-
                 if (value == null)
                 {
                     _logEntryFactory = _defaultLogEntryFactory;
                 }
                 else if (!CurrentLogEntryFactoryIsSameAs(value))
                 {
-                    _logEntryFactory = new Lazy<ILogEntryFactory>(() => LockThenReturn(value));
+                    _logEntryFactory = new Lazy<ILogEntryFactory>(() => value);
                 }
             }
         }
@@ -62,18 +55,13 @@ namespace Rock.Logging
             get { return _stepLoggerFactory.Value; }
             set
             {
-                if (_locked)
-                {
-                    return;
-                }
-
                 if (value == null)
                 {
                     _stepLoggerFactory = _defaultStepLoggerFactory;
                 }
                 else if (!CurrentStepLoggerFactoryIsSameAs(value))
                 {
-                    _stepLoggerFactory = new Lazy<IStepLoggerFactory>(() => LockThenReturn(value));
+                    _stepLoggerFactory = new Lazy<IStepLoggerFactory>(() => value);
                 }
             }
         }
@@ -88,18 +76,13 @@ namespace Rock.Logging
             get { return _configProvider.Value; }
             set
             {
-                if (_locked)
-                {
-                    return;
-                }
-
                 if (value == null)
                 {
                     _configProvider = _defaultConfigProvider;
                 }
                 else if (!CurrentConfigProviderIsSameAs(value))
                 {
-                    _configProvider = new Lazy<IConfigProvider>(() => LockThenReturn(value));
+                    _configProvider = new Lazy<IConfigProvider>(() => value);
                 }
             }
         }
@@ -111,36 +94,8 @@ namespace Rock.Logging
 
         public static IContextProvider[] ContextProviders
         {
-            get 
-            {
-                _locked = true;
-                return _contextProviders;
-            }
-            set
-            {
-                if (_locked)
-                {
-                    return;
-                }
-
-                _contextProviders = value ?? new IContextProvider[0];
-            }
-        }
-
-        /// <summary>
-        /// You probably don't want to do this. But if, for some reason, you did, this would allow you
-        /// to set the various values of the <see cref="Default"/> class, even after a value had been
-        /// previously retrieved.
-        /// </summary>
-        public static void Unlock()
-        {
-            _locked = false;
-        }
-
-        private static T LockThenReturn<T>(T value)
-        {
-            _locked = true;
-            return value;
+            get { return _contextProviders; }
+            set { _contextProviders = value ?? new IContextProvider[0]; }
         }
     }
 }
