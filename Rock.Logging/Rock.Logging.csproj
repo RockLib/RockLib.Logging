@@ -30,8 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rock.Core">
-      <HintPath>..\packages\Rock.Core.0.0.12\lib\net45\Rock.Core.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Reflectinator, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Reflectinator.0.0.8\lib\net40\Reflectinator.dll</HintPath>
+    </Reference>
+    <Reference Include="Rock.Core, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rock.Core.0.0.1-alpha013\lib\net45\Rock.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -105,6 +114,7 @@
     <Compile Include="LogProviders\IMapper.cs" />
     <Compile Include="LogProviders\LogProviderConfiguration.cs" />
     <Compile Include="LogProviders\Mapper.cs" />
+    <Compile Include="AssemblyInitialization\ModuleInitializer.cs" />
     <Compile Include="NullThrottlingRuleEvaluator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions\Sync.cs" />
@@ -115,7 +125,14 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="InjectModuleInitializer" AfterTargets="AfterBuild">
+    <Exec Command="..\packages\InjectModuleInitializer.1.3.0-beta25\tools\InjectModuleInitializer.exe &quot;$(TargetPath)&quot;" />
+  </Target>
+  <Target Name="InjectModuleInitializer" AfterTargets="AfterBuild">
+    <Exec Command="..\packages\InjectModuleInitializer.1.3.0-beta26\tools\InjectModuleInitializer.exe &quot;$(TargetPath)&quot;" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

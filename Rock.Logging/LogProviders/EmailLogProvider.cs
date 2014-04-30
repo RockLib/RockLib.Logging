@@ -6,11 +6,11 @@ namespace Rock.Logging
 {
     public class EmailLogProvider : FormattableLogProvider
     {
-        private readonly IDeliveryMethod _deliveryMethod;
+        private readonly DeliveryMethod _deliveryMethod;
 
         public EmailLogProvider(
             ILogFormatterFactory logFormatterFactory,
-            IDeliveryMethod deliveryMethod = null)
+            DeliveryMethod deliveryMethod = null)
             : base(logFormatterFactory)
         {
             _deliveryMethod = deliveryMethod ?? DeliveryMethod.Default;
