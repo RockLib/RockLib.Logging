@@ -1,0 +1,1 @@
+nuget pack ..\Rock.Logging\Rock.Logging.csproj -Properties Configuration=Release

@@ -1,20 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <id>Rock.Logging</id>
-        <version>0.0.1</version>
-        <authors>Quicken Loans</authors>
-        <owners>Quicken Loans</owners>
-        <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Rock logger.</description>
+        <id>$id$</id>
+        <version>$version$</version>
+        <authors>$author$</authors>
+        <owners>$author$</owners>
+        <description>$description$</description>
         <summary>Rock logger.</summary>
         <tags>rock logger logging</tags>
-        <dependencies>
-            <dependency id="Rock.Core" version="0.0.1" />
-        </dependencies>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
     </metadata>
     <files>
-        <file src="Rock.Logging\bin\Release\Rock.Logging.dll" target="lib\net45\Rock.Logging.dll" />
-        <file src="Rock.Logging\bin\Release\Rock.Logging.pdb" target="lib\net45\Rock.Logging.pdb" />
     </files>
 </package>
