@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging.Diagnostics
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging.Diagnostics
 {

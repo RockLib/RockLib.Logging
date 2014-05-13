@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Rock.DependencyInjection;
 using Rock.Logging.Configuration;
+using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging
 {
