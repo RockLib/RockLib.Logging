@@ -13,6 +13,11 @@ namespace Rock.Logging.Defaults.Implementation
             get { return _stepLoggerFactory.Current; }
         }
 
+        public static IStepLoggerFactory DefaultStepLoggerFactory
+        {
+            get { return _stepLoggerFactory.DefaultInstance; }
+        }
+
         public static void SetStepLoggerFactory(Func<IStepLoggerFactory> getStepLoggerFactoryInstance)
         {
             _stepLoggerFactory.SetCurrent(getStepLoggerFactoryInstance);

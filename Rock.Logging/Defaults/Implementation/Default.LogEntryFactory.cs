@@ -12,6 +12,11 @@ namespace Rock.Logging.Defaults.Implementation
             get { return _logEntryFactory.Current; }
         }
 
+        public static ILogEntryFactory DefaultLogEntryFactory
+        {
+            get { return _logEntryFactory.DefaultInstance; }
+        }
+
         public static void SetLogEntryFactory(Func<ILogEntryFactory> getLogEntryFactoryInstance)
         {
             _logEntryFactory.SetCurrent(getLogEntryFactoryInstance);

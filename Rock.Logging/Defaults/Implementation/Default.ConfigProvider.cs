@@ -13,6 +13,11 @@ namespace Rock.Logging.Defaults.Implementation
             get { return _configProvider.Current; }
         }
 
+        public static IConfigProvider DefaultConfigProvider
+        {
+            get { return _configProvider.DefaultInstance; }
+        }
+
         public static void SetConfigProvider(Func<IConfigProvider> getConfigProviderInstance)
         {
             _configProvider.SetCurrent(getConfigProviderInstance);

@@ -1,5 +1,4 @@
-﻿using System;
-using Rock.Collections;
+﻿using Rock.Collections;
 
 namespace Rock.Logging
 {
