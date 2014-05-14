@@ -1,26 +1,25 @@
 ﻿using System;
 using Rock.Defaults;
-using Rock.Logging.Configuration;
 
 namespace Rock.Logging.Defaults.Implementation
 {
     public static partial class Default
     {
-        private static readonly DefaultHelper<IConfigProvider> _configProvider = new DefaultHelper<IConfigProvider>(() => new FileConfigProvider());
+        private static readonly DefaultHelper<ILoggerFactoryConfiguration> _loggerFactoryConfiguration = new DefaultHelper<ILoggerFactoryConfiguration>(() => new FileLoggerFactoryConfiguration());
 
-        public static IConfigProvider ConfigProvider
+        public static ILoggerFactoryConfiguration LoggerFactoryConfiguration
         {
-            get { return _configProvider.Current; }
+            get { return _loggerFactoryConfiguration.Current; }
         }
 
-        public static IConfigProvider DefaultConfigProvider
+        public static ILoggerFactoryConfiguration DefaultLoggerFactoryConfiguration
         {
-            get { return _configProvider.DefaultInstance; }
+            get { return _loggerFactoryConfiguration.DefaultInstance; }
         }
 
-        public static void SetConfigProvider(Func<IConfigProvider> getConfigProviderInstance)
+        public static void SetLoggerFactoryConfiguration(Func<ILoggerFactoryConfiguration> getLoggerFactoryConfigurationInstance)
         {
-            _configProvider.SetCurrent(getConfigProviderInstance);
+            _loggerFactoryConfiguration.SetCurrent(getLoggerFactoryConfigurationInstance);
         }
     }
 }

@@ -80,8 +80,6 @@
     <Compile Include="ILogEntryFactory.cs" />
     <Compile Include="LogEntryFactory.cs" />
     <Compile Include="LogFormatterConfiguration.Default.cs" />
-    <Compile Include="Configuration\File\FileConfigProvider.cs" />
-    <Compile Include="Configuration\IConfigProvider.cs" />
     <Compile Include="LoggerExtensions\AddCallerInfoExtension.cs" />
     <Compile Include="LogProviders\ConsoleLogProvider.cs" />
     <Compile Include="Diagnostics\IStep.cs" />
@@ -115,7 +113,7 @@
     <Compile Include="LoggerExtensions\Exception.cs" />
     <Compile Include="LoggerExtensions\Message.cs" />
     <Compile Include="LoggerFactory.cs" />
-    <Compile Include="LoggerFactoryConfiguration.cs" />
+    <Compile Include="FileLoggerFactoryConfiguration.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogProviders\FormattableLogProvider.cs" />
     <Compile Include="LogProviders\IMapper.cs" />

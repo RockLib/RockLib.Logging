@@ -98,7 +98,7 @@ namespace Rock.Logging
             IResolver container = null)
             where TLogger : ILogger
         {
-            config = config ?? Default.ConfigProvider.GetConfiguration();
+            config = config ?? Default.LoggerFactoryConfiguration;
             category = category ?? GetFirstCategory(config);
 
             return (TLogger)_loggerCache.GetOrAdd(
