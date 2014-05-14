@@ -63,6 +63,8 @@ namespace Rock.Logging
         /// configuration returned by the <see cref="IConfigProvider.GetConfiguration"/>
         /// method from <see cref="ConfigProvider.Current"/> will be used.
         /// </param>
+        /// <param name="applicationInfo">Information about the current application. If null or not
+        /// provided, <see cref="Rock.Defaults.Implementation.Default.ApplicationInfo"/> will be used.</param>
         /// <param name="container">An <see cref="IResolver"/> that retrieves objects. To be used in order to resolve dependencies for the specified logger type.</param>
         /// <returns>Returns a <see cref="ILogger"/>.</returns>
         /// <remarks>
@@ -95,29 +97,32 @@ namespace Rock.Logging
         public static TLogger GetInstance<TLogger>(
             string category = null,
             ILoggerFactoryConfiguration config = null,
+            IApplicationInfo applicationInfo = null,
             IResolver container = null)
             where TLogger : ILogger
         {
             config = config ?? Default.LoggerFactoryConfiguration;
             category = category ?? GetFirstCategory(config);
+            applicationInfo = applicationInfo ?? Rock.Defaults.Implementation.Default.ApplicationInfo;
 
             return (TLogger)_loggerCache.GetOrAdd(
                 Tuple.Create(category, typeof(TLogger)),
-                _ => CreateAndInitializeLogger<TLogger>(category, config, container));
+                _ => CreateAndInitializeLogger<TLogger>(category, config, applicationInfo, container));
         }
 
         private static ILogger CreateAndInitializeLogger<TLogger>(
             string category,
             ILoggerFactoryConfiguration config,
+            IApplicationInfo applicationInfo,
             IResolver container)
             where TLogger : ILogger
         {
-            var throttlingRuleEvaluator = CreateThrottlingRuleEvaluator(category, config);
-            var auditLogProvider = CreateAuditLogProvider(config, container);
             var logProviders = CreateLogProviders(category, config, container).ToList();
+            var auditLogProvider = CreateAuditLogProvider(config, container);
+            var throttlingRuleEvaluator = CreateThrottlingRuleEvaluator(category, config);
             var contextProviders = CreateContextProviders(category, config).ToList();
 
-            var autoContainer = new AutoContainer(config, throttlingRuleEvaluator, auditLogProvider, logProviders, contextProviders);
+            var autoContainer = new AutoContainer(config, applicationInfo, throttlingRuleEvaluator, auditLogProvider, logProviders, contextProviders);
             var mergedContainer = container == null ? autoContainer : container.MergeWith(autoContainer);
 
             var logger = mergedContainer.Get<TLogger>();

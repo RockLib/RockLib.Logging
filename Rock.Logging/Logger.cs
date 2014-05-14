@@ -9,14 +9,16 @@ namespace Rock.Logging
     public class Logger : ILogger
     {
         private readonly ILoggerConfiguration _configuration;
-        private readonly IThrottlingRuleEvaluator _throttlingRuleEvaluator;
-        private readonly ILogProvider _auditLogProvider;
         private readonly IEnumerable<ILogProvider> _logProviders;
+        private readonly ILogProvider _auditLogProvider;
+        private readonly IThrottlingRuleEvaluator _throttlingRuleEvaluator;
+        private readonly IApplicationInfo _applicationInfo;
         private readonly IEnumerable<IContextProvider> _contextProviders;
 
         public Logger(
             ILoggerConfiguration configuration,
             IEnumerable<ILogProvider> logProviders,
+            IApplicationInfo applicationInfo,
             ILogProvider auditLogProvider = null,
             IThrottlingRuleEvaluator throttlingRuleEvaluator = null,
             IEnumerable<IContextProvider> contextProviders = null)
@@ -31,6 +33,11 @@ namespace Rock.Logging
                 throw new ArgumentNullException("logProviders");
             }
 
+            if (applicationInfo == null)
+            {
+                throw new ArgumentNullException("applicationInfo");
+            }
+
             // Be sure to fully realize lists so we get fast enumeration during logging.
             logProviders = logProviders.ToList();
 
@@ -41,6 +48,7 @@ namespace Rock.Logging
 
             _configuration = configuration;
             _logProviders = logProviders;
+            _applicationInfo = applicationInfo;
             _auditLogProvider = auditLogProvider; // NOTE: this can be null, and is expected.
             _throttlingRuleEvaluator = throttlingRuleEvaluator ?? NullThrottlingRuleEvaluator.Instance;
             _contextProviders = (contextProviders ?? Enumerable.Empty<IContextProvider>()).ToList();
@@ -65,6 +73,11 @@ namespace Rock.Logging
                     || (_throttlingRuleEvaluator != null && !_throttlingRuleEvaluator.ShouldLog(logEntry))))
             {
                 return;
+            }
+
+            if (string.IsNullOrWhiteSpace(logEntry.ApplicationId))
+            {
+                logEntry.ApplicationId = _applicationInfo.ApplicationId;
             }
 
             if (logEntry.SearchKey == null)

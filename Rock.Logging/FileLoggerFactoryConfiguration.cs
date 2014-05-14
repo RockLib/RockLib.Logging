@@ -23,6 +23,11 @@ namespace Rock.Logging
         {
             var settings = (LoggerSettingsSection)ConfigurationManager.GetSection("rock.logging");
 
+            if (settings == null)
+            {
+                throw new InvalidOperationException("Unable to locate 'rock.logging' section in web.config or app.config");
+            }
+
             _isLoggingEnabled = settings.IsLoggingEnabled;
             _loggingLevel = settings.LoggingLevel.GetEnumValue<LogLevel>();
 

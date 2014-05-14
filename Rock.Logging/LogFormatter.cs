@@ -38,7 +38,7 @@ namespace Rock.Logging
         {
             AddSimpleTokenHandler("message", logEntry => logEntry.Message);
             //AddSimpleTokenHandler("userDisplayName", logEntry => logEntry.UserDisplayName);
-            //AddSimpleTokenHandler("applicationId", logEntry => logEntry.ApplicationId.ToString());
+            AddSimpleTokenHandler("applicationId", logEntry => logEntry.ApplicationId);
             //AddSimpleTokenHandler("userCommonId", logEntry => logEntry.UserCommonId.ToString());
             //AddSimpleTokenHandler("machineName", logEntry => logEntry.MachineName);
             //AddSimpleTokenHandler("userName", logEntry => logEntry.UserName);
