@@ -40,11 +40,11 @@ namespace Rock.Logging
                 if (!_synchronous)
                 {
                     // If we're asynchronous, just do what we would have done otherwise.
-                    return _logger.Log(logEntry);
+                    return _logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
                 }
 
                 // We're synchronous, so wait on the task to complete.
-                _logger.Log(logEntry).Wait();
+                _logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber).Wait();
 
                 // Then return a task that is already completed.
                 return _completedTask;
