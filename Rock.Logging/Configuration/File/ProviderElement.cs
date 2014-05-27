@@ -17,7 +17,7 @@ namespace Rock.Logging.Configuration
             }
         }
 
-        [ConfigurationProperty("formatter", IsRequired = true)]
+        [ConfigurationProperty("formatter", IsRequired = false)]
         public string Formatter
         {
             get
