@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging
@@ -6,7 +7,7 @@ namespace Rock.Logging
     public static partial class LoggerExtensions
     {
         // ReSharper disable ExplicitCallerInfoArgument
-        public static void Log(
+        public static Task Log(
             this ILogger logger,
             LogLevel logLevel,
             string message,
@@ -14,72 +15,77 @@ namespace Rock.Logging
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
+            if (logLevel != LogLevel.Audit && !logger.IsEnabled(logLevel))
+            {
+                return _completedTask;
+            }
+
             var logEntry = Default.LogEntryFactory.CreateLogEntry();
 
             logEntry.LogLevel = logLevel;
             logEntry.Message = message;
 
-            logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
+            return logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Debug(
+        public static Task Debug(
             this ILogger logger,
             string message,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Debug, message, callerMemberName, callerFilePath, callerLineNumber);
+            return logger.Log(LogLevel.Debug, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Info(
+        public static Task Info(
             this ILogger logger,
             string message,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Info, message, callerMemberName, callerFilePath, callerLineNumber);
+            return logger.Log(LogLevel.Info, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Warn(
+        public static Task Warn(
             this ILogger logger,
             string message,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Warn, message, callerMemberName, callerFilePath, callerLineNumber);
+            return logger.Log(LogLevel.Warn, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Error(
+        public static Task Error(
             this ILogger logger,
             string message,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Error, message, callerMemberName, callerFilePath, callerLineNumber);
+            return logger.Log(LogLevel.Error, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Fatal(
+        public static Task Fatal(
             this ILogger logger,
             string message,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Fatal, message, callerMemberName, callerFilePath, callerLineNumber);
+            return logger.Log(LogLevel.Fatal, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static void Audit(
+        public static Task Audit(
             this ILogger logger,
             string message,
         [CallerMemberName] string callerMemberName = null,
         [CallerFilePath] string callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Audit, message, callerMemberName, callerFilePath, callerLineNumber);
+            return logger.Log(LogLevel.Audit, message, callerMemberName, callerFilePath, callerLineNumber);
         }
         // ReSharper restore ExplicitCallerInfoArgument
     }

@@ -5,11 +5,6 @@ namespace Rock.Logging
 {
     public static partial class LoggerExtensions
     {
-        /// <summary>
-        /// A Task that has already been completed successfully.
-        /// </summary>
-        private static readonly Task _completedTask = Task.FromResult(0);
-
         public static ILogger Sync(this ILogger logger, bool synchronous = true)
         {
             return new SyncLogger(logger, synchronous);
@@ -31,6 +26,7 @@ namespace Rock.Logging
                 return _logger.IsEnabled(logLevel);
             }
 
+            // ReSharper disable ExplicitCallerInfoArgument
             public Task Log(
                 LogEntry logEntry,
                 [CallerMemberName] string callerMemberName = null,
@@ -49,6 +45,7 @@ namespace Rock.Logging
                 // Then return a task that is already completed.
                 return _completedTask;
             }
+            // ReSharper restore ExplicitCallerInfoArgument
         }
     }
 }
