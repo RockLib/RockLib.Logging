@@ -14,21 +14,12 @@ namespace Rock.Logging
 
         private static readonly Regex _extendedPropertiesRegex = new Regex(@"{extendedProperties\(([^{]*{([^}]*)}(\??)?[^{]*{value}[^}]*)\)}", RegexOptions.Compiled);
         private static readonly Regex _createTimeRegex = new Regex(@"{createTime(\(([^}]*)\))?}", RegexOptions.Compiled);
-        private static readonly Regex _containsHtmlTagsRegex = new Regex("&lt;.+&gt;", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+        private static readonly Regex _containsHtmlTagsRegex = new Regex("&lt;.+?&gt;", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
         
         private static readonly CultureInfo _culture = new CultureInfo("en-US");
         
         private readonly bool _isHtmlEncoded;
         private readonly string _template;
-
-        public LogFormatter(string template)
-        {
-            _template = WebUtility.HtmlDecode(template);
-
-            _isHtmlEncoded =
-                template != null
-                && _containsHtmlTagsRegex.IsMatch(template);
-        }
 
         /// <summary>
         /// Initializes the <see cref="LogFormatter"/> class.
@@ -67,6 +58,15 @@ namespace Rock.Logging
             //AddSimpleTokenHandler("fullInfo", logEntry => FormatLocationInfo(logEntry, "FullInfo"));
             //AddSimpleTokenHandler("threadName", logEntry => FormatLocationInfo(logEntry, "ThreadName"));
             //AddSimpleTokenHandler("threadId", logEntry => FormatLocationInfo(logEntry, "ThreadId"));
+        }
+
+        public LogFormatter(string template)
+        {
+            _template = WebUtility.HtmlDecode(template);
+
+            _isHtmlEncoded =
+                template != null
+                && _containsHtmlTagsRegex.IsMatch(template);
         }
 
         public static void AddSimpleTokenHandler(string key, Func<LogEntry, string> getTokenReplacement)
