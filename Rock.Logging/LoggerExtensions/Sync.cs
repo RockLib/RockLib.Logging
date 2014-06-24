@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -46,6 +47,11 @@ namespace Rock.Logging
                 return _completedTask;
             }
             // ReSharper restore ExplicitCallerInfoArgument
+
+            public void HandleException(Exception ex)
+            {
+                _logger.HandleException(ex);
+            }
         }
     }
 }

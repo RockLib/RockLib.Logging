@@ -24,8 +24,7 @@ namespace Rock.Logging
         {
             using (var mailMessage = GetMailMessage(entry, formattedLogEntry))
             {
-                mailMessage.IsBodyHtml = true;
-                await mailMessage.SendAsync(_deliveryMethod);
+                await mailMessage.Send(_deliveryMethod);
             }
         }
 
@@ -34,7 +33,7 @@ namespace Rock.Logging
             var to = ToEmail.Replace(';', ',');
             var subject = new LogFormatter(Subject).Format(entry);
 
-            return new MailMessage(FromEmail, to, subject, body);
+            return new MailMessage(FromEmail, to, subject, body) { IsBodyHtml = true };
         }
     }
 }

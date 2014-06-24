@@ -116,5 +116,10 @@ namespace Rock.Logging
         protected virtual void AddContextData(LogEntry entry)
         {
         }
+
+        void IExceptionHandler.HandleException(Exception ex)
+        {
+            this.Error(ex);
+        }
     }
 }

@@ -1,24 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Rock.DependencyInjection.AutoMock.Moq;
+using Rock.Logging;
 
-namespace Rock.Logging.UnitTests
+// ReSharper disable once CheckNamespace
+namespace LoggerTests
 {
-    public class LoggerTests
+    public abstract class LoggerTestsBase
     {
-        public class TheIsEnabledMethod
-        {
-            private static readonly Task _completedTask = Task.FromResult(0);
+        protected static readonly Task _completedTask = Task.FromResult(0);
 
-            private AutoMocker _mocker;
+        protected AutoMocker _mocker;
+
+        [SetUp]
+        public void Setup()
+        {
+            _mocker = new AutoMocker();
+        }
+
+        protected Logger GetLogger()
+        {
+            return _mocker.Get<Logger>();
+        }
+
+        public class TheIsEnabledMethod : LoggerTestsBase
+        {
             private Mock<ILogProvider> _mockLogProvider;
 
             [SetUp]
             public void Setup()
             {
-                _mocker = new AutoMocker();
                 _mockLogProvider = new Mock<ILogProvider>();
             }
 
@@ -140,6 +155,65 @@ namespace Rock.Logging.UnitTests
             private IEnumerator<ILogProvider> GetMockLogProviders()
             {
                 yield return _mockLogProvider.Object;
+            }
+        }
+
+        public class TheLogMethod
+        {
+            
+        }
+
+        public class TheHandleExceptionMethod : LoggerTestsBase
+        {
+            [Test]
+            public void CallsTheLogMethodWithALogEntryContainingTheException()
+            {
+                var exception = new Exception();
+
+                var testingLogger = new TestingLogger(GetLogger());
+                ILogger logger = testingLogger;
+
+                logger.HandleException(exception).Wait();
+
+                Assert.That(testingLogger.LogEntries.Count, Is.EqualTo(1));
+                Assert.That(testingLogger.LogEntries[0].Exception, Is.SameAs(exception));
+            }
+
+            [Test]
+            public void CallsTheLogMethodWithALogEntryWithALogLevelOfError()
+            {
+                var exception = new Exception();
+
+                var testingLogger = new TestingLogger(GetLogger());
+                ILogger logger = testingLogger;
+
+                logger.HandleException(exception).Wait();
+
+                Assert.That(testingLogger.LogEntries.Count, Is.EqualTo(1));
+                Assert.That(testingLogger.LogEntries[0].LogLevel, Is.EqualTo(LogLevel.Error));
+            }
+
+            private class TestingLogger : Logger
+            {
+                private readonly List<LogEntry> _logEntries = new List<LogEntry>();
+
+                public TestingLogger(Logger logger)
+                    : base(logger)
+                {
+                }
+
+                // ReSharper disable ExplicitCallerInfoArgument
+                public override Task Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
+                {
+                    _logEntries.Add(logEntry);
+                    return base.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
+                }
+                // ReSharper restore ExplicitCallerInfoArgument
+
+                public IReadOnlyList<LogEntry> LogEntries
+                {
+                    get { return _logEntries.AsReadOnly(); }
+                }
             }
         }
     }
