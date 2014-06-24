@@ -74,7 +74,7 @@
     <Compile Include="ContextProvider.cs" />
     <Compile Include="Defaults\Implementation\Default.StepLoggerFactory.cs" />
     <Compile Include="Defaults\Implementation\Default.ContextProviders.cs" />
-    <Compile Include="Defaults\Implementation\Default.ConfigProvider.cs" />
+    <Compile Include="Defaults\Implementation\Default.LoggerFactoryConfiguration.cs" />
     <Compile Include="Defaults\Implementation\Default.LogEntryFactory.cs" />
     <Compile Include="Diagnostics\DefaultStepLoggerFactory.cs" />
     <Compile Include="Diagnostics\IStepLoggerFactory.cs" />
