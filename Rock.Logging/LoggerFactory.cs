@@ -8,125 +8,61 @@ using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging
 {
-    public static class LoggerFactory
+    public class LoggerFactory : ILoggerFactory
     {
-        private static readonly ConcurrentDictionary<Tuple<string, Type>, ILogger> _loggerCache = new ConcurrentDictionary<Tuple<string, Type>, ILogger>();
-
-        /// <summary>
-        /// Gets an instance of <see cref="ILogger"/> by category and custom configuration.
-        /// </summary>
-        /// <param name="category">The optional category of the logger to be returned.</param>
-        /// <param name="config">
-        /// Various settings required by <see cref="LoggerFactory"/>. If null or not provided, the
-        /// configuration returned by the <see cref="IConfigProvider.GetConfiguration"/>
-        /// method from <see cref="ConfigProvider.Current"/> will be used.
-        /// </param>
-        /// <returns>Returns a <see cref="ILogger"/>.</returns>
-        /// <example>
-        /// <code>
-        ///  // setup logger configuration through the API
-        ///  LoggerConfiguration config = new LoggerConfiguration();
-        ///  CategoryId cat = new CategoryId{Name = "File"};
-        ///  
-        /// // add a file provider so log messages get logged to a file
-        /// Provider prov = new Provider();
-        /// prov.ProviderType = Type.GetType("Rock.Logging.Provider.FileLogProvider, Rock.Framework");
-        /// 
-        /// // setup the file provider property
-        /// Mapper file = new Mapper { Property = "File", Value = "Log.txt" };
-        /// 
-        /// // add the settings to the config
-        /// prov.Mappers.Add(file);
-        /// cat.Providers.Add(prov);
-        /// config.Categories.Add("File", cat);
-        /// 
-        /// ILogger logger = LoggerFactory.GetInstance("File", config);
-        /// </code>
-        /// </example>        
-        /// <exception cref="T:System.ArgumentNullException">CategoryId or config is null</exception>
-        /// <exception cref="T:Rock.Logging.LogConfigurationException">There was a problem reading the configuration.</exception>
-        public static ILogger GetInstance(
-            string category = null,
-            ILoggerFactoryConfiguration config = null)
+        public static ILogger GetInstance(string category = null)
         {
-            return GetInstance<Logger>(category, config);
+            return Default.LoggerFactory.Get<Logger>(category);
         }
 
-        /// <summary>
-        /// Used to load and initialize <see cref="ILogger"/> with a custom implemented type and
-        /// custom API configuration by category.
-        /// </summary>
-        /// <typeparam name="TLogger">Custom logger that implements <see cref="ILogger"/>.</typeparam>
-        /// <param name="category">The optional category of the logger to be returned.</param>
-        /// <param name="config">
-        /// Various settings required by <see cref="LoggerFactory"/>. If null or not provided, the
-        /// configuration returned by the <see cref="IConfigProvider.GetConfiguration"/>
-        /// method from <see cref="ConfigProvider.Current"/> will be used.
-        /// </param>
-        /// <param name="applicationInfo">Information about the current application. If null or not
-        /// provided, <see cref="Rock.Defaults.Implementation.Default.ApplicationInfo"/> will be used.</param>
-        /// <param name="container">An <see cref="IResolver"/> that retrieves objects. To be used in order to resolve dependencies for the specified logger type.</param>
-        /// <returns>Returns a <see cref="ILogger"/>.</returns>
-        /// <remarks>
-        /// Developers can create their own logger specific to their applications that
-        /// provide additional functionality and/or that help out with logging.
-        /// <para>
-        /// This method is used to allow developers to load their own types of logger.  This
-        /// method loads the first category in configuration.
-        /// </para>
-        /// </remarks>
-        /// <example>
-        /// 	<code>
-        /// // setup logger configuration through the API
-        /// LoggerConfiguration config = new LoggerConfiguration();
-        /// // create the default category named "Default"
-        /// CategoryId cat = new CategoryId{Name = "Default"};
-        /// // add a file provider so log messages get logged to a file
-        /// Provider prov = new Provider();
-        /// prov.ProviderType = Type.GetType("Rock.Logging.Provider.FileLogProvider, Rock.Framework");
-        /// // setup the file provider property
-        /// Mapper file = new Mapper { Property = "File", Value = "Log.txt" };
-        /// // add the settings to the config
-        /// prov.Mappers.Add(file);
-        /// cat.Providers.Add(prov);
-        /// config.Categories.Add("Default", cat);
-        /// MyCustomLogger logger = LoggerFactory.GetInstance{MyCustomLogger}("Default", config);
-        /// </code>
-        /// </example>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        public static TLogger GetInstance<TLogger>(
-            string category = null,
+        public static TLogger GetInstance<TLogger>(string category = null)
+            where TLogger : ILogger
+        {
+            return Default.LoggerFactory.Get<TLogger>(category);
+        }
+
+        private readonly IResolver _supplimentaryContainer;
+        private readonly ConcurrentDictionary<string, IResolver> _resolvers = new ConcurrentDictionary<string, IResolver>();
+
+        private readonly ILoggerFactoryConfiguration _config;
+        private readonly IApplicationInfo _applicationInfo;
+        private readonly Lazy<string> _firstCategory;
+
+        public LoggerFactory(
             ILoggerFactoryConfiguration config = null,
             IApplicationInfo applicationInfo = null,
-            IResolver container = null)
-            where TLogger : ILogger
+            IResolver supplimentaryContainer = null)
         {
-            config = config ?? Default.LoggerFactoryConfiguration;
-            category = category ?? GetFirstCategory(config);
-            applicationInfo = applicationInfo ?? Rock.Defaults.Implementation.Default.ApplicationInfo;
-
-            return (TLogger)_loggerCache.GetOrAdd(
-                Tuple.Create(category, typeof(TLogger)),
-                _ => CreateAndInitializeLogger<TLogger>(category, config, applicationInfo, container));
+            _config = config ?? Default.LoggerFactoryConfiguration;
+            _applicationInfo = applicationInfo ?? Rock.Defaults.Implementation.Default.ApplicationInfo;
+            _supplimentaryContainer = supplimentaryContainer;
+            _firstCategory = new Lazy<string>(() => GetFirstCategory(_config));
         }
 
-        private static ILogger CreateAndInitializeLogger<TLogger>(
-            string category,
-            ILoggerFactoryConfiguration config,
-            IApplicationInfo applicationInfo,
-            IResolver container)
+        public TLogger Get<TLogger>(string category = null)
             where TLogger : ILogger
         {
-            var logProviders = CreateLogProviders(category, config, container).ToList();
-            var auditLogProvider = CreateAuditLogProvider(config, container);
-            var throttlingRuleEvaluator = CreateThrottlingRuleEvaluator(category, config);
-            var contextProviders = CreateContextProviders(category, config).ToList();
+            var resolver =
+                _resolvers.GetOrAdd(
+                    category ?? _firstCategory.Value,
+                    c =>
+                    {
+                        var logProviders = CreateLogProviders(c, _config, _supplimentaryContainer).ToList();
+                        var auditLogProvider = CreateAuditLogProvider(_config, _supplimentaryContainer);
+                        var throttlingRuleEvaluator = CreateThrottlingRuleEvaluator(c, _config);
+                        var contextProviders = CreateContextProviders(c, _config).ToList();
 
-            var autoContainer = new AutoContainer(config, applicationInfo, throttlingRuleEvaluator, auditLogProvider, logProviders, contextProviders);
-            var mergedContainer = container == null ? autoContainer : container.MergeWith(autoContainer);
+                        var autoContainer = new AutoContainer(c, _applicationInfo, throttlingRuleEvaluator, auditLogProvider, logProviders, contextProviders);
 
-            var logger = mergedContainer.Get<TLogger>();
-            return logger;
+                        if (_supplimentaryContainer == null)
+                        {
+                            return autoContainer;
+                        }
+
+                        return _supplimentaryContainer.MergeWith(autoContainer);
+                    });
+
+            return resolver.Get<TLogger>();
         }
 
         private static IThrottlingRuleEvaluator CreateThrottlingRuleEvaluator(string category, ILoggerFactoryConfiguration config)

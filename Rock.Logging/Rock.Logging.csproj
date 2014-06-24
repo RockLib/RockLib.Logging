@@ -72,6 +72,7 @@
     <Compile Include="Configuration\File\ThrottlingRuleElement.cs" />
     <Compile Include="Configuration\LogConfigurationException.cs" />
     <Compile Include="ContextProvider.cs" />
+    <Compile Include="Defaults\Implementation\Default.LoggerFactory.cs" />
     <Compile Include="Defaults\Implementation\Default.StepLoggerFactory.cs" />
     <Compile Include="Defaults\Implementation\Default.ContextProviders.cs" />
     <Compile Include="Defaults\Implementation\Default.LoggerFactoryConfiguration.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Diagnostics\DefaultStepLoggerFactory.cs" />
     <Compile Include="Diagnostics\IStepLoggerFactory.cs" />
     <Compile Include="ILogEntryFactory.cs" />
+    <Compile Include="ILoggerFactory.cs" />
     <Compile Include="LogEntryFactory.cs" />
     <Compile Include="LogFormatterConfiguration.Default.cs" />
     <Compile Include="LoggerExtensions\AddCallerInfoExtension.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Diagnostics\StepLoggingExtensions.cs" />
     <Compile Include="ThrottlingRuleConfiguration.cs" />
     <Compile Include="ThrottlingRuleEvaluator.cs" />
+    <Compile Include="WithCachingExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
