@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Rock.Logging
@@ -31,10 +30,6 @@ namespace Rock.Logging
             [CallerLineNumber] int callerLineNumber = 0)
         {
             return _completedTask;
-        }
-
-        public void HandleException(Exception ex)
-        {
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Rock.Logging
 {
-    public interface ILogger : IExceptionHandler
+    public interface ILogger
     {
         bool IsEnabled(LogLevel logLevel);
         

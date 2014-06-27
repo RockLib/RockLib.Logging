@@ -152,89 +152,9 @@ namespace LoggerTests
             }
         }
 
-        public class TheLogMethod
+        public class TheLogAsyncMethod
         {
             
-        }
-
-        public class TheHandleExceptionMethod : LoggerTestsBase
-        {
-            private Mock<ILogProvider> _mockLogProvider;
-
-            [SetUp]
-            public void Setup()
-            {
-                _mockLogProvider = new Mock<ILogProvider>();
-
-                _mocker.GetMock<IEnumerable<ILogProvider>>()
-                    .Setup(m => m.GetEnumerator())
-                    .Returns(GetMockLogProviders());
-
-                _mocker.GetMock<ILoggerConfiguration>()
-                    .Setup(m => m.IsLoggingEnabled)
-                    .Returns(true);
-
-                _mocker.GetMock<ILoggerConfiguration>()
-                    .Setup(m => m.LoggingLevel)
-                    .Returns(LogLevel.Debug);
-
-                _mocker.GetMock<IThrottlingRuleEvaluator>()
-                    .Setup(m => m.ShouldLog(It.IsAny<LogEntry>()))
-                    .Returns(true);
-            }
-
-            private IEnumerator<ILogProvider> GetMockLogProviders()
-            {
-                yield return _mockLogProvider.Object;
-            }
-
-            [Test]
-            public void CallsTheLogMethodWithALogEntryContainingTheException()
-            {
-                var exception = new Exception();
-
-                var testingLogger = new TestingLogger(GetLogger());
-                ILogger logger = testingLogger;
-
-                logger.HandleException(exception);
-
-                Assert.That(testingLogger.LogEntries.Count, Is.EqualTo(1));
-                Assert.That(testingLogger.LogEntries[0].Exception, Is.SameAs(exception));
-            }
-
-            [Test]
-            public void CallsTheLogMethodWithALogEntryWithALogLevelOfError()
-            {
-                var exception = new Exception();
-
-                var testingLogger = new TestingLogger(GetLogger());
-                ILogger logger = testingLogger;
-
-                logger.HandleException(exception);
-
-                Assert.That(testingLogger.LogEntries.Count, Is.EqualTo(1));
-                Assert.That(testingLogger.LogEntries[0].LogLevel, Is.EqualTo(LogLevel.Error));
-            }
-
-            private class TestingLogger : Logger
-            {
-                private readonly List<LogEntry> _logEntries = new List<LogEntry>();
-
-                public TestingLogger(Logger logger)
-                    : base(logger)
-                {
-                }
-
-                protected override void OnPreLog(LogEntry logEntry)
-                {
-                    _logEntries.Add(logEntry);
-                }
-
-                public IReadOnlyList<LogEntry> LogEntries
-                {
-                    get { return _logEntries.AsReadOnly(); }
-                }
-            }
         }
     }
 }

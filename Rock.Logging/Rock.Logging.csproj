@@ -84,6 +84,7 @@
     <Compile Include="LogEntryFactory.cs" />
     <Compile Include="LogFormatterConfiguration.Default.cs" />
     <Compile Include="LogEntryExtensions\AddCallerInfoExtension.cs" />
+    <Compile Include="LoggerExtensions\GetExceptionHandler.cs" />
     <Compile Include="LoggerExtensions\LoggerExtensions.cs" />
     <Compile Include="LogProviders\ConsoleLogProvider.cs" />
     <Compile Include="Diagnostics\IStep.cs" />

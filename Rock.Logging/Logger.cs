@@ -122,11 +122,6 @@ namespace Rock.Logging
             }
         }
 
-        void IExceptionHandler.HandleException(Exception ex)
-        {
-            this.Error(ex);
-        }
-
         protected virtual void OnPreLog(LogEntry logEntry)
         {
         }

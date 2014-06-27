@@ -58,11 +58,6 @@ namespace Rock.Logging
                 return _completedTask;
             }
             // ReSharper restore ExplicitCallerInfoArgument
-
-            public void HandleException(Exception ex)
-            {
-                _asyncLogger.HandleException(ex);
-            }
         }
     }
 }
