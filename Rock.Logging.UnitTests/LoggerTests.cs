@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Rock.DependencyInjection.AutoMock.Moq;
@@ -12,8 +10,6 @@ namespace LoggerTests
 {
     public abstract class LoggerTestsBase
     {
-        protected static readonly Task _completedTask = Task.FromResult(0);
-
         protected AutoMocker _mocker;
 
         [SetUp]
@@ -131,8 +127,6 @@ namespace LoggerTests
 
             private void RunTest(LogLevel logLevelParameter, LogLevel configuredLogLevel, bool configuredIsLoggingEnabled, bool expected)
             {
-                _mockLogProvider.Setup(m => m.Write(It.IsAny<LogEntry>())).Returns(_completedTask);
-
                 _mocker.GetMock<IEnumerable<ILogProvider>>()
                     .Setup(m => m.GetEnumerator())
                     .Returns(GetMockLogProviders());
@@ -165,6 +159,35 @@ namespace LoggerTests
 
         public class TheHandleExceptionMethod : LoggerTestsBase
         {
+            private Mock<ILogProvider> _mockLogProvider;
+
+            [SetUp]
+            public void Setup()
+            {
+                _mockLogProvider = new Mock<ILogProvider>();
+
+                _mocker.GetMock<IEnumerable<ILogProvider>>()
+                    .Setup(m => m.GetEnumerator())
+                    .Returns(GetMockLogProviders());
+
+                _mocker.GetMock<ILoggerConfiguration>()
+                    .Setup(m => m.IsLoggingEnabled)
+                    .Returns(true);
+
+                _mocker.GetMock<ILoggerConfiguration>()
+                    .Setup(m => m.LoggingLevel)
+                    .Returns(LogLevel.Debug);
+
+                _mocker.GetMock<IThrottlingRuleEvaluator>()
+                    .Setup(m => m.ShouldLog(It.IsAny<LogEntry>()))
+                    .Returns(true);
+            }
+
+            private IEnumerator<ILogProvider> GetMockLogProviders()
+            {
+                yield return _mockLogProvider.Object;
+            }
+
             [Test]
             public void CallsTheLogMethodWithALogEntryContainingTheException()
             {
@@ -173,7 +196,7 @@ namespace LoggerTests
                 var testingLogger = new TestingLogger(GetLogger());
                 ILogger logger = testingLogger;
 
-                logger.HandleException(exception).Wait();
+                logger.HandleException(exception);
 
                 Assert.That(testingLogger.LogEntries.Count, Is.EqualTo(1));
                 Assert.That(testingLogger.LogEntries[0].Exception, Is.SameAs(exception));
@@ -187,7 +210,7 @@ namespace LoggerTests
                 var testingLogger = new TestingLogger(GetLogger());
                 ILogger logger = testingLogger;
 
-                logger.HandleException(exception).Wait();
+                logger.HandleException(exception);
 
                 Assert.That(testingLogger.LogEntries.Count, Is.EqualTo(1));
                 Assert.That(testingLogger.LogEntries[0].LogLevel, Is.EqualTo(LogLevel.Error));
@@ -202,13 +225,10 @@ namespace LoggerTests
                 {
                 }
 
-                // ReSharper disable ExplicitCallerInfoArgument
-                public override Task Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
+                protected override void OnPreLog(LogEntry logEntry)
                 {
                     _logEntries.Add(logEntry);
-                    return base.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
                 }
-                // ReSharper restore ExplicitCallerInfoArgument
 
                 public IReadOnlyList<LogEntry> LogEntries
                 {

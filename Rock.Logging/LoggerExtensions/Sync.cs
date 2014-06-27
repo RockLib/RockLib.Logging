@@ -6,51 +6,62 @@ namespace Rock.Logging
 {
     public static partial class LoggerExtensions
     {
-        public static ILogger Sync(this ILogger logger, bool synchronous = true)
+        private static readonly ConditionalWeakTable<ILogger, SyncLogger> _syncLoggers = new ConditionalWeakTable<ILogger, SyncLogger>(); 
+
+        public static ILogger AsSync(this ILogger logger)
         {
-            return new SyncLogger(logger, synchronous);
+            return
+                logger as SyncLogger
+                ?? _syncLoggers.GetValue(logger, log => new SyncLogger(log));
+        }
+
+        public static ILogger AsAsync(this ILogger logger)
+        {
+            var syncLogger = logger as SyncLogger;
+
+            return
+                syncLogger == null
+                    ? logger
+                    : syncLogger.AsyncLogger;
         }
 
         private class SyncLogger : ILogger
         {
-            private readonly ILogger _logger;
-            private readonly bool _synchronous;
+            private readonly ILogger _asyncLogger;
 
-            public SyncLogger(ILogger logger, bool synchronous)
+            public SyncLogger(ILogger asyncLogger)
             {
-                _logger = logger;
-                _synchronous = synchronous;
+                _asyncLogger = asyncLogger;
+            }
+
+            public ILogger AsyncLogger
+            {
+                get { return _asyncLogger; }
             }
 
             public bool IsEnabled(LogLevel logLevel)
             {
-                return _logger.IsEnabled(logLevel);
+                return _asyncLogger.IsEnabled(logLevel);
             }
 
             // ReSharper disable ExplicitCallerInfoArgument
-            public Task Log(
+            public Task LogAsync(
                 LogEntry logEntry,
                 [CallerMemberName] string callerMemberName = null,
                 [CallerFilePath] string callerFilePath = null,
                 [CallerLineNumber] int callerLineNumber = 0)
             {
-                if (!_synchronous)
-                {
-                    // If we're asynchronous, just do what we would have done otherwise.
-                    return _logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
-                }
+                // Wait on the asynchronous logging operation to complete...
+                _asyncLogger.LogAsync(logEntry, callerMemberName, callerFilePath, callerLineNumber).Wait();
 
-                // We're synchronous, so wait on the task to complete.
-                _logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber).Wait();
-
-                // Then return a task that is already completed.
+                // ...then return a task that is already completed.
                 return _completedTask;
             }
             // ReSharper restore ExplicitCallerInfoArgument
 
             public void HandleException(Exception ex)
             {
-                _logger.HandleException(ex);
+                _asyncLogger.HandleException(ex);
             }
         }
     }

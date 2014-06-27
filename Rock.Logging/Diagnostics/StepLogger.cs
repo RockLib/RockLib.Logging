@@ -75,7 +75,7 @@ namespace Rock.Logging.Diagnostics
             logEntry.ExtendedProperties.Add("Step Report", report.ToString());
 
             // ReSharper disable ExplicitCallerInfoArgument
-            _logger.Log(logEntry, _callerMemberName, _callerFilePath, _callerLineNumber);
+            _logger.LogAsync(logEntry, _callerMemberName, _callerFilePath, _callerLineNumber);
             // ReSharper restore ExplicitCallerInfoArgument
         }
     }

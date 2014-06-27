@@ -24,7 +24,7 @@ namespace Rock.Logging
             return false;
         }
 
-        public Task Log(
+        public Task LogAsync(
             LogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,

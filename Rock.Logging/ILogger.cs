@@ -6,7 +6,8 @@ namespace Rock.Logging
     public interface ILogger : IExceptionHandler
     {
         bool IsEnabled(LogLevel logLevel);
-        Task Log(
+        
+        Task LogAsync(
             LogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,

@@ -15,6 +15,11 @@ namespace Rock.Logging
         private readonly IApplicationInfo _applicationInfo;
         private readonly IEnumerable<IContextProvider> _contextProviders;
 
+        protected Logger(Logger logger)
+            : this(logger._configuration, logger._logProviders, logger._applicationInfo, logger._auditLogProvider, logger._throttlingRuleEvaluator, logger._contextProviders)
+        {
+        }
+
         public Logger(
             ILoggerConfiguration configuration,
             IEnumerable<ILogProvider> logProviders,
@@ -62,7 +67,7 @@ namespace Rock.Logging
                 && logLevel != LogLevel.None;
         }
 
-        public async Task Log(
+        public async Task LogAsync(
             LogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
@@ -85,13 +90,16 @@ namespace Rock.Logging
                 logEntry.SearchKey = Guid.NewGuid().ToString();
             }
 
+            // ReSharper disable ExplicitCallerInfoArgument
             logEntry.AddCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
+            // ReSharper restore ExplicitCallerInfoArgument
 
-            AddContextData(logEntry);
             foreach (var contextProvider in _contextProviders)
             {
                 contextProvider.AddContextData(logEntry);
             }
+
+            OnPreLog(logEntry);
 
             Task writeTask;
 
@@ -104,22 +112,23 @@ namespace Rock.Logging
                 writeTask = Task.WhenAll(_logProviders.Select(logProvider => logProvider.Write(logEntry)));
             }
 
-            await writeTask.ContinueWith(task =>
+            try
             {
-                if (task.IsFaulted)
-                {
-                    // TODO: send log entry and exception(s) to system event log.
-                }
-            });
-        }
-
-        protected virtual void AddContextData(LogEntry entry)
-        {
+                await writeTask;
+            }
+            catch (Exception ex)
+            {
+                // TODO: Send log entry and exception(s) to system event log.
+            }
         }
 
         void IExceptionHandler.HandleException(Exception ex)
         {
             this.Error(ex);
+        }
+
+        protected virtual void OnPreLog(LogEntry logEntry)
+        {
         }
     }
 }
