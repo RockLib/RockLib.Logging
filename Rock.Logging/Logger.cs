@@ -105,11 +105,11 @@ namespace Rock.Logging
 
             if (logEntry.LogLevel == LogLevel.Audit && _auditLogProvider != null)
             {
-                writeTask = _auditLogProvider.Write(logEntry);
+                writeTask = _auditLogProvider.WriteAsync(logEntry);
             }
             else
             {
-                writeTask = Task.WhenAll(_logProviders.Select(logProvider => logProvider.Write(logEntry)));
+                writeTask = Task.WhenAll(_logProviders.Select(logProvider => logProvider.WriteAsync(logEntry)));
             }
 
             try

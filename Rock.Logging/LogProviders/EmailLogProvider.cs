@@ -20,7 +20,7 @@ namespace Rock.Logging
         public string ToEmail { get; set; }
         public string Subject { get; set; }
 
-        protected override async Task Write(LogEntry entry, string formattedLogEntry)
+        protected override async Task WriteAsync(LogEntry entry, string formattedLogEntry)
         {
             using (var mailMessage = GetMailMessage(entry, formattedLogEntry))
             {

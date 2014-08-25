@@ -5,24 +5,23 @@ namespace Rock.Logging
     public abstract class FormattableLogProvider : ILogProvider
     {
         /// <summary>
-        /// A completed task. Can be returned from <see cref="Write"/> method if
-        /// its implementation is not actually asynchronous.
+        /// A completed task. Can be returned from the <see cref="WriteAsync"/> method
+        /// if its implementation is not actually asynchronous.
         /// </summary>
         protected static readonly Task CompletedTask = Task.FromResult(0);
 
-        private readonly ILogFormatterFactory _logFormatterFactory;
+        private readonly ILogFormatter _logFormatter;
 
         protected FormattableLogProvider(ILogFormatterFactory logFormatterFactory)
         {
-            _logFormatterFactory = logFormatterFactory;
+            _logFormatter = logFormatterFactory.GetInstance();
         }
 
-        public async Task Write(LogEntry entry)
+        public async Task WriteAsync(LogEntry entry)
         {
-            var formatter = _logFormatterFactory.GetInstance();
-            await Write(entry, formatter.Format(entry));
+            await WriteAsync(entry, _logFormatter.Format(entry));
         }
 
-        protected abstract Task Write(LogEntry entry, string formattedLogEntry);
+        protected abstract Task WriteAsync(LogEntry entry, string formattedLogEntry);
     }
 }

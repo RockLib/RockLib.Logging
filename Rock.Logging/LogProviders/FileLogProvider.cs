@@ -39,7 +39,7 @@ namespace Rock.Logging
             }
         }
 
-        protected override async Task Write(LogEntry entry, string formattedLogEntry)
+        protected override async Task WriteAsync(LogEntry entry, string formattedLogEntry)
         {
             _mutex.WaitOne();
 

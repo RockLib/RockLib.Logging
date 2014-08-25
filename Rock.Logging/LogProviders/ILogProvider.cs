@@ -14,6 +14,6 @@ namespace Rock.Logging
         /// Writes the specified entry.
         /// </summary>
         /// <param name="entry">The entry.</param>
-        Task Write(LogEntry entry);
+        Task WriteAsync(LogEntry entry);
     }
 }
