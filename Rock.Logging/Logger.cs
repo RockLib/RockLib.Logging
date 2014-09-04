@@ -73,8 +73,8 @@ namespace Rock.Logging
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            if (logEntry.LogLevel != LogLevel.Audit
-                && (!IsEnabled(logEntry.LogLevel)
+            if (logEntry.Level != LogLevel.Audit
+                && (!IsEnabled(logEntry.Level)
                     || (_throttlingRuleEvaluator != null && !_throttlingRuleEvaluator.ShouldLog(logEntry))))
             {
                 return;
@@ -103,7 +103,7 @@ namespace Rock.Logging
 
             Task writeTask;
 
-            if (logEntry.LogLevel == LogLevel.Audit && _auditLogProvider != null)
+            if (logEntry.Level == LogLevel.Audit && _auditLogProvider != null)
             {
                 writeTask = _auditLogProvider.WriteAsync(logEntry);
             }

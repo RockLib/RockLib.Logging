@@ -28,7 +28,7 @@ namespace Rock.Logging
 
             var logEntry = Default.LogEntryFactory.CreateLogEntry();
 
-            logEntry.LogLevel = logLevel;
+            logEntry.Level = logLevel;
             logEntry.Exception = exception;
             logEntry.Message = message ?? exception.Message;
 

@@ -21,7 +21,7 @@ namespace Rock.Logging
 
             var logEntry = Default.LogEntryFactory.CreateLogEntry();
 
-            logEntry.LogLevel = logLevel;
+            logEntry.Level = logLevel;
             logEntry.Message = message;
 
             logger.LogAsync(logEntry, callerMemberName, callerFilePath, callerLineNumber);

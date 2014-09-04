@@ -70,7 +70,7 @@ namespace Rock.Logging.Diagnostics
 
             var logEntry = Default.LogEntryFactory.CreateLogEntry();
 
-            logEntry.LogLevel = _logLevel;
+            logEntry.Level = _logLevel;
             logEntry.Message = _message ?? "Step Report";
             logEntry.ExtendedProperties.Add("Step Report", report.ToString());
 
