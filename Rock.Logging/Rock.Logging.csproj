@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Threading" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -102,8 +103,10 @@
     <Compile Include="ILogFormatterConfiguration.cs" />
     <Compile Include="ILogFormatterFactory.cs" />
     <Compile Include="ILoggerFactoryConfiguration.cs" />
+    <Compile Include="LogProviders\DefaultHttpClientFactory.cs" />
     <Compile Include="LogProviders\EmailLogProvider.cs" />
     <Compile Include="LogProviders\FileLogProvider.cs" />
+    <Compile Include="LogProviders\IHttpClientFactory.cs" />
     <Compile Include="LogProviders\ILogProvider.cs" />
     <Compile Include="LogProviders\ILogProviderConfiguration.cs" />
     <Compile Include="IThrottlingRuleConfiguration.cs" />
@@ -122,9 +125,11 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogProviders\FormattableLogProvider.cs" />
     <Compile Include="LogProviders\IMapper.cs" />
+    <Compile Include="LogProviders\HttpEndpointLogProvider.cs" />
     <Compile Include="LogProviders\LogProviderConfiguration.cs" />
     <Compile Include="LogProviders\Mapper.cs" />
     <Compile Include="AssemblyInitialization\ModuleInitializer.cs" />
+    <Compile Include="LogProviders\ResponseReceivedEventArgs.cs" />
     <Compile Include="NullLogger.cs" />
     <Compile Include="NullThrottlingRuleEvaluator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
