@@ -24,7 +24,7 @@ namespace Rock.Logging
         {
             using (var mailMessage = GetMailMessage(entry, formattedLogEntry))
             {
-                await mailMessage.Send(_deliveryMethod);
+                await mailMessage.SendAsync(_deliveryMethod);
             }
         }
 
