@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Rock.Defaults.Implementation;
+using Rock.Net.Http;
 using Rock.Reflection;
 using Rock.Serialization;
 
@@ -11,16 +12,6 @@ namespace Rock.Logging
     public class HttpEndpointLogProvider : ILogProvider
     {
         private const string DefaultContentType = "application/json";
-
-        private static ISerializer GetDefaultSerializer()
-        {
-            return Default.JsonSerializer;
-        }
-
-        private static IHttpClientFactory GetDefaultHttpClientFactory()
-        {
-            return new DefaultHttpClientFactory();
-        }
 
         private readonly Lazy<string> _endpoint;
         private readonly Lazy<string> _contentType;
@@ -87,6 +78,16 @@ namespace Rock.Logging
             {
                 handler(this, new ResponseReceivedEventArgs(response));
             }
+        }
+
+        private static ISerializer GetDefaultSerializer()
+        {
+            return Default.JsonSerializer;
+        }
+
+        private static IHttpClientFactory GetDefaultHttpClientFactory()
+        {
+            return new DefaultHttpClientFactory();
         }
     }
 }
