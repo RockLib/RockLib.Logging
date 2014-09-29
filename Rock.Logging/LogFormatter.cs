@@ -43,7 +43,7 @@ namespace Rock.Logging
             //AddSimpleTokenHandler("affectedSystem", logEntry => logEntry.AffectedSystem);
             //AddSimpleTokenHandler("level", logEntry => logEntry.Level.ToString());
             //AddSimpleTokenHandler("userScreenName", logEntry => logEntry.UserScreenName);
-            AddSimpleTokenHandler("exception", logEntry => logEntry.Exception != null ? logEntry.Exception.ToString() : null);
+            AddSimpleTokenHandler("exception", logEntry => logEntry.ExceptionDetails);
             AddSimpleTokenHandler("newLine", logEntry => Environment.NewLine);
             //AddSimpleTokenHandler("category", logEntry => logEntry.CategoryId.ToString(CultureInfo.CurrentCulture));
             //AddSimpleTokenHandler("environment", logEntry => Environment.Current.ToString());

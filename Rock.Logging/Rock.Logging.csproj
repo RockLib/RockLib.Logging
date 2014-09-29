@@ -38,6 +38,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Threading" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,8 +68,10 @@
     <Compile Include="Defaults\Implementation\Default.LogEntryFactory.cs" />
     <Compile Include="Diagnostics\DefaultStepLoggerFactory.cs" />
     <Compile Include="Diagnostics\IStepLoggerFactory.cs" />
+    <Compile Include="FormatToStringExtension.cs" />
     <Compile Include="ILogEntryFactory.cs" />
     <Compile Include="ILoggerFactory.cs" />
+    <Compile Include="LogEntryExtendedProperties.cs" />
     <Compile Include="LogEntryFactory.cs" />
     <Compile Include="LogFormatterConfiguration.Default.cs" />
     <Compile Include="LogEntryExtensions\AddCallerInfoExtension.cs" />

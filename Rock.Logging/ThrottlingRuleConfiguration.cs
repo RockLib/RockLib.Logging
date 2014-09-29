@@ -14,7 +14,7 @@ namespace Rock.Logging
     /// infrastructure including our Exchange servers and network.  To stop getting repeat messages from an application 
     /// throttling can be placed on a <see cref="Rock.Logging.Configuration.Category"/>.  It is not required. 
     /// The format is "hh:mm:ss" and the default is 00:00:00.  The uniqueness of the log entry
-    /// is determined by the combination of Message, ExceptionData, Level, IsUserDisrupted, Referrer, AffectedSystem,
+    /// is determined by the combination of Message, ExceptionDetails, Level, IsUserDisrupted, Referrer, AffectedSystem,
     /// RequestMethod, CategoryId, Url.
     /// </para>
     /// </remarks>

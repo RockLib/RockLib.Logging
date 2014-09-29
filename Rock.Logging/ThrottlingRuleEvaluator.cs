@@ -21,7 +21,7 @@ namespace Rock.Logging
 
         public bool ShouldLog(LogEntry logEntry)
         {
-            int key = logEntry.GetHashCode();
+            int key = logEntry.GetThrottlingHashCode();
 
             if (_throttlingRuleConfiguration.MinEventThreshold <= 1 && _throttlingRuleConfiguration.MinInterval == TimeSpan.Zero)
             {

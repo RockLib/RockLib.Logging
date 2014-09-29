@@ -29,7 +29,7 @@ namespace Rock.Logging
             var logEntry = Default.LogEntryFactory.CreateLogEntry();
 
             logEntry.Level = logLevel;
-            logEntry.Exception = exception;
+            logEntry.SetException(exception);
             logEntry.Message = message ?? exception.Message;
 
             logger.LogAsync(logEntry, callerMemberName, callerFilePath, callerLineNumber);

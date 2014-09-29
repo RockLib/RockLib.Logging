@@ -85,9 +85,9 @@ namespace Rock.Logging
                 logEntry.ApplicationId = _applicationInfo.ApplicationId;
             }
 
-            if (logEntry.SearchKey == null)
+            if (logEntry.UniqueId == null)
             {
-                logEntry.SearchKey = Guid.NewGuid().ToString();
+                logEntry.UniqueId = Guid.NewGuid().ToString();
             }
 
             // ReSharper disable ExplicitCallerInfoArgument
