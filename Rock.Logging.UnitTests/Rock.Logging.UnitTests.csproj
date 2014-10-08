@@ -43,7 +43,7 @@
     </Reference>
     <Reference Include="Rock.Core, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rock.Core.0.0.1-alpha039\lib\net45\Rock.Core.dll</HintPath>
+      <HintPath>..\packages\Rock.Core.0.0.1\lib\net45\Rock.Core.dll</HintPath>
     </Reference>
     <Reference Include="Rock.Serialization.Netwonsoft">
       <HintPath>..\packages\Rock.Serialization.Netwonsoft.0.0.1-alpha001\lib\net45\Rock.Serialization.Netwonsoft.dll</HintPath>
