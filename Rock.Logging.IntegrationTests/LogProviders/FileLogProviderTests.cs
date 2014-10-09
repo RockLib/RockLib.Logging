@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Rock.Collections;
+using Rock.Logging;
 using Rock.Serialization;
 
-namespace Rock.Logging.IntegrationTests.LogProviders
+// ReSharper disable once CheckNamespace
+namespace FileLogProviderTests
 {
-    public class FileLogProviderTests
+    public class TheWriteAsyncMethod
     {
         private const string _xmlDeclaration = @"<?xml version=""1.0"" encoding=""utf-8""?>";
 
@@ -41,7 +44,7 @@ namespace Rock.Logging.IntegrationTests.LogProviders
         {
             var serializer = new XmlSerializerSerializer();
 
-            var logProvider = LogProvider(serializer, _logFilePath);
+            var logProvider = CreateLogProvider(serializer, _logFilePath);
 
             var logEntry = new LogEntry("Hello, world!", new { Foo = "bar" });
             await logProvider.WriteAsync(logEntry);
@@ -64,7 +67,7 @@ namespace Rock.Logging.IntegrationTests.LogProviders
         {
             var serializer = new XmlSerializerSerializer();
 
-            var logProvider = LogProvider(serializer, _logFilePath);
+            var logProvider = CreateLogProvider(serializer, _logFilePath);
 
             var logEntry0 = new LogEntry("Hello, world!", new { Foo = "bar" });
             await logProvider.WriteAsync(logEntry0);
@@ -104,7 +107,7 @@ namespace Rock.Logging.IntegrationTests.LogProviders
 
             var serializer = new XmlSerializerSerializer();
 
-            var logProvider = LogProvider(serializer, _logFilePath);
+            var logProvider = CreateLogProvider(serializer, _logFilePath);
 
             var logEntry = new LogEntry("Hello, world!", new { Foo = "bar" });
             await logProvider.WriteAsync(logEntry);
@@ -125,7 +128,49 @@ namespace Rock.Logging.IntegrationTests.LogProviders
             Assert.That(logFileContents.Length, Is.EqualTo(_xmlDeclaration.Length + Environment.NewLine.Length + serializedLogEntry.Length + Environment.NewLine.Length));
         }
 
-        protected virtual ILogProvider LogProvider(XmlSerializerSerializer serializer, string logFilePath)
+        [Test]
+        public async void IsThreadSafe()
+        {
+            const int tasksPerProcessor = 5;
+            const int logEntriesPerTask = 5;
+
+            var serializer = new XmlSerializerSerializer();
+
+            var logProvider = CreateLogProvider(serializer, _logFilePath);
+
+            var tasks = new Task[Environment.ProcessorCount * tasksPerProcessor];
+
+            var logEntry = new LogEntry("Hello, world!", new { Foo = "bar" });
+
+            Func<Task> getWriteLogEntriesTask =
+                async () =>
+                {
+                    for (var i = 0; i < logEntriesPerTask; i++)
+                    {
+                        await logProvider.WriteAsync(logEntry);
+                    }
+                };
+
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                tasks[i] = getWriteLogEntriesTask();
+            }
+
+            await Task.WhenAll(tasks);
+
+            var logFileContents = File.ReadAllText(_logFilePath);
+
+            var xmlDocuments =
+                logFileContents.Split(
+                    new[] { _xmlDeclaration + Environment.NewLine },
+                    StringSplitOptions.RemoveEmptyEntries);
+
+            // We are reasonably certain that we are thread-safe because we didn't lose
+            // any log entries (also because we didn't throw an exception).
+            Assert.That(xmlDocuments.Length, Is.EqualTo(Environment.ProcessorCount * logEntriesPerTask * tasksPerProcessor));
+        }
+
+        protected virtual ILogProvider CreateLogProvider(XmlSerializerSerializer serializer, string logFilePath)
         {
             return new FileLogProvider(
                 new SerializingLogFormatterFactory(serializer),
