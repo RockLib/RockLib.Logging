@@ -7,24 +7,24 @@ namespace Rock.Logging
 {
     public class RollingFileLogProvider : FileLogProvider
     {
-        private const int _defaultMaxFileSizeMegabytes = 10;
+        private const double _defaultMaxFileSizeMegabytes = 10;
         private readonly Lazy<int> _maxFileSizeBytes;
 
         public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory)
             : base(logFormatterFactory)
         {
             MaxFileSizeMegabytes = _defaultMaxFileSizeMegabytes;
-            _maxFileSizeBytes = new Lazy<int>(() => MaxFileSizeMegabytes * 1024 * 1024);
+            _maxFileSizeBytes = new Lazy<int>(() => GetFaxFileSizeBytes(MaxFileSizeMegabytes));
         }
 
-        public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory, string file, int maxFileSizeMegabytes)
+        public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory, string file, double maxFileSizeMegabytes)
             : base(logFormatterFactory, file)
         {
             MaxFileSizeMegabytes = maxFileSizeMegabytes;
-            _maxFileSizeBytes = new Lazy<int>(() => maxFileSizeMegabytes * 1024 * 1024);
+            _maxFileSizeBytes = new Lazy<int>(() => GetFaxFileSizeBytes(maxFileSizeMegabytes));
         }
 
-        public int MaxFileSizeMegabytes { get; set; }
+        public double MaxFileSizeMegabytes { get; set; }
 
         protected override Task OnPreWriteAsync(LogEntry entry, string formattedLogEntry)
         {
@@ -74,6 +74,11 @@ namespace Rock.Logging
         private static bool IsNumber(string archiveNumber)
         {
             return archiveNumber.All(char.IsNumber);
+        }
+
+        private static int GetFaxFileSizeBytes(double maxFileSizeMegabytes)
+        {
+            return (int)(maxFileSizeMegabytes * 1024 * 1024);
         }
     }
 }
