@@ -17,7 +17,7 @@ namespace Rock.Logging
             _maxFileSizeBytes = new Lazy<int>(() => GetFaxFileSizeBytes(MaxFileSizeMegabytes));
         }
 
-        public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory, string file, double maxFileSizeMegabytes)
+        public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory, string file, double maxFileSizeMegabytes = _defaultMaxFileSizeMegabytes)
             : base(logFormatterFactory, file)
         {
             MaxFileSizeMegabytes = maxFileSizeMegabytes;
@@ -62,7 +62,7 @@ namespace Rock.Logging
                     .DefaultIfEmpty()
                     .Max() + 1;
 
-            return fileName + "." + archiveNumber + fileExtension;
+            return Path.Combine(directory, fileName + "." + archiveNumber + fileExtension);
         }
 
         private static string GetArchiveNumberString(string file)

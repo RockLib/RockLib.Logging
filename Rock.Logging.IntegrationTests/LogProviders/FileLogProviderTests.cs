@@ -14,8 +14,8 @@ namespace FileLogProviderTests
     {
         private const string _xmlDeclaration = @"<?xml version=""1.0"" encoding=""utf-8""?>";
 
-        private static readonly string _logFileDirectory = Path.Combine(Path.GetTempPath(), "Rock.Logging.IntegrationTests");
-        private static readonly string _logFilePath = Path.Combine(_logFileDirectory, "log.txt");
+        protected static readonly string _logFileDirectory = Path.Combine(Path.GetTempPath(), "Rock.Logging.IntegrationTests");
+        protected static readonly string _logFilePath = Path.Combine(_logFileDirectory, "log.txt");
 
         private static readonly IEqualityComparer _equalityComparer = new DeepEqualityComparer();
 
