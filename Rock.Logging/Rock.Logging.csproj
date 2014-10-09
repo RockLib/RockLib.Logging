@@ -129,6 +129,8 @@
     <Compile Include="LoggerExtensions\Sync.cs" />
     <Compile Include="Diagnostics\StepLoggingExtensions.cs" />
     <Compile Include="SemaphoreSlimAsyncWaitHandle.cs" />
+    <Compile Include="SerializingLogFormatter.cs" />
+    <Compile Include="SerializingLogFormatterFactory.cs" />
     <Compile Include="ThrottlingRuleConfiguration.cs" />
     <Compile Include="ThrottlingRuleEvaluator.cs" />
     <Compile Include="WithCachingExtension.cs" />

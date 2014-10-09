@@ -91,6 +91,8 @@
     <Compile Include="LogEntrySerializationTests\XSerializerSerializer.cs" />
     <Compile Include="LoggerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializingLogFormatterFactoryTests.cs" />
+    <Compile Include="SerializingLogFormatterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
