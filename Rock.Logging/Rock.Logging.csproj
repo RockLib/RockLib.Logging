@@ -70,6 +70,7 @@
     <Compile Include="Diagnostics\DefaultStepLoggerFactory.cs" />
     <Compile Include="Diagnostics\IStepLoggerFactory.cs" />
     <Compile Include="FormatToStringExtension.cs" />
+    <Compile Include="IAsyncWaitHandle.cs" />
     <Compile Include="ILogEntryFactory.cs" />
     <Compile Include="ILoggerFactory.cs" />
     <Compile Include="LogEntryExtendedProperties.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LoggerExtensions\Sync.cs" />
     <Compile Include="Diagnostics\StepLoggingExtensions.cs" />
+    <Compile Include="SemaphoreSlimAsyncWaitHandle.cs" />
     <Compile Include="ThrottlingRuleConfiguration.cs" />
     <Compile Include="ThrottlingRuleEvaluator.cs" />
     <Compile Include="WithCachingExtension.cs" />
