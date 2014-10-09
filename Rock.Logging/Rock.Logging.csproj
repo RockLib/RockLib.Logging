@@ -122,6 +122,7 @@
     <Compile Include="LogProviders\Mapper.cs" />
     <Compile Include="AssemblyInitialization\ModuleInitializer.cs" />
     <Compile Include="LogProviders\ResponseReceivedEventArgs.cs" />
+    <Compile Include="LogProviders\RollingFileLogProvider.cs" />
     <Compile Include="NullLogger.cs" />
     <Compile Include="NullThrottlingRuleEvaluator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
