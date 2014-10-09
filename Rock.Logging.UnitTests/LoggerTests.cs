@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using AutoMoq;
 using Moq;
 using NUnit.Framework;
-using Rock.DependencyInjection.AutoMock.Moq;
 using Rock.Logging;
 
 // ReSharper disable once CheckNamespace
@@ -10,17 +9,17 @@ namespace LoggerTests
 {
     public abstract class LoggerTestsBase
     {
-        protected AutoMocker _mocker;
+        protected AutoMoqer _mocker;
 
         [SetUp]
         public void Setup()
         {
-            _mocker = new AutoMocker();
+            _mocker = new AutoMoqer();
         }
 
         protected Logger GetLogger()
         {
-            return _mocker.Get<Logger>();
+            return _mocker.Resolve<Logger>();
         }
 
         public class TheIsEnabledMethod : LoggerTestsBase
@@ -139,7 +138,11 @@ namespace LoggerTests
                     .Setup(m => m.IsLoggingEnabled)
                     .Returns(configuredIsLoggingEnabled);
 
-                var logger = _mocker.Get<Logger>();
+                _mocker.GetMock<IEnumerable<IContextProvider>>()
+                    .Setup(m => m.GetEnumerator())
+                    .Returns(GetEmptyContextProviders());
+
+                var logger = _mocker.Resolve<Logger>();
 
                 var result = logger.IsEnabled(logLevelParameter);
 
@@ -149,6 +152,11 @@ namespace LoggerTests
             private IEnumerator<ILogProvider> GetMockLogProviders()
             {
                 yield return _mockLogProvider.Object;
+            }
+
+            private IEnumerator<IContextProvider> GetEmptyContextProviders()
+            {
+                yield break;
             }
         }
 
