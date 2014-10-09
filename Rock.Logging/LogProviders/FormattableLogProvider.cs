@@ -5,10 +5,10 @@ namespace Rock.Logging
     public abstract class FormattableLogProvider : ILogProvider
     {
         /// <summary>
-        /// A completed task. Can be returned from the <see cref="WriteAsync"/> method
-        /// if its implementation is not actually asynchronous.
+        /// A completed task. Can be returned from methods that return a <see cref="Task "/>
+        /// but are not really asynchronous.
         /// </summary>
-        protected static readonly Task CompletedTask = Task.FromResult(0);
+        protected static readonly Task _completedTask = Task.FromResult(0);
 
         private readonly ILogFormatter _logFormatter;
 

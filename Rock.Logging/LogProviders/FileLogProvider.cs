@@ -8,8 +8,6 @@ namespace Rock.Logging
 {
     public class FileLogProvider : FormattableLogProvider, IDisposable
     {
-        protected static readonly Task _completedTask = Task.FromResult(0);
-
         private static readonly string _defaultFile =
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
