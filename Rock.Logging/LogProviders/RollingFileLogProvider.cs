@@ -7,18 +7,21 @@ namespace Rock.Logging
 {
     public class RollingFileLogProvider : FileLogProvider
     {
-        private readonly Lazy<int> _maxFileSizeMegabytes;
+        private const int _defaultMaxFileSizeMegabytes = 10;
+        private readonly Lazy<int> _maxFileSizeBytes;
 
         public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory)
             : base(logFormatterFactory)
         {
-            _maxFileSizeMegabytes = new Lazy<int>(() => MaxFileSizeMegabytes);
+            MaxFileSizeMegabytes = _defaultMaxFileSizeMegabytes;
+            _maxFileSizeBytes = new Lazy<int>(() => MaxFileSizeMegabytes * 1024 * 1024);
         }
 
         public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory, string file, int maxFileSizeMegabytes)
             : base(logFormatterFactory, file)
         {
-            _maxFileSizeMegabytes = new Lazy<int>(() => maxFileSizeMegabytes);
+            MaxFileSizeMegabytes = maxFileSizeMegabytes;
+            _maxFileSizeBytes = new Lazy<int>(() => maxFileSizeMegabytes * 1024 * 1024);
         }
 
         public int MaxFileSizeMegabytes { get; set; }
@@ -38,12 +41,7 @@ namespace Rock.Logging
             var fileInfo = new FileInfo(File);
             return
                 fileInfo.Exists
-                && GetSizeInMegabytes(fileInfo) > _maxFileSizeMegabytes.Value;
-        }
-
-        private static long GetSizeInMegabytes(FileInfo fileInfo)
-        {
-            return fileInfo.Length / (1024 * 1024);
+                && fileInfo.Length > _maxFileSizeBytes.Value;
         }
 
         private string GetArchiveFileName()
@@ -56,20 +54,26 @@ namespace Rock.Logging
             var searchPattern = fileName + ".*" + fileExtension;
 
             var archiveNumber =
-                Directory.GetFiles(directory, searchPattern)
-                    .Select(GetArchiveNumber)
-                    .Where(x => x.All(char.IsNumber))
+                Directory
+                    .GetFiles(directory, searchPattern)
+                    .Select(GetArchiveNumberString)
+                    .Where(IsNumber)
                     .Select(int.Parse)
-                    .DefaultIfEmpty(-1)
+                    .DefaultIfEmpty()
                     .Max() + 1;
 
             return fileName + "." + archiveNumber + fileExtension;
         }
 
-        private static string GetArchiveNumber(string x)
+        private static string GetArchiveNumberString(string file)
         {
-            var name = Path.GetFileNameWithoutExtension(x);
+            var name = Path.GetFileNameWithoutExtension(file);
             return name.Substring(name.LastIndexOf('.') + 1);
+        }
+
+        private static bool IsNumber(string archiveNumber)
+        {
+            return archiveNumber.All(char.IsNumber);
         }
     }
 }
