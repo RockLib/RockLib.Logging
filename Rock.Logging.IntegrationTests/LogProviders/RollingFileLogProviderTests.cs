@@ -14,7 +14,7 @@ namespace RollingFileLogProviderTests
         [Test]
         public async void CausesTheLogFileToBeArchivedWhenItsSizeGetsTooBig()
         {
-            const double maxFileSizeMegabytes = .05;
+            const int maxFileSizeKilobytes = 50;
 
             var serializer = new XmlSerializerSerializer();
 
@@ -22,7 +22,7 @@ namespace RollingFileLogProviderTests
                 new RollingFileLogProvider(
                     new SerializingLogFormatterFactory(serializer),
                     _logFilePath,
-                    maxFileSizeMegabytes);
+                    maxFileSizeKilobytes);
 
             LogEntry logEntry;
 
@@ -36,7 +36,7 @@ namespace RollingFileLogProviderTests
             }
 
             // Write to the log file until it has exceeded the max file size.
-            while (IsTooSmallForRollOver(maxFileSizeMegabytes))
+            while (IsTooSmallForRollOver(maxFileSizeKilobytes))
             {
                 await logProvider.WriteAsync(logEntry);
                 Assert.That(Directory.GetFiles(_logFileDirectory).Length, Is.EqualTo(1));
@@ -52,7 +52,7 @@ namespace RollingFileLogProviderTests
         {
             var fileInfo = new FileInfo(_logFilePath);
 
-            return !fileInfo.Exists || (((double)fileInfo.Length) / (1024 * 1024)) < maxFileSizeMegabytes;
+            return !fileInfo.Exists || (((double)fileInfo.Length) / 1024) < maxFileSizeMegabytes;
         }
 
         protected override ILogProvider CreateLogProvider(XmlSerializerSerializer serializer, string logFilePath)

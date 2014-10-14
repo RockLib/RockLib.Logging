@@ -7,24 +7,28 @@ namespace Rock.Logging
 {
     public class RollingFileLogProvider : FileLogProvider
     {
-        private const double _defaultMaxFileSizeMegabytes = 10;
+        private const int _defaultMaxFileSizeKilobytes = 1024; // 1MB
         private readonly Lazy<int> _maxFileSizeBytes;
 
         public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory)
             : base(logFormatterFactory)
         {
-            MaxFileSizeMegabytes = _defaultMaxFileSizeMegabytes;
-            _maxFileSizeBytes = new Lazy<int>(() => GetFaxFileSizeBytes(MaxFileSizeMegabytes));
+            MaxFileSizeKilobytes = _defaultMaxFileSizeKilobytes;
+            _maxFileSizeBytes = new Lazy<int>(() => GetMaxFileSizeBytes(MaxFileSizeKilobytes));
         }
 
-        public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory, string file, double maxFileSizeMegabytes = _defaultMaxFileSizeMegabytes)
-            : base(logFormatterFactory, file)
+        public RollingFileLogProvider(
+            ILogFormatterFactory logFormatterFactory,
+            string file,
+            int maxFileSizeKilobytes = _defaultMaxFileSizeKilobytes,
+            IAsyncWaitHandle waitHandle = null)
+            : base(logFormatterFactory, file, waitHandle)
         {
-            MaxFileSizeMegabytes = maxFileSizeMegabytes;
-            _maxFileSizeBytes = new Lazy<int>(() => GetFaxFileSizeBytes(maxFileSizeMegabytes));
+            MaxFileSizeKilobytes = maxFileSizeKilobytes;
+            _maxFileSizeBytes = new Lazy<int>(() => GetMaxFileSizeBytes(maxFileSizeKilobytes));
         }
 
-        public double MaxFileSizeMegabytes { get; set; }
+        public int MaxFileSizeKilobytes { get; set; }
 
         protected override Task OnPreWriteAsync(LogEntry entry, string formattedLogEntry)
         {
@@ -76,9 +80,9 @@ namespace Rock.Logging
             return archiveNumber.All(char.IsNumber);
         }
 
-        private static int GetFaxFileSizeBytes(double maxFileSizeMegabytes)
+        private static int GetMaxFileSizeBytes(int maxFileSizeKilobytes)
         {
-            return (int)(maxFileSizeMegabytes * 1024 * 1024);
+            return maxFileSizeKilobytes * 1024;
         }
     }
 }
