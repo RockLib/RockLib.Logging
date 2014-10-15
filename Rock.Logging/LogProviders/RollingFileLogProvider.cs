@@ -10,15 +10,22 @@ namespace Rock.Logging
     {
         private const int _defaultMaxFileSizeKilobytes = 1024; // 1MB
         private const int _defaultMaxArchiveCount = 10;
+        private const RolloverPeriod _defaultRolloverPeriod = RolloverPeriod.Never;
 
         private readonly Lazy<int> _maxFileSizeBytes;
         private readonly Lazy<int> _maxArchiveCount;
+        private readonly Lazy<RolloverPeriod> _rolloverPeriod;
 
         public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory)
             : base(logFormatterFactory)
         {
             MaxFileSizeKilobytes = _defaultMaxFileSizeKilobytes;
+            MaxArchiveCount = _defaultMaxArchiveCount;
+            RolloverPeriod = _defaultRolloverPeriod;
+
             _maxFileSizeBytes = new Lazy<int>(() => GetMaxFileSizeBytes(MaxFileSizeKilobytes));
+            _maxArchiveCount = new Lazy<int>(() => MaxArchiveCount);
+            _rolloverPeriod = new Lazy<RolloverPeriod>(() => RolloverPeriod);
         }
 
         public RollingFileLogProvider(
@@ -26,18 +33,22 @@ namespace Rock.Logging
             string file,
             int maxFileSizeKilobytes = _defaultMaxFileSizeKilobytes,
             int maxArchiveCount = _defaultMaxArchiveCount,
+            RolloverPeriod rolloverPeriod = _defaultRolloverPeriod,
             IAsyncWaitHandle waitHandle = null)
             : base(logFormatterFactory, file, waitHandle)
         {
             MaxFileSizeKilobytes = maxFileSizeKilobytes;
             MaxArchiveCount = maxArchiveCount;
+            RolloverPeriod = rolloverPeriod;
 
             _maxFileSizeBytes = new Lazy<int>(() => GetMaxFileSizeBytes(maxFileSizeKilobytes));
-            _maxArchiveCount = new Lazy<int>(() => MaxArchiveCount);
+            _maxArchiveCount = new Lazy<int>(() => maxArchiveCount);
+            _rolloverPeriod = new Lazy<RolloverPeriod>(() => rolloverPeriod);
         }
 
         public int MaxFileSizeKilobytes { get; set; }
         public int MaxArchiveCount { get; set; }
+        public RolloverPeriod RolloverPeriod { get; set; }
 
         protected override Task OnPreWriteAsync(LogEntry entry, string formattedLogEntry)
         {
@@ -53,9 +64,48 @@ namespace Rock.Logging
         private bool NeedsArchiving()
         {
             var fileInfo = new FileInfo(File);
+
             return
                 fileInfo.Exists
-                && fileInfo.Length > _maxFileSizeBytes.Value;
+                && (ExceedsMaxFileSize(fileInfo) || NeedsNewRolloverPeriod(fileInfo));
+        }
+
+        private bool ExceedsMaxFileSize(FileInfo fileInfo)
+        {
+            return fileInfo.Length > _maxFileSizeBytes.Value;
+        }
+
+        private bool NeedsNewRolloverPeriod(FileInfo fileInfo)
+        {
+            if (_rolloverPeriod.Value == RolloverPeriod.Never)
+            {
+                return false;
+            }
+
+            DateTime currentTime, creationTime;
+            SetTimes(fileInfo, out currentTime, out creationTime);
+
+            // Both Daily and Hourly roll over on a date change.
+            if (currentTime.Date != creationTime.Date)
+            {
+                return true;
+            }
+
+            // Hourly rolls over when the date is the same, but the hour is different.
+            return
+                _rolloverPeriod.Value == RolloverPeriod.Hourly
+                && currentTime.Hour != creationTime.Hour;
+        }
+
+        /// <summary>
+        /// Sets <paramref name="currentTime"/> to <see cref="DateTime.UtcNow"/> and <paramref name="creationTime"/> 
+        /// to the value of the <see cref="FileSystemInfo.CreationTimeUtc"/> property of <paramref name="fileInfo"/>. 
+        /// This virtual method exists to facilitate the testing of periodic archiving.
+        /// </summary>
+        protected virtual void SetTimes(FileInfo fileInfo, out DateTime currentTime, out DateTime creationTime)
+        {
+            currentTime = DateTime.UtcNow;
+            creationTime = fileInfo.CreationTimeUtc;
         }
 
         private void ArchiveLog()
@@ -77,12 +127,7 @@ namespace Rock.Logging
                     .DefaultIfEmpty()
                     .Max() + 1;
 
-            return Path.Combine(directory, fileName + "." + archiveNumber.ToString(GetArchiveNumberFormat()) + fileExtension);
-        }
-
-        private string GetArchiveNumberFormat()
-        {
-            return new string(Enumerable.Repeat('0', MaxArchiveCount.ToString().Length).ToArray());
+            return Path.Combine(directory, fileName + "." + archiveNumber + fileExtension);
         }
 
         private static string GetArchiveNumberString(string file)
