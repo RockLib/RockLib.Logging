@@ -11,6 +11,7 @@ namespace Rock.Logging
         private static readonly string _defaultFile =
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "RockFramework",
                 Default.ApplicationInfo.ApplicationId,
                 "log.txt");
 
@@ -95,11 +96,19 @@ namespace Rock.Logging
             }
         }
 
+        /// <summary>
+        /// A method called before the log entry is written. This method is thread-safe. That is,
+        /// only one thread will execute this method at any given time.
+        /// </summary>
         protected virtual Task OnPreWriteAsync(LogEntry entry, string formattedLogEntry)
         {
             return _completedTask;
         }
 
+        /// <summary>
+        /// A method called after the log entry is written. This method is thread-safe. That is,
+        /// only one thread will execute this method at any given time.
+        /// </summary>
         protected virtual Task OnPostWriteAsync(LogEntry entry, string formattedLogEntry)
         {
             return _completedTask;
