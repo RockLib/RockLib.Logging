@@ -27,7 +27,7 @@ namespace LoggerTests
             private Mock<ILogProvider> _mockLogProvider;
 
             [SetUp]
-            public void Setup()
+            public new void Setup()
             {
                 _mockLogProvider = new Mock<ILogProvider>();
             }

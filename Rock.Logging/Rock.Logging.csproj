@@ -62,6 +62,7 @@
     <Compile Include="Configuration\File\ThrottlingRuleElement.cs" />
     <Compile Include="Configuration\LogConfigurationException.cs" />
     <Compile Include="ContextProvider.cs" />
+    <Compile Include="Defaults\Implementation\Default.LogFormatterFactory.cs" />
     <Compile Include="Defaults\Implementation\Default.LoggerFactory.cs" />
     <Compile Include="Defaults\Implementation\Default.StepLoggerFactory.cs" />
     <Compile Include="Defaults\Implementation\Default.ContextProviders.cs" />

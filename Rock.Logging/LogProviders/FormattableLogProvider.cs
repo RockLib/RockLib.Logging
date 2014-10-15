@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging
 {
     public abstract class FormattableLogProvider : ILogProvider
     {
         /// <summary>
-        /// A completed task. Can be returned from methods that return a <see cref="Task "/>
+        /// A completed task. Can be returned from methods that return a <see cref="Task"/>
         /// but are not really asynchronous.
         /// </summary>
         protected static readonly Task _completedTask = Task.FromResult(0);
@@ -14,7 +15,7 @@ namespace Rock.Logging
 
         protected FormattableLogProvider(ILogFormatterFactory logFormatterFactory)
         {
-            _logFormatter = logFormatterFactory.GetInstance();
+            _logFormatter = (logFormatterFactory ?? Default.LogFormatterFactory).GetInstance();
         }
 
         public async Task WriteAsync(LogEntry entry)

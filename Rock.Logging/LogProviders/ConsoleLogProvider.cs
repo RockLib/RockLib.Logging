@@ -5,7 +5,12 @@ namespace Rock.Logging
 {
     public class ConsoleLogProvider : FormattableLogProvider
     {
-        public ConsoleLogProvider(ILogFormatterFactory logFormatterFactory)
+        public ConsoleLogProvider()
+            : this(null)
+        {
+        }
+
+        public ConsoleLogProvider(ILogFormatterFactory logFormatterFactory = null)
             : base(logFormatterFactory)
         {
         }

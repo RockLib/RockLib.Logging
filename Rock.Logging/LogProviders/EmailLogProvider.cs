@@ -8,9 +8,14 @@ namespace Rock.Logging
     {
         private readonly DeliveryMethod _deliveryMethod;
 
+        public EmailLogProvider()
+            : this(null, null)
+        {
+        }
+
         public EmailLogProvider(
-            ILogFormatterFactory logFormatterFactory,
-            DeliveryMethod deliveryMethod = null)
+            DeliveryMethod deliveryMethod = null,
+            ILogFormatterFactory logFormatterFactory = null)
             : base(logFormatterFactory)
         {
             _deliveryMethod = deliveryMethod ?? DeliveryMethod.Default;

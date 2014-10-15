@@ -173,8 +173,8 @@ namespace FileLogProviderTests
         protected virtual ILogProvider CreateLogProvider(XmlSerializerSerializer serializer, string logFilePath)
         {
             return new FileLogProvider(
-                new SerializingLogFormatterFactory(serializer),
-                logFilePath);
+                logFilePath,
+                new SerializingLogFormatterFactory(serializer));
         }
     }
 }

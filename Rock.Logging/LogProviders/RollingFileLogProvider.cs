@@ -12,43 +12,28 @@ namespace Rock.Logging
         private const int _defaultMaxArchiveCount = 10;
         private const RolloverPeriod _defaultRolloverPeriod = RolloverPeriod.Never;
 
-        private readonly Lazy<int> _maxFileSizeBytes;
-        private readonly Lazy<int> _maxArchiveCount;
-        private readonly Lazy<RolloverPeriod> _rolloverPeriod;
+        private readonly int _maxFileSizeBytes;
+        private readonly int _maxArchiveCount;
+        private readonly RolloverPeriod _rolloverPeriod;
 
-        public RollingFileLogProvider(ILogFormatterFactory logFormatterFactory)
-            : base(logFormatterFactory)
+        public RollingFileLogProvider()
+            : this(null, _defaultMaxFileSizeKilobytes, _defaultMaxArchiveCount, _defaultRolloverPeriod, null, null)
         {
-            MaxFileSizeKilobytes = _defaultMaxFileSizeKilobytes;
-            MaxArchiveCount = _defaultMaxArchiveCount;
-            RolloverPeriod = _defaultRolloverPeriod;
-
-            _maxFileSizeBytes = new Lazy<int>(() => GetMaxFileSizeBytes(MaxFileSizeKilobytes));
-            _maxArchiveCount = new Lazy<int>(() => MaxArchiveCount);
-            _rolloverPeriod = new Lazy<RolloverPeriod>(() => RolloverPeriod);
         }
 
         public RollingFileLogProvider(
-            ILogFormatterFactory logFormatterFactory,
-            string file,
+            string file = null,
             int maxFileSizeKilobytes = _defaultMaxFileSizeKilobytes,
             int maxArchiveCount = _defaultMaxArchiveCount,
             RolloverPeriod rolloverPeriod = _defaultRolloverPeriod,
+            ILogFormatterFactory logFormatterFactory = null,
             IAsyncWaitHandle waitHandle = null)
-            : base(logFormatterFactory, file, waitHandle)
+            : base(file, logFormatterFactory, waitHandle)
         {
-            MaxFileSizeKilobytes = maxFileSizeKilobytes;
-            MaxArchiveCount = maxArchiveCount;
-            RolloverPeriod = rolloverPeriod;
-
-            _maxFileSizeBytes = new Lazy<int>(() => GetMaxFileSizeBytes(maxFileSizeKilobytes));
-            _maxArchiveCount = new Lazy<int>(() => maxArchiveCount);
-            _rolloverPeriod = new Lazy<RolloverPeriod>(() => rolloverPeriod);
+            _maxFileSizeBytes = GetMaxFileSizeBytes(maxFileSizeKilobytes);
+            _maxArchiveCount = maxArchiveCount;
+            _rolloverPeriod = rolloverPeriod;
         }
-
-        public int MaxFileSizeKilobytes { get; set; }
-        public int MaxArchiveCount { get; set; }
-        public RolloverPeriod RolloverPeriod { get; set; }
 
         protected override Task OnPreWriteAsync(LogEntry entry, string formattedLogEntry)
         {
@@ -63,7 +48,7 @@ namespace Rock.Logging
 
         private bool NeedsArchiving()
         {
-            var fileInfo = new FileInfo(File);
+            var fileInfo = new FileInfo(_file);
 
             return
                 fileInfo.Exists
@@ -72,12 +57,12 @@ namespace Rock.Logging
 
         private bool ExceedsMaxFileSize(FileInfo fileInfo)
         {
-            return fileInfo.Length > _maxFileSizeBytes.Value;
+            return fileInfo.Length > _maxFileSizeBytes;
         }
 
         private bool NeedsNewRolloverPeriod(FileInfo fileInfo)
         {
-            if (_rolloverPeriod.Value == RolloverPeriod.Never)
+            if (_rolloverPeriod == RolloverPeriod.Never)
             {
                 return false;
             }
@@ -93,7 +78,7 @@ namespace Rock.Logging
 
             // Hourly rolls over when the date is the same, but the hour is different.
             return
-                _rolloverPeriod.Value == RolloverPeriod.Hourly
+                _rolloverPeriod == RolloverPeriod.Hourly
                 && currentTime.Hour != creationTime.Hour;
         }
 
@@ -110,7 +95,7 @@ namespace Rock.Logging
 
         private void ArchiveLog()
         {
-            System.IO.File.Move(File, GetArchiveFileName());
+            File.Move(_file, GetArchiveFileName());
         }
 
         private string GetArchiveFileName()
@@ -145,9 +130,9 @@ namespace Rock.Logging
         {
             var archiveFiles = GetArchiveFiles().OrderBy(f => f.ArchiveNumber).ToList();
 
-            while (archiveFiles.Count > _maxArchiveCount.Value)
+            while (archiveFiles.Count > _maxArchiveCount)
             {
-                System.IO.File.Delete(archiveFiles.First().File);
+                File.Delete(archiveFiles.First().File);
                 archiveFiles.RemoveAt(0);
             }
         }
@@ -165,10 +150,10 @@ namespace Rock.Logging
 
         private IEnumerable<ArchiveFile> GetArchiveFiles(out string directory, out string fileName, out string fileExtension)
         {
-            directory = Path.GetDirectoryName(File);
+            directory = Path.GetDirectoryName(_file);
 
-            fileName = Path.GetFileNameWithoutExtension(File);
-            fileExtension = Path.GetExtension(File);
+            fileName = Path.GetFileNameWithoutExtension(_file);
+            fileExtension = Path.GetExtension(_file);
 
             var searchPattern = fileName + ".*" + fileExtension;
 

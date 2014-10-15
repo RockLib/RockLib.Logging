@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Rock.Logging;
@@ -12,7 +9,7 @@ using Rock.Serialization;
 namespace RollingFileLogProviderTests
 {
     // The RollingFileLogProvider behaves just like a FileLogProvider (except for the rolling over part),
-    // so text it just like a FileLogProvider.
+    // so test it just like a FileLogProvider.
     public class TheWriteAsyncMethod : FileLogProviderTests.TheWriteAsyncMethod
     {
         [Test]
@@ -22,9 +19,9 @@ namespace RollingFileLogProviderTests
 
             var logProvider =
                 new RollingFileLogProvider(
-                    new SerializingLogFormatterFactory(new XmlSerializerSerializer()),
                     _logFilePath,
-                    maxFileSizeKilobytes);
+                    maxFileSizeKilobytes,
+                    logFormatterFactory:new SerializingLogFormatterFactory(new XmlSerializerSerializer()));
 
             Assert.That(GetFileCount(), Is.EqualTo(0));
 
@@ -42,10 +39,10 @@ namespace RollingFileLogProviderTests
 
             var logProvider =
                 new RollingFileLogProvider(
-                    new SerializingLogFormatterFactory(new XmlSerializerSerializer()),
                     _logFilePath,
                     maxFileSizeKilobytes,
-                    2);
+                    2,
+                    logFormatterFactory:new SerializingLogFormatterFactory(new XmlSerializerSerializer()));
 
             Assert.That(GetFileCount(), Is.EqualTo(0));
 
@@ -165,8 +162,8 @@ namespace RollingFileLogProviderTests
         protected override ILogProvider CreateLogProvider(XmlSerializerSerializer serializer, string logFilePath)
         {
             return new RollingFileLogProvider(
-                new SerializingLogFormatterFactory(serializer),
-                logFilePath);
+                logFilePath,
+                logFormatterFactory:new SerializingLogFormatterFactory(new XmlSerializerSerializer()));
         }
 
         private class TestingRollingFileLogProvider : RollingFileLogProvider
@@ -178,7 +175,10 @@ namespace RollingFileLogProviderTests
                 string file,
                 RolloverPeriod rolloverPeriod,
                 params TimeSet[] timeSets)
-                : base(new SerializingLogFormatterFactory(new XmlSerializerSerializer()), file, rolloverPeriod:rolloverPeriod)
+                : base(
+                    file,
+                    rolloverPeriod:rolloverPeriod,
+                    logFormatterFactory:new SerializingLogFormatterFactory(new XmlSerializerSerializer()))
             {
                 _timeSets = timeSets;
             }

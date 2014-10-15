@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Rock.Defaults.Implementation;
 using Rock.Net.Http;
-using Rock.Reflection;
 using Rock.Serialization;
 
 namespace Rock.Logging
@@ -13,22 +12,10 @@ namespace Rock.Logging
     {
         private const string DefaultContentType = "application/json";
 
-        private readonly Lazy<string> _endpoint;
-        private readonly Lazy<string> _contentType;
-        private readonly Lazy<ISerializer> _serializer;
-        private readonly Lazy<IHttpClientFactory> _httpClientFactory;
-
-        public HttpEndpointLogProvider()
-        {
-            _endpoint = new Lazy<string>(() => Endpoint);
-            _contentType = new Lazy<string>(() => ContentType);
-            _serializer = new Lazy<ISerializer>(() => SlowFactory.CreateInstance<ISerializer>(SerializerType));
-            _httpClientFactory = new Lazy<IHttpClientFactory>(() => SlowFactory.CreateInstance<IHttpClientFactory>(HttpClientFactoryType));
-            
-            ContentType = DefaultContentType;
-            SerializerType = GetDefaultSerializer().GetType().AssemblyQualifiedName;
-            HttpClientFactoryType = GetDefaultHttpClientFactory().GetType().AssemblyQualifiedName;
-        }
+        private readonly string _endpoint;
+        private readonly string _contentType;
+        private readonly ISerializer _serializer;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public HttpEndpointLogProvider(
             string endpoint,
@@ -39,34 +26,24 @@ namespace Rock.Logging
             serializer = serializer ?? GetDefaultSerializer();
             httpClientFactory = httpClientFactory ?? GetDefaultHttpClientFactory();
 
-            _endpoint = new Lazy<string>(() => endpoint);
-            _contentType = new Lazy<string>(() => contentType);
-            _serializer = new Lazy<ISerializer>(() => serializer);
-            _httpClientFactory = new Lazy<IHttpClientFactory>(() => httpClientFactory);
-
-            Endpoint = endpoint;
-            ContentType = contentType;
-            SerializerType = serializer.GetType().AssemblyQualifiedName;
-            HttpClientFactoryType = httpClientFactory.GetType().AssemblyQualifiedName;
+            _endpoint = endpoint;
+            _contentType = contentType;
+            _serializer = serializer;
+            _httpClientFactory = httpClientFactory;
         }
 
         public event EventHandler<ResponseReceivedEventArgs> ResponseReceived;
 
-        public string Endpoint { get; set; }
-        public string ContentType { get; set; }
-        public string SerializerType { get; set; }
-        public string HttpClientFactoryType { get; set; }
-
         public async Task WriteAsync(LogEntry entry)
         {
-            var serializedEntry = _serializer.Value.SerializeToString(entry);
+            var serializedEntry = _serializer.SerializeToString(entry);
 
             var postContent = new StringContent(serializedEntry);
-            postContent.Headers.ContentType = new MediaTypeHeaderValue(_contentType.Value);
+            postContent.Headers.ContentType = new MediaTypeHeaderValue(_contentType);
 
-            using (var httpClient = _httpClientFactory.Value.CreateHttpClient())
+            using (var httpClient = _httpClientFactory.CreateHttpClient())
             {
-                var response = await httpClient.PostAsync(_endpoint.Value, postContent);
+                var response = await httpClient.PostAsync(_endpoint, postContent);
                 OnResponseReceived(response);
             }
         }
