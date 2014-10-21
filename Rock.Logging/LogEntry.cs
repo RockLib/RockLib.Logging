@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using Rock.Defaults.Implementation;
+using Rock.Extensions;
 
 namespace Rock.Logging
 {

@@ -48,9 +48,8 @@
     <Reference Include="Microsoft.Practices.Unity.Interception.Configuration">
       <HintPath>..\packages\Unity.2.0\lib\20\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -61,13 +60,13 @@
     </Reference>
     <Reference Include="Rock.Core, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rock.Core.0.0.1\lib\net45\Rock.Core.dll</HintPath>
+      <HintPath>..\packages\Rock.Core.0.0.2\lib\net45\Rock.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rock.Serialization.Netwonsoft">
-      <HintPath>..\packages\Rock.Serialization.Netwonsoft.0.0.1-alpha001\lib\net45\Rock.Serialization.Netwonsoft.dll</HintPath>
+    <Reference Include="Rock.Core.Newtonsoft">
+      <HintPath>..\packages\Rock.Core.Newtonsoft.0.0.1\lib\net45\Rock.Core.Newtonsoft.dll</HintPath>
     </Reference>
-    <Reference Include="Rock.Serialization.XSerializer">
-      <HintPath>..\packages\Rock.Serialization.XSerializer.0.0.1-alpha001\lib\net45\Rock.Serialization.XSerializer.dll</HintPath>
+    <Reference Include="Rock.Core.XSerializer">
+      <HintPath>..\packages\Rock.Core.XSerializer.0.0.2\lib\net45\Rock.Core.XSerializer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -76,9 +75,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XSerializer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=9ab97cfaa8f0c80a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\XSerializer.0.1.22\lib\net40\XSerializer.dll</HintPath>
+    <Reference Include="XSerializer">
+      <HintPath>..\packages\XSerializer.0.1.23\lib\net40\XSerializer.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
