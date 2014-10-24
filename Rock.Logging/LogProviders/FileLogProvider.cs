@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Rock.Defaults.Implementation;
+using CoreDefault = Rock.Defaults.Implementation.Default;
+using LoggingDefault = Rock.Logging.Defaults.Implementation.Default;
 
 namespace Rock.Logging
 {
@@ -11,7 +12,7 @@ namespace Rock.Logging
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 "RockFramework",
-                Default.ApplicationInfo.ApplicationId,
+                CoreDefault.ApplicationInfo.ApplicationId,
                 "log.txt");
 
         protected readonly string _file;
@@ -25,9 +26,9 @@ namespace Rock.Logging
 
         public FileLogProvider(
             string file = null,
-            ILogFormatterFactory logFormatterFactory = null,
+            ILogFormatter logFormatter = null,
             IAsyncWaitHandle waitHandle = null)
-            : base(logFormatterFactory)
+            : base(logFormatter ?? LoggingDefault.FileLogFormatter)
         {
             _file = file ?? _defaultFile;
             _waitHandle = waitHandle ?? new SemaphoreSlimAsyncWaitHandle();

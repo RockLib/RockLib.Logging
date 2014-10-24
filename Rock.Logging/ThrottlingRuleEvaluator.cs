@@ -5,7 +5,8 @@ namespace Rock.Logging
 {
     public class ThrottlingRuleEvaluator : IThrottlingRuleEvaluator
     {
-        private readonly IThrottlingRuleConfiguration _throttlingRuleConfiguration;
+        private readonly int _minEventThreshold;
+        private readonly TimeSpan _minInterval;
 
         private static readonly Dictionary<int, RuleTracker> _lastTimeLogged = new Dictionary<int, RuleTracker>();
         private static readonly object _lockObject = new object();
@@ -13,17 +14,17 @@ namespace Rock.Logging
         /// <summary>
         /// Initializes a new instance of the <see cref="ThrottlingRuleEvaluator"/> class.
         /// </summary>
-        /// <param name="throttlingRuleConfiguration">The throttling rule.</param>
-        public ThrottlingRuleEvaluator(IThrottlingRuleConfiguration throttlingRuleConfiguration)
+        public ThrottlingRuleEvaluator(int minEventThreshold, TimeSpan minInterval)
         {
-            _throttlingRuleConfiguration = throttlingRuleConfiguration;
+            _minEventThreshold = minEventThreshold;
+            _minInterval = minInterval;
         }
 
         public bool ShouldLog(LogEntry logEntry)
         {
             int key = logEntry.GetThrottlingHashCode();
 
-            if (_throttlingRuleConfiguration.MinEventThreshold <= 1 && _throttlingRuleConfiguration.MinInterval == TimeSpan.Zero)
+            if (_minEventThreshold <= 1 && _minInterval == TimeSpan.Zero)
             {
                 return true;
             }
@@ -34,9 +35,9 @@ namespace Rock.Logging
             {
                 if (_lastTimeLogged.ContainsKey(key))
                 {
-                    if (_throttlingRuleConfiguration.MinEventThreshold <= 1 && _throttlingRuleConfiguration.MinInterval != TimeSpan.Zero)
+                    if (_minEventThreshold <= 1 && _minInterval != TimeSpan.Zero)
                     {
-                        if (_lastTimeLogged[key].LastTimeLogged.Add(_throttlingRuleConfiguration.MinInterval) > DateTime.Now)
+                        if (_lastTimeLogged[key].LastTimeLogged.Add(_minInterval) > DateTime.Now)
                         {
                             RuleTracker tracker = _lastTimeLogged[key];
                             tracker.MessagesSkippedSinceLastLog += 1;
@@ -49,9 +50,9 @@ namespace Rock.Logging
                             _lastTimeLogged[key] = new RuleTracker(DateTime.Now, 0);
                         }
                     }
-                    else if (_throttlingRuleConfiguration.MinEventThreshold > 1 && _throttlingRuleConfiguration.MinInterval == TimeSpan.Zero)
+                    else if (_minEventThreshold > 1 && _minInterval == TimeSpan.Zero)
                     {
-                        if (_lastTimeLogged[key].MessagesSkippedSinceLastLog < _throttlingRuleConfiguration.MinEventThreshold - 1)
+                        if (_lastTimeLogged[key].MessagesSkippedSinceLastLog < _minEventThreshold - 1)
                         {
                             RuleTracker tracker = _lastTimeLogged[key];
                             tracker.MessagesSkippedSinceLastLog += 1;
@@ -64,9 +65,9 @@ namespace Rock.Logging
                             _lastTimeLogged[key] = new RuleTracker(DateTime.Now, 0);
                         }
                     }
-                    else if (_throttlingRuleConfiguration.MinEventThreshold > 1 && _throttlingRuleConfiguration.MinInterval != TimeSpan.Zero)
+                    else if (_minEventThreshold > 1 && _minInterval != TimeSpan.Zero)
                     {
-                        if (_lastTimeLogged[key].LastTimeLogged.Add(_throttlingRuleConfiguration.MinInterval) > DateTime.Now && _lastTimeLogged[key].MessagesSkippedSinceLastLog < _throttlingRuleConfiguration.MinEventThreshold - 1)
+                        if (_lastTimeLogged[key].LastTimeLogged.Add(_minInterval) > DateTime.Now && _lastTimeLogged[key].MessagesSkippedSinceLastLog < _minEventThreshold - 1)
                         {
                             RuleTracker tracker = _lastTimeLogged[key];
                             tracker.MessagesSkippedSinceLastLog += 1;
@@ -81,7 +82,7 @@ namespace Rock.Logging
                     }
 
                 }
-                else if (_throttlingRuleConfiguration.MinEventThreshold == -1 || _throttlingRuleConfiguration.MinEventThreshold > 1)
+                else if (_minEventThreshold == -1 || _minEventThreshold > 1)
                 {
                     _lastTimeLogged.Add(key, new RuleTracker(DateTime.Now, 1));
                     toReturn = false;

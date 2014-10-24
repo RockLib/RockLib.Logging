@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Rock.Logging.Defaults.Implementation;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Rock.Logging
 {
@@ -13,9 +13,14 @@ namespace Rock.Logging
 
         private readonly ILogFormatter _logFormatter;
 
-        protected FormattableLogProvider(ILogFormatterFactory logFormatterFactory)
+        protected FormattableLogProvider(ILogFormatter logFormatter)
         {
-            _logFormatter = (logFormatterFactory ?? Default.LogFormatterFactory).GetInstance();
+            if (logFormatter == null)
+            {
+                throw new ArgumentNullException("logFormatter");
+            }
+
+            _logFormatter = logFormatter;
         }
 
         public async Task WriteAsync(LogEntry entry)

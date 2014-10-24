@@ -1,6 +1,7 @@
 ﻿using System.Net.Mail;
 using System.Threading.Tasks;
 using Rock.Mail;
+using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging
 {
@@ -15,8 +16,8 @@ namespace Rock.Logging
 
         public EmailLogProvider(
             DeliveryMethod deliveryMethod = null,
-            ILogFormatterFactory logFormatterFactory = null)
-            : base(logFormatterFactory)
+            ILogFormatter logFormatter = null)
+            : base(logFormatter ?? Default.EmailLogFormatter)
         {
             _deliveryMethod = deliveryMethod ?? DeliveryMethod.Default;
         }
@@ -36,7 +37,7 @@ namespace Rock.Logging
         private MailMessage GetMailMessage(LogEntry entry, string body)
         {
             var to = ToEmail.Replace(';', ',');
-            var subject = new LogFormatter(Subject).Format(entry);
+            var subject = new TemplateLogFormatter(Subject).Format(entry);
 
             return new MailMessage(FromEmail, to, subject, body) { IsBodyHtml = true };
         }

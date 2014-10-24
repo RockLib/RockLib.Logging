@@ -16,8 +16,8 @@ namespace Rock.Logging
         private readonly int _maxArchiveCount;
         private readonly RolloverPeriod _rolloverPeriod;
 
-        public RollingFileLogProvider()
-            : this(null, _defaultMaxFileSizeKilobytes, _defaultMaxArchiveCount, _defaultRolloverPeriod, null, null)
+        public RollingFileLogProvider()                                                                                                             // ReSharper disable RedundantArgumentDefaultValue
+            : this(null, _defaultMaxFileSizeKilobytes, _defaultMaxArchiveCount, _defaultRolloverPeriod, null, null)                                 // ReSharper restore RedundantArgumentDefaultValue
         {
         }
 
@@ -26,9 +26,9 @@ namespace Rock.Logging
             int maxFileSizeKilobytes = _defaultMaxFileSizeKilobytes,
             int maxArchiveCount = _defaultMaxArchiveCount,
             RolloverPeriod rolloverPeriod = _defaultRolloverPeriod,
-            ILogFormatterFactory logFormatterFactory = null,
+            ILogFormatter logFormatter = null,
             IAsyncWaitHandle waitHandle = null)
-            : base(file, logFormatterFactory, waitHandle)
+            : base(file, logFormatter, waitHandle)
         {
             _maxFileSizeBytes = GetMaxFileSizeBytes(maxFileSizeKilobytes);
             _maxArchiveCount = maxArchiveCount;

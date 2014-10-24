@@ -100,7 +100,7 @@ namespace FileLogProviderTests
         [Test]
         public async void AnExistingFileIsAppended()
         {
-            File.WriteAllLines(_logFilePath, new [] { _xmlDeclaration });
+            File.WriteAllLines(_logFilePath, new[] { _xmlDeclaration });
 
             var fileInfo = new FileInfo(_logFilePath);
             Assert.That(fileInfo.Length, Is.EqualTo(_xmlDeclaration.Length + Environment.NewLine.Length));
@@ -174,7 +174,7 @@ namespace FileLogProviderTests
         {
             return new FileLogProvider(
                 logFilePath,
-                new SerializingLogFormatterFactory(serializer));
+                new SerializingLogFormatter(serializer));
         }
     }
 }

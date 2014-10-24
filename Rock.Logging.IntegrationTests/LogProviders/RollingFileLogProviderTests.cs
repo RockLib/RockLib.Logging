@@ -21,7 +21,7 @@ namespace RollingFileLogProviderTests
                 new RollingFileLogProvider(
                     _logFilePath,
                     maxFileSizeKilobytes,
-                    logFormatterFactory:new SerializingLogFormatterFactory(new XmlSerializerSerializer()));
+                    logFormatter: new SerializingLogFormatter(new XmlSerializerSerializer()));
 
             Assert.That(GetFileCount(), Is.EqualTo(0));
 
@@ -42,7 +42,7 @@ namespace RollingFileLogProviderTests
                     _logFilePath,
                     maxFileSizeKilobytes,
                     2,
-                    logFormatterFactory:new SerializingLogFormatterFactory(new XmlSerializerSerializer()));
+                    logFormatter: new SerializingLogFormatter(new XmlSerializerSerializer()));
 
             Assert.That(GetFileCount(), Is.EqualTo(0));
 
@@ -163,7 +163,7 @@ namespace RollingFileLogProviderTests
         {
             return new RollingFileLogProvider(
                 logFilePath,
-                logFormatterFactory:new SerializingLogFormatterFactory(new XmlSerializerSerializer()));
+                logFormatter: new SerializingLogFormatter(new XmlSerializerSerializer()));
         }
 
         private class TestingRollingFileLogProvider : RollingFileLogProvider
@@ -177,8 +177,8 @@ namespace RollingFileLogProviderTests
                 params TimeSet[] timeSets)
                 : base(
                     file,
-                    rolloverPeriod:rolloverPeriod,
-                    logFormatterFactory:new SerializingLogFormatterFactory(new XmlSerializerSerializer()))
+                    rolloverPeriod: rolloverPeriod,
+                    logFormatter: new SerializingLogFormatter(new XmlSerializerSerializer()))
             {
                 _timeSets = timeSets;
             }

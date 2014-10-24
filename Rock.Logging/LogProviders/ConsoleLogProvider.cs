@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging
 {
@@ -10,8 +11,8 @@ namespace Rock.Logging
         {
         }
 
-        public ConsoleLogProvider(ILogFormatterFactory logFormatterFactory = null)
-            : base(logFormatterFactory)
+        public ConsoleLogProvider(ILogFormatter logFormatter = null)
+            : base(logFormatter ?? Default.FileLogFormatter)
         {
         }
 
