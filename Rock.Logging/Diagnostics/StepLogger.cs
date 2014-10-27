@@ -72,7 +72,7 @@ namespace Rock.Logging.Diagnostics
 
             logEntry.Level = _logLevel;
             logEntry.Message = _message ?? "Step Report";
-            logEntry.ExtendedProperties.Add("Step Report", report.ToString());
+            logEntry.ExtendedProperties.Add("StepReport", report.ToString());
 
             // ReSharper disable ExplicitCallerInfoArgument
             _logger.LogAsync(logEntry, _callerMemberName, _callerFilePath, _callerLineNumber);

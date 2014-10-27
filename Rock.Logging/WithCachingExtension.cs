@@ -24,12 +24,12 @@ namespace Rock.Logging
                 _loggerFactory = loggerFactory;
             }
 
-            public TLogger Get<TLogger>(string category = null) where TLogger : ILogger
+            public TLogger Get<TLogger>(string categoryName = null) where TLogger : ILogger
             {
                 return
                     (TLogger)_cachedLoggers.GetOrAdd(
-                        Tuple.Create(category, typeof(TLogger)),
-                        t => _loggerFactory.Get<TLogger>(category));
+                        Tuple.Create(categoryName, typeof(TLogger)),
+                        t => _loggerFactory.Get<TLogger>(categoryName));
             }
         }
     }
