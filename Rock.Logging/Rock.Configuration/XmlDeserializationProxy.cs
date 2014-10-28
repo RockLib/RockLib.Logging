@@ -11,17 +11,53 @@ using Rock.DependencyInjection;
 // ReSharper disable once CheckNamespace
 namespace Rock.Configuration
 {
-    public abstract class XmlDeserializingFactory<T>
+    /// <summary>
+    /// A class that creates instances of type <typeparamref name="TTarget"/>. Instances of
+    /// <see cref="XmlDeserializationProxy{TTarget}"/> are intended to be created via
+    /// standard deserialization.
+    /// </summary>
+    /// <typeparam name="TTarget">The type of object that an instance of
+    /// <see cref="XmlDeserializationProxy{TTarget}"/></typeparam> creates.
+    public class XmlDeserializationProxy<TTarget>
     {
         private readonly Type _defaultType;
         private Lazy<Type> _type;
 
-        protected XmlDeserializingFactory(Type defaultType)
+        /// <summary>
+        /// Initializes a new instance of <see cref="XmlDeserializationProxy{TTarget}"/>
+        /// without specifying a default type. If no type is provided via the 
+        /// <see cref="TypeAssemblyQualifiedName"/> property after this instance of
+        /// <see cref="XmlDeserializationProxy{TTarget}"/> has been create, then subsequent
+        /// calls to the <see cref="CreateInstance()"/> or <see cref="CreateInstance(IResolver)"/>
+        /// methods will fail.
+        /// </summary>
+        public XmlDeserializationProxy()
+            : this(null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="XmlDeserializationProxy{TTarget}"/>,
+        /// specifying a default type. If <paramref name="defaultType"/> is null, and if no 
+        /// type is provided via the <see cref="TypeAssemblyQualifiedName"/> property after
+        /// this instance of <see cref="XmlDeserializationProxy{TTarget}"/> has been create, 
+        /// then subsequent calls to the <see cref="CreateInstance()"/> or
+        /// <see cref="CreateInstance(IResolver)"/> /// methods will fail.
+        /// </summary>
+        /// <param name="defaultType">
+        /// The type of object to create if <see cref="TypeAssemblyQualifiedName"/> is not specified.
+        /// </param>
+        public XmlDeserializationProxy(Type defaultType)
         {
             _defaultType = ThrowIfNotAssignableToT(defaultType);
             _type = new Lazy<Type>(() => _defaultType);
         }
 
+        /// <summary>
+        /// Gets or sets the assembly qualified name of the type that this proxy serializes.
+        /// NOTE: Do not use this property directly - it exists as an implementation detail
+        /// for the internal use of the <see cref="XmlDeserializationProxy{TTarget}"/> class.
+        /// </summary>
         [XmlAttribute("type")]
         public string TypeAssemblyQualifiedName
         {
@@ -29,18 +65,55 @@ namespace Rock.Configuration
             set { _type = new Lazy<Type>(() => value != null ? ThrowIfNotAssignableToT(Type.GetType(value)) : _defaultType); }
         }
 
+        /// <summary>
+        /// Gets or sets any xml attributes that exist in the xml document, but are not
+        /// associated with a property of this class (whether this class is
+        /// <see cref="XmlDeserializationProxy{TTarget}"/> or its inheritor).
+        /// NOTE: Do not use this property directly - it exists as an implementation detail
+        /// for the internal use of the <see cref="XmlDeserializationProxy{TTarget}"/> class.
+        /// </summary>
         [XmlAnyAttribute]
         public XmlAttribute[] AdditionalAttributes { get; set; }
 
+        /// <summary>
+        /// Gets or sets any xml elements that exist in the xml document, but are not
+        /// associated with a property of this class (whether this class is
+        /// <see cref="XmlDeserializationProxy{TTarget}"/> or its inheritor).
+        /// NOTE: Do not use this property directly - it exists as an implementation detail
+        /// for the internal use of the <see cref="XmlDeserializationProxy{TTarget}"/> class.
+        /// </summary>
         [XmlAnyElement]
         public XmlElement[] AdditionalElements { get; set; }
 
-        public T CreateInstance()
+        /// <summary>
+        /// Create a new instance of the type specified by the <see cref="TypeAssemblyQualifiedName"/>
+        /// property, using values from the <see cref="AdditionalAttributes"/> and
+        /// <see cref="AdditionalElements"/> properties, along with any properties specified by
+        /// an inheritor of the <see cref="XmlDeserializationProxy{TTarget}"/> class.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the type specified by the <see cref="TypeAssemblyQualifiedName"/> property.
+        /// </returns>
+        public TTarget CreateInstance()
         {
             return CreateInstance(null);
         }
 
-        public virtual T CreateInstance(IResolver resolver)
+        /// <summary>
+        /// Create a new instance of the type specified by the <see cref="TypeAssemblyQualifiedName"/>
+        /// property, using values from the <see cref="AdditionalAttributes"/> and
+        /// <see cref="AdditionalElements"/> properties, along with any properties specified by
+        /// an inheritor of the <see cref="XmlDeserializationProxy{TTarget}"/> class.
+        /// </summary>
+        /// <param name="resolver">
+        /// An optional <see cref="IResolver"/> that can supply any missing values required by a
+        /// constructor of the type specified by the <see cref="TypeAssemblyQualifiedName"/>
+        /// property.
+        /// </param>
+        /// <returns>
+        /// A new instance of the type specified by the <see cref="TypeAssemblyQualifiedName"/> property.
+        /// </returns>
+        public virtual TTarget CreateInstance(IResolver resolver)
         {
             if (_type.Value == null)
             {
@@ -61,7 +134,7 @@ namespace Rock.Configuration
                 }
             }
 
-            return (T)instance;
+            return (TTarget)instance;
         }
 
         private CreationScenario GetCreationScenario()
@@ -263,9 +336,9 @@ namespace Rock.Configuration
                 return null;
             }
 
-            if (!typeof(T).IsAssignableFrom(type))
+            if (!typeof(TTarget).IsAssignableFrom(type))
             {
-                throw new ArgumentException(string.Format("The provided Type, {0}, must be assignable to Type {1}.", type, typeof(T)));
+                throw new ArgumentException(string.Format("The provided Type, {0}, must be assignable to Type {1}.", type, typeof(TTarget)));
             }
 
             return type;

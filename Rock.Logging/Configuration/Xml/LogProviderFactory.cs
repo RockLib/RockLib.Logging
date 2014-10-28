@@ -1,11 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using Rock.Collections;
 using Rock.Configuration;
 using Rock.DependencyInjection;
 
 namespace Rock.Logging.Configuration
 {
-    public class LogProviderFactory : XmlDeserializingFactory<ILogProvider>
+    public class LogProviderFactory : XmlDeserializationProxy<ILogProvider>
     {
         public LogProviderFactory()
             : base(null)
@@ -14,6 +15,11 @@ namespace Rock.Logging.Configuration
 
         [XmlAttribute("formatter")]
         public string Formatter { get; set; }
+
+        public override ILogProvider CreateInstance(IResolver resolver)
+        {
+            throw new NotSupportedException("Use ");
+        }
 
         public ILogProvider CreateInstance(IKeyedEnumerable<string, LogFormatterFactory> formatterFactories, IResolver resolver)
         {
