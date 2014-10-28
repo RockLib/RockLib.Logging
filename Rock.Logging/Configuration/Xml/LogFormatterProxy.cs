@@ -1,5 +1,5 @@
 ﻿using System.Xml.Serialization;
-using Rock.Configuration;
+using Rock.Serialization;
 
 namespace Rock.Logging.Configuration
 {

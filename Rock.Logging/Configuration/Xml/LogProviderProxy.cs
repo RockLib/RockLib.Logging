@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Xml.Serialization;
 using Rock.Collections;
-using Rock.Configuration;
 using Rock.DependencyInjection;
+using Rock.Serialization;
 
 namespace Rock.Logging.Configuration
 {

@@ -95,7 +95,7 @@
     <Compile Include="LogEntry.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="ILoggerConfiguration.cs" />
-    <Compile Include="Rock.Configuration\XmlDeserializationProxy.cs" />
+    <Compile Include="Rock.Serialization\XmlDeserializationProxy.cs" />
     <Compile Include="TemplateLogFormatter.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LoggerExtensions\Exception.cs" />
