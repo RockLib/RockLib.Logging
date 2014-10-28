@@ -4,9 +4,9 @@ using Rock.Configuration;
 namespace Rock.Logging.Configuration
 {
     [XmlRoot("throttlingRule")]
-    public class ThrottlingRuleEvaluatorFactory : XmlDeserializationProxy<IThrottlingRuleEvaluator>
+    public class ThrottlingRuleEvaluatorProxy : XmlDeserializationProxy<IThrottlingRuleEvaluator>
     {
-        public ThrottlingRuleEvaluatorFactory()
+        public ThrottlingRuleEvaluatorProxy()
             : base(typeof(ThrottlingRuleEvaluator))
         {
         }

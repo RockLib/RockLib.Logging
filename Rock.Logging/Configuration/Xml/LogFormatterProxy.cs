@@ -4,9 +4,9 @@ using Rock.Configuration;
 namespace Rock.Logging.Configuration
 {
     [XmlRoot("formatter")]
-    public class LogFormatterFactory : XmlDeserializationProxy<ILogFormatter>
+    public class LogFormatterProxy : XmlDeserializationProxy<ILogFormatter>
     {
-        public LogFormatterFactory()
+        public LogFormatterProxy()
             : base(typeof(TemplateLogFormatter))
         {
         }

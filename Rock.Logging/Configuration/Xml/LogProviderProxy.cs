@@ -6,13 +6,8 @@ using Rock.DependencyInjection;
 
 namespace Rock.Logging.Configuration
 {
-    public class LogProviderFactory : XmlDeserializationProxy<ILogProvider>
+    public class LogProviderProxy : XmlDeserializationProxy<ILogProvider>
     {
-        public LogProviderFactory()
-            : base(null)
-        {
-        }
-
         [XmlAttribute("formatter")]
         public string Formatter { get; set; }
 
@@ -21,7 +16,7 @@ namespace Rock.Logging.Configuration
             throw new NotSupportedException("Use ");
         }
 
-        public ILogProvider CreateInstance(IKeyedEnumerable<string, LogFormatterFactory> formatterFactories, IResolver resolver)
+        public ILogProvider CreateInstance(IKeyedEnumerable<string, LogFormatterProxy> formatterFactories, IResolver resolver)
         {
             ILogFormatter logFormatter;
             if (Formatter != null && formatterFactories.Contains(Formatter))

@@ -11,10 +11,10 @@ namespace Rock.Logging.Configuration
         private IApplicationInfo _applicationInfo = Default.ApplicationInfo;
         private IResolver _supplimentaryContainer;
 
-        private IKeyedEnumerable<string, LogFormatterFactory> _formatterFactories = new FunctionalKeyedCollection<string, LogFormatterFactory>(f => f.Name, Enumerable.Empty<LogFormatterFactory>());
-        private IKeyedEnumerable<string, ThrottlingRuleEvaluatorFactory> _throttlingRuleEvaluators = new FunctionalKeyedCollection<string, ThrottlingRuleEvaluatorFactory>(f => f.Name, Enumerable.Empty<ThrottlingRuleEvaluatorFactory>());
+        private IKeyedEnumerable<string, LogFormatterProxy> _formatterFactories = new FunctionalKeyedCollection<string, LogFormatterProxy>(f => f.Name, Enumerable.Empty<LogFormatterProxy>());
+        private IKeyedEnumerable<string, ThrottlingRuleEvaluatorProxy> _throttlingRuleEvaluators = new FunctionalKeyedCollection<string, ThrottlingRuleEvaluatorProxy>(f => f.Name, Enumerable.Empty<ThrottlingRuleEvaluatorProxy>());
         private IKeyedEnumerable<string, Category> _categories = new FunctionalKeyedCollection<string, Category>(f => f.Name, Enumerable.Empty<Category>());
-        private ContextProviderFactory[] _contextProviders = new ContextProviderFactory[0];
+        private ContextProviderProxy[] _contextProviders = new ContextProviderProxy[0];
 
         [XmlAttribute("isLoggingEnabled")]
         public bool IsLoggingEnabled { get; set; }
@@ -23,22 +23,22 @@ namespace Rock.Logging.Configuration
         public LogLevel LoggingLevel { get; set; }
 
         [XmlElement("auditLogProvider")]
-        public LogProviderFactory AuditLogProvider { get; set; }
+        public LogProviderProxy AuditLogProvider { get; set; }
 
         [XmlArray("formatters")]
         [XmlArrayItem("formatter")]
-        public LogFormatterFactory[] Formatters
+        public LogFormatterProxy[] Formatters
         {
             get { return _formatterFactories.ToArray(); }
-            set { _formatterFactories = new FunctionalKeyedCollection<string, LogFormatterFactory>(f => f.Name, value); }
+            set { _formatterFactories = new FunctionalKeyedCollection<string, LogFormatterProxy>(f => f.Name, value); }
         }
 
         [XmlArray("throttlingRules")]
         [XmlArrayItem("throttlingRule")]
-        public ThrottlingRuleEvaluatorFactory[] ThrottlingRules
+        public ThrottlingRuleEvaluatorProxy[] ThrottlingRules
         {
             get { return _throttlingRuleEvaluators.ToArray(); }
-            set { _throttlingRuleEvaluators = new FunctionalKeyedCollection<string, ThrottlingRuleEvaluatorFactory>(f => f.Name, value); }
+            set { _throttlingRuleEvaluators = new FunctionalKeyedCollection<string, ThrottlingRuleEvaluatorProxy>(f => f.Name, value); }
         }
 
         [XmlArray("categories")]
@@ -51,10 +51,10 @@ namespace Rock.Logging.Configuration
 
         [XmlArray("contextProviders")]
         [XmlArrayItem("contextProvider")]
-        public ContextProviderFactory[] ContextProviders
+        public ContextProviderProxy[] ContextProviders
         {
             get { return _contextProviders; }
-            set { _contextProviders = value ?? new ContextProviderFactory[0]; }
+            set { _contextProviders = value ?? new ContextProviderProxy[0]; }
         }
 
         public void SetApplicationInfo(IApplicationInfo applicationInfo)

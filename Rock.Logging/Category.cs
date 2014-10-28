@@ -13,6 +13,6 @@ namespace Rock.Logging
 
         [XmlArray("providers")]
         [XmlArrayItem("provider")]
-        public LogProviderFactory[] LogProviders { get; set; }
+        public LogProviderProxy[] LogProviders { get; set; }
     }
 }
