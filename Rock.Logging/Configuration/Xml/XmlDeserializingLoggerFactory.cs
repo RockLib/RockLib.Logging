@@ -11,7 +11,7 @@ namespace Rock.Logging.Configuration
         private IApplicationInfo _applicationInfo = Default.ApplicationInfo;
         private IResolver _supplimentaryContainer;
 
-        private IKeyedEnumerable<string, LogFormatterProxy> _formatterFactories = new FunctionalKeyedCollection<string, LogFormatterProxy>(f => f.Name, Enumerable.Empty<LogFormatterProxy>());
+        private IKeyedEnumerable<string, LogFormatterProxy> _formatters = new FunctionalKeyedCollection<string, LogFormatterProxy>(f => f.Name, Enumerable.Empty<LogFormatterProxy>());
         private IKeyedEnumerable<string, ThrottlingRuleEvaluatorProxy> _throttlingRuleEvaluators = new FunctionalKeyedCollection<string, ThrottlingRuleEvaluatorProxy>(f => f.Name, Enumerable.Empty<ThrottlingRuleEvaluatorProxy>());
         private IKeyedEnumerable<string, Category> _categories = new FunctionalKeyedCollection<string, Category>(f => f.Name, Enumerable.Empty<Category>());
         private ContextProviderProxy[] _contextProviders = new ContextProviderProxy[0];
@@ -29,8 +29,8 @@ namespace Rock.Logging.Configuration
         [XmlArrayItem("formatter")]
         public LogFormatterProxy[] Formatters
         {
-            get { return _formatterFactories.ToArray(); }
-            set { _formatterFactories = new FunctionalKeyedCollection<string, LogFormatterProxy>(f => f.Name, value); }
+            get { return _formatters.ToArray(); }
+            set { _formatters = new FunctionalKeyedCollection<string, LogFormatterProxy>(f => f.Name, value); }
         }
 
         [XmlArray("throttlingRules")]
@@ -80,13 +80,13 @@ namespace Rock.Logging.Configuration
                 LoggingLevel = LoggingLevel
             };
 
-            var logProviders = category.LogProviders.Select(x => x.CreateInstance(_formatterFactories, _supplimentaryContainer)).ToList();
+            var logProviders = category.LogProviders.Select(x => x.CreateInstance(_formatters, _supplimentaryContainer)).ToList();
 
             var applicationInfo = _applicationInfo;
 
             var auditLogProvider =
                 AuditLogProvider != null
-                    ? AuditLogProvider.CreateInstance(_formatterFactories, _supplimentaryContainer)
+                    ? AuditLogProvider.CreateInstance(_formatters, _supplimentaryContainer)
                     : null;
 
             var throttlingRuleEvaluator =
