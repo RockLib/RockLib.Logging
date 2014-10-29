@@ -11,11 +11,6 @@ namespace Rock.Logging.Configuration
         [XmlAttribute("formatter")]
         public string Formatter { get; set; }
 
-        public override ILogProvider CreateInstance(IResolver resolver)
-        {
-            throw new NotSupportedException("Use ");
-        }
-
         public ILogProvider CreateInstance(IKeyedEnumerable<string, LogFormatterProxy> formatterFactories, IResolver resolver)
         {
             ILogFormatter logFormatter;
