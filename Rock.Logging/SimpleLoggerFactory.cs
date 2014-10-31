@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using Rock.Defaults.Implementation;
 using Rock.DependencyInjection;
 
-namespace Rock.Logging.Configuration
+namespace Rock.Logging
 {
     /// <summary>
     /// A implementation of <see cref="ILoggerFactory"/> that creates logger instances

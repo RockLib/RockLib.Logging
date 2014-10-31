@@ -52,7 +52,7 @@
     <Compile Include="Configuration\Xml\LoggerSectionHandler.cs" />
     <Compile Include="Configuration\Xml\ContextProviderProxy.cs" />
     <Compile Include="Configuration\Xml\LogFormatterProxy.cs" />
-    <Compile Include="Configuration\Xml\SimpleLoggerFactory.cs" />
+    <Compile Include="SimpleLoggerFactory.cs" />
     <Compile Include="Configuration\Xml\XmlDeserializingLoggerFactory.cs" />
     <Compile Include="Configuration\Xml\LogProviderProxy.cs" />
     <Compile Include="Configuration\Xml\ThrottlingRuleEvaluatorProxy.cs" />
