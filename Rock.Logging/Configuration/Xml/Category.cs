@@ -1,8 +1,8 @@
 using System.Xml.Serialization;
-using Rock.Logging.Configuration;
 
-namespace Rock.Logging
+namespace Rock.Logging.Configuration
 {
+    [XmlRoot("category")]
     public class Category
     {
         [XmlAttribute("name")]

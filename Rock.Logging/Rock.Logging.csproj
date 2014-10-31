@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Category.cs" />
+    <Compile Include="Configuration\Xml\Category.cs" />
     <Compile Include="Configuration\Xml\LoggerSectionHandler.cs" />
     <Compile Include="Configuration\Xml\ContextProviderProxy.cs" />
     <Compile Include="Configuration\Xml\LogFormatterProxy.cs" />
