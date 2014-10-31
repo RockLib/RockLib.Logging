@@ -15,11 +15,6 @@ namespace Rock.Logging
         private readonly IApplicationInfo _applicationInfo;
         private readonly IEnumerable<IContextProvider> _contextProviders;
 
-        protected Logger(Logger logger)
-            : this(logger._configuration, logger._logProviders, logger._applicationInfo, logger._auditLogProvider, logger._throttlingRuleEvaluator, logger._contextProviders)
-        {
-        }
-
         public Logger(
             ILoggerConfiguration configuration,
             IEnumerable<ILogProvider> logProviders,
