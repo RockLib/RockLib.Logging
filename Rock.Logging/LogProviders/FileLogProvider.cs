@@ -33,6 +33,13 @@ namespace Rock.Logging
             _file = file ?? _defaultFile;
             _waitHandle = waitHandle ?? new SemaphoreSlimAsyncWaitHandle();
             _wasWaitHandleProvided = waitHandle != null;
+
+            var dir = Path.GetDirectoryName(_file);
+
+            if (dir != null && !Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
         }
 
         protected override async Task WriteAsync(LogEntry entry, string formattedLogEntry)
