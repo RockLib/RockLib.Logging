@@ -24,6 +24,11 @@ namespace Rock.Logging.Defaults.Implementation
             _loggerFactory.SetCurrent(getLoggerFactoryInstance);
         }
 
+        public static void RestoreLoggerFactory()
+        {
+            _loggerFactory.RestoreDefault();
+        }
+
         private static ILoggerFactory GetLoggerFactoryFromConfiguration()
         {
             // TODO: If the configuration is not correct, there should be a "good" exception thrown here.

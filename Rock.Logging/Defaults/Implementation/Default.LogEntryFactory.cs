@@ -21,5 +21,10 @@ namespace Rock.Logging.Defaults.Implementation
         {
             _logEntryFactory.SetCurrent(getLogEntryFactoryInstance);
         }
+
+        public static void RestoreLogEntryFactory()
+        {
+            _logEntryFactory.RestoreDefault();
+        }
     }
 }

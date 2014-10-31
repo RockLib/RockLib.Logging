@@ -23,5 +23,10 @@ namespace Rock.Logging.Defaults.Implementation
         {
             _emailLogFormatter.SetCurrent(getEmailLogFormatterInstance);
         }
+
+        public static void RestoreEmailLogFormatter()
+        {
+            _emailLogFormatter.RestoreDefault();
+        }
     }
 }

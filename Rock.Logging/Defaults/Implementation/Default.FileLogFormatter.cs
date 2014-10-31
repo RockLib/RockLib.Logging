@@ -23,5 +23,10 @@ namespace Rock.Logging.Defaults.Implementation
         {
             _fileLogFormatter.SetCurrent(getFileLogFormatterInstance);
         }
+
+        public static void RestoreFileLogFormatter()
+        {
+            _fileLogFormatter.RestoreDefault();
+        }
     }
 }

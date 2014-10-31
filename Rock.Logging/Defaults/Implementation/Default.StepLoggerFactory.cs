@@ -22,5 +22,10 @@ namespace Rock.Logging.Defaults.Implementation
         {
             _stepLoggerFactory.SetCurrent(getStepLoggerFactoryInstance);
         }
+
+        public static void RestoreStepLoggerFactory()
+        {
+            _stepLoggerFactory.RestoreDefault();
+        }
     }
 }
