@@ -10,6 +10,9 @@ using Rock.DependencyInjection;
 
 namespace Rock.Logging.Configuration
 {
+    /// <summary>
+    /// An implementation of <see cref="ILoggerFactory"/> that is initialized via xml serialization.
+    /// </summary>
     public class XmlDeserializingLoggerFactory : ILoggerFactory
     {
         private const string _defaultCategoryXml =
@@ -47,15 +50,27 @@ namespace Rock.Logging.Configuration
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether loggers should be enabled.
+        /// </summary>
         [XmlAttribute("isLoggingEnabled")]
         public bool IsLoggingEnabled { get; set; }
 
+        /// <summary>
+        /// Gets or sets the logging level that is specified for loggers.
+        /// </summary>
         [XmlAttribute("loggingLevel")]
         public LogLevel LoggingLevel { get; set; }
 
+        /// <summary>
+        /// Gets or sets an object that creates an instance of <see cref="ILogProvider"/> that loggers use for auditing.
+        /// </summary>
         [XmlElement("auditLogProvider")]
         public LogProviderProxy AuditLogProvider { get; set; }
 
+        /// <summary>
+        /// Gets or sets an array of objects that create instances of <see cref="ILogFormatter"/> that log providers use to format a log entry.
+        /// </summary>
         [XmlArray("formatters")]
         [XmlArrayItem("formatter")]
         public LogFormatterProxy[] Formatters
@@ -64,6 +79,9 @@ namespace Rock.Logging.Configuration
             set { _formatters = new FunctionalKeyedCollection<string, LogFormatterProxy>(f => f.Name, value); }
         }
 
+        /// <summary>
+        /// Gets or sets an array of objects that create instances of <see cref="IThrottlingRuleEvaluator"/> that log providers use to throttle log entries.
+        /// </summary>
         [XmlArray("throttlingRules")]
         [XmlArrayItem("throttlingRule")]
         public ThrottlingRuleEvaluatorProxy[] ThrottlingRules
@@ -72,6 +90,9 @@ namespace Rock.Logging.Configuration
             set { _throttlingRuleEvaluators = new FunctionalKeyedCollection<string, ThrottlingRuleEvaluatorProxy>(f => f.Name, value); }
         }
 
+        /// <summary>
+        /// Gets or sets an array of <see cref="Category"/> objects that define specific logging scenarios.
+        /// </summary>
         [XmlArray("categories")]
         [XmlArrayItem("category")]
         public Category[] Categories
@@ -90,6 +111,9 @@ namespace Rock.Logging.Configuration
             }
         }
 
+        /// <summary>
+        /// Gets or sets an array of objects that create instances of <see cref="IContextProvider"/> that a logger can use to provide additional information to log entries.
+        /// </summary>
         [XmlArray("contextProviders")]
         [XmlArrayItem("contextProvider")]
         public ContextProviderProxy[] ContextProviders
@@ -98,16 +122,36 @@ namespace Rock.Logging.Configuration
             set { _contextProviders = value ?? new ContextProviderProxy[0]; }
         }
 
+        /// <summary>
+        /// Sets the <see cref="IApplicationInfo"/> that is used by this instance
+        /// of <see cref="XmlDeserializingLoggerFactory"/>. If <paramref name="applicationInfo"/>
+        /// is null, then <see cref="Default.ApplicationInfo"/> will be used.
+        /// </summary>
+        /// <param name="applicationInfo">The <see cref="IApplicationInfo"/> to use.</param>
         public void SetApplicationInfo(IApplicationInfo applicationInfo)
         {
             _applicationInfo = applicationInfo ?? Default.ApplicationInfo;
         }
 
+        /// <summary>
+        /// Sets the supplementary <see cref="IResolver"/> instance that is used by this
+        /// instance of <see cref="XmlDeserializingLoggerFactory"/> to resolve dependencies
+        /// not provided from xml deserialization.
+        /// </summary>
+        /// <param name="supplementaryContainer">The supplementary <see cref="IResolver"/> instance.</param>
         public void SetSupplementaryContainer(IResolver supplementaryContainer)
         {
             _supplementaryContainer = supplementaryContainer;
         }
 
+        /// <summary>
+        /// Get an instance of <typeparamref name="TLogger" /> for the given category.
+        /// </summary>
+        /// <typeparam name="TLogger">The type of <see cref="ILogger" /> to return.</typeparam>
+        /// <param name="categoryName">An optional category.</param>
+        /// <returns>
+        /// An instance of <typeparamref name="TLogger" />.
+        /// </returns>
         public TLogger Get<TLogger>(string categoryName = null) where TLogger : ILogger
         {
             var category =
