@@ -51,7 +51,7 @@ namespace Rock.Logging
                 new ILogProvider[] { new TLogProvider() },
                 Default.ApplicationInfo,
                 //(ILogProvider)null, // No specified audit log provider
-                NullThrottlingRuleEvaluator.Instance,
+                new NullThrottlingRuleEvaluator(),
                 new IContextProvider[0]);
 
             if (_supplementaryContainer != null)

@@ -141,7 +141,7 @@ namespace Rock.Logging.Configuration
             var throttlingRuleEvaluator =
                 category.ThrottlingRule != null && _throttlingRuleEvaluators.Contains(category.ThrottlingRule)
                     ? _throttlingRuleEvaluators[category.ThrottlingRule].CreateInstance(_supplementaryContainer)
-                    : NullThrottlingRuleEvaluator.Instance;
+                    : new NullThrottlingRuleEvaluator();
 
             var contextProviders = ContextProviders.Select(x => x.CreateInstance(_supplementaryContainer)).ToList();
 

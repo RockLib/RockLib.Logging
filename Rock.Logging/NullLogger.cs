@@ -5,18 +5,7 @@ namespace Rock.Logging
 {
     public class NullLogger : ILogger
     {
-        private static readonly NullLogger _instance = new NullLogger();
-
         private readonly Task _completedTask = Task.FromResult(0);
-
-        private NullLogger()
-        {
-        }
-
-        public static NullLogger Instance
-        {
-            get { return _instance; }
-        }
 
         public bool IsEnabled(LogLevel logLevel)
         {

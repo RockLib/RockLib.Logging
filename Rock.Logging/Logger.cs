@@ -55,7 +55,7 @@ namespace Rock.Logging
             _logProviders = logProviders;
             _applicationInfo = applicationInfo;
             _auditLogProvider = auditLogProvider; // NOTE: this can be null, and is expected.
-            _throttlingRuleEvaluator = throttlingRuleEvaluator ?? NullThrottlingRuleEvaluator.Instance;
+            _throttlingRuleEvaluator = throttlingRuleEvaluator ?? new NullThrottlingRuleEvaluator();
             _contextProviders = (contextProviders ?? Enumerable.Empty<IContextProvider>()).ToList();
         }
 
