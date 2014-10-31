@@ -7,7 +7,7 @@ namespace Rock.Logging.Defaults.Implementation
 {
     public static partial class Default
     {
-        private static readonly DefaultHelper<ILoggerFactory> _loggerFactory = new DefaultHelper<ILoggerFactory>(GetLoggerFactoryFromConfiguration);
+        private static readonly DefaultHelper<ILoggerFactory> _loggerFactory = new DefaultHelper<ILoggerFactory>(CreateDefaultLoggerFactory);
 
         public static ILoggerFactory LoggerFactory
         {
@@ -29,10 +29,13 @@ namespace Rock.Logging.Defaults.Implementation
             _loggerFactory.RestoreDefault();
         }
 
-        private static ILoggerFactory GetLoggerFactoryFromConfiguration()
+        private static ILoggerFactory CreateDefaultLoggerFactory()
         {
-            // TODO: If the configuration is not correct, there should be a "good" exception thrown here.
-            return ((XmlDeserializingLoggerFactory)ConfigurationManager.GetSection("rock.logging")).WithCaching();
+            var loggerFactory =
+                (ILoggerFactory)ConfigurationManager.GetSection("rock.logging")
+                ?? new SimpleLoggerFactory<ConsoleLogProvider>(LogLevel.Debug);
+
+            return loggerFactory.WithCaching();
         }
     }
 }
