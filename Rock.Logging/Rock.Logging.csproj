@@ -90,7 +90,6 @@
     <Compile Include="LogProviders\EmailLogProvider.cs" />
     <Compile Include="LogProviders\FileLogProvider.cs" />
     <Compile Include="LogProviders\ILogProvider.cs" />
-    <Compile Include="LogProviders\ILogProviderConfiguration.cs" />
     <Compile Include="IThrottlingRuleEvaluator.cs" />
     <Compile Include="LogEntry.cs" />
     <Compile Include="ILogger.cs" />
@@ -102,10 +101,7 @@
     <Compile Include="LoggerFactory.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogProviders\FormattableLogProvider.cs" />
-    <Compile Include="LogProviders\IMapper.cs" />
     <Compile Include="LogProviders\HttpEndpointLogProvider.cs" />
-    <Compile Include="LogProviders\LogProviderConfiguration.cs" />
-    <Compile Include="LogProviders\Mapper.cs" />
     <Compile Include="AssemblyInitialization\ModuleInitializer.cs" />
     <Compile Include="LogProviders\ResponseReceivedEventArgs.cs" />
     <Compile Include="LogProviders\RollingFileLogProvider.cs" />
