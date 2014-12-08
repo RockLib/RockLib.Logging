@@ -32,8 +32,7 @@
     <DocumentationFile>bin\Release\Rock.Logging.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rock.Core, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Rock.Core">
       <HintPath>..\packages\Rock.Core.0.0.3\lib\net45\Rock.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
