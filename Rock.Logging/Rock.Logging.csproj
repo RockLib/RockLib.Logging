@@ -54,6 +54,7 @@
     <Compile Include="Configuration\Xml\LoggerSectionHandler.cs" />
     <Compile Include="Configuration\Xml\ContextProviderProxy.cs" />
     <Compile Include="Configuration\Xml\LogFormatterProxy.cs" />
+    <Compile Include="Defaults\Implementation\Default.ContextProviders.cs" />
     <Compile Include="Rock.StaticDependencyInjection\CompositionRoot.cs" />
     <Compile Include="Rock.StaticDependencyInjection\ExportAttribute.cs" />
     <Compile Include="Rock.StaticDependencyInjection\ModuleInitializer.cs" />
