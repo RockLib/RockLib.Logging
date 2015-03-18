@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using Rock.Defaults;
-using Rock.Logging.Configuration;
 
 namespace Rock.Logging.Defaults.Implementation
 {

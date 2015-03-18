@@ -11,6 +11,7 @@
     <AssemblyName>Rock.Logging</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <UseInjectModuleInitializer Condition="'$(UseInjectModuleInitializer)' == ''">true</UseInjectModuleInitializer>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,8 +33,9 @@
     <DocumentationFile>bin\Release\Rock.Logging.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rock.Core">
-      <HintPath>..\packages\Rock.Core.0.0.3\lib\net45\Rock.Core.dll</HintPath>
+    <Reference Include="Rock.Core, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rock.Core.0.0.4-alpha02\lib\net45\Rock.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -52,6 +54,10 @@
     <Compile Include="Configuration\Xml\LoggerSectionHandler.cs" />
     <Compile Include="Configuration\Xml\ContextProviderProxy.cs" />
     <Compile Include="Configuration\Xml\LogFormatterProxy.cs" />
+    <Compile Include="Rock.StaticDependencyInjection\CompositionRoot.cs" />
+    <Compile Include="Rock.StaticDependencyInjection\ExportAttribute.cs" />
+    <Compile Include="Rock.StaticDependencyInjection\ModuleInitializer.cs" />
+    <Compile Include="Rock.StaticDependencyInjection\StaticDependencyInjection.Generated.cs" />
     <Compile Include="SimpleLoggerFactory.cs" />
     <Compile Include="Configuration\Xml\XmlDeserializingLoggerFactory.cs" />
     <Compile Include="Configuration\Xml\LogProviderProxy.cs" />
@@ -102,7 +108,6 @@
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogProviders\FormattableLogProvider.cs" />
     <Compile Include="LogProviders\HttpEndpointLogProvider.cs" />
-    <Compile Include="AssemblyInitialization\ModuleInitializer.cs" />
     <Compile Include="LogProviders\ResponseReceivedEventArgs.cs" />
     <Compile Include="LogProviders\RollingFileLogProvider.cs" />
     <Compile Include="LogProviders\RolloverPeriod.cs" />
@@ -121,14 +126,8 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="InjectModuleInitializer" AfterTargets="AfterBuild">
-    <Exec Command="..\packages\InjectModuleInitializer.1.3.0-beta25\tools\InjectModuleInitializer.exe &quot;$(TargetPath)&quot;" />
-  </Target>
-  <Target Name="InjectModuleInitializer" AfterTargets="AfterBuild">
-    <Exec Command="..\packages\InjectModuleInitializer.1.3.0-beta26\tools\InjectModuleInitializer.exe &quot;$(TargetPath)&quot;" />
-  </Target>
-  <Target Name="InjectModuleInitializer" AfterTargets="AfterBuild">
-    <Exec Command="..\packages\InjectModuleInitializer.1.3.1\tools\InjectModuleInitializer.exe &quot;$(TargetPath)&quot;" />
+  <Target Name="InjectModuleInitializer" AfterTargets="AfterBuild" Condition="'$(UseInjectModuleInitializer)' == 'true'">
+    <Exec Command="..\packages\Rock.StaticDependencyInjection.1.1.0\tools\InjectModuleInitializer.exe &quot;$(TargetPath)&quot;" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -113,7 +113,8 @@ namespace Rock.Logging
             }
             catch (Exception ex)
             {
-                // TODO: Send log entry and exception(s) to system event log.
+                // TODO: Send log entry and exception(s) to system event log. AND/OR, sent it to a retry mechanism.
+                // TODO ALSO: The error handling here sucks. Do something about it.
             }
         }
 
