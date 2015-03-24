@@ -57,6 +57,7 @@ namespace Rock.Logging.Configuration
         {
             IsLoggingEnabled = true;
             LoggingLevel = LogLevel.Fatal;
+            AsyncProcessing = true;
         }
 
         /// <summary>
@@ -70,6 +71,16 @@ namespace Rock.Logging.Configuration
         /// </summary>
         [XmlAttribute("loggingLevel")]
         public LogLevel LoggingLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether logging should be asynchonous.
+        /// </summary>
+        /// <remarks>
+        /// This property is not fully implemented. While its value is set during deserialization,
+        /// the <see cref="XmlDeserializingLoggerFactory"/> class never accesses it.
+        /// </remarks>
+        [XmlAttribute("asyncProcessing")]
+        public bool AsyncProcessing { get; set; } // TODO: Finish implementing this setting or remove it.
 
         /// <summary>
         /// Gets or sets an object that creates an instance of <see cref="ILogProvider"/> that loggers use for auditing.
