@@ -51,6 +51,15 @@ namespace Rock.Logging.Configuration
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="XmlDeserializingLoggerFactory"/> class.
+        /// </summary>
+        public XmlDeserializingLoggerFactory()
+        {
+            IsLoggingEnabled = true;
+            LoggingLevel = LogLevel.Fatal;
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether loggers should be enabled.
         /// </summary>
         [XmlAttribute("isLoggingEnabled")]
