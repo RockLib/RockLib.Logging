@@ -11,6 +11,11 @@ namespace Rock.Logging
     public interface ILogProvider
     {
         /// <summary>
+        /// Gets the logging level of the log provider.
+        /// </summary>
+        LogLevel LoggingLevel { get; }
+
+        /// <summary>
         /// Writes the specified entry.
         /// </summary>
         /// <param name="entry">The entry.</param>

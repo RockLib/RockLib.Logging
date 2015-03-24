@@ -13,12 +13,14 @@ namespace Rock.Logging
         private const string DefaultContentType = "application/json";
 
         private readonly string _endpoint;
+        private readonly LogLevel _loggingLevel;
         private readonly string _contentType;
         private readonly ISerializer _serializer;
         private readonly IHttpClientFactory _httpClientFactory;
 
         public HttpEndpointLogProvider(
             string endpoint,
+            LogLevel loggingLevel,
             string contentType = DefaultContentType,
             ISerializer serializer = null,
             IHttpClientFactory httpClientFactory = null)
@@ -27,12 +29,18 @@ namespace Rock.Logging
             httpClientFactory = httpClientFactory ?? GetDefaultHttpClientFactory();
 
             _endpoint = endpoint;
+            _loggingLevel = loggingLevel;
             _contentType = contentType;
             _serializer = serializer;
             _httpClientFactory = httpClientFactory;
         }
 
         public event EventHandler<ResponseReceivedEventArgs> ResponseReceived;
+
+        public LogLevel LoggingLevel
+        {
+            get { return _loggingLevel; }
+        }
 
         public async Task WriteAsync(LogEntry entry)
         {

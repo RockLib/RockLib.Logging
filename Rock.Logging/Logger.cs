@@ -104,7 +104,11 @@ namespace Rock.Logging
             }
             else
             {
-                writeTask = Task.WhenAll(_logProviders.Select(logProvider => logProvider.WriteAsync(logEntry)));
+                writeTask =
+                    Task.WhenAll(
+                        _logProviders
+                            .Where(x => logEntry.Level >= x.LoggingLevel)
+                            .Select(logProvider => logProvider.WriteAsync(logEntry)));
             }
 
             try

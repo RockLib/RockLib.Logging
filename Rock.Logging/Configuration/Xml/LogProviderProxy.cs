@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Rock.Collections;
 using Rock.DependencyInjection;
 using Rock.Serialization;
