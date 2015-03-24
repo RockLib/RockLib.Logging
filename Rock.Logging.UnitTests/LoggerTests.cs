@@ -72,19 +72,19 @@ namespace LoggerTests
                 RunTest(logLevelParameter, configuredLogLevel, true, false);
             }
 
-            [TestCase(LogLevel.None, LogLevel.None)]
-            [TestCase(LogLevel.None, LogLevel.Debug)]
-            [TestCase(LogLevel.None, LogLevel.Info)]
-            [TestCase(LogLevel.None, LogLevel.Warn)]
-            [TestCase(LogLevel.None, LogLevel.Error)]
-            [TestCase(LogLevel.None, LogLevel.Fatal)]
-            [TestCase(LogLevel.None, LogLevel.Audit)]
-            public void AlwaysReturnsFalseWhenTheLogLevelParameterIsNone(LogLevel logLevelParameter, LogLevel configuredLogLevel)
+            [TestCase(LogLevel.NotSet, LogLevel.NotSet)]
+            [TestCase(LogLevel.NotSet, LogLevel.Debug)]
+            [TestCase(LogLevel.NotSet, LogLevel.Info)]
+            [TestCase(LogLevel.NotSet, LogLevel.Warn)]
+            [TestCase(LogLevel.NotSet, LogLevel.Error)]
+            [TestCase(LogLevel.NotSet, LogLevel.Fatal)]
+            [TestCase(LogLevel.NotSet, LogLevel.Audit)]
+            public void AlwaysReturnsFalseWhenTheLogLevelParameterIsNotSet(LogLevel logLevelParameter, LogLevel configuredLogLevel)
             {
                 RunTest(logLevelParameter, configuredLogLevel, true, false);
             }
 
-            [TestCase(LogLevel.Audit, LogLevel.None)]
+            [TestCase(LogLevel.Audit, LogLevel.NotSet)]
             [TestCase(LogLevel.Audit, LogLevel.Debug)]
             [TestCase(LogLevel.Audit, LogLevel.Info)]
             [TestCase(LogLevel.Audit, LogLevel.Warn)]
@@ -112,7 +112,7 @@ namespace LoggerTests
             [TestCase(LogLevel.Fatal, LogLevel.Error)]
             [TestCase(LogLevel.Fatal, LogLevel.Fatal)]
 
-            [TestCase(LogLevel.Audit, LogLevel.None)]
+            [TestCase(LogLevel.Audit, LogLevel.NotSet)]
             [TestCase(LogLevel.Audit, LogLevel.Debug)]
             [TestCase(LogLevel.Audit, LogLevel.Info)]
             [TestCase(LogLevel.Audit, LogLevel.Warn)]

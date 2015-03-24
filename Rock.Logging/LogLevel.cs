@@ -2,7 +2,7 @@
 {
     public enum LogLevel
     {
-        None,
+        NotSet,
         Debug,
         Info,
         Warn,

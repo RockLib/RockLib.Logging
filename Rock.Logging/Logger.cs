@@ -59,7 +59,7 @@ namespace Rock.Logging
             return
                 _configuration.IsLoggingEnabled
                 && logLevel >= _configuration.LoggingLevel
-                && logLevel != LogLevel.None;
+                && logLevel != LogLevel.NotSet;
         }
 
         public async Task LogAsync(
