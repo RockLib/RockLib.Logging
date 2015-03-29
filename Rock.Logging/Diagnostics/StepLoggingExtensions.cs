@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging.Diagnostics
 {
@@ -8,7 +7,7 @@ namespace Rock.Logging.Diagnostics
     {
         public static IStepLogger CreateStepLogger(
             this ILogger logger,
-            LogLevel logLevel,
+            LogLevel logLevel = LogLevel.Debug,
             string message = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
@@ -16,7 +15,7 @@ namespace Rock.Logging.Diagnostics
         {
             return !logger.IsEnabled(logLevel)
                 ? NullStepLogger.Instance
-                : Default.StepLoggerFactory.CreateStepLogger(logger, logLevel, message, callerMemberName, callerFilePath, callerLineNumber);
+                : DefaultStepLoggerFactory.Current.CreateStepLogger(logger, logLevel, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         public static T AddValueTo<T>(this T value, IStepLogger stepLogger, string label = "Value")

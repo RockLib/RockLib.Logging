@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging.Diagnostics
 {
@@ -68,7 +67,7 @@ namespace Rock.Logging.Diagnostics
 
             report.AppendLine("Total Elapsed: " + _stopwatch.Elapsed);
 
-            var logEntry = Default.LogEntryFactory.CreateLogEntry();
+            var logEntry = DefaultLogEntryFactory.Current.CreateLogEntry();
 
             logEntry.Level = _logLevel;
             logEntry.Message = _message ?? "Step Report";

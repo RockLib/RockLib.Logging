@@ -62,7 +62,7 @@
     </Reference>
     <Reference Include="Rock.Core, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rock.Core.0.0.4-alpha05\lib\net45\Rock.Core.dll</HintPath>
+      <HintPath>..\packages\Rock.Core.0.0.4-alpha08\lib\net45\Rock.Core.dll</HintPath>
     </Reference>
     <Reference Include="Rock.Core.Newtonsoft">
       <HintPath>..\packages\Rock.Core.Newtonsoft.0.0.2\lib\net45\Rock.Core.Newtonsoft.dll</HintPath>

@@ -10,15 +10,17 @@ namespace Rock.Logging
     {
         private readonly ILoggerConfiguration _configuration;
         private readonly IEnumerable<ILogProvider> _logProviders;
+
+        private readonly string _applicationId;
+        
         private readonly ILogProvider _auditLogProvider;
         private readonly IThrottlingRuleEvaluator _throttlingRuleEvaluator;
-        private readonly IApplicationInfo _applicationInfo;
         private readonly IEnumerable<IContextProvider> _contextProviders;
 
         public Logger(
             ILoggerConfiguration configuration,
             IEnumerable<ILogProvider> logProviders,
-            IApplicationInfo applicationInfo,
+            IApplicationIdProvider applicationIdProvider = null,
             ILogProvider auditLogProvider = null,
             IThrottlingRuleEvaluator throttlingRuleEvaluator = null,
             IEnumerable<IContextProvider> contextProviders = null)
@@ -33,11 +35,6 @@ namespace Rock.Logging
                 throw new ArgumentNullException("logProviders");
             }
 
-            if (applicationInfo == null)
-            {
-                throw new ArgumentNullException("applicationInfo");
-            }
-
             // Be sure to fully realize lists so we get fast enumeration during logging.
             logProviders = logProviders.ToList();
 
@@ -48,7 +45,12 @@ namespace Rock.Logging
 
             _configuration = configuration;
             _logProviders = logProviders;
-            _applicationInfo = applicationInfo;
+
+            _applicationId =
+                applicationIdProvider != null
+                    ? applicationIdProvider.GetApplicationId()
+                    : ApplicationId.Current;
+
             _auditLogProvider = auditLogProvider; // NOTE: this can be null, and is expected.
             _throttlingRuleEvaluator = throttlingRuleEvaluator ?? new NullThrottlingRuleEvaluator();
             _contextProviders = (contextProviders ?? Enumerable.Empty<IContextProvider>()).ToList();
@@ -77,7 +79,7 @@ namespace Rock.Logging
 
             if (string.IsNullOrWhiteSpace(logEntry.ApplicationId))
             {
-                logEntry.ApplicationId = _applicationInfo.ApplicationId;
+                logEntry.ApplicationId = _applicationId;
             }
 
             if (logEntry.UniqueId == null)

@@ -1,4 +1,3 @@
-using Rock.Logging.Defaults.Implementation;
 using Rock.Logging.Diagnostics;
 using Rock.StaticDependencyInjection;
 using System;
@@ -12,12 +11,12 @@ namespace Rock.Logging.Rock.StaticDependencyInjection
     {
         public override void Bootstrap()
         {
-            ImportMultiple<IContextProvider>(x => Default.SetContextProviders(() => x as IList<IContextProvider> ?? x.ToList()));
-            ImportFirst<ILogFormatter>(x => Default.SetEmailLogFormatter(() => x), "EmailLogFormatter");
-            ImportFirst<ILogFormatter>(x => Default.SetFileLogFormatter(() => x), "FileLogFormatter");
-            ImportFirst<ILogEntryFactory>(x => Default.SetLogEntryFactory(() => x));
-            ImportFirst<ILoggerFactory>(x => Default.SetLoggerFactory(() => x));
-            ImportFirst<IStepLoggerFactory>(x => Default.SetStepLoggerFactory(() => x));
+            ImportMultiple<IContextProvider>(x => DefaultContextProviders.SetCurrent(x as IList<IContextProvider> ?? x.ToList()));
+            ImportFirst<ILogFormatter>(DefaultEmailLogFormatter.SetCurrent, "EmailLogFormatter");
+            ImportFirst<ILogFormatter>(DefaultFileLogFormatter.SetCurrent, "FileLogFormatter");
+            ImportFirst<ILogEntryFactory>(DefaultLogEntryFactory.SetCurrent);
+            ImportFirst<ILoggerFactory>(LoggerFactory.SetCurrent);
+            ImportFirst<IStepLoggerFactory>(DefaultStepLoggerFactory.SetCurrent);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-using Rock.Logging.Defaults.Implementation;
+using System.Configuration;
+using Rock.Immutable;
 
 namespace Rock.Logging
 {
@@ -7,6 +8,27 @@ namespace Rock.Logging
     /// </summary>
     public static class LoggerFactory
     {
+        private static readonly Semimutable<ILoggerFactory> _current = new Semimutable<ILoggerFactory>(GetDefault);
+
+        public static ILoggerFactory Current
+        {
+            get { return _current.Value; }
+        }
+
+        public static void SetCurrent(ILoggerFactory value)
+        {
+            _current.Value = value;
+        }
+
+        private static ILoggerFactory GetDefault()
+        {
+            var loggerFactory =
+                (ILoggerFactory)ConfigurationManager.GetSection("rock.logging")
+                ?? new SimpleLoggerFactory<ConsoleLogProvider>(LogLevel.Debug);
+
+            return loggerFactory.WithCaching();
+        }
+
         /// <summary>
         /// Get a the default instance of <see cref="Logger"/>.
         /// </summary>
@@ -34,7 +56,7 @@ namespace Rock.Logging
         /// <returns>An instance of <see cref="Logger"/>.</returns>
         public static ILogger GetInstance(string categoryName)
         {
-            return Default.LoggerFactory.Get<Logger>(categoryName);
+            return Current.Get<Logger>(categoryName);
         }
 
         /// <summary>
@@ -46,7 +68,7 @@ namespace Rock.Logging
         public static TLogger GetInstance<TLogger>(string categoryName)
             where TLogger : ILogger
         {
-            return Default.LoggerFactory.Get<TLogger>(categoryName);
+            return Current.Get<TLogger>(categoryName);
         }
     }
 }

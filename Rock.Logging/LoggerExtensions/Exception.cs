@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging
 {
@@ -26,7 +25,7 @@ namespace Rock.Logging
                 return;
             }
 
-            var logEntry = Default.LogEntryFactory.CreateLogEntry();
+            var logEntry = DefaultLogEntryFactory.Current.CreateLogEntry();
 
             logEntry.Level = logLevel;
             logEntry.SetException(exception);

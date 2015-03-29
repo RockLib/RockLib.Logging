@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Rock.Collections;
-using Rock.Defaults.Implementation;
 using Rock.DependencyInjection;
 
 namespace Rock.Logging.Configuration
@@ -26,7 +25,7 @@ namespace Rock.Logging.Configuration
 
         private readonly ConditionalWeakTable<Category, ConcurrentDictionary<Type, IResolver>> _containerMapTable = new ConditionalWeakTable<Category, ConcurrentDictionary<Type, IResolver>>();
 
-        private IApplicationInfo _applicationInfo = Default.ApplicationInfo;
+        private IApplicationIdProvider _applicationIdProvider;
         private IResolver _supplementaryContainer;
 
         private IKeyedEnumerable<string, LogFormatterProxy> _formatters = new FunctionalKeyedCollection<string, LogFormatterProxy>(f => f.Name, Enumerable.Empty<LogFormatterProxy>());
@@ -143,14 +142,13 @@ namespace Rock.Logging.Configuration
         }
 
         /// <summary>
-        /// Sets the <see cref="IApplicationInfo"/> that is used by this instance
-        /// of <see cref="XmlDeserializingLoggerFactory"/>. If <paramref name="applicationInfo"/>
-        /// is null, then <see cref="Default.ApplicationInfo"/> will be used.
+        /// Sets the <see cref="IApplicationIdProvider"/> that is used by this instance
+        /// of <see cref="XmlDeserializingLoggerFactory"/>.
         /// </summary>
-        /// <param name="applicationInfo">The <see cref="IApplicationInfo"/> to use.</param>
-        public void SetApplicationInfo(IApplicationInfo applicationInfo)
+        /// <param name="applicationIdProvider">The <see cref="IApplicationIdProvider"/> to use.</param>
+        public void SetApplicationIdProvider(IApplicationIdProvider applicationIdProvider)
         {
-            _applicationInfo = applicationInfo ?? Default.ApplicationInfo;
+            _applicationIdProvider = applicationIdProvider;
         }
 
         /// <summary>
@@ -195,7 +193,7 @@ namespace Rock.Logging.Configuration
             var logProviders =
                 category.LogProviders.Select(x => x.CreateInstance(_formatters, _supplementaryContainer)).ToList();
 
-            var applicationInfo = _applicationInfo;
+            var applicationIdProvider = _applicationIdProvider;
 
             var auditLogProvider =
                 AuditLogProvider != null
@@ -207,13 +205,16 @@ namespace Rock.Logging.Configuration
                     ? _throttlingRuleEvaluators[category.ThrottlingRule].CreateInstance(_supplementaryContainer)
                     : new NullThrottlingRuleEvaluator();
 
-            var contextProviders = ContextProviders.Select(x => x.CreateInstance(_supplementaryContainer)).ToList();
+            var contextProviders =
+                DefaultContextProviders.Current.Concat(
+                    ContextProviders.Select(x => x.CreateInstance(_supplementaryContainer)))
+                    .ToList();
 
             var container =
                 new AutoContainer(
                     configuration,
                     logProviders,
-                    applicationInfo,
+                    applicationIdProvider,
                     auditLogProvider,
                     throttlingRuleEvaluator,
                     contextProviders);

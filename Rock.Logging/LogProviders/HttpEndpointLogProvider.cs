@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Rock.Defaults.Implementation;
 using Rock.Net.Http;
 using Rock.Serialization;
 
@@ -67,12 +66,12 @@ namespace Rock.Logging
 
         private static ISerializer GetDefaultSerializer()
         {
-            return Default.JsonSerializer;
+            return DefaultJsonSerializer.Current;
         }
 
         private static IHttpClientFactory GetDefaultHttpClientFactory()
         {
-            return new DefaultHttpClientFactory();
+            return DefaultHttpClientFactory.Current;
         }
     }
 }

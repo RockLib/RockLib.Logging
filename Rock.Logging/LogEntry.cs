@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
-using Rock.Defaults.Implementation;
-using Rock.Extensions;
+using Rock.Conversion;
+using Rock.StringFormatting;
 
 namespace Rock.Logging
 {
@@ -92,7 +92,7 @@ namespace Rock.Logging
         public LogEntry(string message, object extendedProperties)
             : this(
                 message,
-                Default.ObjectToDictionaryOfStringToStringConverter.Convert(extendedProperties),
+                extendedProperties.ToDictionaryOfStringToString(),
                 null,
                 null)
         {
@@ -134,7 +134,7 @@ namespace Rock.Logging
             string exceptionContext = null)
             : this(
                 message,
-                Default.ObjectToDictionaryOfStringToStringConverter.Convert(extendedProperties),
+                extendedProperties.ToDictionaryOfStringToString(),
                 exception,
                 exceptionContext)
         {

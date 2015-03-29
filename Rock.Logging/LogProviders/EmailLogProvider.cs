@@ -1,7 +1,6 @@
 ﻿using System.Net.Mail;
 using System.Threading.Tasks;
 using Rock.Mail;
-using Rock.Logging.Defaults.Implementation;
 
 namespace Rock.Logging
 {
@@ -17,7 +16,7 @@ namespace Rock.Logging
         public EmailLogProvider(
             DeliveryMethod deliveryMethod = null,
             ILogFormatter logFormatter = null)
-            : base(logFormatter ?? Default.EmailLogFormatter)
+            : base(logFormatter ?? DefaultEmailLogFormatter.Current)
         {
             _deliveryMethod = deliveryMethod ?? DeliveryMethod.Default;
         }

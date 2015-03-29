@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using Rock.Defaults.Implementation;
 using Rock.DependencyInjection;
 
 namespace Rock.Logging
@@ -9,9 +8,9 @@ namespace Rock.Logging
     /// A implementation of <see cref="ILoggerFactory"/> that creates logger instances
     /// configured so its IsLoggingEnabled is true, logs at the LoggingLevel specified
     /// by the value passed into the <c>SimpleLoggerFactory</c> constructor, has a single
-    /// log provider of type <typeparamref name="TLogProvider"/>, uses the application info from
-    /// <see cref="Default.ApplicationInfo"/>, uses a new <see cref="NullThrottlingRuleEvaluator"/>
-    /// for the throttling rule evaluator, and has no context providers.
+    /// log provider of type <typeparamref name="TLogProvider"/>, uses a new
+    /// <see cref="NullThrottlingRuleEvaluator"/> for the throttling rule evaluator,
+    /// and has no context providers.
     /// </summary>
     public sealed class SimpleLoggerFactory<TLogProvider> : ILoggerFactory
         where TLogProvider : ILogProvider, new()
@@ -70,8 +69,7 @@ namespace Rock.Logging
         {
             var container = new AutoContainer(
                 new LoggerConfiguration { IsLoggingEnabled = true, LoggingLevel = _logLevel },
-                new ILogProvider[] { new TLogProvider() },
-                Default.ApplicationInfo);
+                new ILogProvider[] { new TLogProvider() });
 
             if (_supplementaryContainer != null)
             {
