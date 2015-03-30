@@ -11,5 +11,6 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
     </metadata>
     <files>
+        <file src="linqpad-samples\**\*.linq" target="linqpad-samples" />
     </files>
 </package>
