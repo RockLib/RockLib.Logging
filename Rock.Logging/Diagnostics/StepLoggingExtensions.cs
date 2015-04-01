@@ -18,17 +18,6 @@ namespace Rock.Logging.Diagnostics
                 : DefaultStepLoggerFactory.Current.CreateStepLogger(logger, logLevel, message, callerMemberName, callerFilePath, callerLineNumber);
         }
 
-        public static T AddValueTo<T>(this T value, IStepLogger stepLogger, string label = "Value")
-            where T : struct 
-        {
-            if (stepLogger != NullStepLogger.Instance)
-            {
-                stepLogger.AddStep(new LogValueStep<T>(value, label));
-            }
-            
-            return value;
-        }
-
         public static string LogValue(this string value, IStepLogger stepLogger, string label = "Value")
         {
             if (stepLogger != NullStepLogger.Instance)
@@ -39,25 +28,29 @@ namespace Rock.Logging.Diagnostics
             return value;
         }
 
-        public static T LogValue<T, TValue>(this T t, IStepLogger stepLogger, Func<T, TValue> getValue, string label = "Value")
-            where TValue : struct
+        public static T LogValue<T>(this T value, IStepLogger stepLogger, string label = "Value")
         {
-            if (stepLogger != NullStepLogger.Instance)
-            {
-                stepLogger.AddStep(new LogValueStep<TValue>(getValue(t), label));
-            }
-
-            return t;
+            return value.LogValue(stepLogger, x => x, label);
         }
 
-        public static T LogValue<T>(this T t, IStepLogger stepLogger, Func<T, string> getValue, string label = "Value")
+        public static T LogValue<T, TValue>(this T value, IStepLogger stepLogger, Func<T, TValue> getValue, string label = "Value")
         {
             if (stepLogger != NullStepLogger.Instance)
             {
-                stepLogger.AddStep(new LogValueStep(getValue(t), label));
+                stepLogger.AddStep(new LogValueStep<TValue>(getValue(value), label));
+            }
+
+            return value;
+        }
+
+        public static T LogValue<T>(this T value, IStepLogger stepLogger, Func<T, string> getValue, string label = "Value")
+        {
+            if (stepLogger != NullStepLogger.Instance)
+            {
+                stepLogger.AddStep(new LogValueStep(getValue(value), label));
             }
             
-            return t;
+            return value;
         }
 
         public static void AddMessage(this IStepLogger stepLogger, string message)

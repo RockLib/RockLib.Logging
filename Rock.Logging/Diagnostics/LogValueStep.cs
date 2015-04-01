@@ -3,7 +3,6 @@ using System.Text;
 namespace Rock.Logging.Diagnostics
 {
     public class LogValueStep<T> : IStep
-        where T : struct
     {
         private readonly T _value;
         private readonly string _identifier;
