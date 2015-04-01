@@ -7,10 +7,11 @@
         <owners>$author$</owners>
         <description>$description$</description>
         <summary>Rock logger.</summary>
-        <tags>rock logger logging</tags>
+        <tags>rock logger logging linqpad-samples</tags>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
     </metadata>
     <files>
         <file src="linqpad-samples\**\*.linq" target="linqpad-samples" />
+        <file src="linqpad-samples\FileOrder.txt" target="linqpad-samples" />
     </files>
 </package>
