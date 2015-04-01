@@ -56,9 +56,7 @@
     <Compile Include="Configuration\Xml\LogFormatterProxy.cs" />
     <Compile Include="DefaultContextProviders.cs" />
     <Compile Include="DefaultLogEntryFactory.cs" />
-    <Compile Include="DefaultFileLogFormatter.cs" />
     <Compile Include="Diagnostics\StepLoggerFactory.cs" />
-    <Compile Include="DefaultEmailLogFormatter.cs" />
     <Compile Include="Rock.StaticDependencyInjection\CompositionRoot.cs" />
     <Compile Include="Rock.StaticDependencyInjection\ExportAttribute.cs" />
     <Compile Include="Rock.StaticDependencyInjection\ModuleInitializer.cs" />

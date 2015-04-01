@@ -12,8 +12,9 @@ namespace Rock.Logging.Rock.StaticDependencyInjection
         public override void Bootstrap()
         {
             ImportMultiple<IContextProvider>(x => DefaultContextProviders.SetCurrent(x as IList<IContextProvider> ?? x.ToList()));
-            ImportFirst<ILogFormatter>(DefaultEmailLogFormatter.SetCurrent, "EmailLogFormatter");
-            ImportFirst<ILogFormatter>(DefaultFileLogFormatter.SetCurrent, "FileLogFormatter");
+            ImportFirst<ILogFormatter>(EmailLogProvider.SetDefaultLogFormatter, "EmailLogFormatter");
+            ImportFirst<ILogFormatter>(ConsoleLogProvider.SetDefaultLogFormatter, "ConsoleLogFormatter");
+            ImportFirst<ILogFormatter>(FileLogProvider.SetDefaultLogFormatter, "FileLogFormatter");
             ImportFirst<ILogEntryFactory>(DefaultLogEntryFactory.SetCurrent);
             ImportFirst<ILoggerFactory>(LoggerFactory.SetCurrent);
             ImportFirst<IStepLoggerFactory>(DefaultStepLoggerFactory.SetCurrent);
