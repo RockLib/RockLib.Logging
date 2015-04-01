@@ -24,6 +24,11 @@ namespace Rock.Logging
                 _loggerFactory = loggerFactory;
             }
 
+            public ILoggerFactory LoggerFactory
+            {
+                get { return _loggerFactory; }
+            }
+
             public TLogger Get<TLogger>(string categoryName = null) where TLogger : ILogger
             {
                 return
