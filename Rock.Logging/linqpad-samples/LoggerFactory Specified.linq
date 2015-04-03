@@ -1,5 +1,5 @@
 <Query Kind="Program">
-  <NuGetReference Prerelease="true">Rock.Logging</NuGetReference>
+  <NuGetReference>Rock.Logging</NuGetReference>
   <Namespace>Rock.DependencyInjection</Namespace>
   <Namespace>Rock.Logging</Namespace>
   <Namespace>Rock.Serialization</Namespace>
