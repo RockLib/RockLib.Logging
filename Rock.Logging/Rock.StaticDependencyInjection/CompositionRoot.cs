@@ -18,6 +18,7 @@ namespace Rock.Logging.Rock.StaticDependencyInjection
             ImportFirst<ILogEntryFactory>(DefaultLogEntryFactory.SetCurrent);
             ImportFirst<ILoggerFactory>(LoggerFactory.SetCurrent);
             ImportFirst<IStepLoggerFactory>(DefaultStepLoggerFactory.SetCurrent);
+            ImportFirst<IXmlNamespaceProvider>(LogEntryExtendedProperties.SetXmlNamespace);
         }
 
         /// <summary>

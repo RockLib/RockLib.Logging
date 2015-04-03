@@ -2,7 +2,7 @@
 {
     public class NullThrottlingRuleEvaluator : IThrottlingRuleEvaluator
     {
-        public bool ShouldLog(LogEntry logEntry)
+        public bool ShouldLog(ILogEntry logEntry)
         {
             return true;
         }

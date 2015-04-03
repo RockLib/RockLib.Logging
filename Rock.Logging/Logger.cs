@@ -65,7 +65,7 @@ namespace Rock.Logging
         }
 
         public async Task LogAsync(
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
@@ -124,7 +124,7 @@ namespace Rock.Logging
             }
         }
 
-        protected virtual void OnPreLog(LogEntry logEntry)
+        protected virtual void OnPreLog(ILogEntry logEntry)
         {
         }
     }

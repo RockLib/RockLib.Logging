@@ -20,7 +20,7 @@ namespace Rock.Logging
             _minInterval = minInterval;
         }
 
-        public bool ShouldLog(LogEntry logEntry)
+        public bool ShouldLog(ILogEntry logEntry)
         {
             int key = logEntry.GetThrottlingHashCode();
 

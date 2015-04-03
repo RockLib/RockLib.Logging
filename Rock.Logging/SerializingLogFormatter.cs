@@ -11,7 +11,7 @@ namespace Rock.Logging
             _serializer = serializer;
         }
 
-        public string Format(LogEntry entry)
+        public string Format(ILogEntry entry)
         {
             return _serializer.SerializeToString(entry);
         }

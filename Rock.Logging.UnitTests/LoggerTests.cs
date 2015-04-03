@@ -7,6 +7,15 @@ using Rock.Logging;
 // ReSharper disable once CheckNamespace
 namespace LoggerTests
 {
+    public class Wtf
+    {
+        [Test]
+        public void Bbq()
+        {
+            
+        }
+    }
+
     public abstract class LoggerTestsBase
     {
         protected AutoMoqer _mocker;

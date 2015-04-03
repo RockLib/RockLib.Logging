@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Rock.Logging;
+using Rock.Logging.Defaults;
 using Rock.Serialization;
 
 // ReSharper disable once CheckNamespace

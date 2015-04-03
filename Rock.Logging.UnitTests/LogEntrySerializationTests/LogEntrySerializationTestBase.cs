@@ -4,6 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using Rock.Collections;
 using Rock.Logging;
+using Rock.Logging.Defaults;
 using Rock.Serialization;
 
 namespace LoggerTests.LogEntrySerializationTests

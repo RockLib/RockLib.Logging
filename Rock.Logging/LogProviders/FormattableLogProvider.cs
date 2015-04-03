@@ -32,11 +32,11 @@ namespace Rock.Logging
             set { _loggingLevel.Value = value; }
         }
 
-        public async Task WriteAsync(LogEntry entry)
+        public async Task WriteAsync(ILogEntry entry)
         {
             await WriteAsync(entry, _logFormatter.Format(entry));
         }
 
-        protected abstract Task WriteAsync(LogEntry entry, string formattedLogEntry);
+        protected abstract Task WriteAsync(ILogEntry entry, string formattedLogEntry);
     }
 }

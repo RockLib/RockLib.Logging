@@ -1,8 +1,8 @@
-﻿namespace Rock.Logging
+﻿namespace Rock.Logging.Defaults
 {
     public class LogEntryFactory : ILogEntryFactory
     {
-        public LogEntry CreateLogEntry()
+        public ILogEntry CreateLogEntry()
         {
             return new LogEntry();
         }

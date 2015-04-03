@@ -45,7 +45,7 @@ namespace Rock.Logging
             }
         }
 
-        protected override async Task WriteAsync(LogEntry entry, string formattedLogEntry)
+        protected override async Task WriteAsync(ILogEntry entry, string formattedLogEntry)
         {
             await _waitHandle.WaitAsync();
 
@@ -70,7 +70,7 @@ namespace Rock.Logging
         /// A method called before the log entry is written. This method is thread-safe. That is,
         /// only one thread will execute this method at any given time.
         /// </summary>
-        protected virtual Task OnPreWriteAsync(LogEntry entry, string formattedLogEntry)
+        protected virtual Task OnPreWriteAsync(ILogEntry entry, string formattedLogEntry)
         {
             return _completedTask;
         }
@@ -79,7 +79,7 @@ namespace Rock.Logging
         /// A method called after the log entry is written. This method is thread-safe. That is,
         /// only one thread will execute this method at any given time.
         /// </summary>
-        protected virtual Task OnPostWriteAsync(LogEntry entry, string formattedLogEntry)
+        protected virtual Task OnPostWriteAsync(ILogEntry entry, string formattedLogEntry)
         {
             return _completedTask;
         }

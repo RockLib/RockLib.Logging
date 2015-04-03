@@ -2,6 +2,6 @@
 {
     public interface ILogFormatter
     {
-        string Format(LogEntry entry);
+        string Format(ILogEntry entry);
     }
 }

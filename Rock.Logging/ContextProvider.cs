@@ -1,13 +1,13 @@
 namespace Rock.Logging
 {
     public abstract class ContextProvider<TLogEntry> : IContextProvider
-        where TLogEntry : LogEntry
+        where TLogEntry : ILogEntry
     {
-        public void AddContextData(LogEntry logEntry)
+        public void AddContextData(ILogEntry logEntry)
         {
-            var tLogEntry = logEntry as TLogEntry;
-            if (tLogEntry != null)
+            if (logEntry is TLogEntry)
             {
+                var tLogEntry = (TLogEntry)logEntry;
                 AddContextData(tLogEntry);
             }
         }

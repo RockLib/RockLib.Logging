@@ -31,7 +31,7 @@ namespace Rock.Logging
         public string ToEmail { get; set; }
         public string Subject { get; set; }
 
-        protected override async Task WriteAsync(LogEntry entry, string formattedLogEntry)
+        protected override async Task WriteAsync(ILogEntry entry, string formattedLogEntry)
         {
             using (var mailMessage = GetMailMessage(entry, formattedLogEntry))
             {
@@ -39,7 +39,7 @@ namespace Rock.Logging
             }
         }
 
-        private MailMessage GetMailMessage(LogEntry entry, string body)
+        private MailMessage GetMailMessage(ILogEntry entry, string body)
         {
             var to = ToEmail.Replace(';', ',');
             var subject = new TemplateLogFormatter(Subject).Format(entry);

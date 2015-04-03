@@ -12,6 +12,6 @@ namespace Rock.Logging
         /// <returns>
         /// <c>true</c> if the specified log entry should be logged; otherwise, <c>false</c>.
         /// </returns>
-        bool ShouldLog(LogEntry logEntry);
+        bool ShouldLog(ILogEntry logEntry);
     }
 }

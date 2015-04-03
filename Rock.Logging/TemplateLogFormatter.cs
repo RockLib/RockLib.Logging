@@ -10,8 +10,8 @@ namespace Rock.Logging
 {
     public class TemplateLogFormatter : ILogFormatter
     {
-        private static readonly Dictionary<string, Func<LogEntry, string>> _simpleTokenHandlers = new Dictionary<string, Func<LogEntry, string>>();
-        private static readonly Dictionary<string, Func<LogEntry, DateTime>> _dateTimeTokenHandlers = new Dictionary<string, Func<LogEntry, DateTime>>();
+        private static readonly Dictionary<string, Func<ILogEntry, string>> _simpleTokenHandlers = new Dictionary<string, Func<ILogEntry, string>>();
+        private static readonly Dictionary<string, Func<ILogEntry, DateTime>> _dateTimeTokenHandlers = new Dictionary<string, Func<ILogEntry, DateTime>>();
 
         private static readonly Regex _simpleTokenRegex = new Regex(@"{(?<token>[a-zA-Z_][a-zA-Z0-9_]*?)}", RegexOptions.Compiled);
         private static readonly Regex _parentheticalTokenRegex = new Regex(@"{(?<token>[a-zA-Z_][a-zA-Z0-9_]*?)(?:\((?<format>.*?)\))?}", RegexOptions.Compiled);
@@ -69,39 +69,49 @@ namespace Rock.Logging
                 && _containsHtmlTagsRegex.IsMatch(template);
         }
 
-        public static void AddSimpleTokenHandler(string key, Func<LogEntry, string> getValue)
+        public static void AddSimpleTokenHandler(string key, Func<ILogEntry, string> getValue)
         {
             _simpleTokenHandlers[key] = getValue;
         }
 
         public static void AddSimpleTokenHandler<TLogEntry>(string key, Func<TLogEntry, string> getTokenReplacement)
-            where TLogEntry : LogEntry
+            where TLogEntry : ILogEntry
         {
             _simpleTokenHandlers[key] =
                 logEntry =>
                 {
-                    var tLogEntry = logEntry as TLogEntry;
-                    return tLogEntry == null ? null : getTokenReplacement(tLogEntry);
+                    if (logEntry is TLogEntry)
+                    {
+                        var tLogEntry = (TLogEntry)logEntry;
+                        return getTokenReplacement(tLogEntry);
+                    }
+
+                    return null;
                 };
         }
 
-        public static void AddDateTimeTokenHandler(string key, Func<LogEntry, DateTime> getDateTime)
+        public static void AddDateTimeTokenHandler(string key, Func<ILogEntry, DateTime> getDateTime)
         {
             _dateTimeTokenHandlers[key] = getDateTime;
         }
 
         public static void AddDateTimeTokenHandler<TLogEntry>(string key, Func<TLogEntry, DateTime> getDateTime)
-            where TLogEntry : LogEntry
+            where TLogEntry : ILogEntry
         {
             _dateTimeTokenHandlers[key] =
                 logEntry =>
                 {
-                    var tLogEntry = logEntry as TLogEntry;
-                    return tLogEntry == null ? default(DateTime) : getDateTime(tLogEntry);
+                    if (logEntry is TLogEntry)
+                    {
+                        var tLogEntry = (TLogEntry)logEntry;
+                        return getDateTime(tLogEntry);
+                    }
+
+                    return default(DateTime);
                 };
         }
 
-        private static string FormatSpecificExtendedProperty(LogEntry logEntry, string extendedProperty)
+        private static string FormatSpecificExtendedProperty(ILogEntry logEntry, string extendedProperty)
         {
             return
                 logEntry.ExtendedProperties.ContainsKey(extendedProperty)
@@ -109,13 +119,13 @@ namespace Rock.Logging
                     : "N/A";
         }
 
-        public string Format(LogEntry logEntry)
+        public string Format(ILogEntry logEntry)
         {
             var formattedLogEntry = _simpleTokenRegex.Replace(
                 _template,
                 match =>
                 {
-                    Func<LogEntry, string> getValue;
+                    Func<ILogEntry, string> getValue;
 
                     return
                         HtmlEncodeIfNecessary(
@@ -128,7 +138,7 @@ namespace Rock.Logging
                 formattedLogEntry,
                 match =>
                 {
-                    Func<LogEntry, DateTime> getValue;
+                    Func<ILogEntry, DateTime> getValue;
 
                     if (!_dateTimeTokenHandlers.TryGetValue(match.Groups["token"].Value, out getValue))
                     {

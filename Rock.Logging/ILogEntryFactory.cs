@@ -2,6 +2,6 @@
 {
     public interface ILogEntryFactory
     {
-        LogEntry CreateLogEntry();
+        ILogEntry CreateLogEntry();
     }
 }

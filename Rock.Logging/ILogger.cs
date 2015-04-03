@@ -8,7 +8,7 @@ namespace Rock.Logging
         bool IsEnabled(LogLevel logLevel);
         
         Task LogAsync(
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0);

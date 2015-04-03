@@ -41,7 +41,7 @@ namespace Rock.Logging
             get { return _loggingLevel; }
         }
 
-        public async Task WriteAsync(LogEntry entry)
+        public async Task WriteAsync(ILogEntry entry)
         {
             var serializedEntry = _serializer.SerializeToString(entry);
 

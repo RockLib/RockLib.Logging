@@ -7,7 +7,7 @@ namespace Rock.Logging
     {
         public static void Log(
             this ILogger logger,
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
@@ -16,12 +16,12 @@ namespace Rock.Logging
         }
 
         /// <summary>
-        /// Sets the value of the specified log entry's <see cref="LogEntry.Level"/> property to
+        /// Sets the value of the specified log entry's <see cref="ILogEntry.Level"/> property to
         /// <see cref="LogLevel.Debug"/> then logs the log entry.
         /// </summary>
         public static void Debug(
             this ILogger logger,
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
@@ -31,12 +31,12 @@ namespace Rock.Logging
         }
 
         /// <summary>
-        /// Sets the value of the specified log entry's <see cref="LogEntry.Level"/> property to
+        /// Sets the value of the specified log entry's <see cref="ILogEntry.Level"/> property to
         /// <see cref="LogLevel.Info"/> then logs the log entry.
         /// </summary>
         public static void Info(
             this ILogger logger,
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
@@ -46,12 +46,12 @@ namespace Rock.Logging
         }
 
         /// <summary>
-        /// Sets the value of the specified log entry's <see cref="LogEntry.Level"/> property to
+        /// Sets the value of the specified log entry's <see cref="ILogEntry.Level"/> property to
         /// <see cref="LogLevel.Warn"/> then logs the log entry.
         /// </summary>
         public static void Warn(
             this ILogger logger,
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
@@ -61,12 +61,12 @@ namespace Rock.Logging
         }
 
         /// <summary>
-        /// Sets the value of the specified log entry's <see cref="LogEntry.Level"/> property to
+        /// Sets the value of the specified log entry's <see cref="ILogEntry.Level"/> property to
         /// <see cref="LogLevel.Error"/> then logs the log entry.
         /// </summary>
         public static void Error(
             this ILogger logger,
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
@@ -76,12 +76,12 @@ namespace Rock.Logging
         }
 
         /// <summary>
-        /// Sets the value of the specified log entry's <see cref="LogEntry.Level"/> property to
+        /// Sets the value of the specified log entry's <see cref="ILogEntry.Level"/> property to
         /// <see cref="LogLevel.Fatal"/> then logs the log entry.
         /// </summary>
         public static void Fatal(
             this ILogger logger,
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
@@ -91,12 +91,12 @@ namespace Rock.Logging
         }
 
         /// <summary>
-        /// Sets the value of the specified log entry's <see cref="LogEntry.Level"/> property to
+        /// Sets the value of the specified log entry's <see cref="ILogEntry.Level"/> property to
         /// <see cref="LogLevel.Audit"/> then logs the log entry.
         /// </summary>
         public static void Audit(
             this ILogger logger,
-            LogEntry logEntry,
+            ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)

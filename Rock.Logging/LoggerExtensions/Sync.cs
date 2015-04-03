@@ -46,7 +46,7 @@ namespace Rock.Logging
 
             // ReSharper disable ExplicitCallerInfoArgument
             public Task LogAsync(
-                LogEntry logEntry,
+                ILogEntry logEntry,
                 [CallerMemberName] string callerMemberName = null,
                 [CallerFilePath] string callerFilePath = null,
                 [CallerLineNumber] int callerLineNumber = 0)

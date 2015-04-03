@@ -4,8 +4,8 @@ namespace Rock.Logging
 {
     public static class AddCallerInfoExtension
     {
-        public static LogEntry AddCallerInfo(
-            this LogEntry logEntry,
+        public static ILogEntry AddCallerInfo(
+            this ILogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)

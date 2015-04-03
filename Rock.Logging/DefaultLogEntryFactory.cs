@@ -1,4 +1,5 @@
 ﻿using Rock.Immutable;
+using Rock.Logging.Defaults;
 
 namespace Rock.Logging
 {

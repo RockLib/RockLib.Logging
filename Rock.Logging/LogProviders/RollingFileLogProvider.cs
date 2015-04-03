@@ -35,7 +35,7 @@ namespace Rock.Logging
             _rolloverPeriod = rolloverPeriod;
         }
 
-        protected override Task OnPreWriteAsync(LogEntry entry, string formattedLogEntry)
+        protected override Task OnPreWriteAsync(ILogEntry entry, string formattedLogEntry)
         {
             if (NeedsArchiving())
             {

@@ -18,7 +18,7 @@ namespace Rock.Logging
         {
         }
 
-        protected override Task WriteAsync(LogEntry entry, string formattedLogEntry)
+        protected override Task WriteAsync(ILogEntry entry, string formattedLogEntry)
         {
             Console.WriteLine(formattedLogEntry);
             return _completedTask;
