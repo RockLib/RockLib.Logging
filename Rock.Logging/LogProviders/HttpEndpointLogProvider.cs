@@ -14,7 +14,7 @@ namespace Rock.Logging
         private readonly string _endpoint;
         private readonly LogLevel _loggingLevel;
         private readonly string _contentType;
-        private readonly ISerializer _serializer;
+        private readonly Func<ILogEntry, string> _serializeLogEntry; 
         private readonly IHttpClientFactory _httpClientFactory;
 
         public HttpEndpointLogProvider(
@@ -22,7 +22,8 @@ namespace Rock.Logging
             LogLevel loggingLevel,
             string contentType = DefaultContentType,
             ISerializer serializer = null,
-            IHttpClientFactory httpClientFactory = null)
+            IHttpClientFactory httpClientFactory = null,
+            bool serializeAsConcreteType = true)
         {
             serializer = serializer ?? GetDefaultSerializer();
             httpClientFactory = httpClientFactory ?? GetDefaultHttpClientFactory();
@@ -30,7 +31,10 @@ namespace Rock.Logging
             _endpoint = endpoint;
             _loggingLevel = loggingLevel;
             _contentType = contentType;
-            _serializer = serializer;
+            _serializeLogEntry =
+                serializeAsConcreteType
+                    ? (Func<ILogEntry, string>)(entry => serializer.SerializeToString(entry, entry.GetType()))
+                    : entry => serializer.SerializeToString(entry);
             _httpClientFactory = httpClientFactory;
         }
 
@@ -43,7 +47,7 @@ namespace Rock.Logging
 
         public async Task WriteAsync(ILogEntry entry)
         {
-            var serializedEntry = _serializer.SerializeToString(entry);
+            var serializedEntry = _serializeLogEntry(entry);
 
             var postContent = new StringContent(serializedEntry);
             postContent.Headers.ContentType = new MediaTypeHeaderValue(_contentType);
