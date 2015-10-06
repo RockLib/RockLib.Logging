@@ -3,6 +3,7 @@
   <Namespace>Rock.DependencyInjection</Namespace>
   <Namespace>Rock.Logging</Namespace>
   <Namespace>Rock.Serialization</Namespace>
+  <Namespace>Rock.Logging.Defaults</Namespace>
 </Query>
 
 void Main()
@@ -68,7 +69,7 @@ void Main()
 
 private class CsvLogFormatter : ILogFormatter
 {
-    public string Format(LogEntry logEntry)
+    public string Format(ILogEntry logEntry)
     {
         return string.Format(
             "{0}, {1:O}{2}{3}",
