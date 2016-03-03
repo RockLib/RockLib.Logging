@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileConfigurationTests.cs" />
+    <Compile Include="LoggerFactoryTests.cs" />
     <Compile Include="LogProviders\RollingFileLogProviderTests.cs" />
     <Compile Include="LogProviders\FileLogProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

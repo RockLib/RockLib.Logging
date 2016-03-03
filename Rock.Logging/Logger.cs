@@ -11,7 +11,7 @@ namespace Rock.Logging
         private readonly ILoggerConfiguration _configuration;
         private readonly IEnumerable<ILogProvider> _logProviders;
 
-        private readonly string _applicationId;
+        public string ApplicationId { get; set; }
         
         private readonly ILogProvider _auditLogProvider;
         private readonly IThrottlingRuleEvaluator _throttlingRuleEvaluator;
@@ -46,10 +46,10 @@ namespace Rock.Logging
             _configuration = configuration;
             _logProviders = logProviders;
 
-            _applicationId =
+            ApplicationId =
                 applicationIdProvider != null
                     ? applicationIdProvider.GetApplicationId()
-                    : ApplicationId.Current;
+                    : global::Rock.ApplicationId.Current;
 
             _auditLogProvider = auditLogProvider; // NOTE: this can be null, and is expected.
             _throttlingRuleEvaluator = throttlingRuleEvaluator ?? new NullThrottlingRuleEvaluator();
@@ -79,7 +79,7 @@ namespace Rock.Logging
 
             if (string.IsNullOrWhiteSpace(logEntry.ApplicationId))
             {
-                logEntry.ApplicationId = _applicationId;
+                logEntry.ApplicationId = ApplicationId;
             }
 
             if (logEntry.UniqueId == null)
