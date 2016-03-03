@@ -30,15 +30,6 @@ namespace Rock.Logging
         }
 
         /// <summary>
-        /// Get a the default instance of <see cref="Logger"/>.
-        /// </summary>
-        /// <returns>An instance of <see cref="Logger"/>.</returns>
-        public static ILogger GetInstance()
-        {
-            return GetInstance(null);
-        }
-
-        /// <summary>
         /// Get a the default instance of <typeparamref name="TLogger"/>.
         /// </summary>
         /// <typeparam name="TLogger">The type of <see cref="ILogger"/> to return.</typeparam>
@@ -53,10 +44,16 @@ namespace Rock.Logging
         /// Get an instance of <see cref="Logger"/> for the given category.
         /// </summary>
         /// <param name="categoryName">The category of the logger to retrieve.</param>
+        /// <param name="applicationId">The application that generated the log.</param>
         /// <returns>An instance of <see cref="Logger"/>.</returns>
-        public static ILogger GetInstance(string categoryName)
+        public static ILogger GetInstance(string categoryName = null, string applicationId = null)
         {
-            return Current.Get<Logger>(categoryName);
+            var log = Current.Get<Logger>(categoryName);
+            if (applicationId != null)
+            {
+                log.ApplicationId = applicationId;
+            }
+            return log;
         }
 
         /// <summary>
