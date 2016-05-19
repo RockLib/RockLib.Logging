@@ -80,9 +80,9 @@
     <Compile Include="LogEntryExtensions\AddCallerInfoExtension.cs" />
     <Compile Include="LoggerConfiguration.cs" />
     <Compile Include="LoggerExtensions\GetExceptionHandler.cs" />
-    <Compile Include="LoggerExtensions\IsEnabledExtensions.cs" />
-    <Compile Include="LoggerExtensions\LogEntryExtensions.cs" />
-    <Compile Include="LoggerExtensions\LoggerExtensions.cs" />
+    <Compile Include="LoggerExtensions\IsEnabled.cs" />
+    <Compile Include="LoggerExtensions\LogEntry.cs" />
+    <Compile Include="LoggerExtensions\Logger.cs" />
     <Compile Include="LogProviders\ConsoleLogProvider.cs" />
     <Compile Include="Diagnostics\IStep.cs" />
     <Compile Include="Diagnostics\IStepLogger.cs" />
