@@ -115,7 +115,7 @@ namespace Rock.Logging
 
             try
             {
-                await writeTask;
+                await writeTask.ConfigureAwait(false);
             }
             catch (Exception ex)
             {
