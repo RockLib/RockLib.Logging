@@ -47,18 +47,18 @@ namespace Rock.Logging
 
         protected override async Task WriteAsync(ILogEntry entry, string formattedLogEntry)
         {
-            await _waitHandle.WaitAsync();
+            await _waitHandle.WaitAsync().ConfigureAwait(false);
 
             try
             {
-                await OnPreWriteAsync(entry, formattedLogEntry);
+                await OnPreWriteAsync(entry, formattedLogEntry).ConfigureAwait(false);
 
                 using (var writer = new StreamWriter(_file, true))
                 {
-                    await writer.WriteLineAsync(formattedLogEntry);
+                    await writer.WriteLineAsync(formattedLogEntry).ConfigureAwait(false);
                 }
 
-                await OnPostWriteAsync(entry, formattedLogEntry);
+                await OnPostWriteAsync(entry, formattedLogEntry).ConfigureAwait(false);
             }
             finally
             {

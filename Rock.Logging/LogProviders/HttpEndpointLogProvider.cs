@@ -54,7 +54,7 @@ namespace Rock.Logging
 
             using (var httpClient = _httpClientFactory.CreateHttpClient())
             {
-                var response = await httpClient.PostAsync(_endpoint, postContent);
+                var response = await httpClient.PostAsync(_endpoint, postContent).ConfigureAwait(false);
                 OnResponseReceived(response);
             }
         }
