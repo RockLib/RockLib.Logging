@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Rock.BackgroundErrorLogging;
 
 namespace Rock.Logging
 {
@@ -119,7 +120,8 @@ namespace Rock.Logging
             }
             catch (Exception ex)
             {
-                // TODO: Send log entry and exception(s) to system event log. AND/OR, sent it to a retry mechanism.
+                BackgroundErrorLogger.Log(ex, "Error when writing to log provider(s)", "Rock.Logging");
+                // TODO: Send the log entry to a retry mechanism?
                 // TODO ALSO: The error handling here sucks. Do something about it.
             }
         }
