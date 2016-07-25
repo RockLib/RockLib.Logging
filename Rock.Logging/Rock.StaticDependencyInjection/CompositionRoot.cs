@@ -1,3 +1,4 @@
+using Rock.BackgroundErrorLogging;
 using Rock.Logging.Diagnostics;
 using Rock.StaticDependencyInjection;
 using System;
@@ -19,6 +20,13 @@ namespace Rock.Logging.Rock.StaticDependencyInjection
             ImportFirst<ILoggerFactory>(LoggerFactory.SetCurrent);
             ImportFirst<IStepLoggerFactory>(DefaultStepLoggerFactory.SetCurrent);
             ImportFirst<IXmlNamespaceProvider>(LogEntryExtendedProperties.SetXmlNamespace);
+        }
+
+        protected override void OnError(string message, Exception exception, ImportInfo import)
+        {
+            BackgroundErrorLogger.Log(exception, "Static Dependency Injection - " + message, "Rock.Logging", "ImportInfo:\r\n" + import);
+
+            base.OnError(message, exception, import);
         }
 
         /// <summary>
