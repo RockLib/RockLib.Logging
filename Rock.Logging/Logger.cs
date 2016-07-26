@@ -134,7 +134,15 @@ namespace Rock.Logging
 
             if (logEntry.Level == LogLevel.Audit && _auditLogProvider != null)
             {
-                writeTask = _auditLogProvider.WriteAsync(logEntry);
+                try
+                {
+                    writeTask = _auditLogProvider.WriteAsync(logEntry);
+                }
+                catch (Exception ex)
+                {
+                    BackgroundErrorLogger.Log(ex, "Error when writing to audit log provider.", "Rock.Logging");
+                    writeTask = Task.FromResult(0);
+                }
             }
             else
             {
@@ -142,7 +150,18 @@ namespace Rock.Logging
                     Task.WhenAll(
                         _logProviders
                             .Where(x => logEntry.Level >= x.LoggingLevel)
-                            .Select(logProvider => logProvider.WriteAsync(logEntry)));
+                            .Select(logProvider =>
+                            {
+                                try
+                                {
+                                    return logProvider.WriteAsync(logEntry);
+                                }
+                                catch (Exception ex)
+                                {
+                                    BackgroundErrorLogger.Log(ex, "Error when writing to log provider.", "Rock.Logging");
+                                    return Task.FromResult(0);
+                                }
+                            }));
             }
 
             try
