@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Rock.BackgroundErrorLogging;
+using AppId=Rock.ApplicationId;
 
 namespace Rock.Logging
 {
@@ -37,7 +38,7 @@ namespace Rock.Logging
             }
 
             // Be sure to fully realize lists so we get fast enumeration during logging.
-            logProviders = logProviders.ToList();
+            logProviders = logProviders.ToList().AsReadOnly();
 
             if (!logProviders.Any())
             {
@@ -50,11 +51,41 @@ namespace Rock.Logging
             _applicationId =
                 applicationIdProvider != null
                     ? applicationIdProvider.GetApplicationId()
-                    : ApplicationId.Current;
+                    : AppId.Current;
 
             _auditLogProvider = auditLogProvider; // NOTE: this can be null, and is expected.
             _throttlingRuleEvaluator = throttlingRuleEvaluator ?? new NullThrottlingRuleEvaluator();
-            _contextProviders = (contextProviders ?? Enumerable.Empty<IContextProvider>()).ToList();
+            _contextProviders = (contextProviders ?? Enumerable.Empty<IContextProvider>()).ToList().AsReadOnly();
+        }
+
+        public ILoggerConfiguration Configuration
+        {
+            get { return _configuration; }
+        }
+
+        public string ApplicationId
+        {
+            get { return _applicationId; }
+        }
+
+        public IEnumerable<ILogProvider> LogProviders
+        {
+            get { return _logProviders; }
+        }
+
+        public ILogProvider AuditLogProvider
+        {
+            get { return _auditLogProvider; }
+        }
+
+        public IThrottlingRuleEvaluator ThrottlingRuleEvaluator
+        {
+            get { return _throttlingRuleEvaluator; }
+        }
+
+        public IEnumerable<IContextProvider> ContextProviders
+        {
+            get { return _contextProviders; }
         }
 
         public bool IsEnabled(LogLevel logLevel)
