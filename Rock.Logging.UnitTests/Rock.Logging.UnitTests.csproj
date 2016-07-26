@@ -78,14 +78,15 @@
     </Reference>
     <Reference Include="Rock.Core, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rock.Core.0.9.5\lib\net45\Rock.Core.dll</HintPath>
+      <HintPath>..\packages\Rock.Core.0.9.8\lib\net45\Rock.Core.dll</HintPath>
     </Reference>
     <Reference Include="Rock.Core.Newtonsoft, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rock.Core.Newtonsoft.0.9.2\lib\net45\Rock.Core.Newtonsoft.dll</HintPath>
     </Reference>
-    <Reference Include="Rock.Core.XSerializer">
-      <HintPath>..\packages\Rock.Core.XSerializer.0.9.0\lib\net45\Rock.Core.XSerializer.dll</HintPath>
+    <Reference Include="Rock.Core.XSerializer, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rock.Core.XSerializer.0.9.1\lib\net45\Rock.Core.XSerializer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -96,7 +97,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="XSerializer, Version=0.1.0.0, Culture=neutral, PublicKeyToken=9ab97cfaa8f0c80a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\XSerializer.0.1.27\lib\net40\XSerializer.dll</HintPath>
+      <HintPath>..\packages\XSerializer.0.3.5\lib\net40\XSerializer.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
