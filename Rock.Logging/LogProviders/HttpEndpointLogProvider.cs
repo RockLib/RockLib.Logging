@@ -14,6 +14,7 @@ namespace Rock.Logging
         private readonly string _endpoint;
         private readonly LogLevel _loggingLevel;
         private readonly string _contentType;
+        private readonly ISerializer _serializer;
         private readonly Func<ILogEntry, string> _serializeLogEntry; 
         private readonly IHttpClientFactory _httpClientFactory;
 
@@ -25,17 +26,16 @@ namespace Rock.Logging
             IHttpClientFactory httpClientFactory = null,
             bool serializeAsConcreteType = true)
         {
-            serializer = serializer ?? GetDefaultSerializer();
-            httpClientFactory = httpClientFactory ?? GetDefaultHttpClientFactory();
+            _serializer = serializer ?? GetDefaultSerializer();
+            _httpClientFactory = httpClientFactory ?? GetDefaultHttpClientFactory();
 
             _endpoint = endpoint;
             _loggingLevel = loggingLevel;
             _contentType = contentType;
             _serializeLogEntry =
                 serializeAsConcreteType
-                    ? (Func<ILogEntry, string>)(entry => serializer.SerializeToString(entry, entry.GetType()))
-                    : entry => serializer.SerializeToString(entry);
-            _httpClientFactory = httpClientFactory;
+                    ? (Func<ILogEntry, string>)(entry => _serializer.SerializeToString(entry, entry.GetType()))
+                    : entry => _serializer.SerializeToString(entry);
         }
 
         public event EventHandler<ResponseReceivedEventArgs> ResponseReceived;
@@ -43,6 +43,26 @@ namespace Rock.Logging
         public LogLevel LoggingLevel
         {
             get { return _loggingLevel; }
+        }
+
+        public string Endpoint
+        {
+            get { return _endpoint; }
+        }
+
+        public string ContentType
+        {
+            get { return _contentType; }
+        }
+
+        public ISerializer Serializer
+        {
+            get { return _serializer; }
+        }
+
+        public IHttpClientFactory HttpClientFactory
+        {
+            get { return _httpClientFactory; }
         }
 
         public async Task WriteAsync(ILogEntry entry)
