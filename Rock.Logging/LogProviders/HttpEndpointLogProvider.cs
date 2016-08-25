@@ -74,7 +74,19 @@ namespace Rock.Logging
 
             using (var httpClient = _httpClientFactory.CreateHttpClient())
             {
-                var response = await httpClient.PostAsync(_endpoint, postContent).ConfigureAwait(false);
+                HttpResponseMessage response;
+
+                try
+                {
+                    response = await httpClient.PostAsync(_endpoint, postContent).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    throw new HttpEndpointLogProviderException(
+                        "Error sending serialized log entry via HTTP POST.",
+                        ex, _endpoint, _contentType);
+                }
+
                 OnResponseReceived(response);
             }
         }
