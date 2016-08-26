@@ -60,6 +60,7 @@
     <Compile Include="Diagnostics\StepLoggerFactory.cs" />
     <Compile Include="ILogEntry.cs" />
     <Compile Include="IXmlNamespaceProvider.cs" />
+    <Compile Include="LogProviders\HttpEndpointLogProviderException.cs" />
     <Compile Include="Rock.StaticDependencyInjection\CompositionRoot.cs" />
     <Compile Include="Rock.StaticDependencyInjection\ExportAttribute.cs" />
     <Compile Include="Rock.StaticDependencyInjection\ModuleInitializer.cs" />
