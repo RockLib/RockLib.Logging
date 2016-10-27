@@ -12,6 +12,7 @@ namespace Rock.Logging
     {
         private const string DefaultContentType = "application/json";
         private const int DefaultAdditionalHttpClientCycleMilliseconds = 0;
+        private const int HttpClientCyclePaddingMilliseconds = 1000;
 
         private readonly string _endpoint;
         private readonly LogLevel _loggingLevel;
@@ -23,7 +24,7 @@ namespace Rock.Logging
 
         private readonly Timer _httpClientCycleTimer;
         private HttpClient _workingHttpClient;
-        private HttpClient _httpClientToDisposeOfNext;
+        private volatile HttpClient _httpClientToDisposeOfNext;
 
         public HttpEndpointLogProvider(
             string endpoint,
@@ -94,8 +95,10 @@ namespace Rock.Logging
             get { return _additionalHttpClientCycleMilliseconds; }
         }
 
-        private TimeSpan CycleDueTime =>
-            _workingHttpClient.Timeout + TimeSpan.FromMilliseconds(1000 + _additionalHttpClientCycleMilliseconds);
+        private TimeSpan CycleDueTime
+        {
+            get { return _workingHttpClient.Timeout + TimeSpan.FromMilliseconds(HttpClientCyclePaddingMilliseconds + _additionalHttpClientCycleMilliseconds); }
+        }
 
         public async Task WriteAsync(ILogEntry entry)
         {
