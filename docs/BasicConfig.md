@@ -32,6 +32,10 @@ Lets take a look at the above snippet.
  * loggingLevel - This specifies the minimal category of logging which will be recorded.  If Debug is provided ALL logging categories will be written.  If Error is provided, only Error, Fatal and Audit will be written
  * isLoggingEnabled - A bool flag to enable/disable the logging feature as a whole.  This will enable or disable all loggers
 
+ If you fail to provide any formatters we will default to very verbose formatting.
+
+ If you fail to provide a category/appender we will default to console logging.
+
 ## AppSettings Setup
  ### Add the following Entries to the <appSettings /> section of your config file.  If you do not provide these values you will get a runtime warning when accessing the LogFactory
 

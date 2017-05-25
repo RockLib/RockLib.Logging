@@ -22,19 +22,16 @@ This would be used to provide detailed information about the state of the system
 This would be used for messages that are needed for audit purposes.  This is a bit like Debug, but for non-technical use
 
 ## Logging Adapters
-### Console Log Provider
-Writes logging events to the application's Console. The events may go to either the standard our stream or the standard error stream.
+* Console Log Provider
+* Email Log Provider
+* File Log Provider
+* Formattable Log Provider
+* Http Endpoint Log Provider
+* Rolling File Log Provider
 
-### Email Log Provider
-### File Log Provider
-Writes logging events to a file in the file system.
-
-### Formattable Log Provider
-
-### Http Endpoint Log Provider
-### Rolling File Log Provider
-Writes logging events to a file in the file system. The RollingFileAppender can be configured to log to multiple files based upon date or file size constraints.
-
-## Configuration
+## Configuration Examplss
 * [Basic Configuration](docs/BasicConfig.md)
-* [Advanced Confiuration](docs/AdvancedConfiguration.md)
+* [Advanced Confiuration](docs/AdvancedConfig.md)
+  * [Custom Formatter Configuration](docs/AdvancedConfig.md#Custom-sFormatter-Configuration)
+  * [IoC Configuration](docs/AdvancedConfig.md#IoC-Configuration)
+
