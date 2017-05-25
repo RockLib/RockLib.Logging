@@ -107,8 +107,16 @@ LogginLevel: specifies the minimal category of logging which will be recorded. I
 ### Http Endpoint Log Configuration
 
 ## IoC Configuration
+Registering the ILogger interface will be different for every IoC container, but the concepts are pretty much the same.  You will want to setup the container to register an instance of logger via the LoggerFactory
 
 ### Autofac Configuration
+Inside your Autofac IoC setup provide the single line below
+
+```
+builder.Register(c => LoggerFactory.GetInstance()).As<ILogger>();
+```
+
+The code above will instruct Autofac to pull the current instance out of the LoggerFactor for each request.
 
 
 
