@@ -1,18 +1,23 @@
 # Advanced Configuration
 
-  * [Custom Formatter Configuration](docs/AdvancedConfiguration.md#Custom-sFormatter-Configuration)
-  * [IoC Configuration](docs/AdvancedConfiguration.md#IoC-Configuration)
+## Table of Contents
+  * [Custom Formatter Configuration](#custom-formatter-configuration)
+  * Logger Configuration
+    * [Console Logger Configuration](#console-logger-configuration)
+    * [Email Logger Configuration](#email-logger-configuration)
+    * [Rolling File Logger Configuration](#rolling-file-logger-configuration)
+  * [IoC Configuration](#ioc-configuration)
   
 ## Custom Formatter Configuration
 When configuring Rock.Logging you have the ability to specify the format that your logs are outputted on a per category/appender basis.  You can even provide multiple formatters, each can assigned to a different category
 
-The key thing to keep in mind when creating the formmater which is intended to be read by a person  you want the log to contain all the information needed to help determine the cause of the log.  This includes {createTime}, {level} and {message}
+The key thing to keep in mind when creating the formmatter which is intended to be read by a person  you want the log to contain all the information needed to help determine the cause of the log.  This includes {createTime}, {level} and {message}
 
-### Valid Tokesn avialble for Formatting
+### Valid Tokens available for Formatting
 * {message}
 * {applicationId}
 * {applicationUserId}
-* {enviornment}
+* {environment}
 * {machineName}
 * {level}
 * {exception}

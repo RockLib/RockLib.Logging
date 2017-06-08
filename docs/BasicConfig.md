@@ -1,6 +1,13 @@
 # Basic Configuration
 
-## Steps Overview
+## Table of Contents
+* [Setup Overview](#setup-overview)
+  * [Config Section Setup](#configsection-setup)
+  * [Rock Logging Section Setup](#rock-logging-section-setup)
+  * [App Settings Setup](#appsettings=setup)
+* [Basic Usage](#basic-usage)
+
+## Setup Overview
 1. Need to add the <configSection /> entry to your web.config/app.config
 2. Need to add the <rock.logging /> section to your config file
 3. Need to add the correct keys to the <appSettings /> section of the config file
@@ -15,7 +22,7 @@
   </configSections>
 ```
 
-## Rock.Logging Setup
+## Rock Logging Section Setup
 ### Add the <rock.logging /> section to the configuration file.  This can be placed anywhere in the file but needs to be below the <configSections> attribute
 
 ```
@@ -48,9 +55,9 @@ Lets take a look at the above snippet.
  * Rock.ApplicationId.Current - This is used to set the current application ID for the backend logger, this should be unique for each app.  Use 200001 if you do not not have an Id
  * Rock.Environment.Current - This will default to Dev is nothing is provided.  Valid options are Dev, Test, Beta, Prod
 
-## Getting Access to ILogger for Logging
+## Basic Usage
  ### Logging Messages
- To get access to the configurred logger you only need to get an Instance via the LoggerFactory.  Once you have your instance you can call the correct log method and a log entry will be written
+ To get access to the configured logger you only need to get an Instance via the LoggerFactory.  Once you have your instance you can call the correct log method and a log entry will be written
 
  ```
 var logger = LoggerFactory.GetInstance();
