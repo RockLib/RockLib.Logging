@@ -1,12 +1,13 @@
 # Advanced Configuration
 
 ## Table of Contents
-  * [Custom Formatter Configuration](#custom-formatter-configuration)
-  * Logger Configuration
-    * [Console Logger Configuration](#console-logger-configuration)
-    * [Email Logger Configuration](#email-logger-configuration)
-    * [Rolling File Logger Configuration](#rolling-file-logger-configuration)
-  * [IoC Configuration](#ioc-configuration)
+* [Main Overview](../readme.md)
+* [Custom Formatter Configuration](#custom-formatter-configuration)
+* Logger Configuration
+  * [Console Logger Configuration](#console-logger-configuration)
+  * [Email Logger Configuration](#email-logger-configuration)
+  * [Rolling File Logger Configuration](#rolling-file-logger-configuration)
+* [IoC Configuration](#ioc-configuration)
   
 ## Custom Formatter Configuration
 When configuring Rock.Logging you have the ability to specify the format that your logs are outputted on a per category/appender basis.  You can even provide multiple formatters, each can assigned to a different category

@@ -1,6 +1,7 @@
 # Basic Configuration
 
 ## Table of Contents
+* [Main Overview](../readme.md)
 * [Setup Overview](#setup-overview)
   * [Config Section Setup](#configsection-setup)
   * [Rock Logging Section Setup](#rock-logging-section-setup)
