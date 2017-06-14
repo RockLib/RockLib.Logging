@@ -1,7 +1,7 @@
 # Advanced Configuration
 
 ## Table of Contents
-* [Main Overview](../readme.md)
+* [Main Table of Contents](../readme.md)
 * [Custom Formatter Configuration](#custom-formatter-configuration)
 * Logger Configuration
   * [Console Logger Configuration](#console-logger-configuration)
