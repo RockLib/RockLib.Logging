@@ -35,7 +35,7 @@ Below is a very basic formatter, this will format the message and exception on t
 <formatter name="default" template="[{createTime}] - {level} - {message}" />
 ``` 
 
-If your configuration has more than 1 formatter it is required that each one has a unique name.  If a name is duplicated than you will get a runtime error.
+If your configuration has more than one formatter it is required that each one has a unique name.  If a name is duplicated than you will get a runtime error.
 
 ## Specifying Logging Categories/Appenders
 If you do not provide a category the console logger will be used by default.
