@@ -6,6 +6,7 @@
   * [Config Section Setup](#configsection-setup)
   * [Rock Logging Section Setup](#rock-logging-section-setup)
   * [App Settings Setup](#appsettings=setup)
+  * [Sample Config File](#sample-config-file)
 * [Basic Usage](#basic-usage)
 
 ## Setup Overview
@@ -55,6 +56,10 @@ Lets take a look at the above snippet.
  Lets take a look at the 2 config keys above in a bit more detail
  * Rock.ApplicationId.Current - This is used to set the current application ID for the backend logger, this should be unique for each app.  Use 200001 if you do not not have an Id
  * Rock.Environment.Current - This will default to Dev is nothing is provided.  Valid options are Dev, Test, Beta, Prod
+
+ 
+## Sample Config File
+There is a sample web.config file in the root of the Rock.Logging/Docs folder.  This file shows only the entries needed to get the Rock.Logging library to work.
 
 ## Basic Usage
  ### Logging Messages
