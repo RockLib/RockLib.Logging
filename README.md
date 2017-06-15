@@ -18,7 +18,7 @@
 Rock.Logging is available via [NuGet](https://www.nuget.org/packages/Rock.Logging/)
 
 ### Install Nuget via UI
-If you want to install this package via the NuGet UI, this ca be done as well.  Make sure to switch to the QuGet package source.
+If you want to install this package via the NuGet UI, this can be done as well.  Make sure to switch to the QuGet package source.
 
 If you are unsure how to use the UI to reference the package source checkout out these [docs](https://docs.microsoft.com/en-us/nuget/tools/package-manager-ui#package-sources).
 
@@ -46,7 +46,7 @@ PM> Install-Package Rock.Logging
 * Console Log Provider
   * Provider to write all logged messages to the active console
 * Email Log Provider
-  * Provider to end logging events to an email address.
+  * Provider to send logging events to an email address.
 * File Log Provider
   * Provider to output the log based on the Formatter to a flat file
 * Rolling File Log Provider

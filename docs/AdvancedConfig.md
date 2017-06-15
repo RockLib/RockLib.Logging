@@ -12,7 +12,7 @@
 ## Custom Formatter Configuration
 When configuring Rock.Logging you have the ability to specify the format that your logs are outputted on a per category/appender basis.  You can even provide multiple formatters, each can assigned to a different category
 
-The key thing to keep in mind when creating the formmatter which is intended to be read by a person  you want the log to contain all the information needed to help determine the cause of the log.  This includes {createTime}, {level} and {message}
+The key thing to keep in mind when creating the formmatter (which is intended to be read by a person) you want the log to contain all the information needed to help determine the cause of the log.  This includes {createTime}, {level} and {message}
 
 ### Valid Tokens available for Formatting
 * {message}

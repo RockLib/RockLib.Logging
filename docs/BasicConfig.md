@@ -54,7 +54,7 @@ Lets take a look at the above snippet.
  ```
 
  Lets take a look at the 2 config keys above in a bit more detail
- * Rock.ApplicationId.Current - This is used to set the current application ID for the backend logger, this should be unique for each app.  Use 200001 if you do not not have an Id
+ * Rock.ApplicationId.Current - This is used to set the current application ID for the backend logger, this should be unique for each app.  Use 200001 until you have your own app id to work with.
  * Rock.Environment.Current - This will default to Dev is nothing is provided.  Valid options are Dev, Test, Beta, Prod
 
  
