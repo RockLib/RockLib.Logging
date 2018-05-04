@@ -61,6 +61,8 @@ namespace RockLib.Logging
 
             EnsureWorkerThreadIsStarted();
 
+            logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
+
             foreach (var logProvider in Providers)
             {
                 var source = new CancellationTokenSource();
