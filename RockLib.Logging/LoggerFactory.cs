@@ -3,44 +3,28 @@ using RockLib.Configuration.ObjectFactory;
 using RockLib.Immutable;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RockLib.Logging
 {
     public static class LoggerFactory
     {
-        private static readonly ConcurrentDictionary<string, Logger> _loggerCache = new ConcurrentDictionary<string, Logger>(StringComparer.InvariantCultureIgnoreCase);
+        private static readonly ConcurrentDictionary<string, Logger> _lookup = new ConcurrentDictionary<string, Logger>(StringComparer.InvariantCultureIgnoreCase);
 
-        private static readonly Semimutable<LoggerFactoryConfiguration> _configuration = new Semimutable<LoggerFactoryConfiguration>(GetDefaultLoggerFactoryFromConfig);
+        private static readonly Semimutable<IReadOnlyCollection<Logger>> _loggers = new Semimutable<IReadOnlyCollection<Logger>>(GetDefaultLoggers);
 
-        public static LoggerFactoryConfiguration Configuration => _configuration.Value;
+        public static IReadOnlyCollection<Logger> Loggers => _loggers.Value;
 
-        public static void SetConfiguration(LoggerFactoryConfiguration configuration) => _configuration.Value = configuration;
+        public static void SetLoggers(IReadOnlyCollection<Logger> loggers) => _loggers.Value = loggers;
 
-        public static Logger GetInstance() => GetInstance(null);
+        public static Logger GetInstance(string name = Logger.DefaultName) => _lookup.GetOrAdd(name ?? Logger.DefaultName, FindLogger);
 
-        public static Logger GetInstance(string category) => _loggerCache.GetOrAdd(category ?? "default", CreateLogger);
+        private static Logger FindLogger(string name) =>
+            Loggers.FirstOrDefault(logger => logger.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+            ?? throw new KeyNotFoundException(); // TODO: Add exception message
 
-        private static Logger CreateLogger(string category)
-        {
-            var providers = Configuration.LogProviders.Where(p => LogProviderHasCategory(p, category)).ToArray();
-            return new Logger(Configuration.IsLoggingEnabled, Configuration.LoggingLevel, providers);
-        }
-
-        private static bool LogProviderHasCategory(ILogProvider logProvider, string category)
-        {
-            if (category.Equals("default", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return logProvider.Categories == null
-                    || logProvider.Categories.Count == 0
-                    || logProvider.Categories.Contains("default", StringComparer.InvariantCultureIgnoreCase);
-            }
-
-            return logProvider.Categories != null
-                && logProvider.Categories.Contains(category, StringComparer.InvariantCultureIgnoreCase);
-        }
-
-        private static LoggerFactoryConfiguration GetDefaultLoggerFactoryFromConfig() =>
-             Config.Root.GetSection("rocklib.logging").Create<LoggerFactoryConfiguration>();
+        private static IReadOnlyCollection<Logger> GetDefaultLoggers() =>
+             Config.Root.GetSection("rocklib.logging").Create<IReadOnlyCollection<Logger>>();
     }
 }

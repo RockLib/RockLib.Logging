@@ -1,53 +1,131 @@
-﻿using System;
+﻿using RockLib.Diagnostics;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RockLib.Logging
 {
-    public sealed class Logger : ILogger
+    public sealed class Logger : ILogger, IDisposable
     {
-        public Logger(bool isLoggingEnabled, LogLevel loggingLevel,
-            IReadOnlyCollection<ILogProvider> logProviders)
+        public const string DefaultName = "default";
+        public static readonly IReadOnlyCollection<ILogProvider> DefaultProviders = new ILogProvider[0];
+
+        public const string TraceSourceName = "rocklib.logging";
+        private static readonly TraceSource _traceSource = Tracing.GetTraceSource(TraceSourceName);
+
+        private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)> _workItems = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)>();
+        private readonly Lazy<Thread> _startedWorkerThread;
+
+        public Logger(
+            string name = DefaultName,
+            LogLevel level = LogLevel.Warn,
+            IReadOnlyCollection<ILogProvider> providers = null,
+            bool isDisabled = false)
         {
-            IsLoggingEnabled = isLoggingEnabled;
-            LoggingLevel = loggingLevel;
-            LogProviders = logProviders ?? new ILogProvider[0];
+            if (!Enum.IsDefined(typeof(LogLevel), level)) throw new ArgumentException(); // TODO: Add exception message
+
+            Name = name ?? DefaultName;
+            Level = level;
+            Providers = providers ?? DefaultProviders;
+            IsDisabled = isDisabled;
+
+            _startedWorkerThread = new Lazy<Thread>(() =>
+            {
+                var thread = new Thread(ProcessWorkItems) { IsBackground = true };
+                thread.Start();
+                return thread;
+            });
         }
 
-        public bool IsLoggingEnabled { get; }
-        public LogLevel LoggingLevel { get; }
-        public IReadOnlyCollection<ILogProvider> LogProviders { get; }
+        public string Name { get; }
+        public LogLevel Level { get; }
+        public IReadOnlyCollection<ILogProvider> Providers { get; }
+        public bool IsDisabled { get; }
 
-        public void Log(LogEntry logEntry,
+        public void Log(
+            LogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            if (!IsLoggingEnabled || logEntry.Level < LoggingLevel)
+            if (_workItems.IsAddingCompleted)
+                throw new InvalidOperationException(); // TODO: Add exception message
+
+            if (IsDisabled || logEntry.Level < Level)
                 return;
 
-            var writeTasks = new List<Task>(LogProviders.Count);
+            EnsureWorkerThreadIsStarted();
 
-            foreach (var logProvider in LogProviders)
-                writeTasks.Add(WriteToLogProvider(logEntry, logProvider));
-
-            //return Task.WhenAll(writeTasks);
+            foreach (var logProvider in Providers)
+            {
+                var source = new CancellationTokenSource();
+                var task = WriteToLogProvider(logProvider, logEntry, source.Token);
+                _workItems.Add((task, logEntry, logProvider, source));
+            }
         }
 
-        private async Task WriteToLogProvider(LogEntry logEntry, ILogProvider logProvider)
+        public void Dispose()
         {
-            if (logEntry.Level < logProvider.LoggingLevel)
+            _workItems.CompleteAdding();
+            if (_startedWorkerThread.IsValueCreated)
+                _startedWorkerThread.Value.Join();
+            foreach (var provider in Providers.OfType<IDisposable>())
+                provider.Dispose();
+            _workItems.Dispose();
+        }
+
+        private void EnsureWorkerThreadIsStarted()
+        {
+            if (_startedWorkerThread.IsValueCreated)
+                return;
+
+            var dummy = _startedWorkerThread.Value;
+        }
+
+        private async Task WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry, CancellationToken cancellationToken)
+        {
+            if (logEntry.Level < logProvider.Level)
                 return;
 
             try
             {
-                await logProvider.WriteAsync(logEntry).ConfigureAwait(false);
+                await logProvider.WriteAsync(logEntry, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                // TODO: Write to trace
+                _traceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
+                    "[{0}] - [RockLib.Logging.Logger] - Error while sending log entry {1}:{2}{3}",
+                    DateTime.Now, logEntry.UniqueId, Environment.NewLine, ex);
+
                 // TODO: execute retry policy
+            }
+        }
+
+        private void ProcessWorkItems()
+        {
+            foreach (var (task, logEntry, logProvider, source) in _workItems.GetConsumingEnumerable())
+            {
+                if (task.Wait(logProvider.Timeout))
+                {
+                    _traceSource.TraceEvent(TraceEventType.Information, 0,
+                        "[{0}] - [RockLib.Logging.Logger] - Successfully processed log entry {1} from log provider {2}.",
+                        DateTime.Now, logEntry.UniqueId, logProvider);
+                }
+                else
+                {
+                    source.Cancel();
+
+                    _traceSource.TraceEvent(TraceEventType.Warning, 0,
+                        "[{0}] - [RockLib.Logging.Logger] - Log entry {1} from log provider {2} timed out after {3}.",
+                        DateTime.Now, logEntry.UniqueId, logProvider, logProvider.Timeout);
+
+                    // TODO: execute retry policy
+                }
             }
         }
     }
