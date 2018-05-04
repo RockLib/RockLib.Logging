@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -46,7 +47,7 @@ namespace RockLib.Logging
             AddSimpleTokenHandler("message", logEntry => logEntry.Message);
             AddSimpleTokenHandler("userName", logEntry => logEntry.UserName);
             AddSimpleTokenHandler("machineName", logEntry => logEntry.MachineName);
-            AddSimpleTokenHandler("machineIPAddress", logEntry => logEntry.MachineIPAddress);
+            AddSimpleTokenHandler("machineIpAddress", logEntry => logEntry.MachineIpAddress);
             AddSimpleTokenHandler("level", logEntry => logEntry.Level.ToString());
             AddSimpleTokenHandler("exception", logEntry => logEntry.GetExceptionData());
             AddSimpleTokenHandler("uniqueId", logEntry => logEntry.UniqueId);
@@ -80,7 +81,7 @@ namespace RockLib.Logging
         {
             return
                 logEntry.ExtendedProperties.ContainsKey(extendedProperty)
-                    ? logEntry.ExtendedProperties[extendedProperty]
+                    ? ConvertToString(logEntry.ExtendedProperties[extendedProperty])
                     : "N/A";
         }
 
@@ -137,18 +138,18 @@ namespace RockLib.Logging
                                 logEntry.ExtendedProperties
                                     .Aggregate(
                                         new StringBuilder(),
-                                        (sb, kvp) => sb.Append(before).Append(omitKey ? null : kvp.Key).Append(between).Append(HtmlEncodeIfNecessary(kvp.Value)).AppendLine(after))
+                                        (sb, kvp) => sb.Append(before).Append(omitKey ? null : kvp.Key).Append(between).Append(HtmlEncodeIfNecessary(ConvertToString(kvp.Value))).AppendLine(after))
                                     .ToString();
                         }
 
-                        string value;
+                        object value;
 
                         if (!logEntry.ExtendedProperties.TryGetValue(key, out value))
                         {
                             value = "N/A";
                         }
 
-                        return HtmlEncodeIfNecessary(before + (omitKey ? null : key) + between + HtmlEncodeIfNecessary(value) + after);
+                        return HtmlEncodeIfNecessary(before + (omitKey ? null : key) + between + HtmlEncodeIfNecessary(ConvertToString(value)) + after);
                     });
 
             return formattedLogEntry;
@@ -157,6 +158,13 @@ namespace RockLib.Logging
         private string HtmlEncodeIfNecessary(string value)
         {
             return _isHtmlEncoded ? WebUtility.HtmlEncode(value) : value;
+        }
+
+        private static string ConvertToString(object value)
+        {
+            if (value is string stringValue)
+                return stringValue;
+            return JsonConvert.SerializeObject(value);
         }
     }
 }
