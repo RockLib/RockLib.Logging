@@ -14,7 +14,7 @@ namespace RockLib.Logging
         public string MachineName { get; set; } = Environment.MachineName;
         public string Message { get; set; }
         public string UserName { get; set; } = Environment.UserName;
-        
-        public string GetExceptionData() => throw new NotImplementedException(); // TODO: This should pretty print the value of the Exception property
+
+        public string GetExceptionData() => Exception?.FormatToString();
     }
 }
