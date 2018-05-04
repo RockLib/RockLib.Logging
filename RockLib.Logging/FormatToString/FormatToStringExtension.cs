@@ -298,7 +298,7 @@ namespace RockLib.Logging
 
                     //        foreach (var validationError in entityValidationError.ValidationErrors)
                     //        {
-                    //            sb.AppendLine((propertyName + ": " + errorMessage)
+                    //            sb.AppendLine(validationError.PropertyName + ": " + validationError.ErrorMessage)
                     //                .BlockIndent(additionalIndention));
                     //        }
                     //    }
