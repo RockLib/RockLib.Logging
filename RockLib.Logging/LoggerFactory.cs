@@ -22,7 +22,7 @@ namespace RockLib.Logging
 
         private static Logger FindLogger(string name) =>
             Loggers.FirstOrDefault(logger => logger.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-            ?? throw new KeyNotFoundException(); // TODO: Add exception message
+            ?? throw new KeyNotFoundException($"LoggerFactory.Loggers does not contain a Logger with the name '{name}'.");
 
         private static IReadOnlyCollection<Logger> GetDefaultLoggers() =>
              Config.Root.GetSection("rocklib.logging").Create<IReadOnlyCollection<Logger>>();

@@ -21,14 +21,14 @@ namespace RockLib.Logging
         private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)> _workItems = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)>();
         private readonly Lazy<Thread> _startedWorkerThread;
 
+        private volatile bool _isDisposed;
+
         public Logger(
             string name = DefaultName,
             LogLevel level = LogLevel.Warn,
             IReadOnlyCollection<ILogProvider> providers = null,
             bool isDisabled = false)
         {
-            if (!Enum.IsDefined(typeof(LogLevel), level)) throw new ArgumentException(); // TODO: Add exception message
-
             Name = name ?? DefaultName;
             Level = level;
             Providers = providers ?? DefaultProviders;
@@ -53,8 +53,11 @@ namespace RockLib.Logging
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            if (_workItems.IsAddingCompleted)
-                throw new InvalidOperationException(); // TODO: Add exception message
+            if (logEntry == null)
+                throw new ArgumentNullException(nameof(logEntry));
+
+            if (_isDisposed)
+                throw new ObjectDisposedException(typeof(Logger).FullName, "Cannot log to a disposed Logger.");
 
             if (IsDisabled || logEntry.Level < Level)
                 return;
@@ -73,6 +76,7 @@ namespace RockLib.Logging
 
         public void Dispose()
         {
+            _isDisposed = true;
             _workItems.CompleteAdding();
             if (_startedWorkerThread.IsValueCreated)
                 _startedWorkerThread.Value.Join();

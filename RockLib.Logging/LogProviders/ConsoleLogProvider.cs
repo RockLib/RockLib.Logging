@@ -10,8 +10,6 @@ namespace RockLib.Logging
 
         public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(1);
 
-        private readonly ILogFormatter _formatter;
-
         public ConsoleLogProvider(
             string template = DefaultTemplate, LogLevel level = default(LogLevel), TimeSpan? timeout = null)
             : this(new TemplateLogFormatter(template ?? DefaultTemplate), level, timeout)
@@ -21,18 +19,20 @@ namespace RockLib.Logging
         public ConsoleLogProvider(
             ILogFormatter formatter, LogLevel level = default(LogLevel), TimeSpan? timeout = null)
         {
-            _formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
+            Formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
             Level = level;
             Timeout = timeout ?? DefaultTimeout;
         }
 
-        public TimeSpan Timeout { get; }
+        public ILogFormatter Formatter { get; }
 
         public LogLevel Level { get; }
 
+        public TimeSpan Timeout { get; }
+
         public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken)
         {
-            var formattedLog = _formatter.Format(logEntry);
+            var formattedLog = Formatter.Format(logEntry);
             return Console.Out.WriteLineAsync(formattedLog);
         }
     }

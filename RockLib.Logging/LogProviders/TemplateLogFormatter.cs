@@ -37,7 +37,6 @@ namespace RockLib.Logging
         private static readonly CultureInfo _culture = new CultureInfo("en-US");
 
         private readonly bool _isHtmlEncoded;
-        private readonly string _template;
 
         static TemplateLogFormatter()
         {
@@ -60,12 +59,14 @@ namespace RockLib.Logging
 
         public TemplateLogFormatter(string template)
         {
-            _template = WebUtility.HtmlDecode(template);
+            Template = WebUtility.HtmlDecode(template);
 
             _isHtmlEncoded =
                 template != null
                 && _containsHtmlTagsRegex.IsMatch(template);
         }
+
+        public string Template { get; }
 
         public static void AddSimpleTokenHandler(string key, Func<LogEntry, string> getValue)
         {
@@ -88,7 +89,7 @@ namespace RockLib.Logging
         public string Format(LogEntry logEntry)
         {
             var formattedLogEntry = _simpleTokenRegex.Replace(
-                _template,
+                Template,
                 match =>
                 {
                     Func<LogEntry, string> getValue;
