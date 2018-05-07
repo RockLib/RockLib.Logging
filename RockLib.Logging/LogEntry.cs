@@ -39,7 +39,10 @@ namespace RockLib.Logging
 
         public void SetExtendedProperties(object extendedProperties)
         {
-            if (extendedProperties != null)
+            if (extendedProperties is IDictionary<string, object> dictionary)
+                foreach (var item in dictionary)
+                    ExtendedProperties[item.Key] = item.Value;
+            else if (extendedProperties != null)
                 foreach (var setExtendedProperty in GetSetExtendedPropertyActions(extendedProperties.GetType()))
                     setExtendedProperty(this, extendedProperties);
         }

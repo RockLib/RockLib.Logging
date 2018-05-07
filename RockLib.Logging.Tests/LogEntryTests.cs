@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace RockLib.Logging.Tests
@@ -86,6 +87,31 @@ namespace RockLib.Logging.Tests
         }
 
         [Fact]
+        public void ExtendedPropertiesOfTypeDictionaryAreSetFromConstructor1()
+        {
+            var foo = 123;
+            var bar = "abc";
+
+            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
+
+            logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
+            logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
+        }
+
+        [Fact]
+        public void ExtendedPropertiesOfTypeDictionaryAreSetFromConstructor2()
+        {
+            var foo = 123;
+            var bar = "abc";
+            var exception = new Exception();
+
+            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", exception, new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
+
+            logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
+            logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
+        }
+
+        [Fact]
         public void SetExtendedPropertiesMapsObjectPropertiesToExtendedProperties()
         {
             var logEntry = new LogEntry(LogLevel.Error, "Hello, world!");
@@ -94,6 +120,20 @@ namespace RockLib.Logging.Tests
             var bar = "abc";
 
             logEntry.SetExtendedProperties(new { foo, bar });
+
+            logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
+            logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
+        }
+
+        [Fact]
+        public void SetExtendedPropertiesMapsDictionaryItemsToExtendedProperties()
+        {
+            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!");
+
+            var foo = 123;
+            var bar = "abc";
+
+            logEntry.SetExtendedProperties(new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
 
             logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
             logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
