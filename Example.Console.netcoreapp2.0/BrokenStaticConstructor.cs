@@ -27,20 +27,20 @@ namespace Example
 
         private static async Task BadThing1()
         {
-            await Task.Delay(0);
+            await Task.Yield();
             string.Format("There is no argument for the replacement token at index 0: {0}");
         }
 
         private static async Task BadThing2()
         {
-            await Task.Delay(0);
+            await Task.Yield();
             int i = 1, j = 0, k;
             k = i / j;
         }
 
         private static async Task BadThing3()
         {
-            await Task.Delay(0);
+            await Task.Yield();
             File.OpenRead(null);
         }
     }
