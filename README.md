@@ -3,7 +3,7 @@
 *A simple logging library.*
 
 ```powershell
-PM> Install-Package RockLib.Logging
+PM> Install-Package RockLib.Logging -IncludePrerelease
 ```
 
 ### Table of contents
@@ -15,6 +15,7 @@ PM> Install-Package RockLib.Logging
 - [LogEntry class](#logentry-class)
 - [LoggerFactory class](#loggerfactory-class)
   - [Configuration](#configuration)
+- [ILogProvider interface](#ilogprovider-interface)
 
 ## Quick start
 
@@ -77,19 +78,54 @@ if (logger.IsDebugEnabled())
 
 ## `ILogger` interface
 
-The main interface in the RockLib.Logging package is the `ILogger` interface.
+The main interface in the RockLib.Logging package is the `ILogger` interface. It exists in order to make dependency injection and loose coupling easier in applications. It also enables extension methods to be defined that work on any implementation of `ILogger`.
 
 ### Extension methods
 
-RockLib.Logging defines a number of extension methods to make logging easier.
+RockLib.Logging defines a number of extension methods for the `ILogger` interface that make logging easier. There are two versions of the primary extension methods, depending on whether you have an exception or not.
+
+```c#
+public static void Debug(this ILogger logger, string message, object extendedProperties = null);
+public static void Info(this ILogger logger, string message, object extendedProperties = null);
+public static void Warn(this ILogger logger, string message, object extendedProperties = null);
+public static void Error(this ILogger logger, string message, object extendedProperties = null);
+public static void Fatal(this ILogger logger, string message, object extendedProperties = null);
+public static void Audit(this ILogger logger, string message, object extendedProperties = null);
+
+public static void Debug(this ILogger logger, string message, Exception exception, object extendedProperties = null);
+public static void Info(this ILogger logger, string message, Exception exception, object extendedProperties = null);
+public static void Warn(this ILogger logger, string message, Exception exception, object extendedProperties = null);
+public static void Error(this ILogger logger, string message, Exception exception, object extendedProperties = null);
+public static void Fatal(this ILogger logger, string message, Exception exception, object extendedProperties = null);
+public static void Audit(this ILogger logger, string message, Exception exception, object extendedProperties = null);
+```
+
+The optional `extendedProperties` parameter object in each logging method is ultimately mapped to a `LogEntry.ExtendedProperties` with the `LogEntry.SetExtendedProperties(object extendedProperties)` method. See the [LogEntry class](#logentry-class) for details.
+
+If a the creation of the message for a log is expensive, or if the adding of necessary extended properties is expensive, logging operations can be checked so that the expensive logging is only executed if the specifiec log level is met by the logger.
+
+```c#
+public static bool IsDebugEnabled(this ILogger logger)
+public static bool IsInfoEnabled(this ILogger logger)
+public static bool IsWarnEnabled(this ILogger logger)
+public static bool IsErrorEnabled(this ILogger logger)
+public static bool IsFatalEnabled(this ILogger logger)
+public static bool IsAuditEnabled(this ILogger logger)
+```
 
 ## `Logger` class
 
-The `Logger` class defines the logging logic in the RockLib.Logging package.
+The `Logger` class defines the logging logic in the RockLib.Logging package and implements the `ILogger` interface. The class defines a handful of settings along with a collection of `ILogProvider` objects. When its `public void Log(LogEntry logEntry)` method is invoked, it acts as gatekeeper. It only continues if the `IsDisabled` property is false and the log entry's `Level` is greater than or equal to the logger's `Level`. If the log entry passes these gates, it is sent to each of the logger's log providers. For each log provider, the log entry's `Level` must be greater than or equal to a its `Level`.
+
+When a log entry is passed to a log provider's `Task WriteAsync(LogEntry logEntry, CancellationToken token)` method, the resulting task is not waited on. Instead, control is returned immediately to the caller, causing a miminal impact on performance. Before returning, the log provider's task is added to a thread-safe collection, where it is ultimately tracked by a background thread. The purpose of the background thread is to ensure that when the logger's `Dispose` method is called, any in-flight tasks can be waited on before shutting the logger down. I.e., applications won't lose the logs that were being sent right before shutdown.
 
 ## `LogEntry` class
 
-The `LogEntry` class is a data class that contains information about a logging operation.
+The `LogEntry` class is a data class that contains information about a logging operation. While many of the properties of the class are automatically populated upon creation, all values can be changed.
+
+In addition to properties, the `LogEntry` class provides two methods. `LogEntry.GetExceptionData()` returns a formatted string representing the value of the `Exception` property (it returns null if `Exception` is null).
+
+The second method, `LogEntry.SetExtendedProperties(object extendedProperties)`, maps its parameter to the `ExtendedProperties` property. If the object is assignable to `IDictionary<string, object>`, then each item in that dictionary is mapped to an `ExtendedProperty` item. Otherwise, each public instance property of the object are mapped to an `ExtendedProperty` item.
 
 ## `LoggerFactory` class
 
@@ -174,3 +210,7 @@ using RockLib.Logging;
 
 Config.Root.GetSection("rocklib.logging").Create<IReadOnlyCollection<Logger>>()
 ```
+
+## `ILogProvider` interface
+
+The `ILogProvider` interface is the primary mechanism for extinsibility in the RockLib.Logging package, allowing any implementation of the interface to work seamlessly within the logging library. Currently, the package offers one implementation of the interface: `ConsoleLogProvider`. It is expected that many users of the library will create their own implementation of the interface in order to send their logs to their proprietary logging backend (such as loggly, logstash, or splunk).
