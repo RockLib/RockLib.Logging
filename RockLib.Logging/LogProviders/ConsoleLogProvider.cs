@@ -30,7 +30,7 @@ namespace RockLib.Logging
 
         public TimeSpan Timeout { get; }
 
-        public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken)
+        public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken = default(CancellationToken))
         {
             var formattedLog = Formatter.Format(logEntry);
             return Console.Out.WriteLineAsync(formattedLog);

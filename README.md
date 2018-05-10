@@ -213,4 +213,4 @@ Config.Root.GetSection("rocklib.logging").Create<IReadOnlyCollection<Logger>>()
 
 ## `ILogProvider` interface
 
-The `ILogProvider` interface is the primary mechanism for extinsibility in the RockLib.Logging package, allowing any implementation of the interface to work seamlessly within the logging library. Currently, the package offers one implementation of the interface: `ConsoleLogProvider`. It is expected that many users of the library will create their own implementation of the interface in order to send their logs to their proprietary logging backend (such as loggly, logstash, or splunk).
+The `ILogProvider` interface is the primary mechanism for extinsibility in the RockLib.Logging package, allowing any implementation of the interface to work seamlessly within the logging library. Currently, the package offers three implementations of the interface: `ConsoleLogProvider`, `FileLogProvider`, and `RollingFileLogProvider`. It is expected that many users of the library will create their own implementation of the interface in order to send their logs to their proprietary logging backend (such as loggly, logstash, or splunk).
