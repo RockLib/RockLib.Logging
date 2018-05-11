@@ -378,7 +378,7 @@ namespace RockLib.Logging.Tests
 
         private class JsonLogFormatter : ILogFormatter
         {
-            public string Format(LogEntry entry) => JsonConvert.SerializeObject(entry);
+            public string Format(LogEntry logEntry) => JsonConvert.SerializeObject(logEntry);
         }
     }
 }

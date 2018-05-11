@@ -62,7 +62,7 @@ namespace RockLib.Logging
         public int MaxArchiveCount { get; }
         public RolloverPeriod RolloverPeriod { get; }
 
-        protected sealed override void OnPreWrite(LogEntry entry, string formattedLogEntry)
+        protected sealed override void OnPreWrite(LogEntry logEntry, string formattedLogEntry)
         {
             if (NeedsArchiving())
             {

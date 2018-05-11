@@ -9,6 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace RockLib.Logging
 {
+    /// <summary>
+    /// An implementation of the <see cref="ILogFormatter"/> interface that uses a template
+    /// with replacement tokens to format a log entry.
+    /// </summary>
     public class TemplateLogFormatter : ILogFormatter
     {
         private static readonly Dictionary<string, Func<LogEntry, string>> _simpleTokenHandlers = new Dictionary<string, Func<LogEntry, string>>();
@@ -51,12 +55,15 @@ namespace RockLib.Logging
             AddSimpleTokenHandler("exception", logEntry => logEntry.GetExceptionData());
             AddSimpleTokenHandler("uniqueId", logEntry => logEntry.UniqueId);
 
-            AddSimpleTokenHandler("callerInfo", logEntry => FormatSpecificExtendedProperty(logEntry, "CallerInfo"));
-            AddSimpleTokenHandler("stepReport", logEntry => FormatSpecificExtendedProperty(logEntry, "StepReport"));
+            AddExtendedPropertyTokenHandler("callerInfo", "CallerInfo");
 
             AddDateTimeTokenHandler("createTime", logEntry => logEntry.CreateTime);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TemplateLogFormatter"/> class.
+        /// </summary>
+        /// <param name="template">The template to use when formatting logs.</param>
         public TemplateLogFormatter(string template)
         {
             Template = WebUtility.HtmlDecode(template);
@@ -66,14 +73,32 @@ namespace RockLib.Logging
                 && _containsHtmlTagsRegex.IsMatch(template);
         }
 
+        /// <summary>
+        /// Gets the template used for formatting logs.
+        /// </summary>
         public string Template { get; }
 
+        /// <summary>
+        /// Add a token handler for a specific extended property.
+        /// </summary>
+        /// <param name="key">The key of the token.</param>
+        /// <param name="extendedProperty">The extended property to retrieve.</param>
+        public static void AddExtendedPropertyTokenHandler(string key, string extendedProperty)
+        {
+            AddSimpleTokenHandler(key, logEntry => FormatSpecificExtendedProperty(logEntry, extendedProperty));
+        }
+
+        /// <summary>
+        /// Add a token handler for a log entry.
+        /// </summary>
+        /// <param name="key">The key of the token.</param>
+        /// <param name="getValue">A function that returns the token value.</param>
         public static void AddSimpleTokenHandler(string key, Func<LogEntry, string> getValue)
         {
             _simpleTokenHandlers[key] = getValue;
         }
 
-        public static void AddDateTimeTokenHandler(string key, Func<LogEntry, DateTime> getDateTime)
+        private static void AddDateTimeTokenHandler(string key, Func<LogEntry, DateTime> getDateTime)
         {
             _dateTimeTokenHandlers[key] = getDateTime;
         }
@@ -86,6 +111,11 @@ namespace RockLib.Logging
                     : "N/A";
         }
 
+        /// <summary>
+        /// Formats the specified log entry according to the <see cref="Template"/> property.
+        /// </summary>
+        /// <param name="logEntry">The log entry to format.</param>
+        /// <returns>The formatted log entry.</returns>
         public string Format(LogEntry logEntry)
         {
             var formattedLogEntry = _simpleTokenRegex.Replace(
