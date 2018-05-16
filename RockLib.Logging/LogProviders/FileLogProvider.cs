@@ -111,9 +111,10 @@ namespace RockLib.Logging
         }
 
         /// <summary>
-        /// A method called before the log entry is written. This method is thread-safe. That is,
+        /// A method called before log entries are written. This method is synchronized. That is,
         /// only one thread will execute this method at any given time.
         /// </summary>
+        /// <remarks>The base method does nothing.</remarks>
         protected virtual void OnPreWrite(LogEntry logEntry, string formattedLogEntry)
         {
         }

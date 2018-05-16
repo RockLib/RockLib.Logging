@@ -5,10 +5,26 @@ using System.Linq;
 
 namespace RockLib.Logging
 {
+    /// <summary>
+    /// An implementation of <see cref="ILogProvider"/> that writes log entries to a file. Depending
+    /// on configured criteria, the log file is archived (renamed) and a new file is written in its
+    /// place.
+    /// </summary>
     public class RollingFileLogProvider : FileLogProvider
     {
+        /// <summary>
+        /// The default value for <see cref="MaxFileSizeBytes"/>.
+        /// </summary>
         public const int DefaultMaxFileSizeKilobytes = 1024; // 1MB
+
+        /// <summary>
+        /// The default value for <see cref="MaxArchiveCount"/>.
+        /// </summary>
         public const int DefaultMaxArchiveCount = 10;
+
+        /// <summary>
+        /// The default value for <see cref="RolloverPeriod"/>.
+        /// </summary>
         public const RolloverPeriod DefaultRolloverPeriod = RolloverPeriod.Never;
 
         private static readonly Func<DateTime> _defaultGetCurrentTime = () => DateTime.UtcNow;
@@ -17,6 +33,24 @@ namespace RockLib.Logging
         private readonly Func<DateTime> _getCurrentTime;
         private readonly Func<FileInfo, DateTime> _getFileCreationTime;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RollingFileLogProvider"/> class.
+        /// </summary>
+        /// <param name="file">The file that logs will be written to.</param>
+        /// <param name="template">The template used to format log entries.</param>
+        /// <param name="level">The level of the log provider.</param>
+        /// <param name="timeout">The timeout of the log provider.</param>
+        /// <param name="maxFileSizeKilobytes">
+        /// The maximum file size, in bytes, of the file. If the file size is greater than this value,
+        /// it is archived.
+        /// </param>
+        /// <param name="maxArchiveCount">
+        /// The maximum number of archive files that will be kept. If the number of archive files is
+        /// greater than this value, then they are deleted, oldest first.
+        /// </param>
+        /// <param name="rolloverPeriod">
+        /// The rollover period, indicating if/how the file should archived on a periodic basis.
+        /// </param>
         public RollingFileLogProvider(string file,
             string template = DefaultTemplate,
             LogLevel level = default(LogLevel),
@@ -28,6 +62,24 @@ namespace RockLib.Logging
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RollingFileLogProvider"/> class.
+        /// </summary>
+        /// <param name="file">The path to a writable file.</param>
+        /// <param name="formatter">An object that formats log entries prior to writing to file.</param>
+        /// <param name="level">The level of the log provider.</param>
+        /// <param name="timeout">The timeout of the log provider.</param>
+        /// <param name="maxFileSizeKilobytes">
+        /// The maximum file size, in bytes, of the file. If the file size is greater than this value,
+        /// it is archived.
+        /// </param>
+        /// <param name="maxArchiveCount">
+        /// The maximum number of archive files that will be kept. If the number of archive files is
+        /// greater than this value, then they are deleted, oldest first.
+        /// </param>
+        /// <param name="rolloverPeriod">
+        /// The rollover period, indicating if/how the file should archived on a periodic basis.
+        /// </param>
         public RollingFileLogProvider(string file,
             ILogFormatter formatter,
             LogLevel level = default(LogLevel),
@@ -39,6 +91,29 @@ namespace RockLib.Logging
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RollingFileLogProvider"/> class. This protected
+        /// constructor exists to facilitate testing - its <paramref name="getCurrentTime"/> and
+        /// <paramref name="getFileCreationTime"/> parameters allow a subclass to inject system clock
+        /// and file system behavior.
+        /// </summary>
+        /// <param name="getCurrentTime">A function that gets the current time.</param>
+        /// <param name="getFileCreationTime">A function that gets a file's creation time.</param>
+        /// <param name="file">The path to a writable file.</param>
+        /// <param name="formatter">An object that formats log entries prior to writing to file.</param>
+        /// <param name="level">The level of the log provider.</param>
+        /// <param name="timeout">The timeout of the log provider.</param>
+        /// <param name="maxFileSizeKilobytes">
+        /// The maximum file size, in bytes, of the file. If the file size is greater than this value,
+        /// it is archived.
+        /// </param>
+        /// <param name="maxArchiveCount">
+        /// The maximum number of archive files that will be kept. If the number of archive files is
+        /// greater than this value, then they are deleted, oldest first.
+        /// </param>
+        /// <param name="rolloverPeriod">
+        /// The rollover period, indicating if/how the file should archived on a periodic basis.
+        /// </param>
         protected RollingFileLogProvider(
             Func<DateTime> getCurrentTime,
             Func<FileInfo, DateTime> getFileCreationTime,
@@ -58,10 +133,27 @@ namespace RockLib.Logging
             RolloverPeriod = rolloverPeriod;
         }
 
+        /// <summary>
+        /// Gets the maximum file size, in bytes, of the file. If the file size is greater than this
+        /// value, it is archived.
+        /// </summary>
         public int MaxFileSizeBytes { get; }
+
+        /// <summary>
+        /// Gets the maximum number of archive files that will be kept. If the number of archive files
+        /// is greater than this value, then they are deleted, oldest first.
+        /// </summary>
         public int MaxArchiveCount { get; }
+
+        /// <summary>
+        /// Gets the rollover period, indicating if/how the file should archived on a periodic basis.
+        /// </summary>
         public RolloverPeriod RolloverPeriod { get; }
 
+        /// <summary>
+        /// Check to see if the current file needs to be archived. If it does, archive it
+        /// and prune the archive files if needed.
+        /// </summary>
         protected sealed override void OnPreWrite(LogEntry logEntry, string formattedLogEntry)
         {
             if (NeedsArchiving())

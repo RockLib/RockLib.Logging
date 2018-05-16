@@ -7,6 +7,10 @@ namespace RockLib.Logging
     /// <summary>
     /// Defines a object that writes log entries.
     /// </summary>
+    /// <remarks>
+    /// Implementations of this interface *must* ensure that their <see cref="WriteAsync"/> method
+    /// is thread-safe. Multiple threads can invoke the method simultaneously.
+    /// </remarks>
     public interface ILogProvider
     {
         /// <summary>

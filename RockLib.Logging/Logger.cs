@@ -10,12 +10,31 @@ using System.Threading.Tasks;
 
 namespace RockLib.Logging
 {
+    /// <summary>
+    /// Defines an object used for logging.
+    /// </summary>
+    /// <remarks>
+    /// This class is expensive to initialize and is intended to be a long-lived object.
+    /// With the exception of the <see cref="Dispose"/> method, all public instance members
+    /// of this class are thread-safe.
+    /// </remarks>
     public sealed class Logger : ILogger, IDisposable
     {
+        /// <summary>
+        /// The default logger name.
+        /// </summary>
         public const string DefaultName = "default";
+
+        /// <summary>
+        /// The default collection of <see cref="ILogProvider"/> objects.
+        /// </summary>
         public static readonly IReadOnlyCollection<ILogProvider> DefaultProviders = new ILogProvider[0];
 
+        /// <summary>
+        /// The name of the <see cref="TraceSource"/> used by this class for trace logging.
+        /// </summary>
         public const string TraceSourceName = "rocklib.logging";
+
         private static readonly TraceSource _traceSource = Tracing.GetTraceSource(TraceSourceName);
 
         private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)> _workItems = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)>();
@@ -23,6 +42,13 @@ namespace RockLib.Logging
 
         private volatile bool _isDisposed;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Logger"/> class.
+        /// </summary>
+        /// <param name="name">The name of the logger.</param>
+        /// <param name="level">The logging level of the logger.</param>
+        /// <param name="providers">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
+        /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
         public Logger(
             string name = DefaultName,
             LogLevel level = LogLevel.Warn,
@@ -42,11 +68,37 @@ namespace RockLib.Logging
             });
         }
 
+        /// <summary>
+        /// Gets the name of the logger.
+        /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Gets the logging level of the logger.
+        /// </summary>
+        /// <remarks>
+        /// Log entries with a level lower than the value of this property are
+        /// not logged by this logger.
+        /// </remarks>
         public LogLevel Level { get; }
+
+        /// <summary>
+        /// Gets the collection of <see cref="ILogProvider"/> objects used by this logger.
+        /// </summary>
         public IReadOnlyCollection<ILogProvider> Providers { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the logger is disabled.
+        /// </summary>
         public bool IsDisabled { get; }
 
+        /// <summary>
+        /// Logs the specified log entry.
+        /// </summary>
+        /// <param name="logEntry">The log entry to log.</param>
+        /// <param name="callerMemberName">The method or property name of the caller.</param>
+        /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
+        /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
         public void Log(
             LogEntry logEntry,
             [CallerMemberName] string callerMemberName = null,
@@ -74,6 +126,9 @@ namespace RockLib.Logging
             }
         }
 
+        /// <summary>
+        /// Shuts down the logger, blocking until all pending logs have been sent.
+        /// </summary>
         public void Dispose()
         {
             _isDisposed = true;
