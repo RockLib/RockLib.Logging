@@ -97,12 +97,7 @@ namespace RockLib.Logging
 
             try
             {
-                OnPreWrite(logEntry, formattedLogEntry);
-
-                using (var writer = new StreamWriter(File, true))
-                {
-                    await writer.WriteLineAsync(formattedLogEntry).ConfigureAwait(false);
-                }
+                await SynchronizedWriteAsync(formattedLogEntry, cancellationToken);
             }
             finally
             {
@@ -111,12 +106,18 @@ namespace RockLib.Logging
         }
 
         /// <summary>
-        /// A method called before log entries are written. This method is synchronized. That is,
+        /// Writes a formatted log entry to the file. This method is synchronized, that is,
         /// only one thread will execute this method at any given time.
         /// </summary>
-        /// <remarks>The base method does nothing.</remarks>
-        protected virtual void OnPreWrite(LogEntry logEntry, string formattedLogEntry)
+        /// <param name="formattedLogEntry">The formatted log entry.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe.</param>
+        /// <returns>A task that represents the asynchronous write operation.</returns>
+        protected virtual async Task SynchronizedWriteAsync(string formattedLogEntry, CancellationToken cancellationToken)
         {
+            using (var writer = new StreamWriter(File, true))
+            {
+                await writer.WriteLineAsync(formattedLogEntry).ConfigureAwait(false);
+            }
         }
 
         /// <summary>

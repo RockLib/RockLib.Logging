@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RockLib.Logging
 {
@@ -152,15 +154,21 @@ namespace RockLib.Logging
 
         /// <summary>
         /// Check to see if the current file needs to be archived. If it does, archive it
-        /// and prune the archive files if needed.
+        /// and prune the archive files if needed. Then, regardless of whether the file needed
+        /// archiving, call the base method.
         /// </summary>
-        protected sealed override void OnPreWrite(LogEntry logEntry, string formattedLogEntry)
+        /// <param name="formattedLogEntry">The formatted log entry.</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe.</param>
+        /// <returns> A task that represents the asynchronous write operation.</returns>
+        protected sealed override Task SynchronizedWriteAsync(string formattedLogEntry, CancellationToken cancellationToken)
         {
             if (NeedsArchiving())
             {
                 ArchiveCurrentFile();
                 PruneArchives();
             }
+
+            return base.SynchronizedWriteAsync(formattedLogEntry, cancellationToken);
         }
 
         private bool NeedsArchiving()
