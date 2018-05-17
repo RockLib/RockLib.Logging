@@ -41,6 +41,7 @@ namespace RockLib.Logging
         private readonly Lazy<Thread> _startedWorkerThread;
 
         private volatile bool _isDisposed;
+        private volatile int _threadsInCriticalSection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
@@ -108,21 +109,31 @@ namespace RockLib.Logging
             if (logEntry == null)
                 throw new ArgumentNullException(nameof(logEntry));
 
+            // Check _isDisposed immediately before entering the critical section.
             if (_isDisposed)
                 throw new ObjectDisposedException(typeof(Logger).FullName, "Cannot log to a disposed Logger.");
 
-            if (IsDisabled || logEntry.Level < Level)
-                return;
+            Interlocked.Increment(ref _threadsInCriticalSection);
 
-            EnsureWorkerThreadIsStarted();
-
-            logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
-
-            foreach (var logProvider in Providers)
+            try
             {
-                var source = new CancellationTokenSource();
-                var task = WriteToLogProvider(logProvider, logEntry, source.Token);
-                _workItems.Add((task, logEntry, logProvider, source));
+                if (IsDisabled || logEntry.Level < Level)
+                    return;
+
+                EnsureWorkerThreadIsStarted();
+
+                logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
+
+                foreach (var logProvider in Providers)
+                {
+                    var source = new CancellationTokenSource();
+                    var task = WriteToLogProvider(logProvider, logEntry, source.Token);
+                    _workItems.Add((task, logEntry, logProvider, source));
+                }
+            }
+            finally
+            {
+                Interlocked.Decrement(ref _threadsInCriticalSection);
             }
         }
 
@@ -131,13 +142,27 @@ namespace RockLib.Logging
         /// </summary>
         public void Dispose()
         {
-            _isDisposed = true;
-            _workItems.CompleteAdding();
-            if (_startedWorkerThread.IsValueCreated)
-                _startedWorkerThread.Value.Join();
-            foreach (var provider in Providers.OfType<IDisposable>())
-                provider.Dispose();
-            _workItems.Dispose();
+            if (_isDisposed)
+                return;
+            lock (this)
+            {
+                if (_isDisposed)
+                    return;
+                _isDisposed = true;
+                WaitForCriticalSection();
+                _workItems.CompleteAdding();
+                if (_startedWorkerThread.IsValueCreated)
+                    _startedWorkerThread.Value.Join();
+                foreach (var provider in Providers.OfType<IDisposable>())
+                    provider.Dispose();
+                _workItems.Dispose();
+            }
+        }
+
+        private void WaitForCriticalSection()
+        {
+            do Thread.Sleep(1);
+            while (_threadsInCriticalSection > 0);
         }
 
         private void EnsureWorkerThreadIsStarted()
