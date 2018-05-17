@@ -37,11 +37,14 @@ namespace RockLib.Logging
 
         private static readonly TraceSource _traceSource = Tracing.GetTraceSource(TraceSourceName);
 
-        private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)> _workItems = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)>();
-        private readonly Lazy<Thread> _startedWorkerThread;
+        private readonly BlockingCollection<(LogEntry, string, string, int)> _processingQueue = new BlockingCollection<(LogEntry, string, string, int)>();
+        private readonly Thread _processingThread;
 
+        private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)> _trackingQueue = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)>();
+        private readonly Thread _trackingThread;
+
+        private readonly bool _canProcessLogs;
         private volatile bool _isDisposed;
-        private volatile int _threadsInCriticalSection;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
@@ -61,12 +64,22 @@ namespace RockLib.Logging
             Providers = providers ?? DefaultProviders;
             IsDisabled = isDisabled;
 
-            _startedWorkerThread = new Lazy<Thread>(() =>
+            _canProcessLogs = !IsDisabled && Level > LogLevel.NotSet && Providers.Count > 0;
+
+            if (_canProcessLogs)
             {
-                var thread = new Thread(ProcessWorkItems) { IsBackground = true };
-                thread.Start();
-                return thread;
-            });
+                _processingThread = new Thread(ProcessLogEntries) { IsBackground = true };
+                _processingThread.Start();
+                _trackingThread = new Thread(TrackWriteTasks) { IsBackground = true };
+                _trackingThread.Start();
+            }
+            else
+            {
+                _processingQueue.CompleteAdding();
+                _processingQueue.Dispose();
+                _trackingQueue.CompleteAdding();
+                _trackingQueue.Dispose();
+            }
         }
 
         /// <summary>
@@ -106,21 +119,28 @@ namespace RockLib.Logging
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            if (logEntry == null)
-                throw new ArgumentNullException(nameof(logEntry));
+            if (logEntry == null) throw new ArgumentNullException(nameof(logEntry));
+            if (_isDisposed) throw new ObjectDisposedException("Cannot log to a disposed Logger.");
 
-            // Check _isDisposed immediately before entering the critical section.
-            if (_isDisposed)
-                throw new ObjectDisposedException(typeof(Logger).FullName, "Cannot log to a disposed Logger.");
-
-            Interlocked.Increment(ref _threadsInCriticalSection);
-
-            try
+            if (_canProcessLogs)
             {
-                if (IsDisabled || logEntry.Level < Level)
-                    return;
+                try
+                {
+                    _processingQueue.Add((logEntry, callerMemberName, callerFilePath, callerLineNumber));
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw new ObjectDisposedException("Cannot log to a disposed Logger.", ex);
+                }
+            }
+        }
 
-                EnsureWorkerThreadIsStarted();
+        private void ProcessLogEntries()
+        {
+            foreach (var (logEntry, callerFilePath, callerMemberName, callerLineNumber) in _processingQueue.GetConsumingEnumerable())
+            {
+                if (logEntry.Level < Level)
+                    continue;
 
                 logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
 
@@ -128,49 +148,9 @@ namespace RockLib.Logging
                 {
                     var source = new CancellationTokenSource();
                     var task = WriteToLogProvider(logProvider, logEntry, source.Token);
-                    _workItems.Add((task, logEntry, logProvider, source));
+                    _trackingQueue.Add((task, logEntry, logProvider, source));
                 }
             }
-            finally
-            {
-                Interlocked.Decrement(ref _threadsInCriticalSection);
-            }
-        }
-
-        /// <summary>
-        /// Shuts down the logger, blocking until all pending logs have been sent.
-        /// </summary>
-        public void Dispose()
-        {
-            if (_isDisposed)
-                return;
-            lock (this)
-            {
-                if (_isDisposed)
-                    return;
-                _isDisposed = true;
-                WaitForCriticalSection();
-                _workItems.CompleteAdding();
-                if (_startedWorkerThread.IsValueCreated)
-                    _startedWorkerThread.Value.Join();
-                foreach (var provider in Providers.OfType<IDisposable>())
-                    provider.Dispose();
-                _workItems.Dispose();
-            }
-        }
-
-        private void WaitForCriticalSection()
-        {
-            do Thread.Sleep(1);
-            while (_threadsInCriticalSection > 0);
-        }
-
-        private void EnsureWorkerThreadIsStarted()
-        {
-            if (_startedWorkerThread.IsValueCreated)
-                return;
-
-            var dummy = _startedWorkerThread.Value;
         }
 
         private async Task WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry, CancellationToken cancellationToken)
@@ -192,9 +172,9 @@ namespace RockLib.Logging
             }
         }
 
-        private void ProcessWorkItems()
+        private void TrackWriteTasks()
         {
-            foreach (var (task, logEntry, logProvider, source) in _workItems.GetConsumingEnumerable())
+            foreach (var (task, logEntry, logProvider, source) in _trackingQueue.GetConsumingEnumerable())
             {
                 if (task.Wait(logProvider.Timeout))
                 {
@@ -212,6 +192,34 @@ namespace RockLib.Logging
 
                     // TODO: execute retry policy
                 }
+            }
+        }
+
+        /// <summary>
+        /// Shuts down the logger, blocking until all pending logs have been sent.
+        /// </summary>
+        public void Dispose()
+        {
+            lock (this)
+            {
+                if (_isDisposed)
+                    return;
+
+                _isDisposed = true;
+
+                if (_canProcessLogs)
+                {
+                    _processingQueue.CompleteAdding();
+                    _processingThread.Join();
+                    _processingQueue.Dispose();
+
+                    _trackingQueue.CompleteAdding();
+                    _trackingThread.Join();
+                    _trackingQueue.Dispose();
+                }
+
+                foreach (var provider in Providers.OfType<IDisposable>())
+                    provider.Dispose();
             }
         }
     }

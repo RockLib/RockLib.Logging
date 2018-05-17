@@ -75,6 +75,7 @@ namespace RockLib.Logging.Tests
             var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
 
             logger.Log(logEntry);
+            logger.Dispose();
 
             foreach (var logProvider in logProviders)
             {
@@ -139,6 +140,7 @@ namespace RockLib.Logging.Tests
             var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
 
             logger.Log(logEntry);
+            logger.Dispose();
 
             synchronousLogProvider.SentLogEntries.Count.Should().Be(1);
             auditLevelLogProvider.SentLogEntries.Count.Should().Be(0);
@@ -147,13 +149,17 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void LogAddsCallerInfoExtendedPropertyToLogEntry()
         {
-            var synchronousLogProvider = new SynchronousLogProvider();
+            var logProviders = new[]
+            {
+                new SynchronousLogProvider()
+            };
 
-            var logger = new Logger(level: LogLevel.Info);
+            var logger = new Logger(providers: logProviders, level: LogLevel.Info);
 
             var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
 
             logger.Log(logEntry);
+            logger.Dispose();
 
             logEntry.ExtendedProperties.Should().ContainKey("CallerInfo");
         }
