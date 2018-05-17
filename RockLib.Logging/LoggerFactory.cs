@@ -52,6 +52,16 @@ namespace RockLib.Logging
         /// </exception>
         public static Logger GetInstance(string name = Logger.DefaultName) => _lookup.GetOrAdd(name ?? Logger.DefaultName, FindLogger);
 
+        /// <summary>
+        /// Calls the <see cref="Logger.Dispose"/> method on each logger in the <see cref="Loggers"/> property,
+        /// blocking until any of their pending logging operations have completed.
+        /// </summary>
+        public static void ShutDown()
+        {
+            foreach (var logger in Loggers)
+                logger.Dispose();
+        }
+
         private static Logger FindLogger(string name) =>
             Loggers.FirstOrDefault(logger => logger.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
             ?? throw new KeyNotFoundException($"LoggerFactory.Loggers does not contain a Logger with the name '{name}'.");
