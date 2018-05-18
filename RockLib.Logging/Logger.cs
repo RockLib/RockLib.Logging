@@ -55,7 +55,7 @@ namespace RockLib.Logging
         /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
         public Logger(
             string name = DefaultName,
-            LogLevel level = LogLevel.Warn,
+            LogLevel level = LogLevel.NotSet,
             IReadOnlyCollection<ILogProvider> providers = null,
             bool isDisabled = false)
         {
@@ -64,7 +64,7 @@ namespace RockLib.Logging
             Providers = providers ?? DefaultProviders;
             IsDisabled = isDisabled;
 
-            _canProcessLogs = !IsDisabled && Level > LogLevel.NotSet && Providers.Count > 0;
+            _canProcessLogs = !IsDisabled && Providers.Count > 0;
 
             if (_canProcessLogs)
             {
@@ -143,6 +143,7 @@ namespace RockLib.Logging
                     continue;
 
                 logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
+                // TODO: Invoke any context providers
 
                 foreach (var logProvider in Providers)
                 {
