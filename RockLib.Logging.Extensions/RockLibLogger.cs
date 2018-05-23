@@ -7,10 +7,10 @@ namespace RockLib.Logging.Extensions
     /// </summary>
     internal class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     {
-        private readonly Logger _logger;
+        private readonly ILogger _logger;
         private readonly string _categoryName;
 
-        public RockLibLogger(Logger logger, string categoryName)
+        public RockLibLogger(ILogger logger, string categoryName)
         {
             _logger = logger;
             _categoryName = categoryName;
