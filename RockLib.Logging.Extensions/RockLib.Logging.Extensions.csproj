@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>RockLib.Logging.Extensions</PackageId>
+    <PackageVersion>1.0.0-alpha01</PackageVersion>
+    <Authors>Quicken Loans</Authors>
+    <Description>Extensions to create hooks into Microsoft.Extensions.Logging</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Copyright>Copyright 2018 (c) Quicken Loans Corporation. All rights reserved.</Copyright>
+    <PackageTags>RockLib Logging Logger Extensions</PackageTags>
+    <Version>1.0.0-alpha01</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\RockLib.Logging.Extensions.xml</DocumentationFile>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="RockLib.Logging" Version="1.0.0-alpha07" />
+  </ItemGroup>
+
+</Project>
