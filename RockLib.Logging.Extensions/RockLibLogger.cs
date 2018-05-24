@@ -21,11 +21,7 @@ namespace RockLib.Logging.Extensions
         {
             if (formatter == null)
                 throw new ArgumentNullException(nameof(formatter));
-
-            // We do not have a concept of logging level none, so just return.
-            if (logLevel == Microsoft.Extensions.Logging.LogLevel.None)
-                return;
-
+            
             var convertLogLevel = ConvertLogLevel(logLevel);
             if (!IsEnabled(convertLogLevel))
                 return;

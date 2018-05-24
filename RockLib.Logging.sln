@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Console.netcoreapp2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Extensions", "RockLib.Logging.Extensions\RockLib.Logging.Extensions.csproj", "{97FD3827-36E1-4EAA-98C9-138FA5D6DBE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Extensions.Console.netcoreapp2.0", "Example.Extensions.Console.netcoreapp2.0\Example.Extensions.Console.netcoreapp2.0.csproj", "{9404EE07-184F-41B9-8672-CB4877ED907D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Extensions.Console.netcoreapp2.0", "Example.Extensions.Console.netcoreapp2.0\Example.Extensions.Console.netcoreapp2.0.csproj", "{9404EE07-184F-41B9-8672-CB4877ED907D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockLib.Logging.Extensions.Tests", "RockLib.Logging.Extensions.Tests\RockLib.Logging.Extensions.Tests.csproj", "{40B07197-6677-44AA-B142-B4461B811485}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9404EE07-184F-41B9-8672-CB4877ED907D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9404EE07-184F-41B9-8672-CB4877ED907D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9404EE07-184F-41B9-8672-CB4877ED907D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40B07197-6677-44AA-B142-B4461B811485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B07197-6677-44AA-B142-B4461B811485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B07197-6677-44AA-B142-B4461B811485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B07197-6677-44AA-B142-B4461B811485}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
