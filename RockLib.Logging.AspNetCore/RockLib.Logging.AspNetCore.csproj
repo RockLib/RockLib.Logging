@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>RockLib.Logging.Extensions</PackageId>
+    <PackageId>RockLib.Logging.AspNetCore</PackageId>
     <PackageVersion>1.0.0-alpha01</PackageVersion>
     <Authors>Quicken Loans</Authors>
     <Description>Extensions to create hooks into Microsoft.Extensions.Logging</Description>
@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\RockLib.Logging.Extensions.xml</DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\RockLib.Logging.AspNetCore.xml</DocumentationFile>
   </PropertyGroup>
   
   <ItemGroup>
