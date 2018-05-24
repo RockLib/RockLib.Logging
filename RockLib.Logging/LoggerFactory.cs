@@ -25,7 +25,7 @@ namespace RockLib.Logging
     {
         private static readonly ConcurrentDictionary<string, Logger> _lookup = new ConcurrentDictionary<string, Logger>(StringComparer.InvariantCultureIgnoreCase);
 
-        private static readonly Semimutable<IReadOnlyCollection<Logger>> _loggers = new Semimutable<IReadOnlyCollection<Logger>>(GetDefaultLoggers);
+        private static readonly Semimutable<IReadOnlyCollection<Logger>> _loggers = new Semimutable<IReadOnlyCollection<Logger>>(CreateDefaultLoggers);
 
         /// <summary>
         /// Gets the loggers that are avilable to the <see cref="GetInstance"/> method to select from.
@@ -67,7 +67,11 @@ namespace RockLib.Logging
             Loggers.FirstOrDefault(logger => logger.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
             ?? throw new KeyNotFoundException($"LoggerFactory.Loggers does not contain a Logger with the name '{name}'.");
 
-        private static IReadOnlyCollection<Logger> GetDefaultLoggers() =>
+        /// <summary>
+        /// Defines the method used to create the default value of the <see cref="Loggers"/> property.
+        /// </summary>
+        /// <returns>A collection of new <see cref="Logger"/> objects.</returns>
+        public static IReadOnlyCollection<Logger> CreateDefaultLoggers() =>
              Config.Root.GetSection("rocklib.logging").Create<IReadOnlyCollection<Logger>>();
     }
 }
