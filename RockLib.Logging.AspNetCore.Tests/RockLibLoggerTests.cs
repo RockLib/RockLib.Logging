@@ -65,16 +65,15 @@ namespace RockLib.Logging.AspNetCore.Tests
         }
 
         [Fact]
-        public void BeginScopeThrowsNotImplmented()
+        public void BeginScopeReturnsNull()
         {
             var loggerMock = new Mock<ILogger>();
 
             var rlLogger = new RockLibLogger(loggerMock.Object, null);
 
-            Action action = () =>
-                rlLogger.BeginScope(new Dictionary<string, string>());
+            var scope = rlLogger.BeginScope(new Dictionary<string, string>());
 
-            action.Should().Throw<NotImplementedException>();
+            scope.Should().BeNull();
         }
 
         [Theory]

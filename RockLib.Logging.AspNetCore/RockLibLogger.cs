@@ -77,8 +77,8 @@ namespace RockLib.Logging.AspNetCore
 
         public IDisposable BeginScope<TState>(TState state)
         {
-            // TODO: Figure out what to do with scope
-            throw new NotImplementedException();
+            // TODO: Implement scope at some point.
+            return null;
         }
     }
 }
