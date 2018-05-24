@@ -26,7 +26,7 @@ namespace RockLib.Logging.AspNetCore
             if (!IsEnabled(convertLogLevel))
                 return;
 
-            var logEntry = new LogEntry(convertLogLevel, formatter(state, exception), exception);
+            var logEntry = new LogEntry(formatter(state, exception), exception, convertLogLevel);
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.EventId"] = eventId;
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = state;
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.CategoryName"] = _categoryName;

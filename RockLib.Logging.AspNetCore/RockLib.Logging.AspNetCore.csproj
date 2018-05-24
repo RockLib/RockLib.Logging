@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.2" />
-    <PackageReference Include="RockLib.Logging" Version="1.0.0-alpha07" />
+    <PackageReference Include="RockLib.Logging" Version="1.0.0-alpha08" />
   </ItemGroup>
 
 </Project>
