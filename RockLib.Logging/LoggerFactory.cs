@@ -38,7 +38,8 @@ namespace RockLib.Logging
         /// <param name="loggers">
         /// The loggers that will be avilable to the <see cref="GetInstance"/> method to select from.
         /// </param>
-        public static void SetLoggers(IReadOnlyCollection<Logger> loggers) => _loggers.Value = loggers;
+        public static void SetLoggers(IReadOnlyCollection<Logger> loggers) =>
+            _loggers.Value = loggers ?? throw new ArgumentNullException(nameof(loggers));
 
         /// <summary>
         /// Returns the first <see cref="Logger"/> from the <see cref="Loggers"/> property that has a

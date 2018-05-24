@@ -15,6 +15,8 @@ namespace RockLib.Logging
 
         private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setExtendedPropertyActionsCache = new ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>>();
 
+        private LogLevel _level;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry"/> class.
         /// </summary>
@@ -74,7 +76,19 @@ namespace RockLib.Logging
         /// <summary>
         /// Gets or sets the logging level of the current logging operation.
         /// </summary>
-        public LogLevel Level { get; set; }
+        public LogLevel Level
+        {
+            get => _level;
+            set
+            {
+                if (!Enum.IsDefined(typeof(LogLevel), value))
+                    throw new ArgumentException($"Log level is not defined: {value}.", nameof(value));
+                if (value == LogLevel.NotSet)
+                    throw new ArgumentException($"Cannot set the level of a log entry to {LogLevel.NotSet}.", nameof(value));
+
+                _level = value;
+            }
+        }
 
         /// <summary>
         /// Gets or sets the IP addess of the machine where the current logging operation is taking place.
