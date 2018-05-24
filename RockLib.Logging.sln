@@ -7,6 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging", "RockLib.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Tests", "RockLib.Logging.Tests\RockLib.Logging.Tests.csproj", "{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Console.netcoreapp2.0", "Example.Console.netcoreapp2.0\Example.Console.netcoreapp2.0.csproj", "{A1A62E80-9297-45D9-A1BF-972BF692D2DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore", "RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj", "{97FD3827-36E1-4EAA-98C9-138FA5D6DBE1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.AspNetCore.Console.netcoreapp2.0", "Example.AspNetCore.Console.netcoreapp2.0\Example.AspNetCore.Console.netcoreapp2.0.csproj", "{9404EE07-184F-41B9-8672-CB4877ED907D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{40B07197-6677-44AA-B142-B4461B811485}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +29,22 @@ Global
 		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1A62E80-9297-45D9-A1BF-972BF692D2DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1A62E80-9297-45D9-A1BF-972BF692D2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1A62E80-9297-45D9-A1BF-972BF692D2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1A62E80-9297-45D9-A1BF-972BF692D2DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97FD3827-36E1-4EAA-98C9-138FA5D6DBE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97FD3827-36E1-4EAA-98C9-138FA5D6DBE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97FD3827-36E1-4EAA-98C9-138FA5D6DBE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97FD3827-36E1-4EAA-98C9-138FA5D6DBE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9404EE07-184F-41B9-8672-CB4877ED907D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9404EE07-184F-41B9-8672-CB4877ED907D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9404EE07-184F-41B9-8672-CB4877ED907D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9404EE07-184F-41B9-8672-CB4877ED907D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40B07197-6677-44AA-B142-B4461B811485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B07197-6677-44AA-B142-B4461B811485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B07197-6677-44AA-B142-B4461B811485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B07197-6677-44AA-B142-B4461B811485}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
