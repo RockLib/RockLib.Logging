@@ -6,7 +6,7 @@ using Moq;
 using Xunit;
 using MSE = Microsoft.Extensions.Logging;
 
-namespace RockLib.Logging.Extensions.Tests
+namespace RockLib.Logging.AspNetCore.Tests
 {
     public class RockLibLoggerTests
     {

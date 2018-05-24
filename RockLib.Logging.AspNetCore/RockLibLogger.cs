@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RockLib.Logging.Extensions
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// Wrap RockLib's Logger in a Microsoft.Extensions.Logging's interface <see cref="Microsoft.Extensions.Logging.ILogger"/>.

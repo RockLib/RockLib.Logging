@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace RockLib.Logging.Extensions
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// Helpers for .NET Core

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace RockLib.Logging.Extensions.Tests
+namespace RockLib.Logging.AspNetCore.Tests
 {
     public class ConfigureExtensionsTests
     {
@@ -13,7 +13,7 @@ namespace RockLib.Logging.Extensions.Tests
 
         public ConfigureExtensionsTests()
         {
-            _nameField = typeof(RockLibLoggerProvider).GetField("_rockLibName", BindingFlags.NonPublic | BindingFlags.Instance);
+            _nameField = typeof(RockLibLoggerProvider).GetField("_rockLibLoggerName", BindingFlags.NonPublic | BindingFlags.Instance);
         }
 
         [Fact]

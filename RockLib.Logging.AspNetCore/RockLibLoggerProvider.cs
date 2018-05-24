@@ -1,11 +1,11 @@
-﻿namespace RockLib.Logging.Extensions
+﻿namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// Provides the logger for RockLib and Microsoft.Extensions.Logging
     /// </summary>
     public class RockLibLoggerProvider : Microsoft.Extensions.Logging.ILoggerProvider
     {
-        private readonly string _rockLibName;
+        private readonly string _rockLibLoggerName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
@@ -18,10 +18,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
         /// </summary>
-        /// <param name="rockLibName">The name of the logger.</param>
-        public RockLibLoggerProvider(string rockLibName)
+        /// <param name="rockLibLoggerName">The name of the logger.</param>
+        public RockLibLoggerProvider(string rockLibLoggerName)
         {
-            _rockLibName = rockLibName;
+            _rockLibLoggerName = rockLibLoggerName;
         }
         /// <summary>
         /// Create a logger with the given name/>.
@@ -30,7 +30,7 @@
         /// <returns>A logger with the given name</returns>
         public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
         {
-            var logger = LoggerFactory.GetInstance(_rockLibName);
+            var logger = LoggerFactory.GetInstance(_rockLibLoggerName);
 
             return new RockLibLogger(logger, categoryName);
         }

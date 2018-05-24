@@ -9,11 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Tests", "Ro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Console.netcoreapp2.0", "Example.Console.netcoreapp2.0\Example.Console.netcoreapp2.0.csproj", "{A1A62E80-9297-45D9-A1BF-972BF692D2DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Extensions", "RockLib.Logging.Extensions\RockLib.Logging.Extensions.csproj", "{97FD3827-36E1-4EAA-98C9-138FA5D6DBE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore", "RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj", "{97FD3827-36E1-4EAA-98C9-138FA5D6DBE1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Extensions.Console.netcoreapp2.0", "Example.Extensions.Console.netcoreapp2.0\Example.Extensions.Console.netcoreapp2.0.csproj", "{9404EE07-184F-41B9-8672-CB4877ED907D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.AspNetCore.Console.netcoreapp2.0", "Example.AspNetCore.Console.netcoreapp2.0\Example.AspNetCore.Console.netcoreapp2.0.csproj", "{9404EE07-184F-41B9-8672-CB4877ED907D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockLib.Logging.Extensions.Tests", "RockLib.Logging.Extensions.Tests\RockLib.Logging.Extensions.Tests.csproj", "{40B07197-6677-44AA-B142-B4461B811485}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{40B07197-6677-44AA-B142-B4461B811485}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

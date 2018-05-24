@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace RockLib.Logging.Extensions.Tests
+namespace RockLib.Logging.AspNetCore.Tests
 {
     public class RockLibLoggerProviderTests
     {
@@ -12,7 +12,7 @@ namespace RockLib.Logging.Extensions.Tests
 
         public RockLibLoggerProviderTests()
         {
-            _nameField = typeof(RockLibLoggerProvider).GetField("_rockLibName", BindingFlags.NonPublic | BindingFlags.Instance);
+            _nameField = typeof(RockLibLoggerProvider).GetField("_rockLibLoggerName", BindingFlags.NonPublic | BindingFlags.Instance);
             _loggerField = typeof(RockLibLogger).GetField("_logger", BindingFlags.NonPublic | BindingFlags.Instance);
             _categoryField = typeof(RockLibLogger).GetField("_categoryName", BindingFlags.NonPublic | BindingFlags.Instance);
         }
