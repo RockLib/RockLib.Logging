@@ -58,7 +58,7 @@ namespace RockLib.Logging.Tests
 
             logger.Dispose();
 
-            Assert.Throws<ObjectDisposedException>(() => logger.Log(new LogEntry(LogLevel.Info, "Hello, world!")));
+            Assert.Throws<ObjectDisposedException>(() => logger.Log(new LogEntry("Hello, world!", LogLevel.Info)));
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace RockLib.Logging.Tests
 
             var logger = new Logger(providers: logProviders, level: LogLevel.Info);
 
-            var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             logger.Log(logEntry);
             logger.Dispose();
@@ -96,7 +96,7 @@ namespace RockLib.Logging.Tests
 
             var logger = new Logger(providers: logProviders, level: LogLevel.Info, isDisabled: true);
 
-            var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             logger.Log(logEntry);
 
@@ -115,7 +115,7 @@ namespace RockLib.Logging.Tests
 
             var logger = new Logger(providers: logProviders, level: LogLevel.Error);
 
-            var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             logger.Log(logEntry);
 
@@ -137,7 +137,7 @@ namespace RockLib.Logging.Tests
 
             var logger = new Logger(providers: logProviders, level: LogLevel.Info);
 
-            var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             logger.Log(logEntry);
             logger.Dispose();
@@ -156,7 +156,7 @@ namespace RockLib.Logging.Tests
 
             var logger = new Logger(providers: logProviders, level: LogLevel.Info);
 
-            var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             logger.Log(logEntry);
             logger.Dispose();
@@ -171,7 +171,7 @@ namespace RockLib.Logging.Tests
 
             var logger = new Logger(providers: new[] { logProvider }, level: LogLevel.Info);
 
-            var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             logger.Log(logEntry);
 

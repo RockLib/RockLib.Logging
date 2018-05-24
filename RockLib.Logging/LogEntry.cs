@@ -11,6 +11,9 @@ namespace RockLib.Logging
     /// </summary>
     public sealed class LogEntry
     {
+        /// <summary>The default <see cref="LogLevel"/> of the <see cref="Level"/> property.</summary>
+        public const LogLevel DefaultLevel = LogLevel.Error;
+
         private const BindingFlags PublicInstance = BindingFlags.Public | BindingFlags.Instance;
 
         private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setExtendedPropertyActionsCache = new ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>>();
@@ -18,32 +21,41 @@ namespace RockLib.Logging
         private LogLevel _level;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="LogEntry"/> class with its <see cref="Level"/> set
+        /// to <see cref="DefaultLevel"/>.
+        /// </summary>
+        public LogEntry()
+        {
+            _level = DefaultLevel;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry"/> class.
         /// </summary>
-        /// <param name="level">The logging level of the current logging operation.</param>
         /// <param name="message">The log message.</param>
+        /// <param name="level">The logging level of the current logging operation.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to the <see cref="ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
         /// its items are added to <see cref="ExtendedProperties"/>.
         /// </param>
-        public LogEntry(LogLevel level, string message, object extendedProperties = null)
-            : this(level, message, null, extendedProperties)
+        public LogEntry(string message, LogLevel level = DefaultLevel, object extendedProperties = null)
+            : this(message, null, level, extendedProperties)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry"/> class.
         /// </summary>
-        /// <param name="level">The logging level of the current logging operation.</param>
         /// <param name="message">The log message.</param>
         /// <param name="exception">The <see cref="Exception"/> associated with the current logging operation.</param>
+        /// <param name="level">The logging level of the current logging operation.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to the <see cref="ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
         /// its items are added to <see cref="ExtendedProperties"/>.
         /// </param>
-        public LogEntry(LogLevel level, string message, Exception exception, object extendedProperties = null)
+        public LogEntry(string message, Exception exception, LogLevel level = DefaultLevel, object extendedProperties = null)
         {
             Level = level;
             Message = message;

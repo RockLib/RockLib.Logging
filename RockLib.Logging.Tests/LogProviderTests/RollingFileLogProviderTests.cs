@@ -186,7 +186,7 @@ namespace RockLib.Logging.Tests
         {
             var rollingFileLogProvider = new RollingFileLogProvider(_logFilePath, "{level}:{message}");
 
-            var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             await rollingFileLogProvider.WriteAsync(logEntry);
 
@@ -330,7 +330,7 @@ namespace RockLib.Logging.Tests
             }
             catch (Exception ex)
             {
-                return new LogEntry(LogLevel.Info, "Hello, world!", ex, new { Foo = "bar", Who = "there" });
+                return new LogEntry("Hello, world!", ex, LogLevel.Info, new { Foo = "bar", Who = "there" });
             }
         }
 

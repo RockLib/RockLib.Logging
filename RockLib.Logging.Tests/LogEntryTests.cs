@@ -10,7 +10,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void LevelIsSetFromConstructor1()
         {
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
             logEntry.Level.Should().Be(LogLevel.Error);
         }
@@ -20,7 +20,7 @@ namespace RockLib.Logging.Tests
         {
             var exception = new Exception();
 
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", exception);
+            var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 
             logEntry.Level.Should().Be(LogLevel.Error);
         }
@@ -28,7 +28,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void MessageIsSetFromConstructor1()
         {
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
             logEntry.Message.Should().Be("Hello, world!");
         }
@@ -38,7 +38,7 @@ namespace RockLib.Logging.Tests
         {
             var exception = new Exception();
 
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", exception);
+            var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 
             logEntry.Message.Should().BeSameAs("Hello, world!");
         }
@@ -46,7 +46,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void ExceptionIsNotSetFromConstructor1()
         {
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
             logEntry.Exception.Should().BeNull();
         }
@@ -56,7 +56,7 @@ namespace RockLib.Logging.Tests
         {
             var exception = new Exception();
 
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", exception);
+            var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 
             logEntry.Exception.Should().BeSameAs(exception);
         }
@@ -67,7 +67,7 @@ namespace RockLib.Logging.Tests
             var foo = 123;
             var bar = "abc";
 
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", new { foo, bar });
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error, new { foo, bar });
 
             logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
             logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
@@ -80,7 +80,7 @@ namespace RockLib.Logging.Tests
             var bar = "abc";
             var exception = new Exception();
 
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", exception, new { foo, bar });
+            var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error, new { foo, bar });
 
             logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
             logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
@@ -92,7 +92,7 @@ namespace RockLib.Logging.Tests
             var foo = 123;
             var bar = "abc";
 
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error, new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
 
             logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
             logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
@@ -105,7 +105,7 @@ namespace RockLib.Logging.Tests
             var bar = "abc";
             var exception = new Exception();
 
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", exception, new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
+            var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error, new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
 
             logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
             logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
@@ -114,7 +114,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void SetExtendedPropertiesMapsObjectPropertiesToExtendedProperties()
         {
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
             var foo = 123;
             var bar = "abc";
@@ -128,7 +128,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void SetExtendedPropertiesMapsDictionaryItemsToExtendedProperties()
         {
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
             var foo = 123;
             var bar = "abc";
@@ -142,7 +142,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void GetExceptionDataReturnsNullWhenExceptionIsNull()
         {
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
             logEntry.GetExceptionData().Should().BeNull();
         }
@@ -152,7 +152,7 @@ namespace RockLib.Logging.Tests
         {
             var exception = new Exception();
 
-            var logEntry = new LogEntry(LogLevel.Error, "Hello, world!", exception);
+            var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 
             logEntry.GetExceptionData().Should().NotBeNull();
         }

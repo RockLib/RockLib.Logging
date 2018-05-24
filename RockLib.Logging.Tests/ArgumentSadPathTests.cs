@@ -11,38 +11,38 @@ namespace RockLib.Logging.Tests
             [Fact]
             public void InvokingConstructor1WithUndefinedLogLevelThrowsArgumentException()
             {
-                Assert.Throws<ArgumentException>(() => new LogEntry((LogLevel)(int.MinValue), ""));
+                Assert.Throws<ArgumentException>(() => new LogEntry("", (LogLevel)(int.MinValue)));
             }
 
             [Fact]
             public void InvokingConstructor2WithUndefinedLogLevelThrowsArgumentException()
             {
-                Assert.Throws<ArgumentException>(() => new LogEntry((LogLevel)(int.MinValue), "", new Exception()));
+                Assert.Throws<ArgumentException>(() => new LogEntry("", new Exception(), (LogLevel)(int.MinValue)));
             }
 
             [Fact]
             public void PassingUndefinedLogLevelToLevelPropertyThrowsArgumentException()
             {
-                var logEntry = new LogEntry(LogLevel.Info, "");
+                var logEntry = new LogEntry("", LogLevel.Info);
                 Assert.Throws<ArgumentException>(() => logEntry.Level = (LogLevel)(int.MinValue));
             }
 
             [Fact]
             public void InvokingConstructor1WithLogLevelNotSetThrowsArgumentException()
             {
-                Assert.Throws<ArgumentException>(() => new LogEntry(LogLevel.NotSet, ""));
+                Assert.Throws<ArgumentException>(() => new LogEntry("", LogLevel.NotSet));
             }
 
             [Fact]
             public void InvokingConstructor2WithLogLevelNotSetThrowsArgumentException()
             {
-                Assert.Throws<ArgumentException>(() => new LogEntry(LogLevel.NotSet, "", new Exception()));
+                Assert.Throws<ArgumentException>(() => new LogEntry("", new Exception(), LogLevel.NotSet));
             }
 
             [Fact]
             public void PassingLogLevelNotSetToLevelPropertyThrowsArgumentException()
             {
-                var logEntry = new LogEntry(LogLevel.Info, "");
+                var logEntry = new LogEntry("", LogLevel.Info);
                 Assert.Throws<ArgumentException>(() => logEntry.Level = LogLevel.NotSet);
             }
         }
