@@ -3,7 +3,7 @@
 namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
-    /// Helpers for .NET Core
+    /// Extensions for .NET Core
     /// </summary>
     public static class ConfigureExtensions
     {
@@ -11,7 +11,7 @@ namespace RockLib.Logging.AspNetCore
         /// Enable RockLib as logging provider in .NET Core.
         /// </summary>
         /// <param name="factory">The factory being extended</param>
-        /// <param name="rockLibLoggerName">The Logger name</param>
+        /// <param name="rockLibLoggerName">The name of the RockLib logger.</param>
         /// <returns>ILoggerFactory for chaining</returns>
         public static ILoggerFactory AddRockLib(this ILoggerFactory factory, string rockLibLoggerName = null)
         {
@@ -23,7 +23,7 @@ namespace RockLib.Logging.AspNetCore
         /// Enable RockLib as logging provider in .NET Core.
         /// </summary>
         /// <param name="factory">The factory being extended</param>
-        /// <param name="rockLibLoggerName">The Logger name</param>
+        /// <param name="rockLibLoggerName">The name of the RockLib logger.</param>
         /// <returns>ILoggerFactory for chaining</returns>
         public static ILoggingBuilder AddRockLib(this ILoggingBuilder factory, string rockLibLoggerName = null)
         {

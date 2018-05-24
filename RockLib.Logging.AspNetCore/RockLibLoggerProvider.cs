@@ -10,24 +10,17 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
         /// </summary>
-        public RockLibLoggerProvider()
-            : this(null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Logger"/> class.
-        /// </summary>
         /// <param name="rockLibLoggerName">The name of the logger.</param>
-        public RockLibLoggerProvider(string rockLibLoggerName)
+        public RockLibLoggerProvider(string rockLibLoggerName = null)
         {
             _rockLibLoggerName = rockLibLoggerName;
         }
+
         /// <summary>
-        /// Create a logger with the given name/>.
+        /// Create a logger with the given category/>.
         /// </summary>
-        /// <param name="categoryName">Name of the logger to be created.</param>
-        /// <returns>A logger with the given name</returns>
+        /// <param name="categoryName">Category of the logger to be created.</param>
+        /// <returns>A logger with the given category</returns>
         public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
         {
             var logger = LoggerFactory.GetInstance(_rockLibLoggerName);
