@@ -102,7 +102,7 @@ namespace RockLib.Logging.Tests
                 {
                     var consoleLogProvider = new ConsoleLogProvider("{level}:{message}");
 
-                    var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+                    var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
                     await consoleLogProvider.WriteAsync(logEntry);
                 }

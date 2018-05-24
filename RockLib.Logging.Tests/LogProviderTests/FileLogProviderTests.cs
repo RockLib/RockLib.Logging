@@ -112,7 +112,7 @@ namespace RockLib.Logging.Tests
         {
             var fileLogProvider = new FileLogProvider(_file, "{level}:{message}");
 
-            var logEntry = new LogEntry(LogLevel.Info, "Hello, world!");
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             await fileLogProvider.WriteAsync(logEntry);
 

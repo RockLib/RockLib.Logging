@@ -59,6 +59,9 @@ namespace RockLib.Logging
             IReadOnlyCollection<ILogProvider> providers = null,
             bool isDisabled = false)
         {
+            if (!Enum.IsDefined(typeof(LogLevel), level))
+                throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
+
             Name = name ?? DefaultName;
             Level = level;
             Providers = providers ?? DefaultProviders;

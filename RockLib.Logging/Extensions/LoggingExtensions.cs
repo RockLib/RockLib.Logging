@@ -313,7 +313,7 @@ namespace RockLib.Logging
             if (logger.IsDisabled || level < logger.Level)
                 return;
 
-            var logEntry = new LogEntry(level, message, exception, extendedProperties);
+            var logEntry = new LogEntry(message, exception, level, extendedProperties);
             logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
         }
     }

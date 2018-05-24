@@ -49,6 +49,11 @@ namespace RockLib.Logging
             LogLevel level = default(LogLevel),
             TimeSpan? timeout = null)
         {
+            if (!Enum.IsDefined(typeof(LogLevel), level))
+                throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
+            if (timeout.HasValue && timeout.Value < TimeSpan.Zero)
+                throw new ArgumentException("Timeout cannot be negative.", nameof(timeout));
+
             File = file ?? throw new ArgumentNullException(nameof(file));
             Formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
             Level = level;

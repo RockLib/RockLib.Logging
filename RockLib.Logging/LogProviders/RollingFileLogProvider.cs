@@ -128,6 +128,15 @@ namespace RockLib.Logging
             RolloverPeriod rolloverPeriod = DefaultRolloverPeriod)
             : base(file, formatter, level, timeout)
         {
+            if (maxFileSizeKilobytes < 0)
+                throw new ArgumentException("MaxFileSizeKilobytes cannot be negative.", nameof(maxFileSizeKilobytes));
+            if (maxFileSizeKilobytes > (int.MaxValue / 1024))
+                throw new ArgumentException($"MaxFileSizeKilobytes cannot be greater than {int.MaxValue / 1024}.", nameof(maxFileSizeKilobytes));
+            if (maxArchiveCount < 0)
+                throw new ArgumentException("MaxArchiveCount cannot be negative.", nameof(maxArchiveCount));
+            if (!Enum.IsDefined(typeof(RolloverPeriod), rolloverPeriod))
+                throw new ArgumentException($"Rollover period is not defined: {rolloverPeriod}.", nameof(rolloverPeriod));
+
             _getCurrentTime = getCurrentTime ?? throw new ArgumentNullException(nameof(getCurrentTime));
             _getFileCreationTime = getFileCreationTime ?? throw new ArgumentNullException(nameof(getFileCreationTime));
             MaxFileSizeBytes = GetMaxFileSizeBytes(maxFileSizeKilobytes);

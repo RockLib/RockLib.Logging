@@ -66,6 +66,7 @@ namespace RockLib.Logging
         /// <param name="template">The template to use when formatting logs.</param>
         public TemplateLogFormatter(string template)
         {
+            if (template == null) throw new ArgumentNullException(nameof(template));
             Template = WebUtility.HtmlDecode(template);
 
             _isHtmlEncoded =
