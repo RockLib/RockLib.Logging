@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -65,15 +66,101 @@ namespace RockLib.Logging.AspNetCore.Tests
         }
 
         [Fact]
-        public void BeginScopeReturnsNull()
+        public void BeginScopeAddsObjectToTheScopeStack()
         {
             var loggerMock = new Mock<ILogger>();
 
             var rlLogger = new RockLibLogger(loggerMock.Object, null);
 
-            var scope = rlLogger.BeginScope(new Dictionary<string, string>());
+            rlLogger.GetScope().Should().BeEmpty();
 
-            scope.Should().BeNull();
+            rlLogger.BeginScope("a");
+            rlLogger.GetScope().Should().Equal(new object[] { "a" });
+
+            rlLogger.BeginScope("b");
+            rlLogger.GetScope().Should().Equal(new object[] { "b", "a" });
+
+            rlLogger.BeginScope("c");
+            rlLogger.GetScope().Should().Equal(new object[] { "c", "b", "a" });
+        }
+
+        [Fact]
+        public void DisposingTheObjectReturnedFromBeginScopePopsTheScopeStack()
+        {
+            var loggerMock = new Mock<ILogger>();
+
+            var rlLogger = new RockLibLogger(loggerMock.Object, null);
+
+            using (rlLogger.BeginScope("a"))
+            {
+                using (rlLogger.BeginScope("b"))
+                {
+                    using (rlLogger.BeginScope("c"))
+                    {
+                        rlLogger.GetScope().Should().Equal(new object[] { "c", "b", "a" });
+                    }
+                    rlLogger.GetScope().Should().Equal(new object[] { "b", "a" });
+                }
+                rlLogger.GetScope().Should().Equal(new object[] { "a" });
+            }
+
+            rlLogger.GetScope().Should().BeEmpty();
+        }
+
+        [Fact]
+        public void LogAddsScopeToExtendedProperties()
+        {
+            LogEntry logEntry = null;
+            var exception = new Exception("Some random exception");
+            var eventId = new EventId(15, "SomeEvent");
+            var state = new Dictionary<string, string>();
+
+            var loggerMock = new Mock<ILogger>();
+            loggerMock.Setup(lm => lm.Level).Returns(LogLevel.Debug);
+            loggerMock
+                .Setup(lm => lm.Log(It.IsAny<LogEntry>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Callback<LogEntry, string, string, int>((le, s1, s2, i) => logEntry = le);
+
+            var rlLogger = new RockLibLogger(loggerMock.Object, "SomeCategory");
+
+            using (rlLogger.BeginScope("a"))
+            using (rlLogger.BeginScope("b"))
+            using (rlLogger.BeginScope("c"))
+            {
+                rlLogger.Log(MSE.LogLevel.Debug, eventId, state, exception, (dictionary, ex) => "Simple message");
+
+                logEntry.ExtendedProperties.Should().ContainKey("Microsoft.Extensions.Logging.Scope");
+                logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"].Should().BeAssignableTo<object[]>();
+                var scope = (object[])logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"];
+                scope.Should().Equal(rlLogger.GetScope());
+            }
+        }
+
+        [Fact]
+        public void LogDoesNotAddEmptyScopeToExtendedProperties()
+        {
+            LogEntry logEntry = null;
+            var exception = new Exception("Some random exception");
+            var eventId = new EventId(15, "SomeEvent");
+            var state = new Dictionary<string, string>();
+
+            var loggerMock = new Mock<ILogger>();
+            loggerMock.Setup(lm => lm.Level).Returns(LogLevel.Debug);
+            loggerMock
+                .Setup(lm => lm.Log(It.IsAny<LogEntry>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Callback<LogEntry, string, string, int>((le, s1, s2, i) => logEntry = le);
+
+            var rlLogger = new RockLibLogger(loggerMock.Object, "SomeCategory");
+
+            using (rlLogger.BeginScope("a"))
+            using (rlLogger.BeginScope("b"))
+            using (rlLogger.BeginScope("c"))
+            {
+            }
+
+            rlLogger.Log(MSE.LogLevel.Debug, eventId, state, exception, (dictionary, ex) => "Simple message");
+
+            logEntry.ExtendedProperties.Should().NotContainKey("Microsoft.Extensions.Logging.Scope");
         }
 
         [Theory]

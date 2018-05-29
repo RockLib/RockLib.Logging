@@ -35,8 +35,8 @@ namespace RockLib.Logging.AspNetCore
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = state;
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.CategoryName"] = _categoryName;
 
-            if (_scope.IsValueCreated)
-                logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"] = _scope.Value;
+            if (_scope.IsValueCreated && _scope.Value.Count > 0)
+                logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"] = GetScope();
 
             _logger.Log(logEntry);
         }
@@ -87,6 +87,8 @@ namespace RockLib.Logging.AspNetCore
             _scope.Value.Push(state);
             return new DisposeScope(_scope.Value);
         }
+
+        public object[] GetScope() => _scope.Value.ToArray();
 
         private class DisposeScope : IDisposable
         {
