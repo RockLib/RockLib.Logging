@@ -29,13 +29,28 @@ namespace RockLib.Logging.AspNetCore
             var logEntry = new LogEntry(formatter(state, exception), exception, convertLogLevel);
 
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.EventId"] = eventId;
-            logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = state;
+            logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = GetStateObject(state);
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.CategoryName"] = _categoryName;
 
             if (_scope.IsValueCreated && _scope.Value.Count > 0)
                 logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"] = GetScope();
 
             _logger.Log(logEntry);
+        }
+
+        private object GetStateObject(object state)
+        {
+            if (typeof(IEnumerable<KeyValuePair<string, object>>).IsAssignableFrom(state.GetType())
+                && !typeof(IDictionary<string, object>).IsAssignableFrom(state.GetType()))
+            {
+                var items = (IEnumerable<KeyValuePair<string, object>>)state;
+                if (items.GroupBy(x => x.Key).All(g => g.Count() == 1))
+                {
+                    return items.ToDictionary(x => x.Key, x => x.Value);
+                }
+            }
+
+            return state;
         }
 
         public bool IsEnabled(Microsoft.Extensions.Logging.LogLevel logLevel)
@@ -76,7 +91,7 @@ namespace RockLib.Logging.AspNetCore
 
         public IDisposable BeginScope<TState>(TState state)
         {
-            _scope.Value.Push(state);
+            _scope.Value.Push(GetStateObject(state));
             return new DisposeScope(_scope.Value);
         }
 
