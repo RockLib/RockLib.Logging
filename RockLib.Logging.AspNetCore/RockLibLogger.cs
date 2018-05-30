@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RockLib.Logging.AspNetCore
 {
@@ -9,6 +11,7 @@ namespace RockLib.Logging.AspNetCore
     {
         private readonly ILogger _logger;
         private readonly string _categoryName;
+        private readonly Lazy<Stack<object>> _scope = new Lazy<Stack<object>>(() => new Stack<object>());
 
         public RockLibLogger(ILogger logger, string categoryName)
         {
@@ -27,9 +30,13 @@ namespace RockLib.Logging.AspNetCore
                 return;
 
             var logEntry = new LogEntry(formatter(state, exception), exception, convertLogLevel);
+
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.EventId"] = eventId;
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = state;
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.CategoryName"] = _categoryName;
+
+            if (_scope.IsValueCreated && _scope.Value.Count > 0)
+                logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"] = GetScope();
 
             _logger.Log(logEntry);
         }
@@ -77,8 +84,17 @@ namespace RockLib.Logging.AspNetCore
 
         public IDisposable BeginScope<TState>(TState state)
         {
-            // TODO: Implement scope at some point.
-            return null;
+            _scope.Value.Push(state);
+            return new DisposeScope(_scope.Value);
+        }
+
+        public object[] GetScope() => _scope.Value.ToArray();
+
+        private class DisposeScope : IDisposable
+        {
+            private readonly Stack<object> _scope;
+            public DisposeScope(Stack<object> scope) => _scope = scope;
+            public void Dispose() => _scope.Pop();
         }
     }
 }
