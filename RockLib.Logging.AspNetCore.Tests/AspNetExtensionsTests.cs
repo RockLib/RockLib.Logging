@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using RockLib.Configuration;
 using Xunit;
 
 namespace RockLib.Logging.AspNetCore.Tests
@@ -29,22 +31,33 @@ namespace RockLib.Logging.AspNetCore.Tests
         [Fact]
         public void WebHostBuilderExtensionAddsProvider()
         {
-            ServiceDescriptor serviceDescriptor = null;
+            if (!Config.IsLocked)
+            {
+                var dummy = Config.Root;
+            }
+
+            var serviceDescriptors = new List<ServiceDescriptor>();
             var servicesCollectionMock = new Mock<IServiceCollection>();
             servicesCollectionMock
                 .Setup(scm => scm.Add(It.IsAny<ServiceDescriptor>()))
-                .Callback<ServiceDescriptor>(sd => serviceDescriptor = sd);
+                .Callback<ServiceDescriptor>(sd => serviceDescriptors.Add(sd));
 
             var fakeBuilder = new FakeWebHostBuilder()
             {
                 ServiceCollection = servicesCollectionMock.Object
             };
 
-            fakeBuilder.UseRockLib("WebHostBuilderRockLibName");
+            fakeBuilder.UseRockLib("SomeRockLibName");
 
-            servicesCollectionMock.Verify(lfm => lfm.Add(It.IsAny<ServiceDescriptor>()), Times.Once());
+            servicesCollectionMock.Verify(lfm => lfm.Add(It.IsAny<ServiceDescriptor>()), Times.Exactly(2));
 
-            _nameField.GetValue(serviceDescriptor.ImplementationFactory.Invoke(null)).Should().Be("WebHostBuilderRockLibName");
+            // The first thing we happen to register is the RockLib.Logging.Logger
+            var logger = (ILogger)serviceDescriptors[0].ImplementationFactory.Invoke(null);
+            logger.Name.Should().Be("SomeRockLibName");
+
+            // The second thing we happen to register is the RockLib.Logging.AspNetCore.RockLibLoggerProvider
+            var provider = (RockLibLoggerProvider)serviceDescriptors[1].ImplementationFactory.Invoke(null);
+            _nameField.GetValue(provider).Should().Be("SomeRockLibName");
         }
 
         private class FakeWebHostBuilder : IWebHostBuilder
