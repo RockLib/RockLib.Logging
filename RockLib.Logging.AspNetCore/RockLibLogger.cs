@@ -4,9 +4,6 @@ using System.Linq;
 
 namespace RockLib.Logging.AspNetCore
 {
-    /// <summary>
-    /// Wrap RockLib's Logger in a Microsoft.Extensions.Logging's interface <see cref="Microsoft.Extensions.Logging.ILogger"/>.
-    /// </summary>
     internal class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     {
         private readonly ILogger _logger;
@@ -56,11 +53,6 @@ namespace RockLib.Logging.AspNetCore
             return _logger.IsEnabled(logLevel);
         }
 
-        /// <summary>
-        /// Convert loglevel to RockLib variant.
-        /// </summary>
-        /// <param name="logLevel">level to be converted.</param>
-        /// <returns></returns>
         private static LogLevel ConvertLogLevel(Microsoft.Extensions.Logging.LogLevel logLevel)
         {
             switch (logLevel)
