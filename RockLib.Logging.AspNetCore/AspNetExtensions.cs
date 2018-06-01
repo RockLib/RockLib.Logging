@@ -27,27 +27,23 @@ namespace RockLib.Logging.AspNetCore
             {
                 services.AddSingleton<ILogger>(serviceProvider =>
                 {
-                    SetConfigRoot(serviceProvider);
+                    if (!Config.IsLocked)
+                    {
+                        var configuration = serviceProvider.GetService<IConfiguration>();
+                        Config.SetRoot(configuration);
+                    }
+
                     return LoggerFactory.GetInstance(rockLibLoggerName);
                 });
 
                 services.AddSingleton<ILoggerProvider>(serviceProvider =>
                 {
-                    SetConfigRoot(serviceProvider);
-                    return new RockLibLoggerProvider(rockLibLoggerName);
+                    var logger = serviceProvider.GetRequiredService<ILogger>();
+                    return new RockLibLoggerProvider(logger);
                 });
             });
 
             return builder;
-        }
-
-        private static void SetConfigRoot(IServiceProvider serviceProvider)
-        {
-            if (!Config.IsLocked)
-            {
-                var configuration = serviceProvider.GetService<IConfiguration>();
-                Config.SetRoot(configuration);
-            }
         }
     }
 }

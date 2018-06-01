@@ -13,13 +13,6 @@ namespace RockLib.Logging.AspNetCore.Tests
 {
     public class AspNetExtensionsTests
     {
-        private readonly FieldInfo _nameField;
-
-        public AspNetExtensionsTests()
-        {
-            _nameField = typeof(RockLibLoggerProvider).GetField("_rockLibLoggerName", BindingFlags.NonPublic | BindingFlags.Instance);
-        }
-
         [Fact]
         public void WebHostBuilderExtensionThrowsOnNullBuilder()
         {
@@ -36,11 +29,17 @@ namespace RockLib.Logging.AspNetCore.Tests
                 var dummy = Config.Root;
             }
 
+            var actualLogger = LoggerFactory.GetInstance("SomeRockLibName");
+
             var serviceDescriptors = new List<ServiceDescriptor>();
+
             var servicesCollectionMock = new Mock<IServiceCollection>();
             servicesCollectionMock
                 .Setup(scm => scm.Add(It.IsAny<ServiceDescriptor>()))
                 .Callback<ServiceDescriptor>(sd => serviceDescriptors.Add(sd));
+
+            var serviceProviderMock = new Mock<IServiceProvider>();
+            serviceProviderMock.Setup(m => m.GetService(typeof(ILogger))).Returns(actualLogger);
 
             var fakeBuilder = new FakeWebHostBuilder()
             {
@@ -53,11 +52,11 @@ namespace RockLib.Logging.AspNetCore.Tests
 
             // The first thing we happen to register is the RockLib.Logging.Logger
             var logger = (ILogger)serviceDescriptors[0].ImplementationFactory.Invoke(null);
-            logger.Name.Should().Be("SomeRockLibName");
+            logger.Should().BeSameAs(actualLogger);
 
             // The second thing we happen to register is the RockLib.Logging.AspNetCore.RockLibLoggerProvider
-            var provider = (RockLibLoggerProvider)serviceDescriptors[1].ImplementationFactory.Invoke(null);
-            _nameField.GetValue(provider).Should().Be("SomeRockLibName");
+            var provider = (RockLibLoggerProvider)serviceDescriptors[1].ImplementationFactory.Invoke(serviceProviderMock.Object);
+            provider.Logger.Should().BeSameAs(actualLogger);
         }
 
         private class FakeWebHostBuilder : IWebHostBuilder
