@@ -6,15 +6,16 @@ namespace RockLib.Logging.AspNetCore
 {
     internal class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     {
-        private readonly ILogger _logger;
-        private readonly string _categoryName;
         private readonly Lazy<Stack<object>> _scope = new Lazy<Stack<object>>(() => new Stack<object>());
 
         public RockLibLogger(ILogger logger, string categoryName)
         {
-            _logger = logger;
-            _categoryName = categoryName;
+            Logger = logger;
+            CategoryName = categoryName;
         }
+
+        public ILogger Logger { get; }
+        public string CategoryName { get; }
 
         public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, Microsoft.Extensions.Logging.EventId eventId,
             TState state, Exception exception, Func<TState, Exception, string> formatter)
@@ -30,12 +31,12 @@ namespace RockLib.Logging.AspNetCore
 
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.EventId"] = eventId;
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = GetStateObject(state);
-            logEntry.ExtendedProperties["Microsoft.Extensions.Logging.CategoryName"] = _categoryName;
+            logEntry.ExtendedProperties["Microsoft.Extensions.Logging.CategoryName"] = CategoryName;
 
             if (_scope.IsValueCreated && _scope.Value.Count > 0)
                 logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"] = GetScope();
 
-            _logger.Log(logEntry);
+            Logger.Log(logEntry);
         }
 
         private object GetStateObject(object state)
@@ -65,7 +66,7 @@ namespace RockLib.Logging.AspNetCore
 
         private bool IsEnabled(LogLevel logLevel)
         {
-            return _logger.IsEnabled(logLevel);
+            return Logger.IsEnabled(logLevel);
         }
 
         private static LogLevel ConvertLogLevel(Microsoft.Extensions.Logging.LogLevel logLevel)

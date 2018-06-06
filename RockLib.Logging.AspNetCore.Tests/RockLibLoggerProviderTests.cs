@@ -1,46 +1,33 @@
 ﻿using System.Reflection;
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace RockLib.Logging.AspNetCore.Tests
 {
     public class RockLibLoggerProviderTests
     {
-        private readonly FieldInfo _nameField;
-        private readonly FieldInfo _loggerField;
-        private readonly FieldInfo _categoryField;
-
-        public RockLibLoggerProviderTests()
-        {
-            _nameField = typeof(RockLibLoggerProvider).GetField("_rockLibLoggerName", BindingFlags.NonPublic | BindingFlags.Instance);
-            _loggerField = typeof(RockLibLogger).GetField("_logger", BindingFlags.NonPublic | BindingFlags.Instance);
-            _categoryField = typeof(RockLibLogger).GetField("_categoryName", BindingFlags.NonPublic | BindingFlags.Instance);
-        }
-
         [Fact]
-        public void EmptyConstructorSetsNullRockLibName()
+        public void ConstructorSetsLogger()
         {
-            var provider = new RockLibLoggerProvider();
+            var logger = new Mock<ILogger>().Object;
 
-            _nameField.GetValue(provider).Should().BeNull();
-        }
+            var provider = new RockLibLoggerProvider(logger);
 
-        [Fact]
-        public void ConstructorSetsRockLibName()
-        {
-            var provider = new RockLibLoggerProvider("SomeRockName");
-
-            _nameField.GetValue(provider).Should().Be("SomeRockName");
+            provider.Logger.Should().BeSameAs(logger);
         }
 
         [Fact]
         public void CreateLoggerSucceeds()
         {
-            var provider = new RockLibLoggerProvider("SomeRockLibName");
-            var logger = provider.CreateLogger("SomeCategory");
+            var logger = new Mock<ILogger>().Object;
 
-            ((ILogger) _loggerField.GetValue(logger)).Name.Should().Be("SomeRockLibName");
-            _categoryField.GetValue(logger).Should().Be("SomeCategory");
+            var provider = new RockLibLoggerProvider(logger);
+
+            var rockLibLogger = (RockLibLogger)provider.CreateLogger("SomeCategory");
+
+            rockLibLogger.Logger.Should().BeSameAs(logger);
+            rockLibLogger.CategoryName.Should().Be("SomeCategory");
         }
     }
 }
