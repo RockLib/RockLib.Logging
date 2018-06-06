@@ -19,20 +19,27 @@ namespace RockLib.Logging.AspNetCore
         /// </summary>
         /// <param name="builder">The IWebHostBuilder being extended.</param>
         /// <param name="rockLibLoggerName">The name of the RockLib logger used for logging.</param>
+        /// <param name="setConfigRoot">
+        /// Whether to call <see cref="Config.SetRoot(IConfiguration)"/> prior to calling
+        /// <see cref="LoggerFactory.GetInstance"/>. This value is true by default, because, by default,
+        /// the <see cref="LoggerFactory"/> uses <see cref="Config.Root"/> as the backing data source for its
+        /// <see cref="LoggerFactory.Loggers"/> property. If <see cref="LoggerFactory.Loggers"/> is set
+        /// programatically, this value can be false.
+        /// </param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
         /// This method has a side-effect of calling the <see cref="Config.SetRoot(IConfiguration)"/>
         /// method, passing it the instance of <see cref="IConfiguration"/> obtained from the local
         /// <see cref="IServiceProvider"/>.
         /// </remarks>
-        public static IWebHostBuilder UseRockLib(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName)
+        public static IWebHostBuilder UseRockLib(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName, bool setConfigRoot = true)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
 
             builder.ConfigureServices(services =>
             {
-                services.AddLoggerFromLoggerFactory(rockLibLoggerName);
+                services.AddLoggerFromLoggerFactory(rockLibLoggerName, setConfigRoot);
                 services.AddRockLibLoggerProvider();
             });
 
@@ -47,7 +54,7 @@ namespace RockLib.Logging.AspNetCore
         /// <param name="logger">The RockLib logger used for logging.</param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
-        /// This extension method, unlike the <see cref="UseRockLib(IWebHostBuilder, string)"/> overload, does not
+        /// This extension method, unlike the <see cref="UseRockLib(IWebHostBuilder, string, bool)"/> overload, does not
         /// have any side-effects. As such, applications using this extension method many need to call the
         /// <see cref="Config.SetRoot(IConfiguration)"/> method in the constructor of their <code>Startup</code> class.
         /// </remarks>
@@ -67,11 +74,11 @@ namespace RockLib.Logging.AspNetCore
             return builder;
         }
 
-        private static void AddLoggerFromLoggerFactory(this IServiceCollection services, string rockLibLoggerName)
+        private static void AddLoggerFromLoggerFactory(this IServiceCollection services, string rockLibLoggerName, bool setConfigRoot)
         {
             services.AddSingleton<ILogger>(serviceProvider =>
             {
-                if (!Config.IsLocked)
+                if (setConfigRoot && !Config.IsLocked && Config.IsDefault)
                 {
                     var configuration = serviceProvider.GetService<IConfiguration>();
                     Config.SetRoot(configuration);
