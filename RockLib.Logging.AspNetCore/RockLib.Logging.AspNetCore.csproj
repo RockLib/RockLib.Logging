@@ -6,14 +6,14 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.AspNetCore</PackageId>
-    <PackageVersion>1.0.0-alpha02</PackageVersion>
+    <PackageVersion>1.0.0-alpha03</PackageVersion>
     <Authors>Quicken Loans</Authors>
     <Description>Extensions to create hooks into Microsoft.Extensions.Logging</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Copyright>Copyright 2018 (c) Quicken Loans Corporation. All rights reserved.</Copyright>
     <PackageTags>RockLib Logging Logger Extensions</PackageTags>
-    <Version>1.0.0-alpha02</Version>
+    <Version>1.0.0-alpha03</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
