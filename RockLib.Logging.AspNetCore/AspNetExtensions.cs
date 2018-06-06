@@ -32,7 +32,7 @@ namespace RockLib.Logging.AspNetCore
         /// method, passing it the instance of <see cref="IConfiguration"/> obtained from the local
         /// <see cref="IServiceProvider"/>.
         /// </remarks>
-        public static IWebHostBuilder UseRockLib(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName, bool setConfigRoot = true)
+        public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName, bool setConfigRoot = true)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
@@ -54,11 +54,11 @@ namespace RockLib.Logging.AspNetCore
         /// <param name="logger">The RockLib logger used for logging.</param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
-        /// This extension method, unlike the <see cref="UseRockLib(IWebHostBuilder, string, bool)"/> overload, does not
+        /// This extension method, unlike the <see cref="UseRockLibLogging(IWebHostBuilder, string, bool)"/> overload, does not
         /// have any side-effects. As such, applications using this extension method many need to call the
         /// <see cref="Config.SetRoot(IConfiguration)"/> method in the constructor of their <code>Startup</code> class.
         /// </remarks>
-        public static IWebHostBuilder UseRockLib(this IWebHostBuilder builder, ILogger logger)
+        public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, ILogger logger)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));

@@ -16,7 +16,7 @@ namespace RockLib.Logging.AspNetCore.Tests
         [Fact]
         public void UseRockLibExtension1ThrowsOnNullBuilder()
         {
-            Action action = () => ((IWebHostBuilder)null).UseRockLib();
+            Action action = () => ((IWebHostBuilder)null).UseRockLibLogging();
 
             action.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: builder");
         }
@@ -46,7 +46,7 @@ namespace RockLib.Logging.AspNetCore.Tests
                 ServiceCollection = servicesCollectionMock.Object
             };
 
-            fakeBuilder.UseRockLib("SomeRockLibName");
+            fakeBuilder.UseRockLibLogging("SomeRockLibName");
 
             servicesCollectionMock.Verify(lfm => lfm.Add(It.IsAny<ServiceDescriptor>()), Times.Exactly(2));
 
@@ -64,7 +64,7 @@ namespace RockLib.Logging.AspNetCore.Tests
         {
             var actualLogger = new Mock<ILogger>().Object;
 
-            Action action = () => ((IWebHostBuilder)null).UseRockLib(actualLogger);
+            Action action = () => ((IWebHostBuilder)null).UseRockLibLogging(actualLogger);
 
             action.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: builder");
         }
@@ -74,7 +74,7 @@ namespace RockLib.Logging.AspNetCore.Tests
         {
             var webHostBuilder = new Mock<IWebHostBuilder>().Object;
 
-            Action action = () => webHostBuilder.UseRockLib((ILogger)null);
+            Action action = () => webHostBuilder.UseRockLibLogging((ILogger)null);
 
             action.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.\r\nParameter name: logger");
         }
@@ -99,7 +99,7 @@ namespace RockLib.Logging.AspNetCore.Tests
                 ServiceCollection = servicesCollectionMock.Object
             };
 
-            fakeBuilder.UseRockLib(actualLogger);
+            fakeBuilder.UseRockLibLogging(actualLogger);
 
             servicesCollectionMock.Verify(lfm => lfm.Add(It.IsAny<ServiceDescriptor>()), Times.Exactly(2));
 
