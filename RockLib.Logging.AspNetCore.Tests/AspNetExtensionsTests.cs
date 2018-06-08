@@ -14,7 +14,7 @@ namespace RockLib.Logging.AspNetCore.Tests
     public class AspNetExtensionsTests
     {
         [Fact]
-        public void UseRockLibExtension1ThrowsOnNullBuilder()
+        public void UseRockLibLoggingExtension1ThrowsOnNullBuilder()
         {
             Action action = () => ((IWebHostBuilder)null).UseRockLibLogging();
 
@@ -22,7 +22,7 @@ namespace RockLib.Logging.AspNetCore.Tests
         }
 
         [Fact]
-        public void UseRockLibExtension1AddsLoggerAndProvider()
+        public void UseRockLibLoggingExtension1AddsLoggerAndProvider()
         {
             if (!Config.IsLocked)
             {
@@ -60,7 +60,7 @@ namespace RockLib.Logging.AspNetCore.Tests
         }
 
         [Fact]
-        public void UseRockLibExtension2ThrowsOnNullBuilder()
+        public void UseRockLibLoggingExtension2ThrowsOnNullBuilder()
         {
             var actualLogger = new Mock<ILogger>().Object;
 
@@ -70,7 +70,7 @@ namespace RockLib.Logging.AspNetCore.Tests
         }
 
         [Fact]
-        public void UseRockLibExtension2ThrowsOnNullLogger()
+        public void UseRockLibLoggingExtension2ThrowsOnNullLogger()
         {
             var webHostBuilder = new Mock<IWebHostBuilder>().Object;
 
@@ -80,7 +80,7 @@ namespace RockLib.Logging.AspNetCore.Tests
         }
 
         [Fact]
-        public void UseRockLibExtension2AddsLoggerAndProvider()
+        public void UseRockLibLoggingExtension2AddsLoggerAndProvider()
         {
             var actualLogger = new Mock<ILogger>().Object;
 
