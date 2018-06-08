@@ -26,13 +26,16 @@ namespace RockLib.Logging.AspNetCore
         /// <see cref="LoggerFactory.Loggers"/> property. If <see cref="LoggerFactory.Loggers"/> is set
         /// programatically, this value can be false.
         /// </param>
+        /// <param name="bypassAspNetCoreLogging">
+        /// Whether to bypass registering an <see cref="ILoggerProvider"/> with the DI system.
+        /// </param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
         /// This method has a side-effect of calling the <see cref="Config.SetRoot(IConfiguration)"/>
         /// method, passing it the instance of <see cref="IConfiguration"/> obtained from the local
         /// <see cref="IServiceProvider"/>.
         /// </remarks>
-        public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName, bool setConfigRoot = true)
+        public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName, bool setConfigRoot = true, bool bypassAspNetCoreLogging = false)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
@@ -40,7 +43,8 @@ namespace RockLib.Logging.AspNetCore
             builder.ConfigureServices(services =>
             {
                 services.AddLoggerFromLoggerFactory(rockLibLoggerName, setConfigRoot);
-                services.AddRockLibLoggerProvider();
+                if (!bypassAspNetCoreLogging)
+                    services.AddRockLibLoggerProvider();
             });
 
             return builder;
@@ -52,13 +56,16 @@ namespace RockLib.Logging.AspNetCore
         /// </summary>
         /// <param name="builder">The IWebHostBuilder being extended.</param>
         /// <param name="logger">The RockLib logger used for logging.</param>
+        /// <param name="bypassAspNetCoreLogging">
+        /// Whether to bypass registering an <see cref="ILoggerProvider"/> with the DI system.
+        /// </param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
-        /// This extension method, unlike the <see cref="UseRockLibLogging(IWebHostBuilder, string, bool)"/> overload, does not
+        /// This extension method, unlike the <see cref="UseRockLibLogging(IWebHostBuilder, string, bool, bool)"/> overload, does not
         /// have any side-effects. As such, applications using this extension method many need to call the
         /// <see cref="Config.SetRoot(IConfiguration)"/> method in the constructor of their <code>Startup</code> class.
         /// </remarks>
-        public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, ILogger logger)
+        public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, ILogger logger, bool bypassAspNetCoreLogging = false)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
@@ -68,7 +75,8 @@ namespace RockLib.Logging.AspNetCore
             builder.ConfigureServices(services =>
             {
                 services.AddSingleton<ILogger>(logger);
-                services.AddRockLibLoggerProvider();
+                if (!bypassAspNetCoreLogging)
+                    services.AddRockLibLoggerProvider();
             });
 
             return builder;

@@ -60,6 +60,39 @@ namespace RockLib.Logging.AspNetCore.Tests
         }
 
         [Fact]
+        public void UseRockLibLoggingExtension1WithBypassAddsLoggerButNotProvider()
+        {
+            if (!Config.IsLocked)
+            {
+                var dummy = Config.Root;
+            }
+
+            var actualLogger = LoggerFactory.GetInstance("SomeRockLibName");
+
+            var serviceDescriptors = new List<ServiceDescriptor>();
+
+            var servicesCollectionMock = new Mock<IServiceCollection>();
+            servicesCollectionMock
+                .Setup(scm => scm.Add(It.IsAny<ServiceDescriptor>()))
+                .Callback<ServiceDescriptor>(sd => serviceDescriptors.Add(sd));
+
+            var serviceProviderMock = new Mock<IServiceProvider>();
+            serviceProviderMock.Setup(m => m.GetService(typeof(ILogger))).Returns(actualLogger);
+
+            var fakeBuilder = new FakeWebHostBuilder()
+            {
+                ServiceCollection = servicesCollectionMock.Object
+            };
+
+            fakeBuilder.UseRockLibLogging("SomeRockLibName", bypassAspNetCoreLogging:true);
+
+            servicesCollectionMock.Verify(lfm => lfm.Add(It.IsAny<ServiceDescriptor>()), Times.Once);
+
+            var logger = (ILogger)serviceDescriptors[0].ImplementationFactory.Invoke(null);
+            logger.Should().BeSameAs(actualLogger);
+        }
+
+        [Fact]
         public void UseRockLibLoggingExtension2ThrowsOnNullBuilder()
         {
             var actualLogger = new Mock<ILogger>().Object;
@@ -110,6 +143,34 @@ namespace RockLib.Logging.AspNetCore.Tests
             // The second thing we happen to register is the RockLib.Logging.AspNetCore.RockLibLoggerProvider
             var provider = (RockLibLoggerProvider)serviceDescriptors[1].ImplementationFactory.Invoke(serviceProviderMock.Object);
             provider.Logger.Should().BeSameAs(actualLogger);
+        }
+
+        [Fact]
+        public void UseRockLibLoggingExtension2WithBypassAddsLoggerButNotProvider()
+        {
+            var actualLogger = new Mock<ILogger>().Object;
+
+            var serviceDescriptors = new List<ServiceDescriptor>();
+
+            var servicesCollectionMock = new Mock<IServiceCollection>();
+            servicesCollectionMock
+                .Setup(scm => scm.Add(It.IsAny<ServiceDescriptor>()))
+                .Callback<ServiceDescriptor>(sd => serviceDescriptors.Add(sd));
+
+            var serviceProviderMock = new Mock<IServiceProvider>();
+            serviceProviderMock.Setup(m => m.GetService(typeof(ILogger))).Returns(actualLogger);
+
+            var fakeBuilder = new FakeWebHostBuilder()
+            {
+                ServiceCollection = servicesCollectionMock.Object
+            };
+
+            fakeBuilder.UseRockLibLogging(actualLogger, true);
+
+            servicesCollectionMock.Verify(lfm => lfm.Add(It.IsAny<ServiceDescriptor>()), Times.Once);
+
+            var logger = (ILogger)serviceDescriptors[0].ImplementationInstance;
+            logger.Should().BeSameAs(actualLogger);
         }
 
         private class FakeWebHostBuilder : IWebHostBuilder
