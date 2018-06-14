@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RockLib.Reflection.Optimized;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -166,7 +167,7 @@ namespace RockLib.Logging
 
         private static Action<LogEntry, object> GetSetExtendedPropertyAction(PropertyInfo property)
         {
-            var getPropertyValue = property.GetGetFunc();
+            var getPropertyValue = property.CreateGetter();
             return (logEntry, extendedPropertiesObject) =>
                 logEntry.ExtendedProperties[property.Name] = getPropertyValue(extendedPropertiesObject);
         }
