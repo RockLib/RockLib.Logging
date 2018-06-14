@@ -7,6 +7,9 @@ only_commits:
   - RockLib.Logging.Tests/
   - RockLib.Logging.sln
   - RockLib.Logging.appveyor.yml
+  - .gitmodules
+install:
+  - git submodule update --init --recursive --remote
 before_build:
 - ps: |
     # The path to the solution to restore.
