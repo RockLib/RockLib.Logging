@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RockLib.Reflection.Optimized;
+using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 
 namespace RockLib.Logging
 {
@@ -138,7 +140,7 @@ namespace RockLib.Logging
 
         private static Func<StringBuilder, Exception, string, StringBuilder> GetAppendPropertyValueFunc(PropertyInfo property)
         {
-            var getPropertyValue = property.GetGetFunc();
+            var getPropertyValue = property.CreateGetter();
 
             if (property.Name == "HResult")
             {
@@ -271,14 +273,14 @@ namespace RockLib.Logging
                     return;
                 }
 
-                var getEntityValidationErrors = entityValidationErrorsProperty.GetGetFunc<object, IEnumerable>();
-                var isValid = isValidProperty.GetGetFunc<object, bool>();
-                var getEntry = entryProperty.GetGetFunc<object, object>();
-                var getEntity = entityProperty.GetGetFunc<object, object>();
+                var getEntityValidationErrors = entityValidationErrorsProperty.CreateGetter<IEnumerable>();
+                var isValid = isValidProperty.CreateGetter<bool>();
+                var getEntry = entryProperty.CreateGetter();
+                var getEntity = entityProperty.CreateGetter();
                 var getObjectType = GetGetObjectTypeFunc(getObjectTypeMethod);
-                var getValidationErrors = validataionErrorsProperty.GetGetFunc<object, IEnumerable>();
-                var getPropertyName = propertyNameProperty.GetGetFunc<object, string>();
-                var getErrorMessage = errorMessageProperty.GetGetFunc<object, string>();
+                var getValidationErrors = validataionErrorsProperty.CreateGetter<IEnumerable>();
+                var getPropertyName = propertyNameProperty.CreateGetter<string>();
+                var getErrorMessage = errorMessageProperty.CreateGetter<string>();
 
                 dbEntityValidationExceptionType = localDbEntityValidationExceptionType;
                 addValidationErrorMessages = (exception, sb, indention) =>
@@ -350,19 +352,40 @@ namespace RockLib.Logging
             }
         }
 
+        // TODO: remove this method and the following class when method invocation is available from RockLib.Reflection.Optimized.
         private static Func<Type, Type> GetGetObjectTypeFunc(MethodInfo getObjectTypeMethod)
         {
-            var typeParameter = Expression.Parameter(typeof(Type), "type");
+            var invoker = new GetObjectTypeInvoker(getObjectTypeMethod);
+            ThreadPool.QueueUserWorkItem(state => ((GetObjectTypeInvoker)state).SetFunc(), invoker);
+            return invoker.GetObjectType;
+        }
 
-            var body = Expression.Call(getObjectTypeMethod, typeParameter);
+        private class GetObjectTypeInvoker
+        {
+            public readonly MethodInfo Method;
+            public Func<Type, Type> Func;
+            public GetObjectTypeInvoker(MethodInfo method)
+            {
+                Method = method;
+                Func = type => (Type)method.Invoke(null, new object[] { type });
+            }
 
-            var lambda =
-                    Expression.Lambda<Func<Type, Type>>(
-                        body,
-                        "GetObjectType",
-                        new[] { typeParameter });
+            public Type GetObjectType(Type type) => Func.Invoke(type);
 
-            return lambda.Compile();
+            public void SetFunc()
+            {
+                var typeParameter = Expression.Parameter(typeof(Type), "type");
+
+                var body = Expression.Call(Method, typeParameter);
+
+                var lambda =
+                        Expression.Lambda<Func<Type, Type>>(
+                            body,
+                            "GetObjectType",
+                            new[] { typeParameter });
+
+                Func = lambda.Compile();
+            }
         }
     }
 }
