@@ -1,0 +1,3 @@
+[submodule "RockLib.Reflection.Optimized"]
+	path = RockLib.Reflection.Optimized
+	url = git@github.com:RockLib/RockLib.Reflection.Optimized.git
