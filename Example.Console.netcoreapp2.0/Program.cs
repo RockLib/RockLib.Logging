@@ -7,12 +7,18 @@ namespace Example
     {
         static void Main(string[] args)
         {
-            using (Logger logger = LoggerFactory.GetInstance())
+            try
             {
+                Logger logger = LoggerFactory.GetInstance();
+
                 var service = new ExampleService(logger);
 
                 service.DoSomethingDangerous(123, "abc");
                 service.DoSomethingDangerous(42, "What do you mean? African or European swallow?");
+            }
+            finally
+            {
+                LoggerFactory.ShutDown();
             }
 
             Console.WriteLine();

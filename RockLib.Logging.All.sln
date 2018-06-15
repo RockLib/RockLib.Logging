@@ -9,13 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Tests", "Ro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Console.netcoreapp2.0", "Example.Console.netcoreapp2.0\Example.Console.netcoreapp2.0.csproj", "{A1A62E80-9297-45D9-A1BF-972BF692D2DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.AspNetCore.Console.netcoreapp2.0", "Example.AspNetCore.Console.netcoreapp2.0\Example.AspNetCore.Console.netcoreapp2.0.csproj", "{3752D80E-9B52-42F5-BBF9-CD5CE93ECE34}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore", "RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj", "{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{1E143C4D-C527-4038-8CD3-5F26EC7E644B}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RockLib.Reflection.Optimized.Shared", "RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.shproj", "{1F65CBB1-529E-407C-B7D6-8BE5A59EBE14}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.AspNetCore", "Example.AspNetCore\Example.AspNetCore.csproj", "{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -38,10 +38,6 @@ Global
 		{A1A62E80-9297-45D9-A1BF-972BF692D2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1A62E80-9297-45D9-A1BF-972BF692D2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1A62E80-9297-45D9-A1BF-972BF692D2DA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3752D80E-9B52-42F5-BBF9-CD5CE93ECE34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3752D80E-9B52-42F5-BBF9-CD5CE93ECE34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3752D80E-9B52-42F5-BBF9-CD5CE93ECE34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3752D80E-9B52-42F5-BBF9-CD5CE93ECE34}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -50,6 +46,10 @@ Global
 		{1E143C4D-C527-4038-8CD3-5F26EC7E644B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E143C4D-C527-4038-8CD3-5F26EC7E644B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E143C4D-C527-4038-8CD3-5F26EC7E644B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
