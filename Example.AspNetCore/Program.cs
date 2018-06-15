@@ -11,7 +11,7 @@ using RockLib.Configuration;
 using RockLib.Logging;
 using RockLib.Logging.AspNetCore;
 
-namespace Example.AspNetCore.netcoreapp2._0
+namespace Example.AspNetCore
 {
     public class Program
     {

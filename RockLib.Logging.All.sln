@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RockLib.Reflection.Optimized.Shared", "RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.shproj", "{1F65CBB1-529E-407C-B7D6-8BE5A59EBE14}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.AspNetCore.netcoreapp2.0", "Example.AspNetCore.netcoreapp2.0\Example.AspNetCore.netcoreapp2.0.csproj", "{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.AspNetCore", "Example.AspNetCore\Example.AspNetCore.csproj", "{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
