@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RockLib.Logging" Version="1.0.0-alpha08" />
+    <PackageReference Include="RockLib.Logging" Version="1.0.0" />
   </ItemGroup>
-
-  <!--<ItemGroup>
-    <ProjectReference Include="..\RockLib.Logging\RockLib.Logging.csproj" />
-  </ItemGroup>-->
 
   <ItemGroup>
     <None Update="appsettings.json">
