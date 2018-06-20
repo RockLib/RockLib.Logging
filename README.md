@@ -3,7 +3,7 @@
 *A simple logging library.*
 
 ```powershell
-PM> Install-Package RockLib.Logging -IncludePrerelease
+PM> Install-Package RockLib.Logging
 ```
 
 ### Table of contents
