@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Xunit;
 
@@ -179,6 +180,21 @@ namespace RockLib.Logging.Tests
 
             logEntry.ExtendedProperties[nameof(foo)].Should().BeSameAs(foo);
             logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
+        }
+
+        [Fact]
+        public void SetExtendedPropertiesMapsHashtableItemsWithStringKeysToExtendedProperties()
+        {
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
+
+            var foo = 123;
+            var bar = "abc";
+
+            logEntry.SetExtendedProperties(new Hashtable { { nameof(foo), foo }, { nameof(bar), bar }, { 123, "this item does not have a string key" } });
+
+            logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
+            logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
+            logEntry.ExtendedProperties.Count.Should().Be(2);
         }
 
         [Fact]

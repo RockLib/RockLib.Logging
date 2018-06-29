@@ -156,12 +156,15 @@ namespace RockLib.Logging
         {
             if (extendedProperties == null)
                 return;
-            if (extendedProperties is IEnumerable<KeyValuePair<string, object>> dictionary)
-                foreach (var item in dictionary)
+            if (extendedProperties is IEnumerable<KeyValuePair<string, object>> stringDictionary)
+                foreach (var item in stringDictionary)
                     ExtendedProperties[item.Key] = item.Value;
             else if (TryGetStringDictionaryItemAccessors(extendedProperties, out var getKey, out var getValue))
                 foreach (object item in (IEnumerable)extendedProperties)
                     ExtendedProperties[getKey(item)] = getValue(item);
+            if (extendedProperties is IDictionary dictionary)
+                foreach (var key in dictionary.Keys.OfType<string>())
+                    ExtendedProperties[key] = dictionary[key];
             else
                 foreach (var setExtendedProperty in GetSetExtendedPropertyActions(extendedProperties.GetType()))
                     setExtendedProperty(this, extendedProperties);
