@@ -126,16 +126,58 @@ namespace RockLib.Logging.Tests
         }
 
         [Fact]
-        public void SetExtendedPropertiesMapsDictionaryItemsToExtendedProperties()
+        public void SetExtendedPropertiesMapsStringObjectDictionaryItemsToExtendedProperties()
         {
             var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
             var foo = 123;
             var bar = "abc";
 
-            logEntry.SetExtendedProperties(new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
+            logEntry.SetExtendedProperties(new Dictionary<string, object> { { nameof(foo), foo }, { nameof(bar), bar } });
 
             logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
+            logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
+        }
+
+        [Fact]
+        public void SetExtendedPropertiesMapsStringStringDictionaryItemsToExtendedProperties()
+        {
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
+
+            var foo = "123";
+            var bar = "abc";
+
+            logEntry.SetExtendedProperties(new Dictionary<string, string> { { nameof(foo), foo }, { nameof(bar), bar } });
+
+            logEntry.ExtendedProperties[nameof(foo)].Should().BeSameAs(foo);
+            logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
+        }
+
+        [Fact]
+        public void SetExtendedPropertiesMapsStringIntDictionaryItemsToExtendedProperties()
+        {
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
+
+            var foo = 123;
+            var bar = 456;
+
+            logEntry.SetExtendedProperties(new Dictionary<string, int> { { nameof(foo), foo }, { nameof(bar), bar } });
+
+            logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
+            logEntry.ExtendedProperties[nameof(bar)].Should().Be(bar);
+        }
+
+        [Fact]
+        public void SetExtendedPropertiesMapsStringOtherDictionaryItemsToExtendedProperties()
+        {
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
+
+            var foo = new Qux(123);
+            var bar = new Qux(456);
+
+            logEntry.SetExtendedProperties(new Dictionary<string, Qux> { { nameof(foo), foo }, { nameof(bar), bar } });
+
+            logEntry.ExtendedProperties[nameof(foo)].Should().BeSameAs(foo);
             logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
         }
 
@@ -155,6 +197,12 @@ namespace RockLib.Logging.Tests
             var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 
             logEntry.GetExceptionData().Should().NotBeNull();
+        }
+
+        private class Qux
+        {
+            public Qux(int garply) => Garply = garply;
+            public int Garply { get; }
         }
     }
 }

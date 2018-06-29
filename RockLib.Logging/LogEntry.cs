@@ -1,5 +1,6 @@
 ﻿using RockLib.Reflection.Optimized;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace RockLib.Logging
         private const BindingFlags PublicInstance = BindingFlags.Public | BindingFlags.Instance;
 
         private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setExtendedPropertyActionsCache = new ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>>();
+
+        private static readonly ConcurrentDictionary<Type, (Func<object, string> getKey, Func<object, object> getValue)> _stringDictionaryItemAccessors = new ConcurrentDictionary<Type, (Func<object, string>, Func<object, object>)>();
 
         private LogLevel _level;
 
@@ -153,12 +156,43 @@ namespace RockLib.Logging
         {
             if (extendedProperties == null)
                 return;
-            if (extendedProperties is IDictionary<string, object> dictionary)
+            if (extendedProperties is IEnumerable<KeyValuePair<string, object>> dictionary)
                 foreach (var item in dictionary)
                     ExtendedProperties[item.Key] = item.Value;
+            else if (TryGetStringDictionaryItemAccessors(extendedProperties, out var getKey, out var getValue))
+                foreach (object item in (IEnumerable)extendedProperties)
+                    ExtendedProperties[getKey(item)] = getValue(item);
             else
                 foreach (var setExtendedProperty in GetSetExtendedPropertyActions(extendedProperties.GetType()))
                     setExtendedProperty(this, extendedProperties);
+        }
+
+        private static bool TryGetStringDictionaryItemAccessors(object extendedProperties, out Func<object, string> getKey, out Func<object, object> getValue)
+        {
+            (getKey, getValue) = _stringDictionaryItemAccessors.GetOrAdd(extendedProperties.GetType(), CreateStringDictionaryItemAccessors);
+            return getKey != null && getValue != null;
+        }
+
+        private static (Func<object, string>, Func<object, object>) CreateStringDictionaryItemAccessors(Type type)
+        {
+            var kvpValueTypes =
+               (from typeInterface in type.GetInterfaces()
+                where typeInterface.IsGenericType && typeInterface.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                let enumerableType = typeInterface.GetGenericArguments()[0]
+                where enumerableType.IsGenericType && enumerableType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)
+                let kvpTypeArgs = enumerableType.GetGenericArguments()
+                where kvpTypeArgs[0] == typeof(string)
+                select kvpTypeArgs[1]).ToList();
+
+            if (kvpValueTypes.Count != 1)
+                return (null, null);
+
+            var kvpType = typeof(KeyValuePair<,>).MakeGenericType(typeof(string), kvpValueTypes[0]);
+
+            var keyProperty = kvpType.GetProperty("Key");
+            var valueProperty = kvpType.GetProperty("Value");
+
+            return (keyProperty.CreateGetter<string>(), valueProperty.CreateGetter());
         }
 
         private static IReadOnlyCollection<Action<LogEntry, object>> GetSetExtendedPropertyActions(Type type) =>
