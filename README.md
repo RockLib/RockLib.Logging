@@ -187,7 +187,7 @@ class Program
 
 ### Configuration
 
-The `LoggerFactory` class retrieves its default loggers from configuration using the [RockLib.Configuration](https://github.com/RockLib/RockLib.Configuration/tree/develop/RockLib.Configuration) and [RockLib.Configuration.ObjectFactory](https://github.com/RockLib/RockLib.Configuration/tree/develop/RockLib.Configuration.ObjectFactory) packages. The easiest way add logging to your application by configuration is with an `appsettings.json` file.
+The `LoggerFactory` class retrieves its default loggers from configuration using the [RockLib.Configuration](https://github.com/RockLib/RockLib.Configuration/tree/master/RockLib.Configuration) and [RockLib.Configuration.ObjectFactory](https://github.com/RockLib/RockLib.Configuration/tree/master/RockLib.Configuration.ObjectFactory) packages. The easiest way add logging to your application by configuration is with an `appsettings.json` file.
 
 *This is a simple configuration defining a single logger with a single log provider.*
 
