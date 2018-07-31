@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +7,7 @@ namespace RockLib.Logging.AspNetCore
 {
     internal class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     {
-        private readonly Lazy<Stack<object>> _scope = new Lazy<Stack<object>>(() => new Stack<object>());
+        private readonly Lazy<ConcurrentStack<object>> _scope = new Lazy<ConcurrentStack<object>>(() => new ConcurrentStack<object>());
 
         public RockLibLogger(ILogger logger, string categoryName)
         {
@@ -100,9 +101,9 @@ namespace RockLib.Logging.AspNetCore
 
         private class DisposeScope : IDisposable
         {
-            private readonly Stack<object> _scope;
-            public DisposeScope(Stack<object> scope) => _scope = scope;
-            public void Dispose() => _scope.Pop();
+            private readonly ConcurrentStack<object> _scope;
+            public DisposeScope(ConcurrentStack<object> scope) => _scope = scope;
+            public void Dispose() => _scope.TryPop(out var throwaway);
         }
     }
 }
