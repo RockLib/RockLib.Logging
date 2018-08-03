@@ -15,7 +15,7 @@ namespace RockLib.Logging
     /// </summary>
     /// <remarks>
     /// This class is expensive to initialize and is intended to be a long-lived object.
-    /// With the exception of the <see cref="Dispose"/> method, all public instance members
+    /// With the exception of the <see cref="Dispose()"/> method, all public instance members
     /// of this class are thread-safe.
     /// </remarks>
     public sealed class Logger : ILogger, IDisposable
@@ -83,6 +83,9 @@ namespace RockLib.Logging
                 _trackingQueue.CompleteAdding();
                 _trackingQueue.Dispose();
             }
+
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => Dispose();
+            AppDomain.CurrentDomain.DomainUnload += (sender, eventArgs) => Dispose();
         }
 
         /// <summary>
@@ -200,16 +203,35 @@ namespace RockLib.Logging
         }
 
         /// <summary>
+        /// Disposes the logger, if not already disposed.
+        /// </summary>
+        ~Logger()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
         /// Shuts down the logger, blocking until all pending logs have been sent.
         /// </summary>
         public void Dispose()
         {
+            Dispose(true);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (_isDisposed)
+                return;
+
             lock (this)
             {
                 if (_isDisposed)
                     return;
 
                 _isDisposed = true;
+
+                if (disposing)
+                    GC.SuppressFinalize(this);
 
                 if (_canProcessLogs)
                 {
@@ -222,8 +244,9 @@ namespace RockLib.Logging
                     _trackingQueue.Dispose();
                 }
 
-                foreach (var provider in Providers.OfType<IDisposable>())
-                    provider.Dispose();
+                var providers = Providers?.GetEnumerator();
+                while (providers != null && providers.MoveNext())
+                    (providers.Current as IDisposable)?.Dispose();
             }
         }
     }
