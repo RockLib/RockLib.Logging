@@ -83,6 +83,9 @@ namespace RockLib.Logging
                 _trackingQueue.CompleteAdding();
                 _trackingQueue.Dispose();
             }
+
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => Dispose();
+            AppDomain.CurrentDomain.DomainUnload += (sender, eventArgs) => Dispose();
         }
 
         /// <summary>
@@ -200,31 +203,48 @@ namespace RockLib.Logging
         }
 
         /// <summary>
+        /// Disposes the logger, if not already disposed.
+        /// </summary>
+        ~Logger()
+        {
+            if (!_isDisposed)
+                DisposeLogger();
+        }
+
+        /// <summary>
         /// Shuts down the logger, blocking until all pending logs have been sent.
         /// </summary>
         public void Dispose()
         {
+            if (_isDisposed)
+                return;
+
             lock (this)
             {
                 if (_isDisposed)
                     return;
 
                 _isDisposed = true;
-
-                if (_canProcessLogs)
-                {
-                    _processingQueue.CompleteAdding();
-                    _processingThread.Join();
-                    _processingQueue.Dispose();
-
-                    _trackingQueue.CompleteAdding();
-                    _trackingThread.Join();
-                    _trackingQueue.Dispose();
-                }
-
-                foreach (var provider in Providers.OfType<IDisposable>())
-                    provider.Dispose();
+                GC.SuppressFinalize(this);
+                DisposeLogger();
             }
+        }
+
+        private void DisposeLogger()
+        {
+            if (_canProcessLogs)
+            {
+                _processingQueue.CompleteAdding();
+                _processingThread.Join();
+                _processingQueue.Dispose();
+
+                _trackingQueue.CompleteAdding();
+                _trackingThread.Join();
+                _trackingQueue.Dispose();
+            }
+
+            foreach (var provider in Providers.OfType<IDisposable>())
+                provider.Dispose();
         }
     }
 }
