@@ -244,8 +244,9 @@ namespace RockLib.Logging
                     _trackingQueue.Dispose();
                 }
 
-                foreach (var provider in Providers.OfType<IDisposable>())
-                    provider.Dispose();
+                var providers = Providers?.GetEnumerator();
+                while (providers != null && providers.MoveNext())
+                    (providers.Current as IDisposable)?.Dispose();
             }
         }
     }
