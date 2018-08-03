@@ -93,8 +93,9 @@ namespace RockLib.Logging
         /// </summary>
         public static void ShutDown()
         {
-            foreach (var logger in Loggers)
-                logger.Dispose();
+            if (_loggers.IsLocked)
+                foreach (var logger in Loggers)
+                    logger.Dispose();
         }
 
         private static Logger FindLogger(string name) =>
