@@ -88,7 +88,7 @@ namespace RockLib.Logging
         }
 
         /// <summary>
-        /// Calls the <see cref="Logger.Dispose"/> method on each logger in the <see cref="Loggers"/> property,
+        /// Calls the <see cref="Logger.Dispose()"/> method on each logger in the <see cref="Loggers"/> property,
         /// blocking until any of their pending logging operations have completed.
         /// </summary>
         public static void ShutDown()

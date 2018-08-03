@@ -15,7 +15,7 @@ namespace RockLib.Logging
     /// </summary>
     /// <remarks>
     /// This class is expensive to initialize and is intended to be a long-lived object.
-    /// With the exception of the <see cref="Dispose"/> method, all public instance members
+    /// With the exception of the <see cref="Dispose()"/> method, all public instance members
     /// of this class are thread-safe.
     /// </remarks>
     public sealed class Logger : ILogger, IDisposable
@@ -207,14 +207,18 @@ namespace RockLib.Logging
         /// </summary>
         ~Logger()
         {
-            if (!_isDisposed)
-                DisposeLogger();
+            Dispose(false);
         }
 
         /// <summary>
         /// Shuts down the logger, blocking until all pending logs have been sent.
         /// </summary>
         public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        private void Dispose(bool disposing)
         {
             if (_isDisposed)
                 return;
@@ -225,26 +229,24 @@ namespace RockLib.Logging
                     return;
 
                 _isDisposed = true;
-                GC.SuppressFinalize(this);
-                DisposeLogger();
+
+                if (disposing)
+                    GC.SuppressFinalize(this);
+
+                if (_canProcessLogs)
+                {
+                    _processingQueue.CompleteAdding();
+                    _processingThread.Join();
+                    _processingQueue.Dispose();
+
+                    _trackingQueue.CompleteAdding();
+                    _trackingThread.Join();
+                    _trackingQueue.Dispose();
+                }
+
+                foreach (var provider in Providers.OfType<IDisposable>())
+                    provider.Dispose();
             }
-        }
-
-        private void DisposeLogger()
-        {
-            if (_canProcessLogs)
-            {
-                _processingQueue.CompleteAdding();
-                _processingThread.Join();
-                _processingQueue.Dispose();
-
-                _trackingQueue.CompleteAdding();
-                _trackingThread.Join();
-                _trackingQueue.Dispose();
-            }
-
-            foreach (var provider in Providers.OfType<IDisposable>())
-                provider.Dispose();
         }
     }
 }
