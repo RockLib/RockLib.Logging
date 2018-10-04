@@ -53,11 +53,25 @@ namespace RockLib.Logging
         /// <param name="level">The logging level of the logger.</param>
         /// <param name="providers">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
         /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
+        public Logger(string name, LogLevel level, IReadOnlyCollection<ILogProvider> providers, bool isDisabled)
+            : this(name, level, providers, isDisabled, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Logger"/> class.
+        /// </summary>
+        /// <param name="name">The name of the logger.</param>
+        /// <param name="level">The logging level of the logger.</param>
+        /// <param name="providers">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
+        /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
+        /// <param name="isSynchronous">A value indicating whether the logger is synchrnous.</param>
         public Logger(
             string name = DefaultName,
             LogLevel level = LogLevel.NotSet,
             IReadOnlyCollection<ILogProvider> providers = null,
-            bool isDisabled = false)
+            bool isDisabled = false, 
+            bool isSynchronous = false)
         {
             if (!Enum.IsDefined(typeof(LogLevel), level))
                 throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
@@ -66,22 +80,26 @@ namespace RockLib.Logging
             Level = level;
             Providers = providers ?? DefaultProviders;
             IsDisabled = isDisabled;
+            IsSynchronous = isSynchronous;
 
             _canProcessLogs = !IsDisabled && Providers.Count > 0;
 
-            if (_canProcessLogs)
+            if (!IsSynchronous)
             {
-                _processingThread = new Thread(ProcessLogEntries) { IsBackground = true };
-                _processingThread.Start();
-                _trackingThread = new Thread(TrackWriteTasks) { IsBackground = true };
-                _trackingThread.Start();
-            }
-            else
-            {
-                _processingQueue.CompleteAdding();
-                _processingQueue.Dispose();
-                _trackingQueue.CompleteAdding();
-                _trackingQueue.Dispose();
+                if (_canProcessLogs)
+                {
+                    _processingThread = new Thread(ProcessLogEntries) {IsBackground = true};
+                    _processingThread.Start();
+                    _trackingThread = new Thread(TrackWriteTasks) {IsBackground = true};
+                    _trackingThread.Start();
+                }
+                else
+                {
+                    _processingQueue.CompleteAdding();
+                    _processingQueue.Dispose();
+                    _trackingQueue.CompleteAdding();
+                    _trackingQueue.Dispose();
+                }
             }
 
             AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => Dispose();
@@ -113,6 +131,11 @@ namespace RockLib.Logging
         public bool IsDisabled { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the logger is synchronous.
+        /// </summary>
+        public bool IsSynchronous { get; }
+
+        /// <summary>
         /// Logs the specified log entry.
         /// </summary>
         /// <param name="logEntry">The log entry to log.</param>
@@ -127,6 +150,12 @@ namespace RockLib.Logging
         {
             if (logEntry == null) throw new ArgumentNullException(nameof(logEntry));
             if (_isDisposed) throw new ObjectDisposedException("Cannot log to a disposed Logger.");
+
+            if (IsSynchronous)
+            {
+                ProcessLogEntry(logEntry, callerMemberName, callerFilePath, callerLineNumber);
+                return;
+            }
 
             if (_canProcessLogs)
             {
@@ -145,13 +174,25 @@ namespace RockLib.Logging
         {
             foreach (var (logEntry, callerFilePath, callerMemberName, callerLineNumber) in _processingQueue.GetConsumingEnumerable())
             {
-                if (logEntry.Level < Level)
-                    continue;
+                ProcessLogEntry(logEntry, callerFilePath, callerMemberName, callerLineNumber);
+            }
+        }
 
-                logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
-                // TODO: Invoke any context providers
+        private void ProcessLogEntry(LogEntry logEntry, string callerFilePath, string callerMemberName, int callerLineNumber)
+        {
+            if (logEntry.Level < Level)
+                return;
 
-                foreach (var logProvider in Providers)
+            logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
+            // TODO: Invoke any context providers
+
+            foreach (var logProvider in Providers)
+            {
+                if (IsSynchronous)
+                {
+                    Sync.OverAsync(() => WriteToLogProvider(logProvider, logEntry, CancellationToken.None));
+                }
+                else
                 {
                     var source = new CancellationTokenSource();
                     var task = WriteToLogProvider(logProvider, logEntry, source.Token);
@@ -233,7 +274,7 @@ namespace RockLib.Logging
                 if (disposing)
                     GC.SuppressFinalize(this);
 
-                if (_canProcessLogs)
+                if (_canProcessLogs && !IsSynchronous)
                 {
                     _processingQueue.CompleteAdding();
                     _processingThread.Join();

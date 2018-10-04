@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -41,6 +42,31 @@ namespace RockLib.Logging.Tests
             var logger = new Logger(isDisabled: true);
 
             logger.IsDisabled.Should().Be(true);
+        }
+
+        [Fact]
+        public void IsSynchronousIsSetFromConstructor()
+        {
+            var logger = new Logger(isSynchronous: true);
+
+            logger.IsSynchronous.Should().Be(true);
+        }
+
+        [Fact]
+        public void NonOptionalConstructorSetsValues()
+        {
+            var name = "foo";
+            var level = LogLevel.Warn;
+            var providers = new ILogProvider[0];
+            var isDisabled = true;
+
+            var logger = new Logger(name, level, providers, isDisabled);
+
+            logger.Name.Should().Be(name);
+            logger.Level.Should().Be(level);
+            logger.Providers.Should().BeSameAs(providers);
+            logger.IsDisabled.Should().Be(isDisabled);
+            logger.IsSynchronous.Should().BeFalse();
         }
 
         [Fact]
@@ -186,6 +212,49 @@ namespace RockLib.Logging.Tests
             disposeThread.Join(); // ...which unblocks the logger's Dispose method allowing the thread to complete.
 
             logProvider.SentLogEntries.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void IsSynchronousLoggerDoesNotStartBackgroundThreads()
+        {
+            var logProviders = new[]
+            {
+                new SynchronousLogProvider()
+            };
+
+            var logger = new Logger(providers: logProviders, level: LogLevel.Info, isSynchronous: true);
+
+            var type = typeof(Logger);
+            var processingThreadField = type.GetField("_processingThread", BindingFlags.NonPublic | BindingFlags.Instance);
+            var trackingThreadField = type.GetField("_trackingThread", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            processingThreadField.GetValue(logger).Should().BeNull();
+            trackingThreadField.GetValue(logger).Should().BeNull();
+        }
+
+        [Fact]
+        public void IsSynchronousLoggerSendsLogToProvidersWithoutNeedingToDispose()
+        {
+            var logProviders = new[]
+            {
+                new SynchronousLogProvider(),
+                new SynchronousLogProvider()
+            };
+
+            var logger = new Logger(providers: logProviders, level: LogLevel.Info, isSynchronous: true);
+
+            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+
+            logger.Log(logEntry);
+
+            foreach (var logProvider in logProviders)
+            {
+                logProvider.SentLogEntries.Count.Should().Be(1);
+                var sentLogEntry = logProvider.SentLogEntries[0];
+                sentLogEntry.Should().BeSameAs(logEntry);
+            }
+
+            logger.Dispose();
         }
 
         private class SynchronousLogProvider : ILogProvider
