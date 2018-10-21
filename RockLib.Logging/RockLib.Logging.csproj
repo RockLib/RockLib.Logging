@@ -24,8 +24,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RockLib.Configuration" Version="2.2.0" />
-    <PackageReference Include="RockLib.Configuration.ObjectFactory" Version="1.1.4" />
+    <PackageReference Include="RockLib.Configuration" Version="2.2.1" />
+    <PackageReference Include="RockLib.Configuration.ObjectFactory" Version="1.2.0" />
     <PackageReference Include="RockLib.Diagnostics" Version="1.0.1" />
   </ItemGroup>
 
