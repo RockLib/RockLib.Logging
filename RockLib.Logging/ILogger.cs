@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace RockLib.Logging
 {
@@ -25,6 +26,11 @@ namespace RockLib.Logging
         /// not be logged by this logger.
         /// </remarks>
         LogLevel Level { get; }
+
+        /// <summary>
+        /// Gets the collection of <see cref="ILogProvider"/> objects used by this logger.
+        /// </summary>
+        IReadOnlyCollection<ILogProvider> Providers { get; }
 
         /// <summary>
         /// Logs the specified log entry.
