@@ -59,9 +59,9 @@ namespace RockLib.Logging.Tests
         public class LoggerFactory_
         {
             [Fact]
-            public void CallingSetLoggersWithNullLoggersThrowsArgumentNullException()
+            public void CallingSetConfigurationWithNullConfigurationThrowsArgumentNullException()
             {
-                Assert.Throws<ArgumentNullException>(() => LoggerFactory.SetLoggers(null));
+                Assert.Throws<ArgumentNullException>(() => LoggerFactory.SetConfiguration(null));
             }
         }
 

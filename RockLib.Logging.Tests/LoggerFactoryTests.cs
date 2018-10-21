@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
-using RockLib.Configuration;
+using Microsoft.Extensions.Primitives;
 using RockLib.Immutable;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,10 +17,8 @@ namespace RockLib.Logging.Tests
         [Theory]
         [InlineData(Logger.DefaultName, typeof(FooLogProvider))]
         [InlineData("bar", typeof(BarLogProvider))]
-        public void CreateFromConfigWorksWithListOfLoggers(string name, Type expectedLogProviderType)
+        public void CreateLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
         {
-            ResetConfig();
-
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
@@ -29,65 +26,62 @@ namespace RockLib.Logging.Tests
                     ["rocklib.logging:1:name"] = "bar",
                     ["rocklib.logging:1:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
-                .Build();
+                .Build()
+                .GetSection("rocklib.logging");
 
-            Config.SetRoot(config);
-
-            var logger = LoggerFactory.CreateFromConfig(name);
+            var logger = config.CreateLogger(name);
 
             logger.Name.Should().Be(name);
             logger.Providers.Count.Should().Be(1);
             logger.Providers.First().Should().BeOfType(expectedLogProviderType);
+
+            config.CreateLogger(name).Should().NotBeSameAs(logger);
         }
 
         [Fact]
-        public void CreateFromConfigWorksWithSingleUnnamedLogger()
+        public void CreateLoggerWorksWithSingleUnnamedLogger()
         {
-            ResetConfig();
-
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                 })
-                .Build();
+                .Build()
+                .GetSection("rocklib.logging");
 
-            Config.SetRoot(config);
-
-            var logger = LoggerFactory.CreateFromConfig();
+            var logger = config.CreateLogger();
 
             logger.Name.Should().Be(Logger.DefaultName);
             logger.Providers.Count.Should().Be(1);
             logger.Providers.First().Should().BeOfType(typeof(FooLogProvider));
+
+            config.CreateLogger().Should().NotBeSameAs(logger);
         }
 
         [Fact]
-        public void CreateFromConfigWorksWithSingleNamedLogger()
+        public void CreateLoggerWorksWithSingleNamedLogger()
         {
-            ResetConfig();
-
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     ["rocklib.logging:name"] = "bar",
                     ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
-                .Build();
+                .Build()
+                .GetSection("rocklib.logging");
 
-            Config.SetRoot(config);
-
-            var logger = LoggerFactory.CreateFromConfig("bar");
+            var logger = config.CreateLogger("bar");
 
             logger.Name.Should().Be("bar");
             logger.Providers.Count.Should().Be(1);
             logger.Providers.First().Should().BeOfType(typeof(BarLogProvider));
+
+            config.CreateLogger("bar").Should().NotBeSameAs(logger);
         }
 
         [Fact]
-        public void CreateFromConfigThrowsWhenNotFoundInListOfLoggers()
+        public void CreateLoggerThrowsWhenNotFoundInListOfLoggers()
         {
-            ResetConfig();
-
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
@@ -95,161 +89,285 @@ namespace RockLib.Logging.Tests
                     ["rocklib.logging:1:name"] = "bar",
                     ["rocklib.logging:1:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
-                .Build();
-
-            Config.SetRoot(config);
+                .Build()
+                .GetSection("rocklib.logging");
 
             var name = "baz";
-            Action action = () =>  LoggerFactory.CreateFromConfig(name);
+            Action action = () =>  config.CreateLogger(name);
 
-            action.ShouldThrow<KeyNotFoundException>().WithMessage($"The {LoggerFactory.SectionName} section in RockLib.Configuration.Config.Root does not contain a Logger configuration with the name '{name}'.");
+            action.ShouldThrow<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
         }
 
         [Fact]
-        public void CreateFromConfigThrowsWhenNotFoundInSingleLogger()
+        public void CreateLoggerThrowsWhenNotFoundInSingleLogger()
         {
-            ResetConfig();
-
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     ["rocklib.logging:name"] = "bar",
                     ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
-                .Build();
-
-            Config.SetRoot(config);
+                .Build()
+                .GetSection("rocklib.logging");
 
             var name = "baz";
-            Action action = () => LoggerFactory.CreateFromConfig(name);
+            Action action = () => config.CreateLogger(name);
 
-            action.ShouldThrow<KeyNotFoundException>().WithMessage($"The {LoggerFactory.SectionName} section in RockLib.Configuration.Config.Root does not contain a Logger configuration with the name '{name}'.");
+            action.ShouldThrow<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
         }
 
-        [Fact]
-        public void DefaultValueOfLoggersComesFromConfig()
+        [Theory]
+        [InlineData(Logger.DefaultName, typeof(FooLogProvider))]
+        [InlineData("bar", typeof(BarLogProvider))]
+        public void GetCachedLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
         {
-            ResetConfig();
-            ResetLoggerFactoryLoggers();
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:0:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:1:name"] = "bar",
+                    ["rocklib.logging:1:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("rocklib.logging");
 
-            LoggerFactory.Loggers.Count.Should().Be(1);
-            var logger = LoggerFactory.Loggers.First();
-            logger.Name.Should().Be("TestLogger");
-            logger.Level.Should().Be(LogLevel.Info);
+            var logger = config.GetCachedLogger(name);
+
+            logger.Name.Should().Be(name);
             logger.Providers.Count.Should().Be(1);
-            logger.Providers.First().Should().BeOfType<ConsoleLogProvider>();
-            var provider = (ConsoleLogProvider)logger.Providers.First();
-            provider.Level.Should().Be(LogLevel.Warn);
-            provider.Formatter.Should().BeOfType<TemplateLogFormatter>();
-            var formatter = (TemplateLogFormatter)provider.Formatter;
-            formatter.Template.Should().Be("foo bar");
+            logger.Providers.First().Should().BeOfType(expectedLogProviderType);
+
+            config.GetCachedLogger(name).Should().BeSameAs(logger);
         }
 
         [Fact]
-        public void CanSpecifyLoggersProgrammatically()
+        public void GetCachedLoggerWorksWithSingleUnnamedLogger()
         {
-            ResetLoggerFactoryLoggers();
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("rocklib.logging");
 
-            LoggerFactory.SetLoggers(new []
+            var logger = config.GetCachedLogger();
+
+            logger.Name.Should().Be(Logger.DefaultName);
+            logger.Providers.Count.Should().Be(1);
+            logger.Providers.First().Should().BeOfType(typeof(FooLogProvider));
+
+            config.GetCachedLogger().Should().BeSameAs(logger);
+        }
+
+        [Fact]
+        public void GetCachedLoggerWorksWithSingleNamedLogger()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:name"] = "bar",
+                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("rocklib.logging");
+
+            var logger = config.GetCachedLogger("bar");
+
+            logger.Name.Should().Be("bar");
+            logger.Providers.Count.Should().Be(1);
+            logger.Providers.First().Should().BeOfType(typeof(BarLogProvider));
+
+            config.GetCachedLogger("bar").Should().BeSameAs(logger);
+        }
+
+        [Fact]
+        public void GetCachedLoggerThrowsWhenNotFoundInListOfLoggers()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:0:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:1:name"] = "bar",
+                    ["rocklib.logging:1:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("rocklib.logging");
+
+            var name = "baz";
+            Action action = () => config.GetCachedLogger(name);
+
+            action.ShouldThrow<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
+        }
+
+        [Fact]
+        public void GetCachedLoggerThrowsWhenNotFoundInSingleLogger()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:name"] = "bar",
+                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("rocklib.logging");
+
+            var name = "baz";
+            Action action = () => config.GetCachedLogger(name);
+
+            action.ShouldThrow<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
+        }
+
+        [Fact]
+        public void SetConfigurationSetsTheConfigurationProperty()
+        {
+            var configurationField = GetSemimutableConfigurationField();
+
+            var existingConfig = configurationField.Value;
+            configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+
+            var config = new ConfigurationBuilder().Build();
+
+            LoggerFactory.SetConfiguration(config);
+
+            try
             {
-                new Logger("foo"),
-                new Logger("bar"),
-                new Logger("baz")
-            });
-
-            LoggerFactory.Loggers.Count.Should().Be(3);
-
-            LoggerFactory.Loggers.First().Name.Should().Be("foo");
-            LoggerFactory.Loggers.Skip(1).First().Name.Should().Be("bar");
-            LoggerFactory.Loggers.Skip(2).First().Name.Should().Be("baz");
+                LoggerFactory.Configuration.Should().BeSameAs(config);
+            }
+            finally
+            {
+                configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+                LoggerFactory.SetConfiguration(existingConfig);
+            }
         }
 
         [Fact]
-        public void GetInstanceWithNameReturnsTheLoggerWithTheSameName()
+        public void CreateCallsCreateLoggerWithConfigurationProperty()
         {
-            ResetLoggerFactoryLoggers();
+            var configurationField = GetSemimutableConfigurationField();
 
-            Logger expectedLogger = new Logger("foo");
+            var existingConfig = configurationField.Value;
+            configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
 
-            LoggerFactory.SetLoggers(new[] { expectedLogger });
+            var config = new InterceptingConfigurationSection(new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("RockLib.Logging"));
 
-            var logger = LoggerFactory.GetInstance("foo");
+            LoggerFactory.SetConfiguration(config);
 
-            logger.Should().BeSameAs(expectedLogger);
+            try
+            {
+                var logger = LoggerFactory.Create();
+
+                config.Usages.Should().BeGreaterThan(0);
+
+                logger.Name.Should().Be(Logger.DefaultName);
+                logger.Providers.Count.Should().Be(1);
+                logger.Providers.First().Should().BeOfType(typeof(FooLogProvider));
+
+                LoggerFactory.Create().Should().NotBeSameAs(logger);
+            }
+            finally
+            {
+                configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+                LoggerFactory.SetConfiguration(existingConfig);
+            }
         }
 
         [Fact]
-        public void GetInstanceWithNameReturnsTheLoggerWithTheSameCaseInsensitiveName()
+        public void GetCachedCallsGetCachedLoggerWithConfigurationProperty()
         {
-            ResetLoggerFactoryLoggers();
+            var configurationField = GetSemimutableConfigurationField();
 
-            Logger expectedLogger = new Logger("foo");
+            var existingConfig = configurationField.Value;
+            configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
 
-            LoggerFactory.SetLoggers(new[] { expectedLogger });
+            var config = new InterceptingConfigurationSection(new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("RockLib.Logging"));
 
-            var logger = LoggerFactory.GetInstance("FOO");
+            LoggerFactory.SetConfiguration(config);
 
-            logger.Should().BeSameAs(expectedLogger);
+            try
+            {
+                var logger = LoggerFactory.GetCached();
+
+                config.Usages.Should().BeGreaterThan(0);
+
+                logger.Name.Should().Be(Logger.DefaultName);
+                logger.Providers.Count.Should().Be(1);
+                logger.Providers.First().Should().BeOfType(typeof(FooLogProvider));
+
+                LoggerFactory.GetCached().Should().BeSameAs(logger);
+            }
+            finally
+            {
+                configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+                LoggerFactory.SetConfiguration(existingConfig);
+            }
         }
 
-        [Fact]
-        public void GetInstanceWithDefaultNameReturnsTheDefaultLogger()
+        private class InterceptingConfigurationSection : IConfigurationSection
         {
-            ResetLoggerFactoryLoggers();
+            private readonly IConfigurationSection _configuration;
 
-            var expectedLogger = new Logger();
+            public InterceptingConfigurationSection(IConfigurationSection configuration)
+            {
+                _configuration = configuration;
+            }
 
-            LoggerFactory.SetLoggers(new[] { expectedLogger });
+            public int Usages { get; private set; }
 
-            var logger = LoggerFactory.GetInstance();
+            public string this[string key]
+            {
+                get { Usages++;  return _configuration[key]; }
+                set { Usages++; _configuration[key] = value; }
+            }
 
-            logger.Should().BeSameAs(expectedLogger);
+            public string Key
+            {
+                get { Usages++; return _configuration.Key; }
+            }
+
+            public string Path
+            {
+                get { Usages++; return _configuration.Path; }
+            }
+
+            public string Value
+            {
+                get { Usages++; return _configuration.Value; }
+                set { Usages++; _configuration.Value = value; }
+            }
+
+            public IEnumerable<IConfigurationSection> GetChildren()
+            {
+                Usages++; return _configuration.GetChildren();
+            }
+
+            public IChangeToken GetReloadToken()
+            {
+                Usages++; return _configuration.GetReloadToken();
+            }
+
+            public IConfigurationSection GetSection(string key)
+            {
+                Usages++; return _configuration.GetSection(key);
+            }
         }
 
-        [Fact]
-        public void GetInstanceWithNullNameReturnsTheDefaultLogger()
+        private static Semimutable<IConfiguration> GetSemimutableConfigurationField()
         {
-            ResetLoggerFactoryLoggers();
-
-            var expectedLogger = new Logger();
-
-            LoggerFactory.SetLoggers(new[] { expectedLogger });
-
-            var logger = LoggerFactory.GetInstance(null);
-
-            logger.Should().BeSameAs(expectedLogger);
-        }
-
-        [Fact]
-        public void GetInstanceWithNoMatchThrowsKeyNotFoundException()
-        {
-            ResetLoggerFactoryLoggers();
-
-            LoggerFactory.SetLoggers(new Logger[0]);
-
-            Assert.Throws<KeyNotFoundException>(() => LoggerFactory.GetInstance());
-        }
-
-        private void ResetLoggerFactoryLoggers()
-        {
-            var loggersField = typeof(LoggerFactory).GetField("_loggers", BindingFlags.NonPublic | BindingFlags.Static);
-            var lookupField = typeof(LoggerFactory).GetField("_lookup", BindingFlags.NonPublic | BindingFlags.Static);
-
-            var loggers = (Semimutable<IReadOnlyCollection<Logger>>)loggersField.GetValue(null);
-            loggers.GetUnlockValueMethod().Invoke(loggers, null);
-            loggers.ResetValue();
-
-            var lookup = (ConcurrentDictionary<string, Logger>)lookupField.GetValue(null);
-            lookup.Clear();
-        }
-
-        private void ResetConfig()
-        {
-            var rootField = typeof(Config).GetField("_root", BindingFlags.NonPublic | BindingFlags.Static);
-
-            var root = (Semimutable<IConfiguration>)rootField.GetValue(null);
-            root.GetUnlockValueMethod().Invoke(root, null);
-            root.ResetValue();
+            var field = typeof(LoggerFactory).GetField("_configuration", BindingFlags.NonPublic | BindingFlags.Static);
+            return (Semimutable<IConfiguration>)field.GetValue(null);
         }
     }
 
