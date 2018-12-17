@@ -1,4 +1,4 @@
-# RockLib.Logging [![Build status](https://ci.appveyor.com/api/projects/status/8fbt2w3y7svuun1s?svg=true)](https://ci.appveyor.com/project/bfriesen/rocklib-logging)
+# RockLib.Logging [![Build status](https://ci.appveyor.com/api/projects/status/y06g87sp3p3q5gb4?svg=true)](https://ci.appveyor.com/project/RockLib/rocklib-logging)
 
 *A simple logging library.*
 
