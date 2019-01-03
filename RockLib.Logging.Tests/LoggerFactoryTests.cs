@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
+using RockLib.Configuration.ObjectFactory;
 using RockLib.Immutable;
 using System;
 using System.Collections.Generic;
@@ -315,6 +316,111 @@ namespace RockLib.Logging.Tests
             }
         }
 
+        [Fact]
+        public void DefaultTypesFunctionsProperly()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    { "RockLib.Logging:Name", "foo" }
+                }).Build();
+
+            var defaultTypes = new DefaultTypes
+            {
+                { typeof(ILogger), typeof(TestLogger) }
+            };
+
+            var section = config.GetSection("RockLib.Logging");
+
+            var logger = section.CreateLogger("foo", defaultTypes: defaultTypes, reloadOnConfigChange: false);
+
+            logger.Should().BeOfType<TestLogger>();
+        }
+
+        [Fact]
+        public void ValueConvertersFunctionsProperly()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName },
+                    { "RockLib.Logging:Value:Name", "foo" },
+                    { "RockLib.Logging:Value:Location", "2,3" }
+                }).Build();
+
+            Point ParsePoint(string value)
+            {
+                var split = value.Split(',');
+                return new Point(int.Parse(split[0]), int.Parse(split[1]));
+            }
+
+            var valueConverters = new ValueConverters
+            {
+                { typeof(Point), ParsePoint }
+            };
+
+            var section = config.GetSection("RockLib.Logging");
+
+            var logger = (TestLogger)section.CreateLogger("foo", valueConverters: valueConverters, reloadOnConfigChange: false);
+
+            logger.Location.X.Should().Be(2);
+            logger.Location.Y.Should().Be(3);
+        }
+
+        [Fact]
+        public void ResolverFunctionsProperly()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName },
+                    { "RockLib.Logging:Value:Name", "foo" }
+                }).Build();
+
+            var dependency = new TestDependency();
+            var resolver = new Resolver(t => dependency, t => t == typeof(ITestDependency));
+
+            var section = config.GetSection("RockLib.Logging");
+
+            var logger = (TestLogger)section.CreateLogger("foo", resolver: resolver, reloadOnConfigChange: false);
+
+            logger.Dependency.Should().BeSameAs(dependency);
+        }
+
+        [Fact]
+        public void ReloadOnConfigChangeTrueFunctionsProperly()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName },
+                    { "RockLib.Logging:Value:Name", "foo" }
+                }).Build();
+
+            var section = config.GetSection("RockLib.Logging");
+
+            var logger = section.CreateLogger("foo", reloadOnConfigChange: true);
+
+            logger.Should().BeAssignableTo<ConfigReloadingProxy<ILogger>>();
+        }
+
+        [Fact]
+        public void ReloadOnConfigChangeFalseFunctionsProperly()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>
+                {
+                    { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName },
+                    { "RockLib.Logging:Value:Name", "foo" }
+                }).Build();
+
+            var messagingSection = config.GetSection("RockLib.Logging");
+
+            var sender = messagingSection.CreateLogger("foo", reloadOnConfigChange: false);
+
+            sender.Should().BeOfType<TestLogger>();
+        }
+
         private class InterceptingConfigurationSection : IConfigurationSection
         {
             private readonly IConfigurationSection _configuration;
@@ -368,6 +474,49 @@ namespace RockLib.Logging.Tests
         {
             var field = typeof(LoggerFactory).GetField("_configuration", BindingFlags.NonPublic | BindingFlags.Static);
             return (Semimutable<IConfiguration>)field.GetValue(null);
+        }
+
+        private class TestLogger : ILogger
+        {
+            public TestLogger(Point location = default(Point), ITestDependency dependency = null)
+            {
+                Name = nameof(TestLogger);
+                Location = location;
+                Dependency = dependency;
+            }
+
+            public Point Location { get; }
+            public ITestDependency Dependency { get; }
+
+            public string Name { get; }
+            public bool IsDisabled { get; }
+            public LogLevel Level { get; }
+            public IReadOnlyCollection<ILogProvider> Providers { get; }
+            public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private struct Point
+        {
+            public Point(int x, int y)
+            {
+                X = x;
+                Y = y;
+            }
+
+            public int X { get; }
+
+            public int Y { get; }
+        }
+
+        private interface ITestDependency
+        {
+        }
+
+        private class TestDependency : ITestDependency
+        {
         }
     }
 
