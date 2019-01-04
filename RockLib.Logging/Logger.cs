@@ -3,7 +3,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +17,7 @@ namespace RockLib.Logging
     /// With the exception of the <see cref="Dispose()"/> method, all public instance members
     /// of this class are thread-safe.
     /// </remarks>
-    public sealed class Logger : ILogger, IDisposable
+    public sealed class Logger : ILogger
     {
         /// <summary>
         /// The default logger name.
