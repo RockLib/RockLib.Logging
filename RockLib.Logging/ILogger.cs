@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace RockLib.Logging
@@ -6,7 +7,7 @@ namespace RockLib.Logging
     /// <summary>
     /// Defines an object used for logging.
     /// </summary>
-    public interface ILogger
+    public interface ILogger : IDisposable
     {
         /// <summary>
         /// Gets the name of the logger.

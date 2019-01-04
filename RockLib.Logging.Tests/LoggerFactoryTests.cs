@@ -492,10 +492,13 @@ namespace RockLib.Logging.Tests
             public bool IsDisabled { get; }
             public LogLevel Level { get; }
             public IReadOnlyCollection<ILogProvider> Providers { get; }
+
             public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
             {
                 throw new NotImplementedException();
             }
+
+            public void Dispose() { }
         }
 
         private struct Point
