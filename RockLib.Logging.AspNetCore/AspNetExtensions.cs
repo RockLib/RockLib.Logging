@@ -21,10 +21,9 @@ namespace RockLib.Logging.AspNetCore
         /// <param name="rockLibLoggerName">The name of the RockLib logger used for logging.</param>
         /// <param name="setConfigRoot">
         /// Whether to call <see cref="Config.SetRoot(IConfiguration)"/> prior to calling
-        /// <see cref="LoggerFactory.GetInstance"/>. This value is true by default, because, by default,
-        /// the <see cref="LoggerFactory"/> uses <see cref="Config.Root"/> as the backing data source for its
-        /// <see cref="LoggerFactory.Loggers"/> property. If <see cref="LoggerFactory.Loggers"/> is set
-        /// programatically, this value can be false.
+        /// <see cref="LoggerFactory.GetCached"/>. This value is true by default, because, by default,
+        /// the <see cref="LoggerFactory"/> uses <see cref="Config.Root"/> as the backing data source.
+        /// If <see cref="LoggerFactory.SetConfiguration"/> is called directly, this value can be false.
         /// </param>
         /// <param name="bypassAspNetCoreLogging">
         /// Whether to bypass registering an <see cref="ILoggerProvider"/> with the DI system.
@@ -92,7 +91,7 @@ namespace RockLib.Logging.AspNetCore
                     Config.SetRoot(configuration);
                 }
 
-                return LoggerFactory.GetInstance(rockLibLoggerName);
+                return LoggerFactory.GetCached(rockLibLoggerName);
             });
         }
 

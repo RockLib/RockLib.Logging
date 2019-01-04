@@ -29,7 +29,7 @@ namespace RockLib.Logging.AspNetCore.Tests
                 var dummy = Config.Root;
             }
 
-            var actualLogger = LoggerFactory.GetInstance("SomeRockLibName");
+            var actualLogger = LoggerFactory.GetCached("SomeRockLibName");
 
             var serviceDescriptors = new List<ServiceDescriptor>();
 
@@ -67,7 +67,7 @@ namespace RockLib.Logging.AspNetCore.Tests
                 var dummy = Config.Root;
             }
 
-            var actualLogger = LoggerFactory.GetInstance("SomeRockLibName");
+            var actualLogger = LoggerFactory.GetCached("SomeRockLibName");
 
             var serviceDescriptors = new List<ServiceDescriptor>();
 
