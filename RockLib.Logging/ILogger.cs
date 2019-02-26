@@ -34,6 +34,11 @@ namespace RockLib.Logging
         IReadOnlyCollection<ILogProvider> Providers { get; }
 
         /// <summary>
+        /// Occurs when an error happens.
+        /// </summary>
+        event EventHandler<ErrorEventArgs> Error;
+
+        /// <summary>
         /// Logs the specified log entry.
         /// </summary>
         /// <param name="logEntry">The log entry to log.</param>

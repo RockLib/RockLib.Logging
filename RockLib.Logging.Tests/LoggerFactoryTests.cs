@@ -492,6 +492,7 @@ namespace RockLib.Logging.Tests
             public bool IsDisabled { get; }
             public LogLevel Level { get; }
             public IReadOnlyCollection<ILogProvider> Providers { get; }
+            public event EventHandler<ErrorEventArgs> Error;
 
             public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
             {

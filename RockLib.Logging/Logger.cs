@@ -39,7 +39,7 @@ namespace RockLib.Logging
         private readonly BlockingCollection<(LogEntry, string, string, int)> _processingQueue = new BlockingCollection<(LogEntry, string, string, int)>();
         private readonly Thread _processingThread;
 
-        private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)> _trackingQueue = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)>();
+        private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int)> _trackingQueue = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int)>();
         private readonly Thread _trackingThread;
 
         private readonly bool _canProcessLogs;
@@ -135,6 +135,11 @@ namespace RockLib.Logging
         public bool IsSynchronous { get; }
 
         /// <summary>
+        /// Occurs when an error happens.
+        /// </summary>
+        public event EventHandler<ErrorEventArgs> Error;
+
+        /// <summary>
         /// Logs the specified log entry.
         /// </summary>
         /// <param name="logEntry">The log entry to log.</param>
@@ -186,21 +191,24 @@ namespace RockLib.Logging
             // TODO: Invoke any context providers
 
             foreach (var logProvider in Providers)
+                WriteToLogProvider(logEntry, logProvider);
+        }
+
+        private void WriteToLogProvider(LogEntry logEntry, ILogProvider logProvider, int failureCount = 0)
+        {
+            if (IsSynchronous)
             {
-                if (IsSynchronous)
-                {
-                    Sync.OverAsync(() => WriteToLogProvider(logProvider, logEntry, CancellationToken.None));
-                }
-                else
-                {
-                    var source = new CancellationTokenSource();
-                    var task = WriteToLogProvider(logProvider, logEntry, source.Token);
-                    _trackingQueue.Add((task, logEntry, logProvider, source));
-                }
+                Sync.OverAsync(() => WriteToLogProvider(logProvider, logEntry, CancellationToken.None, failureCount));
+            }
+            else
+            {
+                var source = new CancellationTokenSource();
+                var task = WriteToLogProvider(logProvider, logEntry, source.Token, failureCount);
+                _trackingQueue.Add((task, logEntry, logProvider, source, failureCount));
             }
         }
 
-        private async Task WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry, CancellationToken cancellationToken)
+        private async Task WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry, CancellationToken cancellationToken, int failureCount)
         {
             if (logEntry.Level < logProvider.Level)
                 return;
@@ -215,13 +223,14 @@ namespace RockLib.Logging
                     "[{0}] - [RockLib.Logging.Logger] - Error while sending log entry {1}:{2}{3}",
                     DateTime.Now, logEntry.UniqueId, Environment.NewLine, ex);
 
-                // TODO: execute retry policy
+                HandleError(logProvider, logEntry, failureCount, ex,
+                    "Error while sending log entry {0}.", logEntry.UniqueId);
             }
         }
 
         private void TrackWriteTasks()
         {
-            foreach (var (task, logEntry, logProvider, source) in _trackingQueue.GetConsumingEnumerable())
+            foreach (var (task, logEntry, logProvider, source, failureCount) in _trackingQueue.GetConsumingEnumerable())
             {
                 if (task.Wait(logProvider.Timeout))
                 {
@@ -237,9 +246,25 @@ namespace RockLib.Logging
                         "[{0}] - [RockLib.Logging.Logger] - Log entry {1} from log provider {2} timed out after {3}.",
                         DateTime.Now, logEntry.UniqueId, logProvider, logProvider.Timeout);
 
-                    // TODO: execute retry policy
+                    HandleError(logProvider, logEntry, failureCount, null,
+                        "Log entry {0} from log provider {1} timed out after {2}.",
+                        logEntry.UniqueId, logProvider, logProvider.Timeout);
                 }
             }
+        }
+
+        private void HandleError(ILogProvider logProvider, LogEntry logEntry, int failureCount, Exception exception, string messageFormat, params object[] messageArgs)
+        {
+            var errorHandler = Error;
+            if (errorHandler == null)
+                return;
+
+            var args = new ErrorEventArgs(string.Format(messageFormat, messageArgs), exception, logProvider, logEntry, failureCount + 1);
+
+            errorHandler.Invoke(this, args);
+
+            if (args.ShouldRetry)
+                WriteToLogProvider(logEntry, logProvider, failureCount + 1);
         }
 
         /// <summary>
