@@ -34,6 +34,11 @@ namespace RockLib.Logging
         IReadOnlyCollection<ILogProvider> Providers { get; }
 
         /// <summary>
+        /// Gets the collection of <see cref="IContextProvider"/> objects used by this logger.
+        /// </summary>
+        IReadOnlyCollection<IContextProvider> ContextProviders { get; }
+
+        /// <summary>
         /// Occurs when an error happens.
         /// </summary>
         event EventHandler<ErrorEventArgs> Error;

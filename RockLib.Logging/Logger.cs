@@ -23,11 +23,9 @@ namespace RockLib.Logging
         /// The default logger name.
         /// </summary>
         public const string DefaultName = "default";
-
-        /// <summary>
-        /// The default collection of <see cref="ILogProvider"/> objects.
-        /// </summary>
-        public static readonly IReadOnlyCollection<ILogProvider> DefaultProviders = new ILogProvider[0];
+    
+        private static readonly IReadOnlyCollection<ILogProvider> EmptyProviders = new ILogProvider[0];
+        private static readonly IReadOnlyCollection<IContextProvider> EmptyContextProviders = new IContextProvider[0];
 
         /// <summary>
         /// The name of the <see cref="TraceSource"/> used by this class for trace logging.
@@ -52,34 +50,27 @@ namespace RockLib.Logging
         /// <param name="level">The logging level of the logger.</param>
         /// <param name="providers">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
         /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
-        public Logger(string name, LogLevel level, IReadOnlyCollection<ILogProvider> providers, bool isDisabled)
-            : this(name, level, providers, isDisabled, false)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Logger"/> class.
-        /// </summary>
-        /// <param name="name">The name of the logger.</param>
-        /// <param name="level">The logging level of the logger.</param>
-        /// <param name="providers">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
-        /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
         /// <param name="isSynchronous">A value indicating whether the logger is synchrnous.</param>
+        /// <param name="contextProviders">
+        /// A collection of <see cref="IContextProvider"/> objects that customize outgoing log entries.
+        /// </param>
         public Logger(
             string name = DefaultName,
             LogLevel level = LogLevel.NotSet,
             IReadOnlyCollection<ILogProvider> providers = null,
-            bool isDisabled = false, 
-            bool isSynchronous = false)
+            bool isDisabled = false,
+            bool isSynchronous = false,
+            IReadOnlyCollection<IContextProvider> contextProviders = null)
         {
             if (!Enum.IsDefined(typeof(LogLevel), level))
                 throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
 
             Name = name ?? DefaultName;
             Level = level;
-            Providers = providers ?? DefaultProviders;
+            Providers = providers ?? EmptyProviders;
             IsDisabled = isDisabled;
             IsSynchronous = isSynchronous;
+            ContextProviders = contextProviders ?? EmptyContextProviders;
 
             _canProcessLogs = !IsDisabled && Providers.Count > 0;
 
@@ -135,6 +126,11 @@ namespace RockLib.Logging
         public bool IsSynchronous { get; }
 
         /// <summary>
+        /// The collection of <see cref="IContextProvider"/> objects that customize outgoing log entries.
+        /// </summary>
+        public IReadOnlyCollection<IContextProvider> ContextProviders { get; }
+
+        /// <summary>
         /// Occurs when an error happens.
         /// </summary>
         public event EventHandler<ErrorEventArgs> Error;
@@ -188,7 +184,9 @@ namespace RockLib.Logging
                 return;
 
             logEntry.CallerInfo = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
-            // TODO: Invoke any context providers
+
+            foreach (var contextProvider in ContextProviders)
+                contextProvider.AddContext(logEntry);
 
             foreach (var logProvider in Providers)
                 WriteToLogProvider(logEntry, logProvider);
