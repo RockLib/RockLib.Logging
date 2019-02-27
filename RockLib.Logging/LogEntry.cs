@@ -139,6 +139,11 @@ namespace RockLib.Logging
         public string Message { get; set; }
 
         /// <summary>
+        /// Gets or sets the caller information of the log entry.
+        /// </summary>
+        public string CallerInfo { get; set; }
+
+        /// <summary>
         /// Gets or sets the username of the user that is performing the current logging operation.
         /// This is set to <see cref="Environment.UserName"/> by default.
         /// </summary>

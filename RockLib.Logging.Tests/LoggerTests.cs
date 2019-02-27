@@ -173,7 +173,7 @@ namespace RockLib.Logging.Tests
         }
 
         [Fact]
-        public void LogAddsCallerInfoExtendedPropertyToLogEntry()
+        public void LogAddsCallerInfoToLogEntry()
         {
             var logProviders = new[]
             {
@@ -187,7 +187,7 @@ namespace RockLib.Logging.Tests
             logger.Log(logEntry);
             logger.Dispose();
 
-            logEntry.ExtendedProperties.Should().ContainKey("CallerInfo");
+            logEntry.CallerInfo.Should().NotBeNullOrWhiteSpace();
         }
 
         [Fact]
