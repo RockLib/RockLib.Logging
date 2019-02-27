@@ -14,6 +14,9 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="logger">The logger that performs the debug logging operation.</param>
         /// <param name="message">The log message.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -25,12 +28,16 @@ namespace RockLib.Logging
         public static void Debug(
             this ILogger logger,
             string message,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Debug, message, null, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Debug, message, null, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -39,6 +46,9 @@ namespace RockLib.Logging
         /// <param name="logger">The logger that performs the debug logging operation.</param>
         /// <param name="message">The log message.</param>
         /// <param name="exception">The <see cref="Exception"/> associated with the current logging operation.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -50,12 +60,16 @@ namespace RockLib.Logging
         public static void Debug(this ILogger logger,
             string message,
             Exception exception,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Debug, message, exception, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Debug, message, exception, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -63,6 +77,9 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="logger">The logger that performs the info logging operation.</param>
         /// <param name="message">The log message.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -74,12 +91,16 @@ namespace RockLib.Logging
         public static void Info(
             this ILogger logger,
             string message,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Info, message, null, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Info, message, null, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -88,6 +109,9 @@ namespace RockLib.Logging
         /// <param name="logger">The logger that performs the info logging operation.</param>
         /// <param name="message">The log message.</param>
         /// <param name="exception">The <see cref="Exception"/> associated with the current logging operation.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -99,12 +123,16 @@ namespace RockLib.Logging
         public static void Info(this ILogger logger,
             string message,
             Exception exception,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Info, message, exception, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Info, message, exception, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -112,6 +140,9 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="logger">The logger that performs the warn logging operation.</param>
         /// <param name="message">The log message.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -123,12 +154,16 @@ namespace RockLib.Logging
         public static void Warn(
             this ILogger logger,
             string message,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Warn, message, null, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Warn, message, null, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -137,6 +172,9 @@ namespace RockLib.Logging
         /// <param name="logger">The logger that performs the warn logging operation.</param>
         /// <param name="message">The log message.</param>
         /// <param name="exception">The <see cref="Exception"/> associated with the current logging operation.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -148,12 +186,16 @@ namespace RockLib.Logging
         public static void Warn(this ILogger logger,
             string message,
             Exception exception,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Warn, message, exception, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Warn, message, exception, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -161,6 +203,9 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="logger">The logger that performs the error logging operation.</param>
         /// <param name="message">The log message.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -172,12 +217,16 @@ namespace RockLib.Logging
         public static void Error(
             this ILogger logger,
             string message,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Error, message, null, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Error, message, null, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -186,6 +235,9 @@ namespace RockLib.Logging
         /// <param name="logger">The logger that performs the error logging operation.</param>
         /// <param name="message">The log message.</param>
         /// <param name="exception">The <see cref="Exception"/> associated with the current logging operation.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -197,12 +249,16 @@ namespace RockLib.Logging
         public static void Error(this ILogger logger,
             string message,
             Exception exception,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Error, message, exception, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Error, message, exception, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -210,6 +266,9 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="logger">The logger that performs the fatal logging operation.</param>
         /// <param name="message">The log message.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -221,12 +280,16 @@ namespace RockLib.Logging
         public static void Fatal(
             this ILogger logger,
             string message,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Fatal, message, null, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Fatal, message, null, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -235,6 +298,9 @@ namespace RockLib.Logging
         /// <param name="logger">The logger that performs the fatal logging operation.</param>
         /// <param name="message">The log message.</param>
         /// <param name="exception">The <see cref="Exception"/> associated with the current logging operation.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -246,12 +312,16 @@ namespace RockLib.Logging
         public static void Fatal(this ILogger logger,
             string message,
             Exception exception,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Fatal, message, exception, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Fatal, message, exception, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -259,6 +329,9 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="logger">The logger that performs the audit logging operation.</param>
         /// <param name="message">The log message.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -270,12 +343,16 @@ namespace RockLib.Logging
         public static void Audit(
             this ILogger logger,
             string message,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0)
         {
-            logger.Log(LogLevel.Audit, message, null, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Audit, message, null, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -284,6 +361,9 @@ namespace RockLib.Logging
         /// <param name="logger">The logger that performs the audit logging operation.</param>
         /// <param name="message">The log message.</param>
         /// <param name="exception">The <see cref="Exception"/> associated with the current logging operation.</param>
+        /// <param name="correlationId">The ID used to corralate a transaction across many service calls for this log entry.</param>
+        /// <param name="businessProcessId">The business process ID.</param>
+        /// <param name="businessActivityId">The business activity ID.</param>
         /// <param name="extendedProperties">
         /// An object whose properties are added to a <see cref="LogEntry.ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
@@ -295,16 +375,23 @@ namespace RockLib.Logging
         public static void Audit(this ILogger logger,
             string message,
             Exception exception,
+            string correlationId = null,
+            string businessProcessId = null,
+            string businessActivityId = null,
             object extendedProperties = null,
             [CallerMemberName] string callerMemberName = null,
             [CallerFilePath] string callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0) =>
-            logger.Log(LogLevel.Audit, message, exception, extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
+            logger.Log(LogLevel.Audit, message, exception, correlationId, businessProcessId, businessActivityId,
+                extendedProperties, callerMemberName, callerFilePath, callerLineNumber);
 
         private static void Log(this ILogger logger,
             LogLevel level,
             string message,
             Exception exception,
+            string correlationId,
+            string businessProcessId,
+            string businessActivityId,
             object extendedProperties,
             string callerMemberName,
             string callerFilePath,
@@ -313,7 +400,12 @@ namespace RockLib.Logging
             if (logger.IsDisabled || level < logger.Level)
                 return;
 
-            var logEntry = new LogEntry(message, exception, level, extendedProperties);
+            var logEntry = new LogEntry(message, exception, level, extendedProperties)
+            {
+                CorrelationId = correlationId,
+                BusinessProcessId = businessProcessId,
+                BusinessActivityId = businessActivityId
+            };
             logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
         }
     }

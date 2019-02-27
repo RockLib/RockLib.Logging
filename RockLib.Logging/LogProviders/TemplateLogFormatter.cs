@@ -54,6 +54,9 @@ namespace RockLib.Logging
             AddSimpleTokenHandler("level", logEntry => logEntry.Level.ToString());
             AddSimpleTokenHandler("exception", logEntry => logEntry.GetExceptionData());
             AddSimpleTokenHandler("uniqueId", logEntry => logEntry.UniqueId);
+            AddSimpleTokenHandler("correlationId", logEntry => logEntry.CorrelationId);
+            AddSimpleTokenHandler("businessProcessId", logEntry => logEntry.BusinessProcessId);
+            AddSimpleTokenHandler("businessActivityId", logEntry => logEntry.BusinessActivityId);
 
             AddExtendedPropertyTokenHandler("callerInfo", "CallerInfo");
 

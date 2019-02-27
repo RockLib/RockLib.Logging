@@ -107,6 +107,21 @@ namespace RockLib.Logging
         }
 
         /// <summary>
+        /// Gets or sets the ID used to corralate a transaction across many service calls for this log entry.
+        /// </summary>
+        public string CorrelationId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the business process ID.
+        /// </summary>
+        public string BusinessProcessId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the business activity ID.
+        /// </summary>
+        public string BusinessActivityId { get; set; }
+
+        /// <summary>
         /// Gets or sets the IP addess of the machine where the current logging operation is taking place.
         /// This is set to a default value, detected at runtime.
         /// </summary>
