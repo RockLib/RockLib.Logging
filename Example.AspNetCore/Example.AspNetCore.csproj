@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RockLib.Logging.AspNetCore" Version="1.0.0-alpha04" />
+    <PackageReference Include="RockLib.Logging.AspNetCore" Version="1.0.1" />
     <!--<ProjectReference Include="..\RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj" />-->
   </ItemGroup>
 
