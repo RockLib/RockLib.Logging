@@ -187,7 +187,7 @@ namespace RockLib.Logging
             if (logEntry.Level < Level)
                 return;
 
-            logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
+            logEntry.CallerInfo = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
             // TODO: Invoke any context providers
 
             foreach (var logProvider in Providers)
