@@ -1,4 +1,5 @@
-﻿using RockLib.Diagnostics;
+﻿using RockLib.Configuration.ObjectFactory;
+using RockLib.Diagnostics;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace RockLib.Logging
         /// </summary>
         public const string DefaultName = "default";
     
-        private static readonly IReadOnlyCollection<ILogProvider> EmptyProviders = new ILogProvider[0];
+        private static readonly IReadOnlyCollection<ILogProvider> EmptyLogProviders = new ILogProvider[0];
         private static readonly IReadOnlyCollection<IContextProvider> EmptyContextProviders = new IContextProvider[0];
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="name">The name of the logger.</param>
         /// <param name="level">The logging level of the logger.</param>
-        /// <param name="providers">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
+        /// <param name="logProviders">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
         /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
         /// <param name="isSynchronous">A value indicating whether the logger is synchrnous.</param>
         /// <param name="contextProviders">
@@ -57,7 +58,7 @@ namespace RockLib.Logging
         public Logger(
             string name = DefaultName,
             LogLevel level = LogLevel.NotSet,
-            IReadOnlyCollection<ILogProvider> providers = null,
+            [AlternateName("providers")] IReadOnlyCollection<ILogProvider> logProviders = null,
             bool isDisabled = false,
             bool isSynchronous = false,
             IReadOnlyCollection<IContextProvider> contextProviders = null)
@@ -67,12 +68,12 @@ namespace RockLib.Logging
 
             Name = name ?? DefaultName;
             Level = level;
-            Providers = providers ?? EmptyProviders;
+            LogProviders = logProviders ?? EmptyLogProviders;
             IsDisabled = isDisabled;
             IsSynchronous = isSynchronous;
             ContextProviders = contextProviders ?? EmptyContextProviders;
 
-            _canProcessLogs = !IsDisabled && Providers.Count > 0;
+            _canProcessLogs = !IsDisabled && LogProviders.Count > 0;
 
             if (!IsSynchronous)
             {
@@ -113,7 +114,7 @@ namespace RockLib.Logging
         /// <summary>
         /// Gets the collection of <see cref="ILogProvider"/> objects used by this logger.
         /// </summary>
-        public IReadOnlyCollection<ILogProvider> Providers { get; }
+        public IReadOnlyCollection<ILogProvider> LogProviders { get; }
 
         /// <summary>
         /// Gets a value indicating whether the logger is disabled.
@@ -188,7 +189,7 @@ namespace RockLib.Logging
             foreach (var contextProvider in ContextProviders)
                 contextProvider.AddContext(logEntry);
 
-            foreach (var logProvider in Providers)
+            foreach (var logProvider in LogProviders)
                 WriteToLogProvider(logEntry, logProvider);
         }
 
@@ -307,9 +308,9 @@ namespace RockLib.Logging
                     _trackingQueue.Dispose();
                 }
 
-                var providers = Providers?.GetEnumerator();
-                while (providers != null && providers.MoveNext())
-                    (providers.Current as IDisposable)?.Dispose();
+                var logProviders = LogProviders?.GetEnumerator();
+                while (logProviders != null && logProviders.MoveNext())
+                    (logProviders.Current as IDisposable)?.Dispose();
             }
         }
     }
