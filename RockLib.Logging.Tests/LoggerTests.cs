@@ -29,11 +29,11 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void ProvidersIsSetFromConstructor()
         {
-            var providers = new ILogProvider[0];
+            var logProviders = new ILogProvider[0];
 
-            var logger = new Logger(providers: providers);
+            var logger = new Logger(logProviders: logProviders);
 
-            logger.Providers.Should().BeSameAs(providers);
+            logger.LogProviders.Should().BeSameAs(logProviders);
         }
 
         [Fact]
@@ -57,14 +57,14 @@ namespace RockLib.Logging.Tests
         {
             var name = "foo";
             var level = LogLevel.Warn;
-            var providers = new ILogProvider[0];
+            var logProviders = new ILogProvider[0];
             var isDisabled = true;
 
-            var logger = new Logger(name, level, providers, isDisabled);
+            var logger = new Logger(name, level, logProviders, isDisabled);
 
             logger.Name.Should().Be(name);
             logger.Level.Should().Be(level);
-            logger.Providers.Should().BeSameAs(providers);
+            logger.LogProviders.Should().BeSameAs(logProviders);
             logger.IsDisabled.Should().Be(isDisabled);
             logger.IsSynchronous.Should().BeFalse();
         }
@@ -96,7 +96,7 @@ namespace RockLib.Logging.Tests
                 new SynchronousLogProvider()
             };
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
@@ -120,7 +120,7 @@ namespace RockLib.Logging.Tests
                 new SynchronousLogProvider()
             };
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info, isDisabled: true);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info, isDisabled: true);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
@@ -139,7 +139,7 @@ namespace RockLib.Logging.Tests
                 new SynchronousLogProvider()
             };
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Error);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Error);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
@@ -161,7 +161,7 @@ namespace RockLib.Logging.Tests
                 auditLevelLogProvider,
             };
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
@@ -180,7 +180,7 @@ namespace RockLib.Logging.Tests
                 new SynchronousLogProvider()
             };
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
@@ -195,7 +195,7 @@ namespace RockLib.Logging.Tests
         {
             var logProvider = new SemaphoreDelayedLogProvider();
 
-            var logger = new Logger(providers: new[] { logProvider }, level: LogLevel.Info);
+            var logger = new Logger(logProviders: new[] { logProvider }, level: LogLevel.Info);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
@@ -222,7 +222,7 @@ namespace RockLib.Logging.Tests
                 new SynchronousLogProvider()
             };
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info, isSynchronous: true);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info, isSynchronous: true);
 
             var type = typeof(Logger);
             var processingThreadField = type.GetField("_processingThread", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -241,7 +241,7 @@ namespace RockLib.Logging.Tests
                 new SynchronousLogProvider()
             };
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info, isSynchronous: true);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info, isSynchronous: true);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 

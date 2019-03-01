@@ -15,32 +15,8 @@ namespace RockLib.Logging.Tests
 {
     public class LoggerFactoryTests
     {
-        [Theory]
-        [InlineData(Logger.DefaultName, typeof(FooLogProvider))]
-        [InlineData("bar", typeof(BarLogProvider))]
-        public void CreateLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
-        {
-            var config = new ConfigurationBuilder()
-                .AddInMemoryCollection(new Dictionary<string, string>()
-                {
-                    ["rocklib.logging:0:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
-                    ["rocklib.logging:1:name"] = "bar",
-                    ["rocklib.logging:1:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
-                })
-                .Build()
-                .GetSection("rocklib.logging");
-
-            var logger = config.CreateLogger(name);
-
-            logger.Name.Should().Be(name);
-            logger.Providers.Count.Should().Be(1);
-            logger.Providers.First().Should().BeOfType(expectedLogProviderType);
-
-            config.CreateLogger(name).Should().NotBeSameAs(logger);
-        }
-
         [Fact]
-        public void CreateLoggerWorksWithSingleUnnamedLogger()
+        public void LegacyConfigurationFormatIsSupported()
         {
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
@@ -53,8 +29,52 @@ namespace RockLib.Logging.Tests
             var logger = config.CreateLogger();
 
             logger.Name.Should().Be(Logger.DefaultName);
-            logger.Providers.Count.Should().Be(1);
-            logger.Providers.First().Should().BeOfType(typeof(FooLogProvider));
+            logger.LogProviders.Count.Should().Be(1);
+            logger.LogProviders.First().Should().BeOfType(typeof(FooLogProvider));
+
+            config.CreateLogger().Should().NotBeSameAs(logger);
+        }
+
+        [Theory]
+        [InlineData(Logger.DefaultName, typeof(FooLogProvider))]
+        [InlineData("bar", typeof(BarLogProvider))]
+        public void CreateLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:0:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:1:name"] = "bar",
+                    ["rocklib.logging:1:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("rocklib.logging");
+
+            var logger = config.CreateLogger(name);
+
+            logger.Name.Should().Be(name);
+            logger.LogProviders.Count.Should().Be(1);
+            logger.LogProviders.First().Should().BeOfType(expectedLogProviderType);
+
+            config.CreateLogger(name).Should().NotBeSameAs(logger);
+        }
+
+        [Fact]
+        public void CreateLoggerWorksWithSingleUnnamedLogger()
+        {
+            var config = new ConfigurationBuilder()
+                .AddInMemoryCollection(new Dictionary<string, string>()
+                {
+                    ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                })
+                .Build()
+                .GetSection("rocklib.logging");
+
+            var logger = config.CreateLogger();
+
+            logger.Name.Should().Be(Logger.DefaultName);
+            logger.LogProviders.Count.Should().Be(1);
+            logger.LogProviders.First().Should().BeOfType(typeof(FooLogProvider));
 
             config.CreateLogger().Should().NotBeSameAs(logger);
         }
@@ -66,7 +86,7 @@ namespace RockLib.Logging.Tests
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     ["rocklib.logging:name"] = "bar",
-                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("rocklib.logging");
@@ -74,8 +94,8 @@ namespace RockLib.Logging.Tests
             var logger = config.CreateLogger("bar");
 
             logger.Name.Should().Be("bar");
-            logger.Providers.Count.Should().Be(1);
-            logger.Providers.First().Should().BeOfType(typeof(BarLogProvider));
+            logger.LogProviders.Count.Should().Be(1);
+            logger.LogProviders.First().Should().BeOfType(typeof(BarLogProvider));
 
             config.CreateLogger("bar").Should().NotBeSameAs(logger);
         }
@@ -86,9 +106,9 @@ namespace RockLib.Logging.Tests
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
-                    ["rocklib.logging:0:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:0:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                     ["rocklib.logging:1:name"] = "bar",
-                    ["rocklib.logging:1:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:1:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("rocklib.logging");
@@ -106,7 +126,7 @@ namespace RockLib.Logging.Tests
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     ["rocklib.logging:name"] = "bar",
-                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("rocklib.logging");
@@ -125,9 +145,9 @@ namespace RockLib.Logging.Tests
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
-                    ["rocklib.logging:0:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:0:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                     ["rocklib.logging:1:name"] = "bar",
-                    ["rocklib.logging:1:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:1:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("rocklib.logging");
@@ -135,8 +155,8 @@ namespace RockLib.Logging.Tests
             var logger = config.GetCachedLogger(name);
 
             logger.Name.Should().Be(name);
-            logger.Providers.Count.Should().Be(1);
-            logger.Providers.First().Should().BeOfType(expectedLogProviderType);
+            logger.LogProviders.Count.Should().Be(1);
+            logger.LogProviders.First().Should().BeOfType(expectedLogProviderType);
 
             config.GetCachedLogger(name).Should().BeSameAs(logger);
         }
@@ -147,7 +167,7 @@ namespace RockLib.Logging.Tests
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
-                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("rocklib.logging");
@@ -155,8 +175,8 @@ namespace RockLib.Logging.Tests
             var logger = config.GetCachedLogger();
 
             logger.Name.Should().Be(Logger.DefaultName);
-            logger.Providers.Count.Should().Be(1);
-            logger.Providers.First().Should().BeOfType(typeof(FooLogProvider));
+            logger.LogProviders.Count.Should().Be(1);
+            logger.LogProviders.First().Should().BeOfType(typeof(FooLogProvider));
 
             config.GetCachedLogger().Should().BeSameAs(logger);
         }
@@ -168,7 +188,7 @@ namespace RockLib.Logging.Tests
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     ["rocklib.logging:name"] = "bar",
-                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("rocklib.logging");
@@ -176,8 +196,8 @@ namespace RockLib.Logging.Tests
             var logger = config.GetCachedLogger("bar");
 
             logger.Name.Should().Be("bar");
-            logger.Providers.Count.Should().Be(1);
-            logger.Providers.First().Should().BeOfType(typeof(BarLogProvider));
+            logger.LogProviders.Count.Should().Be(1);
+            logger.LogProviders.First().Should().BeOfType(typeof(BarLogProvider));
 
             config.GetCachedLogger("bar").Should().BeSameAs(logger);
         }
@@ -188,9 +208,9 @@ namespace RockLib.Logging.Tests
             var config = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
-                    ["rocklib.logging:0:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:0:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                     ["rocklib.logging:1:name"] = "bar",
-                    ["rocklib.logging:1:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:1:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("rocklib.logging");
@@ -208,7 +228,7 @@ namespace RockLib.Logging.Tests
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
                     ["rocklib.logging:name"] = "bar",
-                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("rocklib.logging");
@@ -253,7 +273,7 @@ namespace RockLib.Logging.Tests
             var config = new InterceptingConfigurationSection(new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
-                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("RockLib.Logging"));
@@ -267,8 +287,8 @@ namespace RockLib.Logging.Tests
                 config.Usages.Should().BeGreaterThan(0);
 
                 logger.Name.Should().Be(Logger.DefaultName);
-                logger.Providers.Count.Should().Be(1);
-                logger.Providers.First().Should().BeOfType(typeof(FooLogProvider));
+                logger.LogProviders.Count.Should().Be(1);
+                logger.LogProviders.First().Should().BeOfType(typeof(FooLogProvider));
 
                 LoggerFactory.Create().Should().NotBeSameAs(logger);
             }
@@ -290,7 +310,7 @@ namespace RockLib.Logging.Tests
             var config = new InterceptingConfigurationSection(new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>()
                 {
-                    ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
+                    ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                 })
                 .Build()
                 .GetSection("RockLib.Logging"));
@@ -304,8 +324,8 @@ namespace RockLib.Logging.Tests
                 config.Usages.Should().BeGreaterThan(0);
 
                 logger.Name.Should().Be(Logger.DefaultName);
-                logger.Providers.Count.Should().Be(1);
-                logger.Providers.First().Should().BeOfType(typeof(FooLogProvider));
+                logger.LogProviders.Count.Should().Be(1);
+                logger.LogProviders.First().Should().BeOfType(typeof(FooLogProvider));
 
                 LoggerFactory.GetCached().Should().BeSameAs(logger);
             }
@@ -491,7 +511,9 @@ namespace RockLib.Logging.Tests
             public string Name { get; }
             public bool IsDisabled { get; }
             public LogLevel Level { get; }
-            public IReadOnlyCollection<ILogProvider> Providers { get; }
+            public IReadOnlyCollection<ILogProvider> LogProviders { get; }
+            public IReadOnlyCollection<IContextProvider> ContextProviders { get; }
+
             public event EventHandler<ErrorEventArgs> Error;
 
             public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
