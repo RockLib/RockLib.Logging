@@ -514,7 +514,7 @@ namespace RockLib.Logging.Tests
             public IReadOnlyCollection<ILogProvider> LogProviders { get; }
             public IReadOnlyCollection<IContextProvider> ContextProviders { get; }
 
-            public event EventHandler<ErrorEventArgs> Error;
+            public event EventHandler<ErrorEventArgs> LogProviderError;
 
             public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
             {

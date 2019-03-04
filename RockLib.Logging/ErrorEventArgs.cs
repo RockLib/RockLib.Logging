@@ -3,7 +3,7 @@
 namespace RockLib.Logging
 {
     /// <summary>
-    /// Provides data for the <see cref="ILogger.Error"/> event.
+    /// Provides data for the <see cref="ILogger.LogProviderError"/> event.
     /// </summary>
     public class ErrorEventArgs : EventArgs
     {

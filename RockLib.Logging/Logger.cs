@@ -132,9 +132,11 @@ namespace RockLib.Logging
         public IReadOnlyCollection<IContextProvider> ContextProviders { get; }
 
         /// <summary>
-        /// Occurs when an error happens.
+        /// Fires when an exception is thrown by a log provider or it times out. If a handler
+        /// of this event sets the <see cref="ErrorEventArgs.ShouldRetry"/> property of the event
+        /// args to true, then the log entry should be resent by the log provider.
         /// </summary>
-        public event EventHandler<ErrorEventArgs> Error;
+        public event EventHandler<ErrorEventArgs> LogProviderError;
 
         /// <summary>
         /// Logs the specified log entry.
@@ -254,7 +256,7 @@ namespace RockLib.Logging
 
         private void HandleError(ILogProvider logProvider, LogEntry logEntry, int failureCount, Exception exception, string messageFormat, params object[] messageArgs)
         {
-            var errorHandler = Error;
+            var errorHandler = LogProviderError;
             if (errorHandler == null)
                 return;
 
