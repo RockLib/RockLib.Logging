@@ -154,22 +154,22 @@ namespace RockLib.Logging
             if (logEntry == null) throw new ArgumentNullException(nameof(logEntry));
             if (_isDisposed) throw new ObjectDisposedException("Cannot log to a disposed Logger.");
 
+            if (!_canProcessLogs)
+                return;
+
             if (IsSynchronous)
             {
                 ProcessLogEntry(logEntry, callerMemberName, callerFilePath, callerLineNumber);
                 return;
             }
 
-            if (_canProcessLogs)
+            try
             {
-                try
-                {
-                    _processingQueue.Add((logEntry, callerMemberName, callerFilePath, callerLineNumber));
-                }
-                catch (InvalidOperationException ex)
-                {
-                    throw new ObjectDisposedException("Cannot log to a disposed Logger.", ex);
-                }
+                _processingQueue.Add((logEntry, callerMemberName, callerFilePath, callerLineNumber));
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new ObjectDisposedException("Cannot log to a disposed Logger.", ex);
             }
         }
 
@@ -225,7 +225,7 @@ namespace RockLib.Logging
                     DateTime.Now, logEntry.UniqueId, Environment.NewLine, ex);
 
                 HandleError(logProvider, logEntry, failureCount, ex,
-                    "Error while sending log entry {0}.", logEntry.UniqueId);
+                    "Error while sending log entry {0} to log provider {1}.", logEntry.UniqueId, logProvider);
             }
         }
 

@@ -11,7 +11,7 @@ namespace RockLib.Logging
         /// Initializes a new instance of the <see cref="ErrorEventArgs"/> class.
         /// </summary>
         /// <param name="message">A message the describes the error.</param>
-        /// <param name="exception">The exception responsible for the error.</param>
+        /// <param name="exception">The exception responsible for the error, or null to indicate a timeout.</param>
         /// <param name="logProvider">
         /// The log provider that failed to write the log entry.
         /// </param>
