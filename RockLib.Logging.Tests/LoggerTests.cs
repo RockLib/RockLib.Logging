@@ -55,7 +55,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void LogProcessorUsesBackgroundLogProcessorWhenProcessingModeIsBackground()
         {
-            var logger = new Logger(processingMode: ProcessingMode.Background);
+            var logger = new Logger(processingMode: Logger.ProcessingMode.Background);
 
             logger.LogProcessor.Should().BeOfType<BackgroundLogProcessor>();
         }
@@ -63,7 +63,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void LogProcessorUsesSynchronousLogProcessorWhenProcessingModeIsSynchronous()
         {
-            var logger = new Logger(processingMode: ProcessingMode.Synchronous);
+            var logger = new Logger(processingMode: Logger.ProcessingMode.Synchronous);
 
             logger.LogProcessor.Should().BeOfType<SynchronousLogProcessor>();
         }
@@ -71,7 +71,7 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void LogProcessorUsesFireAndForgetLogProcessorWhenProcessingModeIsFireAndForget()
         {
-            var logger = new Logger(processingMode: ProcessingMode.FireAndForget);
+            var logger = new Logger(processingMode: Logger.ProcessingMode.FireAndForget);
 
             logger.LogProcessor.Should().BeOfType<FireAndForgetLogProcessor>();
         }
@@ -202,7 +202,7 @@ namespace RockLib.Logging.Tests
                 new ConsoleLogProvider()
             };
 
-            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info, processingMode: ProcessingMode.Synchronous);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info, processingMode: Logger.ProcessingMode.Synchronous);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
