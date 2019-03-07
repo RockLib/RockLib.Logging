@@ -12,11 +12,7 @@ namespace RockLib.Logging.LogProcessing
 
         public void Dispose() => Dispose(true);
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!IsDisposed)
-                IsDisposed = true;
-        }
+        protected virtual void Dispose(bool disposing) => IsDisposed = true;
 
         public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler)
         {
@@ -32,8 +28,9 @@ namespace RockLib.Logging.LogProcessing
                 catch (Exception ex)
                 {
                     TraceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
-                        "[{0:s}] - [RockLib.Logging] - Error while adding context to log entry {1} using context provider {2}.",
-                        DateTime.Now, logEntry.UniqueId, contextProvider);
+                        "[{0:s}] - Error while adding context to log entry {1} using context provider {2}.{3}{4}",
+                        DateTime.Now, logEntry.UniqueId, contextProvider, Environment.NewLine, ex);
+
                     continue;
                 }
             }
@@ -66,19 +63,29 @@ namespace RockLib.Logging.LogProcessing
             if (errorHandler != null)
             {
                 var args = new ErrorEventArgs(string.Format(messageFormat, messageArgs),
-                    exception, logProvider, logEntry, failureCount + 1);
+                    exception, logProvider, logEntry, failureCount);
 
-                errorHandler(args);
+                try
+                {
+                    errorHandler(args);
+                }
+                catch (Exception ex)
+                {
+                    TraceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
+                        "[{0:s}] - Error in error handler.{1}{2}",
+                        DateTime.Now, Environment.NewLine, ex);
+                }
 
                 if (args.ShouldRetry)
                 {
                     try
                     {
-                        WriteToLogProvider(logProvider, logEntry, errorHandler, failureCount + 1);
+                        WriteToLogProvider(logProvider, logEntry, errorHandler, failureCount);
                     }
                     catch (Exception ex)
                     {
-                        HandleError(ex, logProvider, logEntry, errorHandler, failureCount, messageFormat, messageArgs);
+                        HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
+                            "Error while re-sending log entry {0} to log provider {1}.", logEntry.UniqueId, logProvider);
                     }
                 }
             }
@@ -93,7 +100,7 @@ namespace RockLib.Logging.LogProcessing
             if (exception != null)
             {
                 traceFormat = string.Concat("[{", messageArgs.Length,
-                    ":s}] - [RockLib.Logging] - ",
+                    ":s}] - ",
                     messageFormat,
                     '{', messageArgs.Length + 1, '}',
                     '{', messageArgs.Length + 2, '}');
@@ -109,7 +116,7 @@ namespace RockLib.Logging.LogProcessing
             else
             {
                 traceFormat = string.Concat("[{", messageArgs.Length,
-                    "}] - [RockLib.Logging] - ",
+                    ":s}] - ",
                     messageFormat);
 
                 traceArgs = new object[messageArgs.Length + 1];

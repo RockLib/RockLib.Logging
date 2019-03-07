@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace RockLib.Logging.LogProcessing
@@ -13,6 +14,10 @@ namespace RockLib.Logging.LogProcessing
             {
                 SynchronizationContext.SetSynchronizationContext(null);
                 logProvider.WriteAsync(logEntry, CancellationToken.None).GetAwaiter().GetResult();
+
+                TraceSource.TraceEvent(TraceEventType.Information, 0,
+                    "[{0:s}] - [" + nameof(SynchronousLogProcessor) + "] - Successfully processed log entry {1} from log provider {2}.",
+                    DateTime.Now, logEntry.UniqueId, logProvider);
             }
             finally
             {

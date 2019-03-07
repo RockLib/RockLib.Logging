@@ -63,7 +63,7 @@ namespace RockLib.Logging.LogProcessing
                 catch (Exception ex)
                 {
                     HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
-                        "Error while sending log entry {0} to log provider {1}.",
+                        "Error while waiting for log entry {0} to be sent by log provider {1}.",
                         logEntry.UniqueId, logProvider);
 
                     return;
@@ -72,7 +72,7 @@ namespace RockLib.Logging.LogProcessing
                 if (success)
                 {
                     TraceSource.TraceEvent(TraceEventType.Information, 0,
-                        "[{0}] - [RockLib.Logging.Logger] - Successfully processed log entry {1} from log provider {2}.",
+                        "[{0:s}] - [" + nameof(BackgroundLogProcessor) + "] - Successfully processed log entry {1} from log provider {2}.",
                         DateTime.Now, logEntry.UniqueId, logProvider);
                 }
                 else
