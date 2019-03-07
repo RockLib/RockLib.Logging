@@ -18,13 +18,10 @@ namespace RockLib.Logging.LogProcessing
                 IsDisposed = true;
         }
 
-        public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler) =>
-            ProcessLogEntry(logger, logEntry, errorHandler, 0);
-
-        protected void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount)
+        public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler)
         {
             if (IsDisposed)
-                throw new ObjectDisposedException(GetType().Name);
+                return;
 
             foreach (var contextProvider in logger.ContextProviders)
             {

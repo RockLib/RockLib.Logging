@@ -40,7 +40,7 @@ namespace RockLib.Logging.LogProcessing
         private void ProcessLogEntries()
         {
             foreach (var (logger, logEntry, errorHandler) in _processingQueue.GetConsumingEnumerable())
-                ProcessLogEntry(logger, logEntry, errorHandler, 0);
+                base.ProcessLogEntry(logger, logEntry, errorHandler);
         }
 
         protected override void WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount)
@@ -54,7 +54,22 @@ namespace RockLib.Logging.LogProcessing
         {
             foreach (var (task, logEntry, logProvider, source, failureCount, errorHandler) in _trackingQueue.GetConsumingEnumerable())
             {
-                if (task.Wait(logProvider.Timeout))
+                var success = false;
+
+                try
+                {
+                    success = task.Wait(logProvider.Timeout);
+                }
+                catch (Exception ex)
+                {
+                    HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
+                        "Error while sending log entry {0} to log provider {1}.",
+                        logEntry.UniqueId, logProvider);
+
+                    return;
+                }
+
+                if (success)
                 {
                     TraceSource.TraceEvent(TraceEventType.Information, 0,
                         "[{0}] - [RockLib.Logging.Logger] - Successfully processed log entry {1} from log provider {2}.",
