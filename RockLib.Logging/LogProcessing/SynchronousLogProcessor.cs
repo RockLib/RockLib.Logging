@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace RockLib.Logging
+namespace RockLib.Logging.LogProcessing
 {
-    internal static class Sync
+    public sealed class SynchronousLogProcessor : LogProcessor
     {
-        public static void OverAsync(Func<Task> getTaskOfTResult)
+        protected override void WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry,
+            Action<ErrorEventArgs> errorHandler, int failureCount)
         {
             SynchronizationContext old = SynchronizationContext.Current;
             try
             {
                 SynchronizationContext.SetSynchronizationContext(null);
-                getTaskOfTResult().GetAwaiter().GetResult();
+                logProvider.WriteAsync(logEntry, CancellationToken.None).GetAwaiter().GetResult();
             }
             finally
             {
