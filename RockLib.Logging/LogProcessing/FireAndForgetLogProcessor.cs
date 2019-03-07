@@ -4,9 +4,14 @@ using System.Threading;
 
 namespace RockLib.Logging.LogProcessing
 {
+    /// <summary>
+    /// A log processor that processes logs asynchronously, but without any
+    /// task tracking.
+    /// </summary>
     public sealed class FireAndForgetLogProcessor : LogProcessor
     {
-        protected override async void WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry,
+        /// <inheritdoc/>
+        protected override async void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry,
             Action<ErrorEventArgs> errorHandler, int failureCount)
         {
             try

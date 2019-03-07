@@ -4,16 +4,48 @@ using System.Diagnostics;
 
 namespace RockLib.Logging.LogProcessing
 {
+    /// <summary>
+    /// A base class for implementations of the <see cref="ILogProcessor"/> interface.
+    /// </summary>
     public abstract class LogProcessor : ILogProcessor
     {
-        protected readonly static TraceSource TraceSource = Tracing.GetTraceSource(Logger.TraceSourceName);
+        /// <summary>
+        /// Gets a <see cref="System.Diagnostics.TraceSource"/> for diagnostics.
+        /// </summary>
+        protected static TraceSource TraceSource { get; } = Tracing.GetTraceSource(Logger.TraceSourceName);
 
+        /// <summary>
+        /// Gets a value indicating whether the log processor has been disposed.
+        /// </summary>
         public bool IsDisposed { get; private set; }
 
+        /// <summary>
+        /// Disposes the log processor.
+        /// </summary>
         public void Dispose() => Dispose(true);
 
+        /// <summary>
+        /// Disposes the log processor.
+        /// </summary>
+        /// <param name="disposing">
+        /// <see langword="true"/> if disposing; <see langword="false"/> if finalizing.
+        /// </param>
         protected virtual void Dispose(bool disposing) => IsDisposed = true;
 
+        /// <summary>
+        /// Processes the log entry on behalf of the logger.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger that the log entry is processed on behalf of. Its log
+        /// providers and context providers define how the log entry is processed.
+        /// </param>
+        /// <param name="logEntry">The log entry to process.</param>
+        /// <param name="errorHandler">
+        /// An optional delegate to invoke if there is an error. If the
+        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
+        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
+        /// then the log entry will be retried.
+        /// </param>
         public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler)
         {
             if (IsDisposed)
@@ -42,7 +74,7 @@ namespace RockLib.Logging.LogProcessing
 
                 try
                 {
-                    WriteToLogProvider(logProvider, logEntry, errorHandler, 0);
+                    SendToLogProvider(logProvider, logEntry, errorHandler, 0);
                 }
                 catch (Exception ex)
                 {
@@ -52,17 +84,53 @@ namespace RockLib.Logging.LogProcessing
             }
         }
 
-        protected abstract void WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry,
-            Action<ErrorEventArgs> errorHandler, int failureCount);
+        /// <summary>
+        /// Send the log entry to the log provider.
+        /// </summary>
+        /// <param name="logProvider">The log provider to send the log entry to.</param>
+        /// <param name="logEntry">The log entry that is being processed.</param>
+        /// <param name="errorHandler">
+        /// An optional delegate to invoke if there is an error. If the
+        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
+        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
+        /// then the log entry will be retried.
+        /// </param>
+        /// <param name="failureCount">The number of times this log entry has failed to send.</param>
+        protected abstract void SendToLogProvider(
+            ILogProvider logProvider, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount);
 
+        /// <summary>
+        /// Handles an error.
+        /// </summary>
+        /// <param name="exception">
+        /// The exception that caused the error. <see langword="null"/> indicates a timeout error.
+        /// </param>
+        /// <param name="logProvider">
+        /// The log provider responsible for the error.
+        /// </param>
+        /// <param name="logEntry">
+        /// The log entry that failed to be sent by the log provider.
+        /// </param>
+        /// <param name="errorHandler">
+        /// An optional delegate to invoke if there is an error. If the
+        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
+        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
+        /// then the log entry will be retried.
+        /// </param>
+        /// <param name="failureCount">
+        /// The number of times this log entry has failed to send (including the error that is
+        /// being handled).
+        /// </param>
+        /// <param name="errorMessageFormat">A format string for the message that describes the error.</param>
+        /// <param name="errorMessageArgs">An object array containing zero or more objects to format.</param>
         protected void HandleError(Exception exception, ILogProvider logProvider, LogEntry logEntry,
-            Action<ErrorEventArgs> errorHandler, int failureCount, string messageFormat, params object[] messageArgs)
+            Action<ErrorEventArgs> errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
         {
-            TraceError(exception, messageFormat, messageArgs);
+            TraceError(exception, errorMessageFormat, errorMessageArgs);
 
             if (errorHandler != null)
             {
-                var args = new ErrorEventArgs(string.Format(messageFormat, messageArgs),
+                var args = new ErrorEventArgs(string.Format(errorMessageFormat, errorMessageArgs),
                     exception, logProvider, logEntry, failureCount);
 
                 try
@@ -80,7 +148,7 @@ namespace RockLib.Logging.LogProcessing
                 {
                     try
                     {
-                        WriteToLogProvider(logProvider, logEntry, errorHandler, failureCount);
+                        SendToLogProvider(logProvider, logEntry, errorHandler, failureCount);
                     }
                     catch (Exception ex)
                     {

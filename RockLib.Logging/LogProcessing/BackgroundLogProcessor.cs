@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace RockLib.Logging.LogProcessing
 {
+    /// <summary>
+    /// A log processor that processes and tracks logs on dedicated non-threadpool
+    /// background threads. On dispose, it blocks until all in-flight logs have
+    /// finished processing.
+    /// </summary>
     public sealed class BackgroundLogProcessor : LogProcessor
     {
         private readonly BlockingCollection<(ILogger, LogEntry, Action<ErrorEventArgs>)> _processingQueue = new BlockingCollection<(ILogger, LogEntry, Action<ErrorEventArgs>)>();
@@ -14,6 +19,9 @@ namespace RockLib.Logging.LogProcessing
         private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, Action<ErrorEventArgs>)> _trackingQueue = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, Action<ErrorEventArgs>)>();
         private readonly Thread _trackingThread;
 
+        /// <summary>
+        /// Initializes a new instances of the <see cref="BackgroundLogProcessor"/> class.
+        /// </summary>
         public BackgroundLogProcessor()
         {
             _processingThread = new Thread(ProcessLogEntries) { IsBackground = true };
@@ -25,6 +33,20 @@ namespace RockLib.Logging.LogProcessing
             AppDomain.CurrentDomain.DomainUnload += (sender, eventArgs) => Dispose(true);
         }
 
+        /// <summary>
+        /// Processes the log entry on behalf of the logger.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger that the log entry is processed on behalf of. Its log
+        /// providers and context providers define how the log entry is processed.
+        /// </param>
+        /// <param name="logEntry">The log entry to process.</param>
+        /// <param name="errorHandler">
+        /// An optional delegate to invoke if there is an error. If the
+        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
+        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
+        /// then the log entry will be retried.
+        /// </param>
         public override void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler)
         {
             try
@@ -43,7 +65,8 @@ namespace RockLib.Logging.LogProcessing
                 base.ProcessLogEntry(logger, logEntry, errorHandler);
         }
 
-        protected override void WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount)
+        /// <inheritdoc/>
+        protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount)
         {
             var source = new CancellationTokenSource();
             var task = logProvider.WriteAsync(logEntry, CancellationToken.None);
@@ -86,8 +109,10 @@ namespace RockLib.Logging.LogProcessing
             }
         }
 
+        /// <inheritdoc/>
         ~BackgroundLogProcessor() => Dispose(false);
 
+        /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
             if (IsDisposed)

@@ -4,9 +4,13 @@ using System.Threading;
 
 namespace RockLib.Logging.LogProcessing
 {
+    /// <summary>
+    /// A log processor that processes logs on the same thread as the caller.
+    /// </summary>
     public sealed class SynchronousLogProcessor : LogProcessor
     {
-        protected override void WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry,
+        /// <inheritdoc/>
+        protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry,
             Action<ErrorEventArgs> errorHandler, int failureCount)
         {
             SynchronizationContext old = SynchronizationContext.Current;
