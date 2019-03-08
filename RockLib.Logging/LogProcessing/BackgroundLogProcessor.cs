@@ -49,13 +49,16 @@ namespace RockLib.Logging.LogProcessing
         /// </param>
         public override void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler)
         {
+            if (IsDisposed)
+                return;
+
             try
             {
                 _processingQueue.Add((logger, logEntry, errorHandler));
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException)
             {
-                throw new ObjectDisposedException("Cannot log to a disposed Logger.", ex);
+                return;
             }
         }
 
@@ -83,13 +86,25 @@ namespace RockLib.Logging.LogProcessing
                 {
                     success = task.Wait(logProvider.Timeout);
                 }
+                catch (AggregateException aggregateException)
+                {
+                    var ex = aggregateException.InnerExceptions.Count == 1
+                        ? aggregateException.InnerException
+                        : aggregateException;
+
+                    HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
+                        "Error while waiting for log entry {0} to be sent by log provider {1}.",
+                        logEntry.UniqueId, logProvider);
+
+                    continue;
+                }
                 catch (Exception ex)
                 {
                     HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
                         "Error while waiting for log entry {0} to be sent by log provider {1}.",
                         logEntry.UniqueId, logProvider);
 
-                    return;
+                    continue;
                 }
 
                 if (success)

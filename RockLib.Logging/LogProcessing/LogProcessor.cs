@@ -48,9 +48,6 @@ namespace RockLib.Logging.LogProcessing
         /// </param>
         public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler)
         {
-            if (IsDisposed)
-                return;
-
             foreach (var contextProvider in logger.ContextProviders)
             {
                 try 
@@ -123,7 +120,7 @@ namespace RockLib.Logging.LogProcessing
         /// </param>
         /// <param name="errorMessageFormat">A format string for the message that describes the error.</param>
         /// <param name="errorMessageArgs">An object array containing zero or more objects to format.</param>
-        protected void HandleError(Exception exception, ILogProvider logProvider, LogEntry logEntry,
+        protected virtual void HandleError(Exception exception, ILogProvider logProvider, LogEntry logEntry,
             Action<ErrorEventArgs> errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
         {
             TraceError(exception, errorMessageFormat, errorMessageArgs);
