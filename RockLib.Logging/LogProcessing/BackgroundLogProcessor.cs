@@ -13,6 +13,8 @@ namespace RockLib.Logging.LogProcessing
     /// </summary>
     public sealed class BackgroundLogProcessor : LogProcessor
     {
+        private readonly object _locker = new object();
+
         private readonly BlockingCollection<(ILogger, LogEntry, Action<ErrorEventArgs>)> _processingQueue = new BlockingCollection<(ILogger, LogEntry, Action<ErrorEventArgs>)>();
         private readonly Thread _processingThread;
 
@@ -133,7 +135,7 @@ namespace RockLib.Logging.LogProcessing
             if (IsDisposed)
                 return;
 
-            lock (this)
+            lock (_locker)
             {
                 if (IsDisposed)
                     return;
