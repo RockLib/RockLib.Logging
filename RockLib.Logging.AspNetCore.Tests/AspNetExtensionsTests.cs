@@ -198,7 +198,7 @@ namespace RockLib.Logging.AspNetCore.Tests
                 ServiceCollection = new ServiceCollection()
             };
 
-            fakeBuilder.UseRockLibLogging("TestLogger1", defaultTypes: defaultTypes, reloadOnConfigChange: false, registerAspNetCoreLogger: true);
+            fakeBuilder.UseRockLibLogging("TestLogger1", defaultTypes: defaultTypes, registerAspNetCoreLogger: true);
 
             var logger = fakeBuilder.ServiceCollection[1].ImplementationFactory.Invoke(null);
             logger.Should().BeOfType<TestLogger>();
@@ -235,7 +235,7 @@ namespace RockLib.Logging.AspNetCore.Tests
                 ServiceCollection = new ServiceCollection()
             };
 
-            fakeBuilder.UseRockLibLogging("TestLogger2", defaultTypes: defaultTypes, valueConverters: valueConverters, reloadOnConfigChange: false, registerAspNetCoreLogger: true);
+            fakeBuilder.UseRockLibLogging("TestLogger2", defaultTypes: defaultTypes, valueConverters: valueConverters, registerAspNetCoreLogger: true);
 
             var logger = fakeBuilder.ServiceCollection[1].ImplementationFactory.Invoke(null);
             logger.Should().BeOfType<TestLogger>();
@@ -243,87 +243,6 @@ namespace RockLib.Logging.AspNetCore.Tests
             var testLogger = (TestLogger)logger;
             testLogger.Location.X.Should().Be(2);
             testLogger.Location.Y.Should().Be(3);
-        }
-
-        //[Fact]
-        //public void ResolverFunctionsProperly()
-        //{
-        //    if (!Config.IsLocked)
-        //    {
-        //        var dummy = Config.Root;
-        //    }
-
-        //    var dependency = new TestDependencyA();
-        //    var resolver = new Resolver(t => dependency, t => t == typeof(ITestDependency));
-
-        //    var defaultTypes = new DefaultTypes
-        //    {
-        //        { typeof(ILogger), typeof(TestLogger) }
-        //    };
-
-        //    var fakeBuilder = new FakeWebHostBuilder()
-        //    {
-        //        ServiceCollection = new ServiceCollection()
-        //    };
-
-        //    fakeBuilder.UseRockLibLogging("TestLogger3", defaultTypes: defaultTypes, resolver: resolver, reloadOnConfigChange: false, bypassAspNetCoreLogging: true);
-
-        //    var logger = fakeBuilder.ServiceCollection[1].ImplementationFactory.Invoke(null);
-        //    logger.Should().BeOfType<TestLogger>();
-
-        //    var testLogger = (TestLogger)logger;
-        //    testLogger.Dependency.Should().BeSameAs(dependency);
-        //}
-
-        [Fact]
-        public void ReloadOnConfigChangeTrueFunctionsProperly()
-        {
-            if (!Config.IsLocked)
-            {
-                var dummy = Config.Root;
-            }
-
-            var defaultTypes = new DefaultTypes
-            {
-                { typeof(ILogger), typeof(TestLogger) },
-                { typeof(ITestDependency), typeof(TestDependencyB) }
-            };
-
-            var fakeBuilder = new FakeWebHostBuilder()
-            {
-                ServiceCollection = new ServiceCollection()
-            };
-
-            fakeBuilder.UseRockLibLogging("TestLogger4", defaultTypes: defaultTypes, reloadOnConfigChange: true, registerAspNetCoreLogger: true);
-
-            var logger = fakeBuilder.ServiceCollection[1].ImplementationFactory.Invoke(null);
-            logger.Should().BeAssignableTo<ConfigReloadingProxy<ILogger>>();
-        }
-
-        [Fact]
-        public void ReloadOnConfigChangeFalseFunctionsProperly()
-        {
-            if (!Config.IsLocked)
-            {
-                var dummy = Config.Root;
-            }
-
-            var defaultTypes = new DefaultTypes
-            {
-                { typeof(ILogger), typeof(TestLogger) },
-                { typeof(ITestDependency), typeof(TestDependencyB) }
-            };
-
-            var fakeBuilder = new FakeWebHostBuilder()
-            {
-                ServiceCollection = new ServiceCollection()
-            };
-
-            fakeBuilder.UseRockLibLogging("TestLogger5", defaultTypes: defaultTypes, reloadOnConfigChange: false, registerAspNetCoreLogger: true);
-
-            IServiceProvider serviceProvider = null;
-            var logger = fakeBuilder.ServiceCollection[1].ImplementationFactory.Invoke(serviceProvider);
-            logger.Should().BeOfType<TestLogger>();
         }
 
         private class FakeWebHostBuilder : IWebHostBuilder
