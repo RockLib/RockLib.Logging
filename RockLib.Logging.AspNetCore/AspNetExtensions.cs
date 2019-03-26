@@ -49,7 +49,7 @@ namespace RockLib.Logging.AspNetCore
         /// <see cref="IServiceProvider"/>.
         /// </remarks>
         public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName,
-            DefaultTypes defaultTypes = null, ValueConverters valueConverters = null, bool reloadOnConfigChange = true,
+            DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
             bool setConfigRoot = true, bool registerAspNetCoreLogger = false)
         {
             if (builder == null)
@@ -57,7 +57,7 @@ namespace RockLib.Logging.AspNetCore
 
             builder.ConfigureServices(services =>
             {
-                services.AddLoggerFromLoggerFactory(rockLibLoggerName, defaultTypes, valueConverters, reloadOnConfigChange, setConfigRoot);
+                services.AddLoggerFromLoggerFactory(rockLibLoggerName, defaultTypes, valueConverters, setConfigRoot);
                 if (registerAspNetCoreLogger)
                     services.AddRockLibLoggerProvider();
             });
@@ -98,7 +98,7 @@ namespace RockLib.Logging.AspNetCore
         }
 
         private static void AddLoggerFromLoggerFactory(this IServiceCollection services, string rockLibLoggerName, 
-            DefaultTypes defaultTypes, ValueConverters valueConverters, bool reloadOnConfigChange, bool setConfigRoot)
+            DefaultTypes defaultTypes, ValueConverters valueConverters, bool setConfigRoot)
         {
             services.AddSingleton<ILogProcessor, BackgroundLogProcessor>();
 
@@ -112,7 +112,7 @@ namespace RockLib.Logging.AspNetCore
 
                 var resolver = new Resolver(t => serviceProvider.GetService(t));
 
-                return LoggerFactory.Create(rockLibLoggerName, defaultTypes, valueConverters, resolver, reloadOnConfigChange);
+                return LoggerFactory.Create(rockLibLoggerName, defaultTypes, valueConverters, resolver, reloadOnConfigChange: false);
             });
         }
 
