@@ -40,7 +40,7 @@ namespace RockLib.Logging.AspNetCore
         /// If <see cref="LoggerFactory.SetConfiguration"/> is called directly, this value can be false.
         /// </param>
         /// <param name="registerAspNetCoreLogger">
-        /// Whether to bypass registering an <see cref="ILoggerProvider"/> with the DI system.
+        /// Whether to register a RockLib <see cref="ILoggerProvider"/> with the DI system.
         /// </param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
@@ -72,7 +72,7 @@ namespace RockLib.Logging.AspNetCore
         /// <param name="builder">The IWebHostBuilder being extended.</param>
         /// <param name="logger">The RockLib logger used for logging.</param>
         /// <param name="registerAspNetCoreLogger">
-        /// Whether to bypass registering an <see cref="ILoggerProvider"/> with the DI system.
+        /// Whether to register a RockLib <see cref="ILoggerProvider"/> with the DI system.
         /// </param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
