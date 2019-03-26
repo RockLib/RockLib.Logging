@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,8 +9,11 @@ namespace RockLib.Logging
     /// <summary>
     /// An implementation of <see cref="ILogProvider"/> that writes log entries to a file.
     /// </summary>
-    public class FileLogProvider : ILogProvider, IDisposable
+    public class FileLogProvider : ILogProvider
     {
+        // TODO: Use case insensitive comparer for Windows, case sensitive comparer for Mac/Linux.
+        private static readonly ConcurrentDictionary<string, SemaphoreSlim> _semaphoreCache = new ConcurrentDictionary<string, SemaphoreSlim>();
+
         /// <summary>
         /// The default template.
         /// </summary>
@@ -20,7 +24,7 @@ namespace RockLib.Logging
         /// </summary>
         public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(3);
 
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _semaphore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogProvider"/> class.
@@ -65,6 +69,8 @@ namespace RockLib.Logging
             {
                 Directory.CreateDirectory(dir);
             }
+
+            _semaphore = _semaphoreCache.GetOrAdd(file, f => new SemaphoreSlim(1, 1));
         }
 
         /// <summary>
@@ -102,7 +108,7 @@ namespace RockLib.Logging
 
             try
             {
-                await SynchronizedWriteAsync(formattedLogEntry, cancellationToken);
+                await SynchronizedWriteAsync(formattedLogEntry, cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -123,14 +129,6 @@ namespace RockLib.Logging
             {
                 await writer.WriteLineAsync(formattedLogEntry).ConfigureAwait(false);
             }
-        }
-
-        /// <summary>
-        /// Releases all resources used by the current instance of the <see cref="FileLogProvider"/> class.
-        /// </summary>
-        public virtual void Dispose()
-        {
-            _semaphore.Dispose();
         }
     }
 }
