@@ -1,5 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -8,21 +9,22 @@ namespace RockLib.Logging.AspNetCore.Tests
     public class RockLibLoggerProviderTests
     {
         [Fact]
-        public void ConstructorSetsLogger()
+        public void ConstructorSetsCreateLogger()
         {
-            var logger = new Mock<ILogger>().Object;
+            Func<ILogger> createLogger = () => null;
 
-            var provider = new RockLibLoggerProvider(logger);
+            var provider = new RockLibLoggerProvider(createLogger);
 
-            provider.Logger.Should().BeSameAs(logger);
+            provider.CreateLogger.Should().BeSameAs(createLogger);
         }
 
         [Fact]
         public void CreateLoggerSucceeds()
         {
             var logger = new Mock<ILogger>().Object;
+            ILogger CreateLogger() => logger;
 
-            var provider = new RockLibLoggerProvider(logger);
+            ILoggerProvider provider = new RockLibLoggerProvider(CreateLogger);
 
             var rockLibLogger = (RockLibLogger)provider.CreateLogger("SomeCategory");
 

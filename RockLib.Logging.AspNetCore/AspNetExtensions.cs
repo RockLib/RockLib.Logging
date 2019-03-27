@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RockLib.Configuration;
 using RockLib.Configuration.ObjectFactory;
+using RockLib.Logging.LogProcessing;
 
 namespace RockLib.Logging.AspNetCore
 {
@@ -28,12 +29,6 @@ namespace RockLib.Logging.AspNetCore
         /// An object that defines custom converter functions that are used to convert string configuration
         /// values to a target type.
         /// </param>
-        /// <param name="resolver">
-        /// An object that can retrieve constructor parameter values that are not found in configuration. This
-        /// object is an adapter for dependency injection containers, such as Ninject, Unity, Autofac, or
-        /// StructureMap. Consider using the <see cref="Resolver"/> class for this parameter, as it supports
-        /// most depenedency injection containers.
-        /// </param>
         /// <param name="reloadOnConfigChange">
         /// Whether to create an instance of <see cref="ILogger"/> that automatically reloads itself when its
         /// configuration changes. Default is true.
@@ -44,8 +39,8 @@ namespace RockLib.Logging.AspNetCore
         /// the <see cref="LoggerFactory"/> uses <see cref="Config.Root"/> as the backing data source.
         /// If <see cref="LoggerFactory.SetConfiguration"/> is called directly, this value can be false.
         /// </param>
-        /// <param name="bypassAspNetCoreLogging">
-        /// Whether to bypass registering an <see cref="ILoggerProvider"/> with the DI system.
+        /// <param name="registerAspNetCoreLogger">
+        /// Whether to register a RockLib <see cref="ILoggerProvider"/> with the DI system.
         /// </param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
@@ -54,16 +49,16 @@ namespace RockLib.Logging.AspNetCore
         /// <see cref="IServiceProvider"/>.
         /// </remarks>
         public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName,
-            DefaultTypes defaultTypes = null, ValueConverters valueConverters = null, IResolver resolver = null, bool reloadOnConfigChange = true,
-            bool setConfigRoot = true, bool bypassAspNetCoreLogging = false)
+            DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
+            bool setConfigRoot = true, bool registerAspNetCoreLogger = false)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
 
             builder.ConfigureServices(services =>
             {
-                services.AddLoggerFromLoggerFactory(rockLibLoggerName, defaultTypes, valueConverters, resolver, reloadOnConfigChange, setConfigRoot);
-                if (!bypassAspNetCoreLogging)
+                services.AddLoggerFromLoggerFactory(rockLibLoggerName, defaultTypes, valueConverters, setConfigRoot);
+                if (registerAspNetCoreLogger)
                     services.AddRockLibLoggerProvider();
             });
 
@@ -76,16 +71,16 @@ namespace RockLib.Logging.AspNetCore
         /// </summary>
         /// <param name="builder">The IWebHostBuilder being extended.</param>
         /// <param name="logger">The RockLib logger used for logging.</param>
-        /// <param name="bypassAspNetCoreLogging">
-        /// Whether to bypass registering an <see cref="ILoggerProvider"/> with the DI system.
+        /// <param name="registerAspNetCoreLogger">
+        /// Whether to register a RockLib <see cref="ILoggerProvider"/> with the DI system.
         /// </param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
-        /// This extension method, unlike the <see cref="UseRockLibLogging(IWebHostBuilder, string, DefaultTypes, ValueConverters, IResolver, bool, bool, bool)"/> overload, does not
+        /// This extension method, unlike the <see cref="UseRockLibLogging(IWebHostBuilder, string, DefaultTypes, ValueConverters, bool, bool, bool)"/> overload, does not
         /// have any side-effects. As such, applications using this extension method many need to call the
         /// <see cref="Config.SetRoot(IConfiguration)"/> method in the constructor of their <code>Startup</code> class.
         /// </remarks>
-        public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, ILogger logger, bool bypassAspNetCoreLogging = false)
+        public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, ILogger logger, bool registerAspNetCoreLogger = false)
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
@@ -94,8 +89,8 @@ namespace RockLib.Logging.AspNetCore
 
             builder.ConfigureServices(services =>
             {
-                services.AddSingleton<ILogger>(logger);
-                if (!bypassAspNetCoreLogging)
+                services.AddSingleton(logger);
+                if (registerAspNetCoreLogger)
                     services.AddRockLibLoggerProvider();
             });
 
@@ -103,9 +98,11 @@ namespace RockLib.Logging.AspNetCore
         }
 
         private static void AddLoggerFromLoggerFactory(this IServiceCollection services, string rockLibLoggerName, 
-            DefaultTypes defaultTypes, ValueConverters valueConverters, IResolver resolver, bool reloadOnConfigChange, bool setConfigRoot)
+            DefaultTypes defaultTypes, ValueConverters valueConverters, bool setConfigRoot)
         {
-            services.AddSingleton<ILogger>(serviceProvider =>
+            services.AddSingleton<ILogProcessor, BackgroundLogProcessor>();
+
+            services.AddTransient(serviceProvider =>
             {
                 if (setConfigRoot && !Config.IsLocked && Config.IsDefault)
                 {
@@ -113,7 +110,9 @@ namespace RockLib.Logging.AspNetCore
                     Config.SetRoot(configuration);
                 }
 
-                return LoggerFactory.GetCached(rockLibLoggerName, defaultTypes, valueConverters, resolver, reloadOnConfigChange);
+                var resolver = new Resolver(t => serviceProvider.GetService(t));
+
+                return LoggerFactory.Create(rockLibLoggerName, defaultTypes, valueConverters, resolver, reloadOnConfigChange: false);
             });
         }
 
@@ -121,8 +120,7 @@ namespace RockLib.Logging.AspNetCore
         {
             services.AddSingleton<ILoggerProvider>(serviceProvider =>
             {
-                var logger = serviceProvider.GetRequiredService<ILogger>();
-                return new RockLibLoggerProvider(logger);
+                return new RockLibLoggerProvider(() => serviceProvider.GetRequiredService<ILogger>());
             });
         }
     }
