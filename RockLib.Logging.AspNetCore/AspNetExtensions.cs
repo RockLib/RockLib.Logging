@@ -29,10 +29,6 @@ namespace RockLib.Logging.AspNetCore
         /// An object that defines custom converter functions that are used to convert string configuration
         /// values to a target type.
         /// </param>
-        /// <param name="reloadOnConfigChange">
-        /// Whether to create an instance of <see cref="ILogger"/> that automatically reloads itself when its
-        /// configuration changes. Default is true.
-        /// </param>
         /// <param name="setConfigRoot">
         /// Whether to call <see cref="Config.SetRoot(IConfiguration)"/> prior to calling
         /// <see cref="LoggerFactory.GetCached"/>. This value is true by default, because, by default,
@@ -76,7 +72,7 @@ namespace RockLib.Logging.AspNetCore
         /// </param>
         /// <returns>IWebHostBuilder for chaining</returns>
         /// <remarks>
-        /// This extension method, unlike the <see cref="UseRockLibLogging(IWebHostBuilder, string, DefaultTypes, ValueConverters, bool, bool, bool)"/> overload, does not
+        /// This extension method, unlike the <see cref="UseRockLibLogging(IWebHostBuilder, string, DefaultTypes, ValueConverters, bool, bool)"/> overload, does not
         /// have any side-effects. As such, applications using this extension method many need to call the
         /// <see cref="Config.SetRoot(IConfiguration)"/> method in the constructor of their <code>Startup</code> class.
         /// </remarks>
