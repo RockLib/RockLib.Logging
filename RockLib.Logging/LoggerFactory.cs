@@ -22,10 +22,15 @@ namespace RockLib.Logging
         /// </summary>
         public const string SectionName = "RockLib.Logging";
 
+        /// <summary>
+        /// The alternate section name, relative to <see cref="Config.Root"/>, from which to retrieve logging settings.
+        /// </summary>
+        public const string AlternateSectionName = "RockLib_Logging";
+
         private static readonly ConditionalWeakTable<IConfiguration, ConcurrentDictionary<string, ILogger>> _cache = new ConditionalWeakTable<IConfiguration, ConcurrentDictionary<string, ILogger>>();
 
         private static readonly Semimutable<IConfiguration> _configuration =
-            new Semimutable<IConfiguration>(() => Config.Root.GetSection(SectionName));
+            new Semimutable<IConfiguration>(() => Config.Root.GetCompositeSection(AlternateSectionName, SectionName));
 
         /// <summary>
         /// Sets the instance of <see cref="IConfiguration"/> that defines the loggers that can be created
