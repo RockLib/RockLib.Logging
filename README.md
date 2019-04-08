@@ -13,9 +13,12 @@
 - How to:
   - [Configure and use LoggerFactory](docs/LoggerFactory.md)
   - [Enable logging for ASP.NET Core applications](docs/AspNetCore.md)
-  - [Use ConsoleLogProvider](docs/Console.md)
-  - [Use FileLogProvider](docs/File.md)
-  - [Use RollingFileLogProvider](docs/RollingFile.md)
+  - [Use log providers](docs/LogProviders.md)
+    - [ConsoleLogProvider](docs/Console.md) 
+    - [FileLogProvider](docs/File.md)
+    - [RollingFileLogProvider](docs/RollingFile.md)
+  - [Use context providers](docs/ContextProviders.md)
+  - [Use log processors](docs/LogProcessors.md)
   - [Format logs](docs/Formatting.md)
 - API Reference:
   - [RockLib.Logging](https://www.fuget.org/packages/RockLib.Logging)
