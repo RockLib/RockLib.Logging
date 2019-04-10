@@ -6,7 +6,7 @@
 
 ### RockLib.Logging.AspNetCore [![Build status](https://ci.appveyor.com/api/projects/status/olwpmvt6lw5au265?svg=true)](https://ci.appveyor.com/project/RockLib/rocklib-logging-8gd5t) [![NuGet](https://img.shields.io/nuget/vpre/RockLib.Logging.AspNetCore.svg)](https://www.nuget.org/packages/RockLib.Logging.AspNetCore)
 
------
+---
 
 - [Getting started](docs/GettingStarted.md)
 - [Basic logging operations](docs/Logging.md)
@@ -17,6 +17,7 @@
     - [ConsoleLogProvider](docs/Console.md) 
     - [FileLogProvider](docs/File.md)
     - [RollingFileLogProvider](docs/RollingFile.md)
+  - [Handle log provider errors](docs/LogProviderErrors.md)
   - [Use context providers](docs/ContextProviders.md)
   - [Use log processors](docs/LogProcessors.md)
   - [Format logs](docs/Formatting.md)
