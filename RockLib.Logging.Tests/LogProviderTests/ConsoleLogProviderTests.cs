@@ -3,7 +3,6 @@ using Moq;
 using System;
 using System.IO;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -89,18 +88,32 @@ namespace RockLib.Logging.Tests
             consoleLogProvider.Timeout.Should().Be(ConsoleLogProvider.DefaultTimeout);
         }
 
-        [Fact]
-        public async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToConsole()
+        [Theory]
+        [InlineData(ConsoleLogProvider.Output.StdOut)]
+        [InlineData(ConsoleLogProvider.Output.StdErr)]
+        public async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToConsole(ConsoleLogProvider.Output output)
         {
             var sb = new StringBuilder();
             using (var writer = new StringWriter(sb))
             {
-                var original = Console.Out;
-                Console.SetOut(writer);
+                Action revert;
+
+                if (output == ConsoleLogProvider.Output.StdOut)
+                {
+                    var original = Console.Out;
+                    Console.SetOut(writer);
+                    revert = () => Console.SetOut(original);
+                }
+                else
+                {
+                    var original = Console.Error;
+                    Console.SetError(writer);
+                    revert = () => Console.SetError(original);
+                }
 
                 try
                 {
-                    var consoleLogProvider = new ConsoleLogProvider("{level}:{message}");
+                    var consoleLogProvider = new ConsoleLogProvider("{level}:{message}", output: output);
 
                     var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
@@ -108,7 +121,7 @@ namespace RockLib.Logging.Tests
                 }
                 finally
                 {
-                    Console.SetOut(original);
+                    revert();
                 }
             }
 
