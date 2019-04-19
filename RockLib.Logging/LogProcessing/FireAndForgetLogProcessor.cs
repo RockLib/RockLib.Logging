@@ -12,7 +12,7 @@ namespace RockLib.Logging.LogProcessing
     {
         /// <inheritdoc/>
         protected override async void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry,
-            Action<ErrorEventArgs> errorHandler, int failureCount)
+            IErrorHandler errorHandler, int failureCount)
         {
             try
             {

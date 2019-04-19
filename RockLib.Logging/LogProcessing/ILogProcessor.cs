@@ -20,16 +20,10 @@ namespace RockLib.Logging.LogProcessing
         /// providers and context providers define how the log entry is processed.
         /// </param>
         /// <param name="logEntry">The log entry to process.</param>
-        /// <param name="errorHandler">
-        /// An optional delegate to invoke if there is an error. If the
-        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
-        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
-        /// then the log entry will be retried.
-        /// </param>
         /// <remarks>
         /// Implementations should not call the <see cref="ILogger.Log"/> method
         /// on the <paramref name="logger"/> parameter.
         /// </remarks>
-        void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler);
+        void ProcessLogEntry(ILogger logger, LogEntry logEntry);
     }
 }

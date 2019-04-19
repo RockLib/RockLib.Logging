@@ -13,12 +13,12 @@ namespace RockLib.Logging.LogProcessing
     /// </summary>
     public sealed class BackgroundLogProcessor : LogProcessor
     {
-        private readonly object _locker = new object();
+        private readonly object _disposeLocker = new object();
 
-        private readonly BlockingCollection<(ILogger, LogEntry, Action<ErrorEventArgs>)> _processingQueue = new BlockingCollection<(ILogger, LogEntry, Action<ErrorEventArgs>)>();
+        private readonly BlockingCollection<(ILogger, LogEntry)> _processingQueue = new BlockingCollection<(ILogger, LogEntry)>();
         private readonly Thread _processingThread;
 
-        private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, Action<ErrorEventArgs>)> _trackingQueue = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, Action<ErrorEventArgs>)>();
+        private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, IErrorHandler)> _trackingQueue = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, IErrorHandler)>();
         private readonly Thread _trackingThread;
 
         /// <summary>
@@ -43,20 +43,14 @@ namespace RockLib.Logging.LogProcessing
         /// providers and context providers define how the log entry is processed.
         /// </param>
         /// <param name="logEntry">The log entry to process.</param>
-        /// <param name="errorHandler">
-        /// An optional delegate to invoke if there is an error. If the
-        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
-        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
-        /// then the log entry will be retried.
-        /// </param>
-        public override void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler)
+        public override void ProcessLogEntry(ILogger logger, LogEntry logEntry)
         {
             if (IsDisposed)
                 return;
 
             try
             {
-                _processingQueue.Add((logger, logEntry, errorHandler));
+                _processingQueue.Add((logger, logEntry));
             }
             catch (InvalidOperationException)
             {
@@ -66,12 +60,12 @@ namespace RockLib.Logging.LogProcessing
 
         private void ProcessLogEntries()
         {
-            foreach (var (logger, logEntry, errorHandler) in _processingQueue.GetConsumingEnumerable())
-                base.ProcessLogEntry(logger, logEntry, errorHandler);
+            foreach (var (logger, logEntry) in _processingQueue.GetConsumingEnumerable())
+                base.ProcessLogEntry(logger, logEntry);
         }
 
         /// <inheritdoc/>
-        protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount)
+        protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry, IErrorHandler errorHandler, int failureCount)
         {
             var source = new CancellationTokenSource();
             var task = logProvider.WriteAsync(logEntry, CancellationToken.None);
@@ -135,7 +129,7 @@ namespace RockLib.Logging.LogProcessing
             if (IsDisposed)
                 return;
 
-            lock (_locker)
+            lock (_disposeLocker)
             {
                 if (IsDisposed)
                     return;

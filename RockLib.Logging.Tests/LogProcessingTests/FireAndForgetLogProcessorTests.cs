@@ -34,24 +34,24 @@ namespace RockLib.Logging.Tests.LogProcessingTests
             var logProvider = new FakeLogProvider();
             var logEntry = new LogEntry();
 
-            ErrorEventArgs capturedArgs = null;
+            Error capturedError = null;
             var waitHandle = new AutoResetEvent(false);
 
-            Action<ErrorEventArgs> handleError = args =>
+            IErrorHandler errorHandler = DelegateErrorHandler.New(error =>
             {
-                capturedArgs = args;
+                capturedError = error;
                 waitHandle.Set();
-            };
+            });
 
-            logProcessor.Unlock().SendToLogProvider(logProvider, logEntry, handleError, 1);
+            logProcessor.Unlock().SendToLogProvider(logProvider, logEntry, errorHandler, 1);
 
             waitHandle.WaitOne(10000).Should().BeTrue();
 
-            capturedArgs.Should().NotBeNull();
-            capturedArgs.Exception.Message.Should().Be("oh, no.");
-            capturedArgs.LogProvider.Should().BeSameAs(logProvider);
-            capturedArgs.LogEntry.Should().BeSameAs(logEntry);
-            capturedArgs.FailureCount.Should().Be(2);
+            capturedError.Should().NotBeNull();
+            capturedError.Exception.Message.Should().Be("oh, no.");
+            capturedError.LogProvider.Should().BeSameAs(logProvider);
+            capturedError.LogEntry.Should().BeSameAs(logEntry);
+            capturedError.FailureCount.Should().Be(2);
         }
     }
 }

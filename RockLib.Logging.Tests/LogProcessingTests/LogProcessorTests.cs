@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using FluentAssertions;
 using Moq;
 using RockLib.Dynamic;
@@ -30,7 +29,7 @@ namespace RockLib.Logging.Tests.LogProcessingTests
         }
 
         [Fact]
-        public void ProcessLogEntryCallContextProvidersAddContextMethod()
+        public void ProcessLogEntryCallsContextProvidersAddContextMethod()
         {
             var logProcessor = new TestLogProcessor();
 
@@ -44,7 +43,7 @@ namespace RockLib.Logging.Tests.LogProcessingTests
 
             var logEntry = new LogEntry();
 
-            logProcessor.ProcessLogEntry(logger, logEntry, null);
+            logProcessor.ProcessLogEntry(logger, logEntry);
 
             mockContextProvider1.Verify(m => m.AddContext(logEntry), Times.Once);
             mockContextProvider2.Verify(m => m.AddContext(logEntry), Times.Once);
@@ -65,7 +64,7 @@ namespace RockLib.Logging.Tests.LogProcessingTests
 
             var logEntry = new LogEntry();
 
-            logProcessor.ProcessLogEntry(logger, logEntry, null);
+            logProcessor.ProcessLogEntry(logger, logEntry);
 
             logProcessor.SendToLogProviderInvocations.Count.Should().Be(2);
 
@@ -74,12 +73,12 @@ namespace RockLib.Logging.Tests.LogProcessingTests
 
             invocation1.LogProvider.Should().BeSameAs(mockLogProvider1.Object);
             invocation1.LogEntry.Should().BeSameAs(logEntry);
-            invocation1.ErrorHandler.Should().BeNull();
+            invocation1.ErrorHandler.Should().BeSameAs(NullErrorHandler.Instance);
             invocation1.FailureCount.Should().Be(0);
 
             invocation2.LogProvider.Should().BeSameAs(mockLogProvider2.Object);
             invocation2.LogEntry.Should().BeSameAs(logEntry);
-            invocation2.ErrorHandler.Should().BeNull();
+            invocation2.ErrorHandler.Should().BeSameAs(NullErrorHandler.Instance);
             invocation2.FailureCount.Should().Be(0);
 
             logProcessor.HandleErrorInvocations.Should().BeEmpty();
@@ -103,7 +102,7 @@ namespace RockLib.Logging.Tests.LogProcessingTests
 
             var logEntry = new LogEntry() { Level = LogLevel.Info };
 
-            logProcessor.ProcessLogEntry(logger, logEntry, null);
+            logProcessor.ProcessLogEntry(logger, logEntry);
 
             logProcessor.SendToLogProviderInvocations.Count.Should().Be(1);
 
@@ -111,7 +110,7 @@ namespace RockLib.Logging.Tests.LogProcessingTests
 
             invocation.LogProvider.Should().BeSameAs(mockLogProvider2.Object);
             invocation.LogEntry.Should().BeSameAs(logEntry);
-            invocation.ErrorHandler.Should().BeNull();
+            invocation.ErrorHandler.Should().BeSameAs(NullErrorHandler.Instance);
             invocation.FailureCount.Should().Be(0);
 
             logProcessor.HandleErrorInvocations.Should().BeEmpty();
@@ -131,7 +130,7 @@ namespace RockLib.Logging.Tests.LogProcessingTests
 
             var logEntry = new LogEntry();
 
-            logProcessor.ProcessLogEntry(logger, logEntry, null);
+            logProcessor.ProcessLogEntry(logger, logEntry);
 
             logProcessor.HandleErrorInvocations.Count.Should().Be(1);
 
@@ -140,19 +139,19 @@ namespace RockLib.Logging.Tests.LogProcessingTests
             invocation.Exception.Message.Should().Be("error.");
             invocation.LogProvider.Should().BeSameAs(mockLogProvider.Object);
             invocation.LogEntry.Should().BeSameAs(logEntry);
-            invocation.ErrorHandler.Should().BeNull();
+            invocation.ErrorHandler.Should().BeSameAs(NullErrorHandler.Instance);
             invocation.FailureCount.Should().Be(1);
         }
 
         [Fact]
         public void HandleErrorInvokesErrorHandlerCallbackWhenProvided()
         {
-            ErrorEventArgs capturedArgs = null;
+            Error capturedError = null;
 
-            Action<ErrorEventArgs> errorHandler = args =>
+            IErrorHandler errorHandler = DelegateErrorHandler.New(error =>
             {
-                capturedArgs = args;
-            };
+                capturedError = error;
+            });
 
             var logProcessor = new TestLogProcessor();
 
@@ -162,22 +161,22 @@ namespace RockLib.Logging.Tests.LogProcessingTests
 
             logProcessor.Unlock().HandleError(exception, logProvider, logEntry, errorHandler, 321, "Oops: {0}", new object[] { 123 });
 
-            capturedArgs.Should().NotBeNull();
-            capturedArgs.Exception.Should().BeSameAs(exception);
-            capturedArgs.LogProvider.Should().BeSameAs(logProvider);
-            capturedArgs.LogEntry.Should().BeSameAs(logEntry);
-            capturedArgs.FailureCount.Should().Be(321);
-            capturedArgs.Message.Should().Be("Oops: 123");
+            capturedError.Should().NotBeNull();
+            capturedError.Exception.Should().BeSameAs(exception);
+            capturedError.LogProvider.Should().BeSameAs(logProvider);
+            capturedError.LogEntry.Should().BeSameAs(logEntry);
+            capturedError.FailureCount.Should().Be(321);
+            capturedError.Message.Should().Be("Oops: 123");
         }
 
         [Fact]
         public void IfErrorHandlerSetsShouldRetryToTrueSendToLogProviderIsCalled()
         {
-            Action<ErrorEventArgs> errorHandler = args =>
+            IErrorHandler errorHandler = DelegateErrorHandler.New(error =>
             {
-                if (args.FailureCount < 2)
-                    args.ShouldRetry = true;
-            };
+                if (error.FailureCount < 2)
+                    error.ShouldRetry = true;
+            });
 
             var logProcessor = new TestLogProcessor();
 
@@ -200,11 +199,11 @@ namespace RockLib.Logging.Tests.LogProcessingTests
         [Fact]
         public void IfRetriedSendToLogProviderThrowsHandleErrorIsCalled()
         {
-            Action<ErrorEventArgs> errorHandler = args =>
+            IErrorHandler errorHandler = DelegateErrorHandler.New(error =>
             {
-                if (args.FailureCount < 2)
-                    args.ShouldRetry = true;
-            };
+                if (error.FailureCount < 2)
+                    error.ShouldRetry = true;
+            });
 
             var logProcessor = new TestLogProcessor(sendToLogProviderShouldThrow: true);
 
@@ -244,17 +243,17 @@ namespace RockLib.Logging.Tests.LogProcessingTests
                 _sendToLogProviderShouldThrow = sendToLogProviderShouldThrow;
             }
 
-            public List<(ILogProvider LogProvider, LogEntry LogEntry, Action<ErrorEventArgs> ErrorHandler, int FailureCount)> SendToLogProviderInvocations { get; } = new List<(ILogProvider LogProvider, LogEntry LogEntry, Action<ErrorEventArgs> ErrorHandler, int FailureCount)>();
-            public List<(Exception Exception, ILogProvider LogProvider, LogEntry LogEntry, Action<ErrorEventArgs> ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)> HandleErrorInvocations { get; } = new List<(Exception Exception, ILogProvider LogProvider, LogEntry LogEntry, Action<ErrorEventArgs> ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)>();
+            public List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)> SendToLogProviderInvocations { get; } = new List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)>();
+            public List<(Exception Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)> HandleErrorInvocations { get; } = new List<(Exception Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)>();
 
-            protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount)
+            protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry, IErrorHandler errorHandler, int failureCount)
             {
                 SendToLogProviderInvocations.Add((logProvider, logEntry, errorHandler, failureCount));
                 if (_sendToLogProviderShouldThrow)
                     throw new Exception("error.");
             }
 
-            protected override void HandleError(Exception exception, ILogProvider logProvider, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
+            protected override void HandleError(Exception exception, ILogProvider logProvider, LogEntry logEntry, IErrorHandler errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
             {
                 HandleErrorInvocations.Add((exception, logProvider, logEntry, errorHandler, failureCount, errorMessageFormat, errorMessageArgs));
                 base.HandleError(exception, logProvider, logEntry, errorHandler, failureCount, errorMessageFormat, errorMessageArgs);
