@@ -3,12 +3,12 @@
 namespace RockLib.Logging
 {
     /// <summary>
-    /// Provides data for the <see cref="ILogger.LogProviderError"/> event.
+    /// Defines an error to be handled by the <see cref="IErrorHandler"/> interface.
     /// </summary>
-    public class ErrorEventArgs : EventArgs
+    public sealed class Error
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ErrorEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="Error"/> class.
         /// </summary>
         /// <param name="message">A message the describes the error.</param>
         /// <param name="exception">The exception responsible for the error, or null to indicate a timeout.</param>
@@ -19,12 +19,15 @@ namespace RockLib.Logging
         /// <param name="failureCount">
         /// The number of times the log provider has failed to write the log entry.
         /// </param>
-        public ErrorEventArgs(string message, Exception exception, ILogProvider logProvider, LogEntry logEntry, int failureCount)
+        public Error(string message, Exception exception, ILogProvider logProvider, LogEntry logEntry, int failureCount)
         {
-            Message = message;
+            if (failureCount < 0)
+                throw new ArgumentException("Cannot be less than zero.", nameof(failureCount));
+
+            Message = message ?? throw new ArgumentNullException(nameof(message));
             Exception = exception;
-            LogProvider = logProvider;
-            LogEntry = logEntry;
+            LogProvider = logProvider ?? throw new ArgumentNullException(nameof(logProvider));
+            LogEntry = logEntry ?? throw new ArgumentNullException(nameof(logEntry));
             FailureCount = failureCount;
         }
 

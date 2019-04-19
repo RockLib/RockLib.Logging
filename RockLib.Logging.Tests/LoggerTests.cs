@@ -116,37 +116,7 @@ namespace RockLib.Logging.Tests
 
             logger.Log(logEntry);
 
-            mockLogProcessor.Verify(m => m.ProcessLogEntry(logger, logEntry, It.IsAny<Action<ErrorEventArgs>>()), Times.Once);
-        }
-
-        [Fact]
-        public void LogPassesANullErrorHandlerWhenThereAreNoEventHandlersForTheLogProviderErrorEvent()
-        {
-            var mockLogProcessor = new Mock<ILogProcessor>();
-
-            var logger = new Logger(mockLogProcessor.Object, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
-
-            var logEntry = new LogEntry();
-
-            logger.Log(logEntry);
-
-            mockLogProcessor.Verify(m => m.ProcessLogEntry(logger, logEntry, null), Times.Once);
-        }
-
-        [Fact]
-        public void LogPassesANonNullErrorHandlerWhenThereAreEventHandlersForTheLogProviderErrorEvent()
-        {
-            var mockLogProcessor = new Mock<ILogProcessor>();
-
-            var logger = new Logger(mockLogProcessor.Object, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
-
-            logger.LogProviderError += (s, e) => { };
-
-            var logEntry = new LogEntry();
-
-            logger.Log(logEntry);
-
-            mockLogProcessor.Verify(m => m.ProcessLogEntry(logger, logEntry, It.IsNotNull<Action<ErrorEventArgs>>()), Times.Once);
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(logger, logEntry), Times.Once);
         }
 
         [Fact]
@@ -160,7 +130,7 @@ namespace RockLib.Logging.Tests
 
             logger.Log(logEntry);
 
-            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>(), It.IsAny<Action<ErrorEventArgs>>()),
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>()),
                 Times.Never);
         }
 
@@ -175,7 +145,7 @@ namespace RockLib.Logging.Tests
 
             logger.Log(logEntry);
 
-            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>(), It.IsAny<Action<ErrorEventArgs>>()),
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>()),
                 Times.Never);
         }
 
@@ -190,7 +160,7 @@ namespace RockLib.Logging.Tests
 
             logger.Log(logEntry);
 
-            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>(), It.IsAny<Action<ErrorEventArgs>>()),
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>()),
                 Times.Never);
         }
 

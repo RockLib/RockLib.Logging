@@ -40,13 +40,7 @@ namespace RockLib.Logging.LogProcessing
         /// providers and context providers define how the log entry is processed.
         /// </param>
         /// <param name="logEntry">The log entry to process.</param>
-        /// <param name="errorHandler">
-        /// An optional delegate to invoke if there is an error. If the
-        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
-        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
-        /// then the log entry will be retried.
-        /// </param>
-        public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry, Action<ErrorEventArgs> errorHandler)
+        public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry)
         {
             foreach (var contextProvider in logger.ContextProviders)
             {
@@ -63,6 +57,8 @@ namespace RockLib.Logging.LogProcessing
                     continue;
                 }
             }
+
+            var errorHandler = logger.ErrorHandler ?? NullErrorHandler.Instance;
 
             foreach (var logProvider in logger.LogProviders)
             {
@@ -87,14 +83,11 @@ namespace RockLib.Logging.LogProcessing
         /// <param name="logProvider">The log provider to send the log entry to.</param>
         /// <param name="logEntry">The log entry that is being processed.</param>
         /// <param name="errorHandler">
-        /// An optional delegate to invoke if there is an error. If the
-        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
-        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
-        /// then the log entry will be retried.
+        /// The object that handles errors that occur during log processing.
         /// </param>
         /// <param name="failureCount">The number of times this log entry has failed to send.</param>
         protected abstract void SendToLogProvider(
-            ILogProvider logProvider, LogEntry logEntry, Action<ErrorEventArgs> errorHandler, int failureCount);
+            ILogProvider logProvider, LogEntry logEntry, IErrorHandler errorHandler, int failureCount);
 
         /// <summary>
         /// Handles an error.
@@ -109,10 +102,7 @@ namespace RockLib.Logging.LogProcessing
         /// The log entry that failed to be sent by the log provider.
         /// </param>
         /// <param name="errorHandler">
-        /// An optional delegate to invoke if there is an error. If the
-        /// <see cref="ErrorEventArgs.ShouldRetry"/> property of the delegate's
-        /// <see cref="ErrorEventArgs"/> parameter is set to <see langword="true"/>,
-        /// then the log entry will be retried.
+        /// The object that handles errors that occur during log processing.
         /// </param>
         /// <param name="failureCount">
         /// The number of times this log entry has failed to send (including the error that is
@@ -121,37 +111,34 @@ namespace RockLib.Logging.LogProcessing
         /// <param name="errorMessageFormat">A format string for the message that describes the error.</param>
         /// <param name="errorMessageArgs">An object array containing zero or more objects to format.</param>
         protected virtual void HandleError(Exception exception, ILogProvider logProvider, LogEntry logEntry,
-            Action<ErrorEventArgs> errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
+            IErrorHandler errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
         {
             TraceError(exception, errorMessageFormat, errorMessageArgs);
 
-            if (errorHandler != null)
-            {
-                var args = new ErrorEventArgs(string.Format(errorMessageFormat, errorMessageArgs),
-                    exception, logProvider, logEntry, failureCount);
+            var error = new Error(string.Format(errorMessageFormat, errorMessageArgs),
+                exception, logProvider, logEntry, failureCount);
 
+            try
+            {
+                errorHandler.HandleError(error);
+            }
+            catch (Exception ex)
+            {
+                TraceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
+                    "[{0:s}] - Error in error handler.{1}{2}",
+                    DateTime.Now, Environment.NewLine, ex);
+            }
+
+            if (error.ShouldRetry)
+            {
                 try
                 {
-                    errorHandler(args);
+                    SendToLogProvider(logProvider, logEntry, errorHandler, failureCount);
                 }
                 catch (Exception ex)
                 {
-                    TraceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
-                        "[{0:s}] - Error in error handler.{1}{2}",
-                        DateTime.Now, Environment.NewLine, ex);
-                }
-
-                if (args.ShouldRetry)
-                {
-                    try
-                    {
-                        SendToLogProvider(logProvider, logEntry, errorHandler, failureCount);
-                    }
-                    catch (Exception ex)
-                    {
-                        HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
-                            "Error while re-sending log entry {0} to log provider {1}.", logEntry.UniqueId, logProvider);
-                    }
+                    HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
+                        "Error while re-sending log entry {0} to log provider {1}.", logEntry.UniqueId, logProvider);
                 }
             }
         }
@@ -192,6 +179,12 @@ namespace RockLib.Logging.LogProcessing
             }
 
             TraceSource.TraceEvent(TraceEventType.Error, traceId, traceFormat, traceArgs);
+        }
+
+        private class NullErrorHandler : IErrorHandler
+        {
+            public static readonly IErrorHandler Instance = new NullErrorHandler();
+            void IErrorHandler.HandleError(Error error) { }
         }
     }
 }

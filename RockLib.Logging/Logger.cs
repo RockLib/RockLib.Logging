@@ -44,7 +44,7 @@ namespace RockLib.Logging
         /// The default logger name.
         /// </summary>
         public const string DefaultName = "default";
-    
+
         private static readonly IReadOnlyCollection<ILogProvider> EmptyLogProviders = new ILogProvider[0];
         private static readonly IReadOnlyCollection<IContextProvider> EmptyContextProviders = new IContextProvider[0];
 
@@ -159,11 +159,9 @@ namespace RockLib.Logging
         public ILogProcessor LogProcessor { get; }
 
         /// <summary>
-        /// Fires when an exception is thrown by a log provider or it times out. If a handler
-        /// of this event sets the <see cref="ErrorEventArgs.ShouldRetry"/> property of the event
-        /// args to true, then the log entry should be resent by the log provider.
+        /// Gets or sets the object that handles errors that occur during log processing.
         /// </summary>
-        public event EventHandler<ErrorEventArgs> LogProviderError;
+        public IErrorHandler ErrorHandler { get; set; }
 
         /// <summary>
         /// Logs the specified log entry.
@@ -187,16 +185,7 @@ namespace RockLib.Logging
 
             logEntry.CallerInfo = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
 
-            LogProcessor.ProcessLogEntry(this, logEntry, GetErrorHandler());
-        }
-
-        private Action<ErrorEventArgs> GetErrorHandler()
-        {
-            var eventHandler = LogProviderError;
-
-            return eventHandler == null
-                ? (Action<ErrorEventArgs>)null
-                : (args => eventHandler(this, args));
+            LogProcessor.ProcessLogEntry(this, logEntry);
         }
 
         /// <summary>

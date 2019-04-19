@@ -513,8 +513,7 @@ namespace RockLib.Logging.Tests
             public LogLevel Level { get; }
             public IReadOnlyCollection<ILogProvider> LogProviders { get; }
             public IReadOnlyCollection<IContextProvider> ContextProviders { get; }
-
-            public event EventHandler<ErrorEventArgs> LogProviderError { add { } remove { } }
+            public IErrorHandler ErrorHandler { get; set; }
 
             public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
             {
