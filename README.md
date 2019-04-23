@@ -9,8 +9,9 @@
 ---
 
 - [Getting started](docs/GettingStarted.md)
-- [Basic logging operations](docs/Logging.md)
 - How to:
+  - [Perform basic logging operations](docs/Logging.md)
+  - [Instantiate a logger](docs/Logger.md)
   - [Configure and use LoggerFactory](docs/LoggerFactory.md)
   - [Enable logging for ASP.NET Core applications](docs/AspNetCore.md)
   - [Use log providers](docs/LogProviders.md)
