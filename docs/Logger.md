@@ -1,6 +1,6 @@
 # How to instantiate a logger
 
-The `Logger` class can be directly instantiated and has two public constructors. The only difference between the constructors is how its log processor is initialized.
+The `Logger` class can be directly instantiated and has two public constructors. The only difference between the constructors is how its log processor is initialized (whether by enum or directly).
 
 **Constructor 1:**
 
