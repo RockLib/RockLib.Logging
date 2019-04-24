@@ -9,16 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+    <PackageReference Include="RockLib.Logging.AspNetCore" Version="2.0.0-alpha02" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="RockLib.Logging.AspNetCore" Version="1.0.0-alpha04" />
-    <!--<ProjectReference Include="..\RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj" />-->
   </ItemGroup>
 
 </Project>

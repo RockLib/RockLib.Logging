@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,22 @@ namespace RockLib.Logging
     public class ConsoleLogProvider : ILogProvider
     {
         /// <summary>
+        /// Defines the types of output streams used by <see cref="ConsoleLogProvider"/>.
+        /// </summary>
+        public enum Output
+        {
+            /// <summary>
+            /// The <see cref="ConsoleLogProvider"/> will write to the standard output stream.
+            /// </summary>
+            StdOut,
+
+            /// <summary>
+            /// The <see cref="ConsoleLogProvider"/> will write to the standard error stream.
+            /// </summary>
+            StdErr
+        }
+
+        /// <summary>
         /// The default template.
         /// </summary>
         public const string DefaultTemplate = @"----------------------------------------------------------------------------------------------------{newLine}LOG INFO{newLine}{newLine}Message: {message}{newLine}Create Time: {createTime(O)}{newLine}Level: {level}{newLine}Log ID: {uniqueId}{newLine}User Name: {userName}{newLine}Machine Name: {machineName}{newLine}Machine IP Address: {machineIpAddress}{newLine}{newLine}EXTENDED PROPERTY INFO{newLine}{newLine}{extendedProperties({key}: {value})}{newLine}EXCEPTION INFO{newLine}{newLine}{exception}";
@@ -19,15 +36,18 @@ namespace RockLib.Logging
         /// </summary>
         public static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(1);
 
+        private readonly TextWriter _consoleWriter;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConsoleLogProvider"/> class.
         /// </summary>
         /// <param name="template">The template used to format log entries.</param>
         /// <param name="level">The level of the log provider.</param>
+        /// <param name="output">The type of output stream to use.</param>
         /// <param name="timeout">The timeout of the log provider.</param>
         public ConsoleLogProvider(
-            string template = DefaultTemplate, LogLevel level = default(LogLevel), TimeSpan? timeout = null)
-            : this(new TemplateLogFormatter(template ?? DefaultTemplate), level, timeout)
+            string template = DefaultTemplate, LogLevel level = default(LogLevel), Output output = Output.StdOut, TimeSpan? timeout = null)
+            : this(new TemplateLogFormatter(template ?? DefaultTemplate), level, output, timeout)
         {
         }
 
@@ -36,9 +56,10 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="formatter">An object that formats log entries prior to writing to standard out.</param>
         /// <param name="level">The level of the log provider.</param>
+        /// <param name="output">The type of output stream to use.</param>
         /// <param name="timeout">The timeout of the log provider.</param>
         public ConsoleLogProvider(
-            ILogFormatter formatter, LogLevel level = default(LogLevel), TimeSpan? timeout = null)
+            ILogFormatter formatter, LogLevel level = default(LogLevel), Output output = Output.StdOut, TimeSpan? timeout = null)
         {
             if (!Enum.IsDefined(typeof(LogLevel), level))
                 throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
@@ -48,6 +69,18 @@ namespace RockLib.Logging
             Formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
             Level = level;
             Timeout = timeout ?? DefaultTimeout;
+
+            switch (output)
+            {
+                case Output.StdOut:
+                    _consoleWriter = Console.Out;
+                    break;
+                case Output.StdErr:
+                    _consoleWriter = Console.Error;
+                    break;
+                default:
+                    throw new ArgumentException($"Output stream is not defined: {output}.", nameof(output));
+            }
         }
 
         /// <summary>
@@ -74,7 +107,7 @@ namespace RockLib.Logging
         public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken = default(CancellationToken))
         {
             var formattedLog = Formatter.Format(logEntry);
-            return Console.Out.WriteLineAsync(formattedLog);
+            return _consoleWriter.WriteLineAsync(formattedLog);
         }
     }
 }

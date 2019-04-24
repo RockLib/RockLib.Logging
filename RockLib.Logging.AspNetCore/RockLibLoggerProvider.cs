@@ -1,23 +1,17 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace RockLib.Logging.AspNetCore
 {
-    internal class RockLibLoggerProvider : Microsoft.Extensions.Logging.ILoggerProvider
+    internal class RockLibLoggerProvider : ILoggerProvider
     {
-        public RockLibLoggerProvider(ILogger logger)
-        {
-            Logger = logger;
-        }
+        public RockLibLoggerProvider(Func<ILogger> createLogger) => CreateLogger = createLogger;
 
-        public ILogger Logger { get; }
+        public Func<ILogger> CreateLogger { get; }
 
-        public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
-        {
-            return new RockLibLogger(Logger, categoryName);
-        }
+        Microsoft.Extensions.Logging.ILogger ILoggerProvider.CreateLogger(string categoryName) =>
+            new RockLibLogger(CreateLogger(), categoryName);
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() {}
     }
 }

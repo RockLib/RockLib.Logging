@@ -1,12 +1,9 @@
-﻿using RockLib.Diagnostics;
+﻿using RockLib.Configuration.ObjectFactory;
+using RockLib.Logging.LogProcessing;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace RockLib.Logging
 {
@@ -18,31 +15,45 @@ namespace RockLib.Logging
     /// With the exception of the <see cref="Dispose()"/> method, all public instance members
     /// of this class are thread-safe.
     /// </remarks>
-    public sealed class Logger : ILogger, IDisposable
+    public sealed class Logger : ILogger
     {
+        /// <summary>
+        /// Defines types of processing modes used by logger objects.
+        /// </summary>
+        public enum ProcessingMode
+        {
+            /// <summary>
+            /// The logger should process and track logs on dedicated non-threadpool
+            /// background threads.
+            /// </summary>
+            Background,
+
+            /// <summary>
+            /// The logger should process logs on the same thread as the caller.
+            /// </summary>
+            Synchronous,
+
+            /// <summary>
+            /// The logger should process logs asynchronously, but without any
+            /// task tracking.
+            /// </summary>
+            FireAndForget
+        }
+
         /// <summary>
         /// The default logger name.
         /// </summary>
         public const string DefaultName = "default";
 
-        /// <summary>
-        /// The default collection of <see cref="ILogProvider"/> objects.
-        /// </summary>
-        public static readonly IReadOnlyCollection<ILogProvider> DefaultProviders = new ILogProvider[0];
+        private static readonly IReadOnlyCollection<ILogProvider> EmptyLogProviders = new ILogProvider[0];
+        private static readonly IReadOnlyCollection<IContextProvider> EmptyContextProviders = new IContextProvider[0];
 
         /// <summary>
         /// The name of the <see cref="TraceSource"/> used by this class for trace logging.
         /// </summary>
         public const string TraceSourceName = "rocklib.logging";
 
-        private static readonly TraceSource _traceSource = Tracing.GetTraceSource(TraceSourceName);
-
-        private readonly BlockingCollection<(LogEntry, string, string, int)> _processingQueue = new BlockingCollection<(LogEntry, string, string, int)>();
-        private readonly Thread _processingThread;
-
-        private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)> _trackingQueue = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource)>();
-        private readonly Thread _trackingThread;
-
+        private readonly bool _disposeLogProcessor;
         private readonly bool _canProcessLogs;
         private volatile bool _isDisposed;
 
@@ -51,59 +62,66 @@ namespace RockLib.Logging
         /// </summary>
         /// <param name="name">The name of the logger.</param>
         /// <param name="level">The logging level of the logger.</param>
-        /// <param name="providers">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
+        /// <param name="logProviders">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
         /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
-        public Logger(string name, LogLevel level, IReadOnlyCollection<ILogProvider> providers, bool isDisabled)
-            : this(name, level, providers, isDisabled, false)
+        /// <param name="processingMode">A value that indicates how the logger will process logs.</param>
+        /// <param name="contextProviders">
+        /// A collection of <see cref="IContextProvider"/> objects that customize outgoing log entries.
+        /// </param>
+        public Logger(
+            string name = DefaultName,
+            LogLevel level = LogLevel.NotSet,
+            [AlternateName("providers")] IReadOnlyCollection<ILogProvider> logProviders = null,
+            bool isDisabled = false,
+            ProcessingMode processingMode = ProcessingMode.Background,
+            IReadOnlyCollection<IContextProvider> contextProviders = null)
+            : this(name, level, logProviders, isDisabled, contextProviders, CreateLogProcessor(processingMode), disposeLogProcessor: true)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
         /// </summary>
+        /// <param name="logProcessor">The object responsible for processing logs.</param>
         /// <param name="name">The name of the logger.</param>
         /// <param name="level">The logging level of the logger.</param>
-        /// <param name="providers">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
+        /// <param name="logProviders">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
         /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
-        /// <param name="isSynchronous">A value indicating whether the logger is synchrnous.</param>
+        /// <param name="contextProviders">
+        /// A collection of <see cref="IContextProvider"/> objects that customize outgoing log entries.
+        /// </param>
         public Logger(
+            ILogProcessor logProcessor,
             string name = DefaultName,
             LogLevel level = LogLevel.NotSet,
-            IReadOnlyCollection<ILogProvider> providers = null,
-            bool isDisabled = false, 
-            bool isSynchronous = false)
+            [AlternateName("providers")] IReadOnlyCollection<ILogProvider> logProviders = null,
+            bool isDisabled = false,
+            IReadOnlyCollection<IContextProvider> contextProviders = null)
+            : this(name, level, logProviders, isDisabled, contextProviders, logProcessor, disposeLogProcessor: false)
+        {
+        }
+
+        private Logger(
+            string name,
+            LogLevel level,
+            IReadOnlyCollection<ILogProvider> logProviders,
+            bool isDisabled,
+            IReadOnlyCollection<IContextProvider> contextProviders,
+            ILogProcessor logProcessor,
+            bool disposeLogProcessor)
         {
             if (!Enum.IsDefined(typeof(LogLevel), level))
                 throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
 
             Name = name ?? DefaultName;
             Level = level;
-            Providers = providers ?? DefaultProviders;
+            LogProviders = logProviders ?? EmptyLogProviders;
             IsDisabled = isDisabled;
-            IsSynchronous = isSynchronous;
+            ContextProviders = contextProviders ?? EmptyContextProviders;
+            LogProcessor = logProcessor ?? throw new ArgumentNullException(nameof(logProcessor));
 
-            _canProcessLogs = !IsDisabled && Providers.Count > 0;
-
-            if (!IsSynchronous)
-            {
-                if (_canProcessLogs)
-                {
-                    _processingThread = new Thread(ProcessLogEntries) {IsBackground = true};
-                    _processingThread.Start();
-                    _trackingThread = new Thread(TrackWriteTasks) {IsBackground = true};
-                    _trackingThread.Start();
-                }
-                else
-                {
-                    _processingQueue.CompleteAdding();
-                    _processingQueue.Dispose();
-                    _trackingQueue.CompleteAdding();
-                    _trackingQueue.Dispose();
-                }
-            }
-
-            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => Dispose();
-            AppDomain.CurrentDomain.DomainUnload += (sender, eventArgs) => Dispose();
+            _disposeLogProcessor = disposeLogProcessor;
+            _canProcessLogs = !IsDisabled && LogProviders.Count > 0;
         }
 
         /// <summary>
@@ -123,7 +141,7 @@ namespace RockLib.Logging
         /// <summary>
         /// Gets the collection of <see cref="ILogProvider"/> objects used by this logger.
         /// </summary>
-        public IReadOnlyCollection<ILogProvider> Providers { get; }
+        public IReadOnlyCollection<ILogProvider> LogProviders { get; }
 
         /// <summary>
         /// Gets a value indicating whether the logger is disabled.
@@ -131,9 +149,19 @@ namespace RockLib.Logging
         public bool IsDisabled { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the logger is synchronous.
+        /// The collection of <see cref="IContextProvider"/> objects that customize outgoing log entries.
         /// </summary>
-        public bool IsSynchronous { get; }
+        public IReadOnlyCollection<IContextProvider> ContextProviders { get; }
+
+        /// <summary>
+        /// Gets the object responsible for processing logs.
+        /// </summary>
+        public ILogProcessor LogProcessor { get; }
+
+        /// <summary>
+        /// Gets or sets the object that handles errors that occur during log processing.
+        /// </summary>
+        public IErrorHandler ErrorHandler { get; set; }
 
         /// <summary>
         /// Logs the specified log entry.
@@ -150,114 +178,25 @@ namespace RockLib.Logging
         {
             if (logEntry == null) throw new ArgumentNullException(nameof(logEntry));
             if (_isDisposed) throw new ObjectDisposedException("Cannot log to a disposed Logger.");
+            if (LogProcessor.IsDisposed) throw new ObjectDisposedException("Cannot log to a Logger with a disposed LogProcessor.");
 
-            if (IsSynchronous)
-            {
-                ProcessLogEntry(logEntry, callerMemberName, callerFilePath, callerLineNumber);
-                return;
-            }
-
-            if (_canProcessLogs)
-            {
-                try
-                {
-                    _processingQueue.Add((logEntry, callerMemberName, callerFilePath, callerLineNumber));
-                }
-                catch (InvalidOperationException ex)
-                {
-                    throw new ObjectDisposedException("Cannot log to a disposed Logger.", ex);
-                }
-            }
-        }
-
-        private void ProcessLogEntries()
-        {
-            foreach (var (logEntry, callerFilePath, callerMemberName, callerLineNumber) in _processingQueue.GetConsumingEnumerable())
-            {
-                ProcessLogEntry(logEntry, callerFilePath, callerMemberName, callerLineNumber);
-            }
-        }
-
-        private void ProcessLogEntry(LogEntry logEntry, string callerFilePath, string callerMemberName, int callerLineNumber)
-        {
-            if (logEntry.Level < Level)
+            if (!_canProcessLogs || logEntry.Level < Level)
                 return;
 
-            logEntry.ExtendedProperties["CallerInfo"] = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
-            // TODO: Invoke any context providers
+            logEntry.CallerInfo = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
 
-            foreach (var logProvider in Providers)
-            {
-                if (IsSynchronous)
-                {
-                    Sync.OverAsync(() => WriteToLogProvider(logProvider, logEntry, CancellationToken.None));
-                }
-                else
-                {
-                    var source = new CancellationTokenSource();
-                    var task = WriteToLogProvider(logProvider, logEntry, source.Token);
-                    _trackingQueue.Add((task, logEntry, logProvider, source));
-                }
-            }
-        }
-
-        private async Task WriteToLogProvider(ILogProvider logProvider, LogEntry logEntry, CancellationToken cancellationToken)
-        {
-            if (logEntry.Level < logProvider.Level)
-                return;
-
-            try
-            {
-                await logProvider.WriteAsync(logEntry, cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                _traceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
-                    "[{0}] - [RockLib.Logging.Logger] - Error while sending log entry {1}:{2}{3}",
-                    DateTime.Now, logEntry.UniqueId, Environment.NewLine, ex);
-
-                // TODO: execute retry policy
-            }
-        }
-
-        private void TrackWriteTasks()
-        {
-            foreach (var (task, logEntry, logProvider, source) in _trackingQueue.GetConsumingEnumerable())
-            {
-                if (task.Wait(logProvider.Timeout))
-                {
-                    _traceSource.TraceEvent(TraceEventType.Information, 0,
-                        "[{0}] - [RockLib.Logging.Logger] - Successfully processed log entry {1} from log provider {2}.",
-                        DateTime.Now, logEntry.UniqueId, logProvider);
-                }
-                else
-                {
-                    source.Cancel();
-
-                    _traceSource.TraceEvent(TraceEventType.Warning, 0,
-                        "[{0}] - [RockLib.Logging.Logger] - Log entry {1} from log provider {2} timed out after {3}.",
-                        DateTime.Now, logEntry.UniqueId, logProvider, logProvider.Timeout);
-
-                    // TODO: execute retry policy
-                }
-            }
+            LogProcessor.ProcessLogEntry(this, logEntry);
         }
 
         /// <summary>
         /// Disposes the logger, if not already disposed.
         /// </summary>
-        ~Logger()
-        {
-            Dispose(false);
-        }
+        ~Logger() => Dispose(false);
 
         /// <summary>
         /// Shuts down the logger, blocking until all pending logs have been sent.
         /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+        public void Dispose() => Dispose(true);
 
         private void Dispose(bool disposing)
         {
@@ -274,20 +213,27 @@ namespace RockLib.Logging
                 if (disposing)
                     GC.SuppressFinalize(this);
 
-                if (_canProcessLogs && !IsSynchronous)
-                {
-                    _processingQueue.CompleteAdding();
-                    _processingThread.Join();
-                    _processingQueue.Dispose();
+                if (_disposeLogProcessor)
+                    LogProcessor.Dispose();
 
-                    _trackingQueue.CompleteAdding();
-                    _trackingThread.Join();
-                    _trackingQueue.Dispose();
-                }
+                var logProviders = LogProviders?.GetEnumerator();
+                while (logProviders != null && logProviders.MoveNext())
+                    (logProviders.Current as IDisposable)?.Dispose();
+            }
+        }
 
-                var providers = Providers?.GetEnumerator();
-                while (providers != null && providers.MoveNext())
-                    (providers.Current as IDisposable)?.Dispose();
+        private static ILogProcessor CreateLogProcessor(ProcessingMode processingMode)
+        {
+            switch (processingMode)
+            {
+                case ProcessingMode.Background:
+                    return new BackgroundLogProcessor();
+                case ProcessingMode.Synchronous:
+                    return new SynchronousLogProcessor();
+                case ProcessingMode.FireAndForget:
+                    return new FireAndForgetLogProcessor();
+                default:
+                    throw new ArgumentException($"Processing mode is not defined: {processingMode}.", nameof(processingMode));
             }
         }
     }

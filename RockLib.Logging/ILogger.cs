@@ -1,11 +1,13 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace RockLib.Logging
 {
     /// <summary>
     /// Defines an object used for logging.
     /// </summary>
-    public interface ILogger
+    public interface ILogger : IDisposable
     {
         /// <summary>
         /// Gets the name of the logger.
@@ -25,6 +27,21 @@ namespace RockLib.Logging
         /// not be logged by this logger.
         /// </remarks>
         LogLevel Level { get; }
+
+        /// <summary>
+        /// Gets the collection of <see cref="ILogProvider"/> objects used by this logger.
+        /// </summary>
+        IReadOnlyCollection<ILogProvider> LogProviders { get; }
+
+        /// <summary>
+        /// Gets the collection of <see cref="IContextProvider"/> objects used by this logger.
+        /// </summary>
+        IReadOnlyCollection<IContextProvider> ContextProviders { get; }
+
+        /// <summary>
+        /// Gets or sets the object that handles errors that occur during log processing.
+        /// </summary>
+        IErrorHandler ErrorHandler { get; set; }
 
         /// <summary>
         /// Logs the specified log entry.

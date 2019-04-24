@@ -1,9 +1,7 @@
 ﻿using FluentAssertions;
+using Moq;
+using RockLib.Logging.LogProcessing;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace RockLib.Logging.Tests
@@ -29,11 +27,11 @@ namespace RockLib.Logging.Tests
         [Fact]
         public void ProvidersIsSetFromConstructor()
         {
-            var providers = new ILogProvider[0];
+            var logProviders = new ILogProvider[0];
 
-            var logger = new Logger(providers: providers);
+            var logger = new Logger(logProviders: logProviders);
 
-            logger.Providers.Should().BeSameAs(providers);
+            logger.LogProviders.Should().BeSameAs(logProviders);
         }
 
         [Fact]
@@ -45,28 +43,37 @@ namespace RockLib.Logging.Tests
         }
 
         [Fact]
-        public void IsSynchronousIsSetFromConstructor()
+        public void LogProcessorIsSetFromConstructor()
         {
-            var logger = new Logger(isSynchronous: true);
+            var logProcessor = new Mock<ILogProcessor>().Object;
 
-            logger.IsSynchronous.Should().Be(true);
+            var logger = new Logger(logProcessor);
+
+            logger.LogProcessor.Should().BeSameAs(logProcessor);
         }
 
         [Fact]
-        public void NonOptionalConstructorSetsValues()
+        public void LogProcessorUsesBackgroundLogProcessorWhenProcessingModeIsBackground()
         {
-            var name = "foo";
-            var level = LogLevel.Warn;
-            var providers = new ILogProvider[0];
-            var isDisabled = true;
+            var logger = new Logger(processingMode: Logger.ProcessingMode.Background);
 
-            var logger = new Logger(name, level, providers, isDisabled);
+            logger.LogProcessor.Should().BeOfType<BackgroundLogProcessor>();
+        }
 
-            logger.Name.Should().Be(name);
-            logger.Level.Should().Be(level);
-            logger.Providers.Should().BeSameAs(providers);
-            logger.IsDisabled.Should().Be(isDisabled);
-            logger.IsSynchronous.Should().BeFalse();
+        [Fact]
+        public void LogProcessorUsesSynchronousLogProcessorWhenProcessingModeIsSynchronous()
+        {
+            var logger = new Logger(processingMode: Logger.ProcessingMode.Synchronous);
+
+            logger.LogProcessor.Should().BeOfType<SynchronousLogProcessor>();
+        }
+
+        [Fact]
+        public void LogProcessorUsesFireAndForgetLogProcessorWhenProcessingModeIsFireAndForget()
+        {
+            var logger = new Logger(processingMode: Logger.ProcessingMode.FireAndForget);
+
+            logger.LogProcessor.Should().BeOfType<FireAndForgetLogProcessor>();
         }
 
         [Fact]
@@ -88,210 +95,90 @@ namespace RockLib.Logging.Tests
         }
 
         [Fact]
-        public void LogPassesTheLogEntryToEachLogProvider()
+        public void LogThrowsObjectDisposedExceptionAfterLogProcessorHasBeenDisposed()
         {
-            var logProviders = new[]
-            {
-                new SynchronousLogProvider(),
-                new SynchronousLogProvider()
-            };
+            var mockLogProcessor = new Mock<ILogProcessor>();
+            mockLogProcessor.Setup(m => m.IsDisposed).Returns(true);
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info);
+            var logger = new Logger(mockLogProcessor.Object);
 
-            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
-
-            logger.Log(logEntry);
-            logger.Dispose();
-
-            foreach (var logProvider in logProviders)
-            {
-                logProvider.SentLogEntries.Count.Should().Be(1);
-                var sentLogEntry = logProvider.SentLogEntries[0];
-                sentLogEntry.Should().BeSameAs(logEntry);
-            }
+            Assert.Throws<ObjectDisposedException>(() => logger.Log(new LogEntry("Hello, world!", LogLevel.Info)));
         }
 
         [Fact]
-        public void LogDoesNotPassLogEntriesToLogProvidersWhenIsDisabledIsTrue()
+        public void LogCallsProcessLogEntryOnItsLogProcessor()
         {
-            var logProviders = new[]
-            {
-                new SynchronousLogProvider(),
-                new SynchronousLogProvider()
-            };
+            var mockLogProcessor = new Mock<ILogProcessor>();
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info, isDisabled: true);
+            var logger = new Logger(mockLogProcessor.Object, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
 
-            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+            var logEntry = new LogEntry();
 
             logger.Log(logEntry);
 
-            foreach (var logProvider in logProviders)
-                logProvider.SentLogEntries.Count.Should().Be(0);
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(logger, logEntry), Times.Once);
         }
 
         [Fact]
-        public void LogDoesNotPassLogEntriesToLogProvidersWhenLevelIsHigherThanTheLogEntryLevel()
+        public void LogDoesNotCallLogProcessorWhenIsDisabledIsTrue()
         {
-            var logProviders = new[]
-            {
-                new SynchronousLogProvider(),
-                new SynchronousLogProvider()
-            };
+            var mockLogProcessor = new Mock<ILogProcessor>();
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Error);
+            var logger = new Logger(mockLogProcessor.Object, isDisabled: true, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
 
-            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+            var logEntry = new LogEntry();
 
             logger.Log(logEntry);
 
-            foreach (var logProvider in logProviders)
-                logProvider.SentLogEntries.Count.Should().Be(0);
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>()),
+                Times.Never);
         }
 
         [Fact]
-        public void LogDoesNotPassLogEntriesToLogProvidersWithALevelHigherThanTheLogEntryLevel()
+        public void LogDoesNotCallLogProcessorWhenThereAreNoLogProviders()
         {
-            var synchronousLogProvider = new SynchronousLogProvider();
-            var auditLevelLogProvider = new AuditLevelLogProvider();
+            var mockLogProcessor = new Mock<ILogProcessor>();
 
-            var logProviders = new[]
-            {
-                synchronousLogProvider,
-                auditLevelLogProvider,
-            };
+            var logger = new Logger(mockLogProcessor.Object, logProviders: new ILogProvider[0]);
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info);
-
-            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+            var logEntry = new LogEntry();
 
             logger.Log(logEntry);
-            logger.Dispose();
 
-            synchronousLogProvider.SentLogEntries.Count.Should().Be(1);
-            auditLevelLogProvider.SentLogEntries.Count.Should().Be(0);
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>()),
+                Times.Never);
         }
 
         [Fact]
-        public void LogAddsCallerInfoExtendedPropertyToLogEntry()
+        public void LogDoesNotCallLogProcessorWhenLevelIsHigherThanTheLogEntryLevel()
+        {
+            var mockLogProcessor = new Mock<ILogProcessor>();
+
+            var logger = new Logger(mockLogProcessor.Object, level: LogLevel.Error, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
+
+            var logEntry = new LogEntry() { Level = LogLevel.Info };
+
+            logger.Log(logEntry);
+
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>()),
+                Times.Never);
+        }
+
+        [Fact]
+        public void LogAddsCallerInfoToLogEntry()
         {
             var logProviders = new[]
             {
-                new SynchronousLogProvider()
+                new ConsoleLogProvider()
             };
 
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info);
-
-            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
-
-            logger.Log(logEntry);
-            logger.Dispose();
-
-            logEntry.ExtendedProperties.Should().ContainKey("CallerInfo");
-        }
-
-        [Fact]
-        public void DisposeBlocksUntilLogEntriesAreSent()
-        {
-            var logProvider = new SemaphoreDelayedLogProvider();
-
-            var logger = new Logger(providers: new[] { logProvider }, level: LogLevel.Info);
+            var logger = new Logger(logProviders: logProviders, level: LogLevel.Info, processingMode: Logger.ProcessingMode.Synchronous);
 
             var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
             logger.Log(logEntry);
 
-            var disposeThread = new Thread(() => logger.Dispose());
-            disposeThread.Start();
-
-            Thread.Sleep(100); // (we could wait all day here)
-
-            logProvider.SentLogEntries.Count.Should().Be(0);
-
-            logProvider.Semaphore.Release(); // Unblock the logProvider's WriteAsync method...
-            disposeThread.Join(); // ...which unblocks the logger's Dispose method allowing the thread to complete.
-
-            logProvider.SentLogEntries.Count.Should().Be(1);
-        }
-
-        [Fact]
-        public void IsSynchronousLoggerDoesNotStartBackgroundThreads()
-        {
-            var logProviders = new[]
-            {
-                new SynchronousLogProvider()
-            };
-
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info, isSynchronous: true);
-
-            var type = typeof(Logger);
-            var processingThreadField = type.GetField("_processingThread", BindingFlags.NonPublic | BindingFlags.Instance);
-            var trackingThreadField = type.GetField("_trackingThread", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            processingThreadField.GetValue(logger).Should().BeNull();
-            trackingThreadField.GetValue(logger).Should().BeNull();
-        }
-
-        [Fact]
-        public void IsSynchronousLoggerSendsLogToProvidersWithoutNeedingToDispose()
-        {
-            var logProviders = new[]
-            {
-                new SynchronousLogProvider(),
-                new SynchronousLogProvider()
-            };
-
-            var logger = new Logger(providers: logProviders, level: LogLevel.Info, isSynchronous: true);
-
-            var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
-
-            logger.Log(logEntry);
-
-            foreach (var logProvider in logProviders)
-            {
-                logProvider.SentLogEntries.Count.Should().Be(1);
-                var sentLogEntry = logProvider.SentLogEntries[0];
-                sentLogEntry.Should().BeSameAs(logEntry);
-            }
-
-            logger.Dispose();
-        }
-
-        private class SynchronousLogProvider : ILogProvider
-        {
-            public TimeSpan Timeout => TimeSpan.Zero;
-
-            public virtual LogLevel Level => LogLevel.NotSet;
-
-            public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken)
-            {
-                SentLogEntries.Add(logEntry);
-                return Task.CompletedTask;
-            }
-
-            public List<LogEntry> SentLogEntries { get; } = new List<LogEntry>();
-        }
-
-        private class AuditLevelLogProvider : SynchronousLogProvider
-        {
-            public override LogLevel Level => LogLevel.Audit;
-        }
-
-        private class SemaphoreDelayedLogProvider : ILogProvider
-        {
-            public TimeSpan Timeout => TimeSpan.FromSeconds(30);
-
-            public LogLevel Level => LogLevel.NotSet;
-
-            public List<LogEntry> SentLogEntries { get; } = new List<LogEntry>();
-
-            public SemaphoreSlim Semaphore { get; } = new SemaphoreSlim(0, 1);
-
-            public async Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken)
-            {
-                await Semaphore.WaitAsync(cancellationToken);
-                SentLogEntries.Add(logEntry);
-            }
+            logEntry.CallerInfo.Should().NotBeNullOrWhiteSpace();
         }
     }
 }
