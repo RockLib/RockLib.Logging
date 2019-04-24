@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace RockLib.Logging
 {
@@ -47,13 +46,6 @@ namespace RockLib.Logging
         /// Logs the specified log entry.
         /// </summary>
         /// <param name="logEntry">The log entry to log.</param>
-        /// <param name="callerMemberName">The method or property name of the caller.</param>
-        /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
-        /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        void Log(
-            LogEntry logEntry,
-            [CallerMemberName] string callerMemberName = null,
-            [CallerFilePath] string callerFilePath = null,
-            [CallerLineNumber] int callerLineNumber = 0);
+        void Log(LogEntry logEntry);
     }
 }

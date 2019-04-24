@@ -515,7 +515,7 @@ namespace RockLib.Logging.Tests
             public IReadOnlyCollection<IContextProvider> ContextProviders { get; }
             public IErrorHandler ErrorHandler { get; set; }
 
-            public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
+            public void Log(LogEntry logEntry)
             {
                 throw new NotImplementedException();
             }

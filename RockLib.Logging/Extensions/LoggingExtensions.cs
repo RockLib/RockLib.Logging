@@ -400,13 +400,14 @@ namespace RockLib.Logging
             if (logger.IsDisabled || level < logger.Level)
                 return;
 
-            var logEntry = new LogEntry(message, exception, level, extendedProperties)
+            var logEntry = new LogEntry(message, exception, level, extendedProperties, callerMemberName, callerFilePath, callerLineNumber)
             {
                 CorrelationId = correlationId,
                 BusinessProcessId = businessProcessId,
                 BusinessActivityId = businessActivityId
             };
-            logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
+
+            logger.Log(logEntry);
         }
     }
 }

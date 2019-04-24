@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace RockLib.Logging
 {
@@ -28,9 +29,16 @@ namespace RockLib.Logging
         /// Initializes a new instance of the <see cref="LogEntry"/> class with its <see cref="Level"/> set
         /// to <see cref="DefaultLevel"/>.
         /// </summary>
-        public LogEntry()
+        /// <param name="callerMemberName">The method or property name of the caller.</param>
+        /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
+        /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
+        public LogEntry(
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             _level = DefaultLevel;
+            SetCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -43,8 +51,16 @@ namespace RockLib.Logging
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
         /// its items are added to <see cref="ExtendedProperties"/>.
         /// </param>
-        public LogEntry(string message, LogLevel level = DefaultLevel, object extendedProperties = null)
-            : this(message, null, level, extendedProperties)
+        /// <param name="callerMemberName">The method or property name of the caller.</param>
+        /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
+        /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
+        public LogEntry(string message,
+            LogLevel level = DefaultLevel,
+            object extendedProperties = null,
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
+            : this(message, null, level, extendedProperties, callerMemberName, callerFilePath, callerLineNumber)
         {
         }
 
@@ -59,12 +75,22 @@ namespace RockLib.Logging
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
         /// its items are added to <see cref="ExtendedProperties"/>.
         /// </param>
-        public LogEntry(string message, Exception exception, LogLevel level = DefaultLevel, object extendedProperties = null)
+        /// <param name="callerMemberName">The method or property name of the caller.</param>
+        /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
+        /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
+        public LogEntry(string message,
+            Exception exception,
+            LogLevel level = DefaultLevel,
+            object extendedProperties = null,
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0)
         {
             Level = level;
             Message = message;
             Exception = exception;
             SetExtendedProperties(extendedProperties);
+            SetCallerInfo(callerMemberName, callerFilePath, callerLineNumber);
         }
 
         /// <summary>
@@ -148,6 +174,19 @@ namespace RockLib.Logging
         /// This is set to <see cref="Environment.UserName"/> by default.
         /// </summary>
         public string UserName { get; set; } = Environment.UserName;
+
+        /// <summary>
+        /// Sets the value of the <see cref="CallerInfo"/> property based on the caller of this
+        /// method.
+        /// </summary>
+        /// <param name="callerMemberName">The method or property name of the caller.</param>
+        /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
+        /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
+        public void SetCallerInfo(
+            [CallerMemberName] string callerMemberName = null,
+            [CallerFilePath] string callerFilePath = null,
+            [CallerLineNumber] int callerLineNumber = 0) =>
+            CallerInfo = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
 
         /// <summary>
         /// Gets a string representation of the <see cref="Exception"/> property, or null
