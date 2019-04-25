@@ -4,7 +4,9 @@ Logger instances can be created and retrieved using the static `LoggerFactory` c
 
 ## Specifying configuration
 
-The `LoggerFactory.Configuration` property defines the configuration that `LoggerFactory` uses. By default, this property has a value obtained by calling  `RockLib.Configuration.Config.Root.GetCompositeSection("RockLib_Logging", "RockLib.Logging")`. Configuration can be changed by calling the `LoggerFactory.SetConfiguration` method.
+The `LoggerFactory.Configuration` property defines the configuration that `LoggerFactory` uses. By default, this property has a value obtained by calling  `RockLib.Configuration.Config.Root.GetCompositeSection("RockLib_Logging", "RockLib.Logging")`. Configuration can be changed by calling the `LoggerFactory.SetConfiguration` method. The configuration passed to the `SetConfiguration` method must follow the format of the `"RockLib.Logging"` configuration section as described below.
+
+An easy mistake to make when specifying configuration is to pass in the configuration root when logging is defined in a sub-section. In this case, be sure to call `GetSection` on the configuration root, passing in the name of the logging sub-section.
 
 ## Configuration format
 
