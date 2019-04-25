@@ -304,7 +304,7 @@ namespace RockLib.Logging.AspNetCore.Tests
 
             public IReadOnlyCollection<IContextProvider> ContextProviders => throw new NotImplementedException();
 
-            public event EventHandler<ErrorEventArgs> LogProviderError { add { } remove { } }
+            public IErrorHandler ErrorHandler { get; set; }
 
             public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0)
             {
