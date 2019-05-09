@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RockLib.Configuration;
+using RockLib.Configuration.AspNetCore;
 using RockLib.Configuration.ObjectFactory;
 using RockLib.Logging.LogProcessing;
 
@@ -30,10 +31,8 @@ namespace RockLib.Logging.AspNetCore
         /// values to a target type.
         /// </param>
         /// <param name="setConfigRoot">
-        /// Whether to call <see cref="Config.SetRoot(IConfiguration)"/> prior to calling
-        /// <see cref="LoggerFactory.GetCached"/>. This value is true by default, because, by default,
-        /// the <see cref="LoggerFactory"/> uses <see cref="Config.Root"/> as the backing data source.
-        /// If <see cref="LoggerFactory.SetConfiguration"/> is called directly, this value can be false.
+        /// Whether to set the value of the <see cref="Config.Root"/> property to the <see cref="IConfiguration"/>
+        /// containing the merged configuration of the application and the <see cref="IWebHost"/>.
         /// </param>
         /// <param name="registerAspNetCoreLogger">
         /// Whether to register a RockLib <see cref="ILoggerProvider"/> with the DI system.
@@ -51,9 +50,12 @@ namespace RockLib.Logging.AspNetCore
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
 
+            if (setConfigRoot)
+                builder.SetConfigRoot();
+
             builder.ConfigureServices(services =>
             {
-                services.AddLoggerFromLoggerFactory(rockLibLoggerName, defaultTypes, valueConverters, setConfigRoot);
+                services.AddLoggerFromLoggerFactory(rockLibLoggerName, defaultTypes, valueConverters);
                 if (registerAspNetCoreLogger)
                     services.AddRockLibLoggerProvider();
             });
@@ -94,20 +96,13 @@ namespace RockLib.Logging.AspNetCore
         }
 
         private static void AddLoggerFromLoggerFactory(this IServiceCollection services, string rockLibLoggerName, 
-            DefaultTypes defaultTypes, ValueConverters valueConverters, bool setConfigRoot)
+            DefaultTypes defaultTypes, ValueConverters valueConverters)
         {
             services.AddSingleton<ILogProcessor, BackgroundLogProcessor>();
 
             services.AddTransient(serviceProvider =>
             {
-                if (setConfigRoot && !Config.IsLocked && Config.IsDefault)
-                {
-                    var configuration = serviceProvider.GetService<IConfiguration>();
-                    Config.SetRoot(configuration);
-                }
-
                 var resolver = new Resolver(t => serviceProvider.GetService(t));
-
                 return LoggerFactory.Create(rockLibLoggerName, defaultTypes, valueConverters, resolver, reloadOnConfigChange: false);
             });
         }
