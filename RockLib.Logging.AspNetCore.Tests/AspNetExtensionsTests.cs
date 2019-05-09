@@ -268,7 +268,8 @@ namespace RockLib.Logging.AspNetCore.Tests
 
             public IWebHostBuilder ConfigureServices(Action<WebHostBuilderContext, IServiceCollection> configureServices)
             {
-                throw new NotImplementedException();
+                configureServices(new WebHostBuilderContext(), ServiceCollection);
+                return this;
             }
 
             public string GetSetting(string key)
