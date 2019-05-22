@@ -1,8 +1,8 @@
-# How to instantiate a logger
+# How to instantiate and configure a logger
 
-The `Logger` class can be directly instantiated and has two public constructors. The only difference between the constructors is how its log processor is initialized (whether by enum or directly).
+The `Logger` class can be directly instantiated and has two public constructors. The only difference between the constructors is how its log processor is initialized (whether by enum or directly). It also has one read/write property.
 
-**Constructor 1:**
+#### Constructor 1:
 
 Name | Type | Description | Required | Default Value
 ---- | ---- | ----------- | -------- | -------------
@@ -13,7 +13,7 @@ isDisabled | `bool` | Whether the logger should be disabled. | No | `false`
 processingMode | `enum ProcessingMode`: `Background`, `Synchronous`, `FireAndForget` | A value that indicates how the logger will process logs. | No | `Background`
 contextProviders | `IReadOnlyCollection<IContextProvider>` | A collection of `IContextProvider` objects that customize outgoing log entries. | No | Empty list
 
-**Constructor 2:**
+#### Constructor 2:
 
 Name | Type | Description | Required | Default Value
 ---- | ---- | ----------- | -------- | -------------
@@ -23,3 +23,9 @@ level | `enum LogLevel`: `NotSet`, `Debug`, `Info`, `Warn`, `Error`, `Fatal`, `A
 logProviders | `IReadOnlyCollection<ILogProvider>` | A collection of `ILogProvider` objects used by this logger. | No | Empty list
 isDisabled | `bool` | Whether the logger should be disabled. | No | `false`
 contextProviders | `IReadOnlyCollection<IContextProvider>` | A collection of `IContextProvider` objects that customize outgoing log entries. | No | Empty list
+
+#### Read / write properties
+
+Name | Type | Description | Default Value
+---- | ---- | ----------- | -------------
+ErrorHandler | `IErrorHandler` | An object that handles errors that occur during log processing. | `null`
