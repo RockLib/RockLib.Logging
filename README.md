@@ -20,7 +20,7 @@
     - [RollingFileLogProvider](docs/RollingFile.md)
   - [Handle log provider errors](docs/LogProviderErrors.md)
   - [Use context providers](docs/ContextProviders.md)
-  - [Use log processors](docs/LogProcessors.md)
+  - [Use log processors / processing mode](docs/LogProcessors.md)
   - [Format logs](docs/Formatting.md)
   - [Enable tracing for troubleshooting](docs/Tracing.md)
 - API Reference:
