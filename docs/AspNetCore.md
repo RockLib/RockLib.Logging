@@ -43,6 +43,7 @@ setRootConfig            | No       | `bool`            | Whether to call the `R
 registerAspNetCoreLogger | No       | `bool`            | Whether to register a RockLib `Microsoft.Extensions.Logging.ILoggerProvider` with the DI system | `false`
 
 This version requires that a `RockLib.Logging.Logger` is provided as an argument:
+
 Parameter                | Required | Type      | Description | Default
 ------------------------ | -------- | --------- | ----------- | -------
 logger                   | Yes      | `ILogger` | The RockLib logger used for logging | N/A
