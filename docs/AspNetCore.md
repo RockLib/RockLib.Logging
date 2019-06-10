@@ -31,7 +31,9 @@ Machine IP Address  | The local IP address of the machine receiving the request
 There are two versions of the `UseRockLibLogging` method outlined below.
 
 ---
-This version does not require any parameters and will use the default or unnamed logger, unless otherwise specified:
+
+This version does not require any arguments and will use the default or unnamed logger, unless otherwise specified:
+
 Parameter                | Required | Type              | Description | Default
 ------------------------ | -------- | ----------------- | ----------- | -------
 rockLibLoggerName        | No       | `string`          | The name of the RockLib logger used for logging | `"default"`
