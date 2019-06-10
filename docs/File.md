@@ -21,9 +21,7 @@ Add a new JSON file to the project named 'appsettings.json'. Set its 'Copy to Ou
     "Providers": [
       {
         "Type": "RockLib.Logging.FileLogProvider, RockLib.Logging",
-        "Value": { 
-          "File": "log.txt"
-        }
+        "Value": { "File": "log.txt" }
       }
     ]
   }
@@ -141,9 +139,7 @@ Note that debug logs were not written because the logger's level is set to "Warn
     "Providers": [
       {
         "Type": "RockLib.Logging.FileLogProvider, RockLib.Logging",
-        "Value": { 
-          "File": "log.txt"
-        }
+        "Value": { "File": "log.txt" }
       }
     ]
   }
