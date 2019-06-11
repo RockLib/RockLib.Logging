@@ -19,3 +19,18 @@ Context providers are passed to the logger upon instantiation via an array of ty
 ```C#
 var logger = new Logger(contextProviders: new [] { new OsContextProvider() });
 ```
+
+Alternatively, context providers can be assigned to a `Logger` by means of configuration. In the following example, we will assign our context provider to the default `Logger`:
+
+```C#
+{
+  "RockLib.Logging": {
+    "LogProviders": {
+        "Type": "RockLib.Logging.ConsoleLogProvider, RockLib.Logging"
+    },
+    "ContextProviders": {
+        "Type": "MyProject.OsContextProvider, MyProject"
+    }
+  }
+}
+```
