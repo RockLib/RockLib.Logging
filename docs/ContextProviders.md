@@ -14,7 +14,7 @@ The following implementation of `IContextProvider` will add the version of the o
     }
 ```
 
-Context providers are passed to the logger upon instantiation via an array of type `IContextProvider`. For example, to provide a new instance of the above context provider to a new `Logger`:
+Context providers are passed to the logger upon instantiation via an array of type `IContextProvider`. For example, the following code will provide a new instance of the above context provider to a new `Logger`:
 
 ```C#
 var logger = new Logger(contextProviders: new [] { new OsContextProvider() });
