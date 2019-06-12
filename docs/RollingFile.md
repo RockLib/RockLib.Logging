@@ -2,11 +2,7 @@
 
 In this tutorial, we will be building a console application that does basic rolling file logging.
 
----
-
 Create a .NET Core 2.0 (or above) console application named "RollingFileTutorial".
-
----
 
 Add a nuget reference for "RockLib.Logging" to the project.
 
@@ -143,7 +139,7 @@ Stack Trace:
 
 ---
 
-Note that debug logs were not written because the logger's level is set to "Warn". To enable debug logs, modify the appsettings.json file so the level is "Debug":
+Note that debug logs were not written because the logger's level is set to "Warn". To enable debug logs, modify the 'appsettings.json' file so the level is "Debug":
 
 ```json
 {
