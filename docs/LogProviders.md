@@ -1,14 +1,14 @@
 # Log Providers
 
-## [Console](docs/Console.md)
+## [Console](Console.md)
 
 Writes log entries to standard out.
 
-## [File](docs/File.md)
+## [File](File.md)
 
 Writes log entries to a file.
 
-## [Rolling File](docs/RollingFile.md)
+## [Rolling File](RollingFile.md)
 
 Writes log entries to a file. Log files will then be archived based on time and filesize configuration.
 
