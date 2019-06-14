@@ -10,7 +10,7 @@ The `BackgroundLogProcessor` is the default `LogProcessor` used in `RockLib.Logg
 
 This `LogProcessor` processes and tracks logs on dedicated non-threadpool background threads. When this is disposed of, it will block until all in-flight logs have finished processing.
 
-This behavior ensures that, on a graceful shutdown of a application, that logs will still be sent to their destination.
+This behavior ensures that, on a graceful shutdown of an application, logs will still be sent to their destination.
 
 ## FireAndForgetLogProcessor
 
@@ -36,9 +36,9 @@ The `ILogProcessor` interface is available for implementation if custom logic is
 
 ## LogProcessor
 
-The abstract `LogProcessor` class implements `ILogProcessor` The `SendToLogProvider` abstract method must be defined.
+The abstract `LogProcessor` class implements `ILogProcessor`. The `SendToLogProvider` abstract method must be defined.
 
-Additionally, the folllowing virtual members provide base functionality, but are available for override, if necessary:
+Additionally, the folllowing virtual members provide base functionality, but are available for override if necessary:
 
 * `Dispose`
 * `ProcessLogEntry`
