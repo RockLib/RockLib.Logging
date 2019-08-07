@@ -2,7 +2,7 @@
 
 A configured logger instance can be used to automatically log requests made to a ASP.NET Core application.
 
-In the following example, calling the `UseRockLibLogging` extension method with no parameters on the application's `WebHost` will cause all requests made to the web application to be logged at `Info` level to the unnamed, default logger:
+In the following example, calling the `UseRockLibLogging` extension method with no parameters on the application's `WebHost` will cause all requests made to the web application to be logged to the unnamed, default logger:
 
     public static IWebHost BuildWebHost(string[] args) =>
         WebHost.CreateDefaultBuilder(args)

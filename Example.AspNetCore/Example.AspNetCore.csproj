@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
-    <PackageReference Include="RockLib.Logging.AspNetCore" Version="2.0.0-alpha02" />
+    <PackageReference Include="RockLib.Logging.AspNetCore" Version="2.0.2" />
   </ItemGroup>
 
   <ItemGroup>
