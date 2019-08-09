@@ -58,7 +58,7 @@ With the default template:
     "Level": "Warn",
     "Providers": [
       {
-        "Type": "RockLib.Logging.RollingFileLogProvider, RockLib.Logging"
+        "Type": "RockLib.Logging.RollingFileLogProvider, RockLib.Logging",
         "Value": { "File": "log.txt" }
       }
     ]
@@ -76,7 +76,7 @@ With a custom template:
       {
         "Type": "RockLib.Logging.RollingFileLogProvider, RockLib.Logging",
         "Value": {
-          "File": "log.txt"
+          "File": "log.txt",
           "Template": "{level}: {message}"
         }
       }
@@ -95,7 +95,7 @@ With custom rolling file properties:
       {
         "Type": "RockLib.Logging.RollingFileLogProvider, RockLib.Logging",
         "Value": {
-          "File": "log.txt"
+          "File": "log.txt",
           "MaxFileSizeKilobytes": 2048,
           "MaxArchiveCount": 20,
           "RolloverPeriod": "Daily",
@@ -115,7 +115,7 @@ Or with a custom `ILogFormatter` (Assumes the class `MyAssembly.MyCustomFormatte
       {
         "Type": "RockLib.Logging.RollingFileLogProvider, RockLib.Logging",
         "Value": {
-          "Value": { "File": "log.txt" }
+          "Value": { "File": "log.txt" },
           "Formatter": {
             "Type" : "MyAssembly.MyCustomFormatter, MyAssembly"
          }

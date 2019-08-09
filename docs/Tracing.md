@@ -16,7 +16,7 @@ In order to set such a `TraceSource`, add this to your configuration:
         },
         "Listeners": {
             "Name": "rocklib.logging",
-            "LogFileName": "C:\my\path\rocklib_logging.log"
+            "LogFileName": "C:\\my\\path\\rocklib_logging.log"
         }
     }
 }
@@ -39,7 +39,7 @@ Tracing.Settings = new DiagnosticsSettings(
                 new System.Diagnostics.DefaultTraceListener
                 {
                     Name = "rocklib.logging",
-                    LogFileName = "C:\my\path\rocklib_logging.log"
+                    LogFileName = "C:\\my\\path\\rocklib_logging.log"
                 }
             }
         }
