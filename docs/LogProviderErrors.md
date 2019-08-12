@@ -1,6 +1,6 @@
 # Handle Log Provider Errors
 
-By default, errors produced by log providers are only traced, see [Tracing](tracing.md). In order to directly handle the errors, the `ILogger.ErrorHandler` can be set, either directly or through an extension method.
+By default, errors produced by log providers are only traced, see [Tracing](Tracing.md). In order to directly handle the errors, the `ILogger.ErrorHandler` can be set, either directly or through an extension method.
 
 ## Error Type
 
