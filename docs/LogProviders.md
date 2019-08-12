@@ -1,12 +1,10 @@
 # Log Providers
 
-`LogProviders` provider different outputs for writing logs.
-
-`RockLib.Logging` comes with three `LogProviders` available for use.
+The `ILogProvider` interface defines exactly how logs are written; a logger can have zero to many log providers. `RockLib.Logging` comes with three implementations of the `ILogProvider`.
 
 ## [ConsoleLogProvider](ConsoleLogProvider.md)
 
-Writes log entries to standard out.
+Writes log entries to standard out or standard error.
 
 ## [FileLogProvider](FileLogProvider.md)
 
