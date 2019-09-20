@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging", "RockLib.Logging\RockLib.Logging.csproj", "{0F6F91D3-E6A9-4694-9598-D0CAC6B115B3}"
 EndProject
@@ -16,6 +16,10 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RockLib.Reflection.Optimized.Shared", "RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.shproj", "{1F65CBB1-529E-407C-B7D6-8BE5A59EBE14}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.AspNetCore", "Example.AspNetCore\Example.AspNetCore.csproj", "{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockLib.Logging.DependencyInjection", "RockLib.Logging.DependencyInjection\RockLib.Logging.DependencyInjection.csproj", "{6365906E-F127-4B3D-B602-4B3CC20171D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.DependencyInjection.Tests", "RockLib.Logging.DependencyInjection.Tests\RockLib.Logging.DependencyInjection.Tests.csproj", "{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -50,6 +54,14 @@ Global
 		{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F55EA4-6C5E-4ED6-BAED-AAC364FEB745}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6365906E-F127-4B3D-B602-4B3CC20171D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6365906E-F127-4B3D-B602-4B3CC20171D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6365906E-F127-4B3D-B602-4B3CC20171D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6365906E-F127-4B3D-B602-4B3CC20171D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
