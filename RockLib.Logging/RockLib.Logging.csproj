@@ -7,7 +7,7 @@
   <PropertyGroup>
     <PackageId>RockLib.Logging</PackageId>
     <PackageVersion>2.0.0</PackageVersion>
-    <Authors>Quicken Loans</Authors>
+    <Authors>Brian Friesen</Authors>
     <Description>A simple logging library.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
