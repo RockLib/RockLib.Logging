@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.DependencyInjection</PackageId>
-    <PackageVersion>1.0.0-alpha00</PackageVersion>
+    <PackageVersion>1.0.0-alpha01</PackageVersion>
     <Authors>Quicken Loans</Authors>
     <Description>Extensions to register RockLib.Logging with Microsoft.Extensions.DependencyInjection.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
