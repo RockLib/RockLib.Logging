@@ -27,7 +27,7 @@ namespace RockLib.Logging.DependencyInjection
         /// values to a target type.
         /// </param>
         /// <param name="addLoggerProvider">
-        /// Whether to also add a singleton <see cref="ILogProvider"/> service with a <see cref="RockLibLoggerProvider"/>
+        /// Whether to also add a singleton <see cref="ILoggerProvider"/> service with a <see cref="RockLibLoggerProvider"/>
         /// implementation to the service collection.
         /// </param>
         /// <param name="addBackgroundLogProcessor">
@@ -79,7 +79,7 @@ namespace RockLib.Logging.DependencyInjection
         /// values to a target type.
         /// </param>
         /// <param name="addLoggerProvider">
-        /// Whether to also add a singleton <see cref="ILogProvider"/> service with a <see cref="RockLibLoggerProvider"/>
+        /// Whether to also add a singleton <see cref="ILoggerProvider"/> service with a <see cref="RockLibLoggerProvider"/>
         /// implementation to the service collection.
         /// </param>
         /// <param name="reloadOnConfigChange">
@@ -114,7 +114,7 @@ namespace RockLib.Logging.DependencyInjection
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
         /// <param name="logger">The instance of <see cref="ILogger"/> to add.</param>
         /// <param name="addLoggerProvider">
-        /// Whether to also add a singleton <see cref="ILogProvider"/> service with a <see cref="RockLibLoggerProvider"/>
+        /// Whether to also add a singleton <see cref="ILoggerProvider"/> service with a <see cref="RockLibLoggerProvider"/>
         /// implementation to the service collection.
         /// </param>
         /// <returns>The same <see cref="IServiceCollection"/>.</returns>
