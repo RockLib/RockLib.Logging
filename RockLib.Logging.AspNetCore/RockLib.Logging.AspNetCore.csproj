@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.AspNetCore</PackageId>
-    <PackageVersion>2.0.3-alpha00</PackageVersion>
+    <PackageVersion>2.0.3</PackageVersion>
     <Authors>Brian Friesen</Authors>
     <Description>Extensions to create hooks into Microsoft.Extensions.Logging</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
