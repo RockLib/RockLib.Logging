@@ -1,21 +1,19 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System;
 using Xunit;
 
-namespace RockLib.Logging.AspNetCore.Tests
+namespace RockLib.Logging.DependencyInjection.Tests
 {
     public class RockLibLoggerProviderTests
     {
         [Fact]
-        public void ConstructorSetsCreateLogger()
+        public void ConstructorThrowsIfDelegateIsNull()
         {
-            Func<ILogger> createLogger = () => null;
+            Action action = () => new RockLibLoggerProvider(null);
 
-            var provider = new RockLibLoggerProvider(createLogger);
-
-            provider.CreateLogger.Should().BeSameAs(createLogger);
+            action.Should().ThrowExactly<ArgumentNullException>();
         }
 
         [Fact]

@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using RockLib.Dynamic;
 using Xunit;
 using MSE = Microsoft.Extensions.Logging;
 
-namespace RockLib.Logging.AspNetCore.Tests
+namespace RockLib.Logging.DependencyInjection.Tests
 {
     public class RockLibLoggerTests
     {
@@ -216,5 +216,10 @@ namespace RockLib.Logging.AspNetCore.Tests
 
             rlLogger.IsEnabled(mseLogLevel).Should().Be(shouldBeEnabled);
         }
+    }
+
+    internal static class GetScopeExtension
+    {
+        public static object[] GetScope(this RockLibLogger rockLibLogger) => rockLibLogger.Unlock().GetScope();
     }
 }

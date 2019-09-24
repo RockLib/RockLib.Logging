@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using RockLib.Configuration;
 using RockLib.Configuration.AspNetCore;
 using RockLib.Configuration.ObjectFactory;
+using RockLib.Logging.DependencyInjection;
 using RockLib.Logging.LogProcessing;
 
 namespace RockLib.Logging.AspNetCore
@@ -54,11 +55,7 @@ namespace RockLib.Logging.AspNetCore
                 builder.SetConfigRoot();
 
             builder.ConfigureServices(services =>
-            {
-                services.AddLoggerFromLoggerFactory(rockLibLoggerName, defaultTypes, valueConverters);
-                if (registerAspNetCoreLogger)
-                    services.AddRockLibLoggerProvider();
-            });
+                services.AddRockLibLoggerTransient(rockLibLoggerName, defaultTypes, valueConverters, registerAspNetCoreLogger));
 
             return builder;
         }
@@ -85,34 +82,9 @@ namespace RockLib.Logging.AspNetCore
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
-            builder.ConfigureServices(services =>
-            {
-                services.AddSingleton(logger);
-                if (registerAspNetCoreLogger)
-                    services.AddRockLibLoggerProvider();
-            });
+            builder.ConfigureServices(services => services.AddRockLibLoggerSingleton(logger, registerAspNetCoreLogger));
 
             return builder;
-        }
-
-        private static void AddLoggerFromLoggerFactory(this IServiceCollection services, string rockLibLoggerName, 
-            DefaultTypes defaultTypes, ValueConverters valueConverters)
-        {
-            services.AddSingleton<ILogProcessor, BackgroundLogProcessor>();
-
-            services.AddTransient(serviceProvider =>
-            {
-                var resolver = new Resolver(t => serviceProvider.GetService(t));
-                return LoggerFactory.Create(rockLibLoggerName, defaultTypes, valueConverters, resolver, reloadOnConfigChange: false);
-            });
-        }
-
-        private static void AddRockLibLoggerProvider(this IServiceCollection services)
-        {
-            services.AddSingleton<ILoggerProvider>(serviceProvider =>
-            {
-                return new RockLibLoggerProvider(() => serviceProvider.GetRequiredService<ILogger>());
-            });
         }
     }
 }
