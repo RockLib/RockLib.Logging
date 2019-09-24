@@ -109,7 +109,7 @@ namespace RockLib.Logging.DependencyInjection
         }
 
         /// <summary>
-        /// Adds a singleton <see cref="ILogger"/> service  to the specified <see cref="IServiceCollection"/>.
+        /// Adds a singleton <see cref="ILogger"/> service, specified directly, to the specified <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
         /// <param name="logger">The instance of <see cref="ILogger"/> to add.</param>
