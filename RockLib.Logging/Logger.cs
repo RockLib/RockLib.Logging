@@ -45,17 +45,15 @@ namespace RockLib.Logging
         /// </summary>
         public const string DefaultName = "default";
 
-        private static readonly IReadOnlyCollection<ILogProvider> EmptyLogProviders = new ILogProvider[0];
-        private static readonly IReadOnlyCollection<IContextProvider> EmptyContextProviders = new IContextProvider[0];
+        private static readonly IReadOnlyCollection<ILogProvider> _emptyLogProviders = new ILogProvider[0];
+        private static readonly IReadOnlyCollection<IContextProvider> _emptyContextProviders = new IContextProvider[0];
 
         /// <summary>
         /// The name of the <see cref="TraceSource"/> used by this class for trace logging.
         /// </summary>
         public const string TraceSourceName = "rocklib.logging";
 
-        private readonly bool _disposeLogProcessor;
         private readonly bool _canProcessLogs;
-        private volatile bool _isDisposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
@@ -75,7 +73,7 @@ namespace RockLib.Logging
             bool isDisabled = false,
             ProcessingMode processingMode = ProcessingMode.Background,
             IReadOnlyCollection<IContextProvider> contextProviders = null)
-            : this(name, level, logProviders, isDisabled, contextProviders, CreateLogProcessor(processingMode), disposeLogProcessor: true)
+            : this(CreateLogProcessor(processingMode), name, level, logProviders, isDisabled, contextProviders)
         {
         }
 
@@ -97,30 +95,17 @@ namespace RockLib.Logging
             [AlternateName("providers")] IReadOnlyCollection<ILogProvider> logProviders = null,
             bool isDisabled = false,
             IReadOnlyCollection<IContextProvider> contextProviders = null)
-            : this(name, level, logProviders, isDisabled, contextProviders, logProcessor, disposeLogProcessor: false)
-        {
-        }
-
-        private Logger(
-            string name,
-            LogLevel level,
-            IReadOnlyCollection<ILogProvider> logProviders,
-            bool isDisabled,
-            IReadOnlyCollection<IContextProvider> contextProviders,
-            ILogProcessor logProcessor,
-            bool disposeLogProcessor)
         {
             if (!Enum.IsDefined(typeof(LogLevel), level))
                 throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
 
             Name = name ?? DefaultName;
             Level = level;
-            LogProviders = logProviders ?? EmptyLogProviders;
+            LogProviders = logProviders ?? _emptyLogProviders;
             IsDisabled = isDisabled;
-            ContextProviders = contextProviders ?? EmptyContextProviders;
+            ContextProviders = contextProviders ?? _emptyContextProviders;
             LogProcessor = logProcessor ?? throw new ArgumentNullException(nameof(logProcessor));
 
-            _disposeLogProcessor = disposeLogProcessor;
             _canProcessLogs = !IsDisabled && LogProviders.Count > 0;
         }
 
@@ -177,7 +162,6 @@ namespace RockLib.Logging
             [CallerLineNumber] int callerLineNumber = 0)
         {
             if (logEntry == null) throw new ArgumentNullException(nameof(logEntry));
-            if (_isDisposed) throw new ObjectDisposedException("Cannot log to a disposed Logger.");
             if (LogProcessor.IsDisposed) throw new ObjectDisposedException("Cannot log to a Logger with a disposed LogProcessor.");
 
             if (!_canProcessLogs || logEntry.Level < Level)
@@ -189,38 +173,9 @@ namespace RockLib.Logging
         }
 
         /// <summary>
-        /// Disposes the logger, if not already disposed.
+        /// Does nothing. Exists for backwards compatibility.
         /// </summary>
-        ~Logger() => Dispose(false);
-
-        /// <summary>
-        /// Shuts down the logger, blocking until all pending logs have been sent.
-        /// </summary>
-        public void Dispose() => Dispose(true);
-
-        private void Dispose(bool disposing)
-        {
-            if (_isDisposed)
-                return;
-
-            lock (this)
-            {
-                if (_isDisposed)
-                    return;
-
-                _isDisposed = true;
-
-                if (disposing)
-                    GC.SuppressFinalize(this);
-
-                if (_disposeLogProcessor)
-                    LogProcessor.Dispose();
-
-                var logProviders = LogProviders?.GetEnumerator();
-                while (logProviders != null && logProviders.MoveNext())
-                    (logProviders.Current as IDisposable)?.Dispose();
-            }
-        }
+        public void Dispose() { }
 
         private static ILogProcessor CreateLogProcessor(ProcessingMode processingMode)
         {
