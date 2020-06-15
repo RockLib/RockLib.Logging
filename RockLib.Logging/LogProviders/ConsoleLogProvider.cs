@@ -46,7 +46,7 @@ namespace RockLib.Logging
         /// <param name="output">The type of output stream to use.</param>
         /// <param name="timeout">The timeout of the log provider.</param>
         public ConsoleLogProvider(
-            string template = DefaultTemplate, LogLevel level = default(LogLevel), Output output = Output.StdOut, TimeSpan? timeout = null)
+            string template = DefaultTemplate, LogLevel level = default, Output output = default, TimeSpan? timeout = null)
             : this(new TemplateLogFormatter(template ?? DefaultTemplate), level, output, timeout)
         {
         }
@@ -59,7 +59,7 @@ namespace RockLib.Logging
         /// <param name="output">The type of output stream to use.</param>
         /// <param name="timeout">The timeout of the log provider.</param>
         public ConsoleLogProvider(
-            ILogFormatter formatter, LogLevel level = default(LogLevel), Output output = Output.StdOut, TimeSpan? timeout = null)
+            ILogFormatter formatter, LogLevel level = default, Output output = default, TimeSpan? timeout = null)
         {
             if (!Enum.IsDefined(typeof(LogLevel), level))
                 throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
@@ -104,7 +104,7 @@ namespace RockLib.Logging
         /// <param name="logEntry">The log entry to write.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe.</param>
         /// <returns>A task that completes when the log entry has been written to standard out.</returns>
-        public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken = default(CancellationToken))
+        public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken = default)
         {
             var formattedLog = Formatter.Format(logEntry);
             return _consoleWriter.WriteLineAsync(formattedLog);

@@ -55,7 +55,7 @@ namespace RockLib.Logging
         /// </param>
         public RollingFileLogProvider(string file,
             string template = DefaultTemplate,
-            LogLevel level = default(LogLevel),
+            LogLevel level = default,
             TimeSpan? timeout = null,
             int maxFileSizeKilobytes = DefaultMaxFileSizeKilobytes,
             int maxArchiveCount = DefaultMaxArchiveCount,
@@ -84,7 +84,7 @@ namespace RockLib.Logging
         /// </param>
         public RollingFileLogProvider(string file,
             ILogFormatter formatter,
-            LogLevel level = default(LogLevel),
+            LogLevel level = default,
             TimeSpan? timeout = null,
             int maxFileSizeKilobytes = DefaultMaxFileSizeKilobytes,
             int maxArchiveCount = DefaultMaxArchiveCount,
@@ -121,7 +121,7 @@ namespace RockLib.Logging
             Func<FileInfo, DateTime> getFileCreationTime,
             string file,
             ILogFormatter formatter,
-            LogLevel level = default(LogLevel),
+            LogLevel level = default,
             TimeSpan? timeout = null,
             int maxFileSizeKilobytes = DefaultMaxFileSizeKilobytes,
             int maxArchiveCount = DefaultMaxArchiveCount,
@@ -249,7 +249,7 @@ namespace RockLib.Logging
             maxFileSizeKilobytes * 1024;
 
         private IEnumerable<ArchiveFile> GetArchiveFiles() =>
-            GetArchiveFiles(out string dummy1, out string dummy2, out string dummy3);
+            GetArchiveFiles(out _, out _, out _);
 
         private IEnumerable<ArchiveFile> GetArchiveFiles(out string directory, out string fileName, out string fileExtension)
         {
