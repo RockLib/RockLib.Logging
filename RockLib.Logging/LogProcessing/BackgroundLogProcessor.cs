@@ -68,7 +68,7 @@ namespace RockLib.Logging.LogProcessing
         protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry, IErrorHandler errorHandler, int failureCount)
         {
             var source = new CancellationTokenSource();
-            var task = logProvider.WriteAsync(logEntry, CancellationToken.None);
+            var task = logProvider.WriteAsync(logEntry, source.Token);
             _trackingQueue.Add((task, logEntry, logProvider, source, failureCount, errorHandler));
         }
 
