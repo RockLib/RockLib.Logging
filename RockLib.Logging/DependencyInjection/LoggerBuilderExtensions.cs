@@ -65,7 +65,7 @@ namespace RockLib.Logging.DependencyInjection
         /// <param name="timeout">The timeout of the log provider.</param>
         /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
         public static ILoggerBuilder AddConsoleLogProvider(this ILoggerBuilder builder,
-            string template = ConsoleLogProvider.DefaultTemplate,
+            string template,
             LogLevel? level = null,
             ConsoleLogProvider.Output? output = null,
             TimeSpan? timeout = null)
@@ -168,7 +168,7 @@ namespace RockLib.Logging.DependencyInjection
         /// </param>
         /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
         public static ILoggerBuilder AddConsoleLogProvider(this ILoggerBuilder builder,
-            Action<ConsoleLogProviderOptions> configureOptions)
+            Action<ConsoleLogProviderOptions> configureOptions = null)
         {
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
@@ -203,7 +203,7 @@ namespace RockLib.Logging.DependencyInjection
         /// <param name="timeout">The timeout of the log provider.</param>
         /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
         public static ILoggerBuilder AddFileLogProvider(this ILoggerBuilder builder,
-            string template = FileLogProvider.DefaultTemplate,
+            string template,
             string file = null,
             LogLevel? level = null,
             TimeSpan? timeout = null)
@@ -306,7 +306,7 @@ namespace RockLib.Logging.DependencyInjection
         /// </param>
         /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
         public static ILoggerBuilder AddFileLogProvider(this ILoggerBuilder builder,
-            Action<FileLogProviderOptions> configureOptions)
+            Action<FileLogProviderOptions> configureOptions = null)
         {
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
@@ -321,7 +321,7 @@ namespace RockLib.Logging.DependencyInjection
                     ?? new TemplateLogFormatter(FileLogProvider.DefaultTemplate);
 
                 if (optionsMonitor != null && options.ReloadOnChange)
-                    return new OptionsMonitorReloadingLogProvider<FileLogProviderOptions>(
+                    return new ReloadingLogProvider<FileLogProviderOptions>(
                         optionsMonitor, options, CreateLogProvider, builder.LoggerName);
 
                 return CreateLogProvider(options);
@@ -359,7 +359,7 @@ namespace RockLib.Logging.DependencyInjection
         /// </param>
         /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
         public static ILoggerBuilder AddRollingFileLogProvider(this ILoggerBuilder builder,
-            string template = FileLogProvider.DefaultTemplate,
+            string template,
             string file = null,
             LogLevel? level = null,
             TimeSpan? timeout = null,
@@ -512,7 +512,7 @@ namespace RockLib.Logging.DependencyInjection
         /// </param>
         /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
         public static ILoggerBuilder AddRollingFileLogProvider(this ILoggerBuilder builder,
-            Action<RollingFileLogProviderOptions> configureOptions)
+            Action<RollingFileLogProviderOptions> configureOptions = null)
         {
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
@@ -527,7 +527,7 @@ namespace RockLib.Logging.DependencyInjection
                     ?? new TemplateLogFormatter(FileLogProvider.DefaultTemplate);
 
                 if (optionsMonitor != null && options.ReloadOnChange)
-                    return new OptionsMonitorReloadingLogProvider<RollingFileLogProviderOptions>(
+                    return new ReloadingLogProvider<RollingFileLogProviderOptions>(
                         optionsMonitor, options, CreateLogProvider, builder.LoggerName);
 
                 return CreateLogProvider(options);

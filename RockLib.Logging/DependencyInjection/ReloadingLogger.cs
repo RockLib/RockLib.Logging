@@ -7,7 +7,7 @@ using static RockLib.Logging.DependencyInjection.ServiceCollectionExtensions;
 
 namespace RockLib.Logging.DependencyInjection
 {
-    internal class OptionsMonitorReloadingLogger : ILogger
+    internal class ReloadingLogger : ILogger
     {
         private readonly ILogProcessor _logProcessor;
         private readonly IReadOnlyCollection<ILogProvider> _logProviders;
@@ -15,7 +15,7 @@ namespace RockLib.Logging.DependencyInjection
 
         private Logger _logger;
 
-        public OptionsMonitorReloadingLogger(ILogProcessor logProcessor,
+        public ReloadingLogger(ILogProcessor logProcessor,
             string name,
             IReadOnlyCollection<ILogProvider> logProviders,
             IReadOnlyCollection<IContextProvider> contextProviders,

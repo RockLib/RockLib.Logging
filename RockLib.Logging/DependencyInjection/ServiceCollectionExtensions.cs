@@ -40,6 +40,11 @@ namespace RockLib.Logging.DependencyInjection
             Action<ILoggerOptions> configureOptions = null,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
+            if (services is null)
+                throw new ArgumentNullException(nameof(services));
+            if (logProcessor is null)
+                throw new ArgumentNullException(nameof(logProcessor));
+
             var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
             services.SetLogProcessor(logProcessor);
@@ -79,6 +84,11 @@ namespace RockLib.Logging.DependencyInjection
             Action<ILoggerOptions> configureOptions = null,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
+            if (services is null)
+                throw new ArgumentNullException(nameof(services));
+            if (logProcessorRegistration is null)
+                throw new ArgumentNullException(nameof(logProcessorRegistration));
+
             var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
             services.SetLogProcessor(logProcessorRegistration);
@@ -115,6 +125,9 @@ namespace RockLib.Logging.DependencyInjection
             Logger.ProcessingMode processingMode = Logger.ProcessingMode.Background,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
+            if (services is null)
+                throw new ArgumentNullException(nameof(services));
+
             var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
             services.SetLogProcessor(processingMode);
@@ -129,7 +142,6 @@ namespace RockLib.Logging.DependencyInjection
             services.ClearLogProcessor();
             services.AddSingleton(logProcessor);
         }
-
 
         private static void SetLogProcessor(this IServiceCollection services, Func<IServiceProvider, ILogProcessor> logProcessorRegistration)
         {
@@ -151,6 +163,8 @@ namespace RockLib.Logging.DependencyInjection
                 case Logger.ProcessingMode.FireAndForget:
                     services.AddSingleton<ILogProcessor, FireAndForgetLogProcessor>();
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(processingMode));
             }
         }
 

@@ -58,6 +58,9 @@ namespace RockLib.Logging.DependencyInjection
         /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
         public ILoggerBuilder AddLogProvider(Func<IServiceProvider, ILogProvider> logProviderRegistration)
         {
+            if (logProviderRegistration is null)
+                throw new ArgumentNullException(nameof(logProviderRegistration));
+
             Services.Configure<LoggerOptions>(LoggerName, options => options.LogProviderRegistrations.Add(logProviderRegistration));
             return this;
         }
@@ -69,6 +72,9 @@ namespace RockLib.Logging.DependencyInjection
         /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
         public ILoggerBuilder AddContextProvider(Func<IServiceProvider, IContextProvider> contextProviderRegistration)
         {
+            if (contextProviderRegistration is null)
+                throw new ArgumentNullException(nameof(contextProviderRegistration));
+
             Services.Configure<LoggerOptions>(LoggerName, options => options.ContextProviderRegistrations.Add(contextProviderRegistration));
             return this;
         }
@@ -82,6 +88,9 @@ namespace RockLib.Logging.DependencyInjection
         /// <returns>An instance of <see cref="ILogger"/>.</returns>
         public ILogger Build(IServiceProvider serviceProvider)
         {
+            if (serviceProvider is null)
+                throw new ArgumentNullException(nameof(serviceProvider));
+
             var optionsMonitor = serviceProvider.GetService<IOptionsMonitor<LoggerOptions>>();
             var options = optionsMonitor?.Get(LoggerName) ?? new LoggerOptions();            
             ConfigureOptions?.Invoke(options);
@@ -100,7 +109,7 @@ namespace RockLib.Logging.DependencyInjection
             var contextProviders = options.ContextProviderRegistrations.Select(createContextProvider => createContextProvider(serviceProvider)).ToArray();
 
             if (optionsMonitor != null && options.ReloadOnChange)
-                return new OptionsMonitorReloadingLogger(logProcessor, LoggerName, logProviders, contextProviders, optionsMonitor, options);
+                return new ReloadingLogger(logProcessor, LoggerName, logProviders, contextProviders, optionsMonitor, options);
             
             return new Logger(logProcessor, LoggerName, logProviders: logProviders, contextProviders: contextProviders);
         }

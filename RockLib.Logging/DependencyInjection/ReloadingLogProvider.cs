@@ -7,14 +7,14 @@ using static RockLib.Logging.DependencyInjection.ServiceCollectionExtensions;
 
 namespace RockLib.Logging.DependencyInjection
 {
-    internal class OptionsMonitorReloadingLogProvider<TOptions> : ILogProvider
+    internal class ReloadingLogProvider<TOptions> : ILogProvider
     {
         private readonly Func<TOptions, ILogProvider> _createLogProvider;
         private readonly string _name;
 
         private ILogProvider _logProvider;
 
-        public OptionsMonitorReloadingLogProvider(IOptionsMonitor<TOptions> optionsMonitor, TOptions options,
+        public ReloadingLogProvider(IOptionsMonitor<TOptions> optionsMonitor, TOptions options,
             Func<TOptions, ILogProvider> createLogProvider, string name)
         {
             _createLogProvider = createLogProvider;
