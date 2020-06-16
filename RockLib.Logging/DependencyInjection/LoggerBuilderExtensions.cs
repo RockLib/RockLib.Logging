@@ -320,7 +320,14 @@ namespace RockLib.Logging.DependencyInjection
                 var formatter = options.FormatterRegistration?.Invoke(serviceProvider)
                     ?? new TemplateLogFormatter(FileLogProvider.DefaultTemplate);
 
-                return new FileLogProvider(options.File, formatter, options.Level, options.Timeout);
+                if (optionsMonitor != null && options.ReloadOnChange)
+                    return new OptionsMonitorReloadingLogProvider<FileLogProviderOptions>(
+                        optionsMonitor, options, CreateLogProvider, builder.LoggerName);
+
+                return CreateLogProvider(options);
+
+                ILogProvider CreateLogProvider(FileLogProviderOptions o) =>
+                    new FileLogProvider(o.File, formatter, o.Level, o.Timeout);
             });
         }
 
@@ -519,8 +526,15 @@ namespace RockLib.Logging.DependencyInjection
                 var formatter = options.FormatterRegistration?.Invoke(serviceProvider)
                     ?? new TemplateLogFormatter(FileLogProvider.DefaultTemplate);
 
-                return new RollingFileLogProvider(options.File, formatter, options.Level,
-                options.Timeout, options.MaxFileSizeKilobytes, options.MaxArchiveCount, options.RolloverPeriod);
+                if (optionsMonitor != null && options.ReloadOnChange)
+                    return new OptionsMonitorReloadingLogProvider<RollingFileLogProviderOptions>(
+                        optionsMonitor, options, CreateLogProvider, builder.LoggerName);
+
+                return CreateLogProvider(options);
+
+                ILogProvider CreateLogProvider(RollingFileLogProviderOptions o) =>
+                    new RollingFileLogProvider(o.File, formatter, o.Level, o.Timeout,
+                        o.MaxFileSizeKilobytes, o.MaxArchiveCount, o.RolloverPeriod);
             });
         }
 
