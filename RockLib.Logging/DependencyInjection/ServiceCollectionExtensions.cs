@@ -7,16 +7,40 @@ using System.Linq;
 
 namespace RockLib.Logging.DependencyInjection
 {
+    /// <summary>
+    /// Defines extension methods for <see cref="IServiceCollection"/> that add loggers to a
+    /// service collection.
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
-        // TODO: Add remarks stating that if multiple loggers are added, the last one defines the log processor for all.
-        public static ILoggerBuilder AddRockLibLogging(this IServiceCollection services,
+        /// <summary>
+        /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
+        /// <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">
+        /// The <see cref="IServiceCollection"/> to add the logger to.
+        /// </param>
+        /// <param name="logProcessor">The object that will process log entries on behalf of the logger.</param>
+        /// <param name="loggerName">The name of the logger to build.</param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
+        /// logger.
+        /// </param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
+        /// <returns>
+        /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
+        /// </returns>
+        /// <remarks>
+        /// Note that if this method or any of its overloads are called more than once, then the
+        /// last call defines the log processor for all.
+        /// </remarks>
+        public static ILoggerBuilder AddLogger(this IServiceCollection services,
             ILogProcessor logProcessor,
             string loggerName = Logger.DefaultName,
-            Action<LoggerOptions> configureOptions = null,
+            Action<ILoggerOptions> configureOptions = null,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
-            var builder = new LoggerBuilder(loggerName, configureOptions);
+            var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
             services.SetLogProcessor(logProcessor);
             services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
@@ -25,30 +49,73 @@ namespace RockLib.Logging.DependencyInjection
             return builder;
         }
 
-        // TODO: Add remarks stating that if multiple loggers are added, the last one defines the log processor for all.
-        public static ILoggerBuilder AddRockLibLogging(this IServiceCollection services,
-            Func<IServiceProvider, ILogProcessor> logProcessorFactory,
+        /// <summary>
+        /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
+        /// <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">
+        /// The <see cref="IServiceCollection"/> to add the logger to.
+        /// </param>
+        /// <param name="logProcessorRegistration">
+        /// The method used to create the <see cref="ILogProcessor"/> that will process log entries
+        /// on behalf of the logger.
+        /// </param>
+        /// <param name="loggerName">The name of the logger to build.</param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
+        /// logger.
+        /// </param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
+        /// <returns>
+        /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
+        /// </returns>
+        /// <remarks>
+        /// Note that if this method or any of its overloads are called more than once, then the
+        /// last call defines the log processor for all.
+        /// </remarks>
+        public static ILoggerBuilder AddLogger(this IServiceCollection services,
+            Func<IServiceProvider, ILogProcessor> logProcessorRegistration,
             string loggerName = Logger.DefaultName,
-            Action<LoggerOptions> configureOptions = null,
+            Action<ILoggerOptions> configureOptions = null,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
-            var builder = new LoggerBuilder(loggerName, configureOptions);
+            var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
-            services.SetLogProcessor(logProcessorFactory);
+            services.SetLogProcessor(logProcessorRegistration);
             services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
             services.SetLoggerLookupDescriptor();
 
             return builder;
         }
 
-        // TODO: Add remarks stating that if multiple loggers are added, the last one defines the log processor for all.
-        public static ILoggerBuilder AddRockLibLogging(this IServiceCollection services,
+        /// <summary>
+        /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
+        /// <see cref="IServiceCollection"/>.
+        /// </summary>
+        /// <param name="services">
+        /// The <see cref="IServiceCollection"/> to add the logger to.
+        /// </param>
+        /// <param name="loggerName">The name of the logger to build.</param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
+        /// logger.
+        /// </param>
+        /// <param name="processingMode">A value that indicates how the logger will process logs.</param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
+        /// <returns>
+        /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
+        /// </returns>
+        /// <remarks>
+        /// Note that if this method or any of its overloads are called more than once, then the
+        /// last call defines the log processor for all.
+        /// </remarks>
+        public static ILoggerBuilder AddLogger(this IServiceCollection services,
             string loggerName = Logger.DefaultName,
-            Action<LoggerOptions> configureOptions = null,
+            Action<ILoggerOptions> configureOptions = null,
             Logger.ProcessingMode processingMode = Logger.ProcessingMode.Background,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
-            var builder = new LoggerBuilder(loggerName, configureOptions);
+            var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
             services.SetLogProcessor(processingMode);
             services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
@@ -64,10 +131,10 @@ namespace RockLib.Logging.DependencyInjection
         }
 
 
-        private static void SetLogProcessor(this IServiceCollection services, Func<IServiceProvider, ILogProcessor> logProcessorFactory)
+        private static void SetLogProcessor(this IServiceCollection services, Func<IServiceProvider, ILogProcessor> logProcessorRegistration)
         {
             services.ClearLogProcessor();
-            services.AddSingleton(logProcessorFactory);
+            services.AddSingleton(logProcessorRegistration);
         }
 
         private static void SetLogProcessor(this IServiceCollection services, Logger.ProcessingMode processingMode)
@@ -106,7 +173,7 @@ namespace RockLib.Logging.DependencyInjection
                 .Select(service => service.Lifetime == ServiceLifetime.Singleton)
                 .ToArray();
 
-            LoggerLookup LoggerLookupFactory(IServiceProvider serviceProvider) => name =>
+            LoggerLookup LoggerLookupRegistration(IServiceProvider serviceProvider) => name =>
             {
                 // Select the first logger that has a matching name.
                 var loggers = serviceProvider.GetServices<ILogger>().ToArray();
@@ -120,7 +187,7 @@ namespace RockLib.Logging.DependencyInjection
                 return selectedLogger;
             };
 
-            services.AddSingleton(LoggerLookupFactory);
+            services.AddSingleton(LoggerLookupRegistration);
         }
 
         internal static bool NamesEqual(string loggerName, string lookupName)

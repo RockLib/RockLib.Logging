@@ -6,39 +6,80 @@ using RockLib.Configuration;
 using RockLib.Configuration.ObjectFactory;
 using RockLib.Logging.LogProcessing;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace RockLib.Logging.DependencyInjection
 {
+    /// <summary>
+    /// The default implementation of the <see cref="ILoggerBuilder"/> interface.
+    /// </summary>
     public class LoggerBuilder : ILoggerBuilder
     {
-        public LoggerBuilder(string loggerName, Action<LoggerOptions> configureOptions)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoggerBuilder"/> class.
+        /// </summary>
+        /// <param name="services">
+        /// The <see cref="IServiceCollection"/> that is configured when the <see cref="AddLogProvider"/> and
+        /// <see cref="AddContextProvider"/> methods are called.
+        /// </param>
+        /// <param name="loggerName">The name of the logger to build.</param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
+        /// logger.
+        /// </param>
+        public LoggerBuilder(IServiceCollection services, string loggerName, Action<ILoggerOptions> configureOptions)
         {
+            Services = services ?? throw new ArgumentNullException(nameof(services));
             LoggerName = loggerName ?? Logger.DefaultName;
             ConfigureOptions = configureOptions;
         }
 
+        /// <summary>
+        /// The <see cref="IServiceCollection"/> that is configured when the <see cref="AddLogProvider"/> and
+        /// <see cref="AddContextProvider"/> methods are called.
+        /// </summary>
+        public IServiceCollection Services { get; }
+
+        /// <summary>
+        /// The name of the logger to build.
+        /// </summary>
         public string LoggerName { get; }
 
-        public Action<LoggerOptions> ConfigureOptions { get; }
+        /// <summary>
+        /// The delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
+        /// logger.
+        /// </summary>
+        public Action<ILoggerOptions> ConfigureOptions { get; }
 
-        public IList<LogProviderRegistration> LogProviders { get; } = new List<LogProviderRegistration>();
-
-        public IList<ContextProviderRegistration> ContextProviders { get; } = new List<ContextProviderRegistration>();
-
-        public ILoggerBuilder AddLogProvider(LogProviderRegistration registration)
+        /// <summary>
+        /// Adds an <see cref="ILogProvider"/> to the logger.
+        /// </summary>
+        /// <param name="logProviderRegistration">A method that creates the <see cref="ILogProvider"/>.</param>
+        /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
+        public ILoggerBuilder AddLogProvider(Func<IServiceProvider, ILogProvider> logProviderRegistration)
         {
-            LogProviders.Add(registration);
+            Services.Configure<LoggerOptions>(LoggerName, options => options.LogProviderRegistrations.Add(logProviderRegistration));
             return this;
         }
 
-        public ILoggerBuilder AddContextProvider(ContextProviderRegistration registration)
+        /// <summary>
+        /// Adds an <see cref="IContextProvider"/> to the logger.
+        /// </summary>
+        /// <param name="contextProviderRegistration">A method that creates the <see cref="IContextProvider"/>.</param>
+        /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
+        public ILoggerBuilder AddContextProvider(Func<IServiceProvider, IContextProvider> contextProviderRegistration)
         {
-            ContextProviders.Add(registration);
+            Services.Configure<LoggerOptions>(LoggerName, options => options.ContextProviderRegistrations.Add(contextProviderRegistration));
             return this;
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="ILogger"/>.
+        /// </summary>
+        /// <param name="serviceProvider">
+        /// The <see cref="IServiceProvider"/> that retrieves the services required to create the <see cref="ILogger"/>.
+        /// </param>
+        /// <returns>An instance of <see cref="ILogger"/>.</returns>
         public ILogger Build(IServiceProvider serviceProvider)
         {
             var optionsMonitor = serviceProvider.GetService<IOptionsMonitor<LoggerOptions>>();
@@ -55,8 +96,8 @@ namespace RockLib.Logging.DependencyInjection
             }
 
             var logProcessor = serviceProvider.GetRequiredService<ILogProcessor>();
-            var logProviders = LogProviders.Select(createLogProvider => createLogProvider(serviceProvider)).ToArray();
-            var contextProviders = ContextProviders.Select(createContextProvider => createContextProvider(serviceProvider)).ToArray();
+            var logProviders = options.LogProviderRegistrations.Select(createLogProvider => createLogProvider(serviceProvider)).ToArray();
+            var contextProviders = options.ContextProviderRegistrations.Select(createContextProvider => createContextProvider(serviceProvider)).ToArray();
 
             if (optionsMonitor != null && options.ReloadOnChange)
                 return new OptionsMonitorReloadingLogger(logProcessor, LoggerName, logProviders, contextProviders, optionsMonitor, options);
@@ -65,7 +106,8 @@ namespace RockLib.Logging.DependencyInjection
         }
 
         private bool IsEmpty(LoggerOptions options) =>
-            LogProviders.Count == 0 && ContextProviders.Count == 0 && options.Level == null && options.IsDisabled == null;
+            options.LogProviderRegistrations.Count == 0 && options.ContextProviderRegistrations.Count == 0
+                && options.Level == null && options.IsDisabled == null;
     }
 }
 #endif
