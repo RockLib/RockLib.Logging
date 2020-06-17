@@ -4,8 +4,6 @@ using Moq;
 using RockLib.Logging.DependencyInjection;
 using RockLib.Logging.LogProcessing;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RockLib.Logging.Tests.DependencyInjection
