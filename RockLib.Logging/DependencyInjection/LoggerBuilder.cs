@@ -111,7 +111,8 @@ namespace RockLib.Logging.DependencyInjection
             if (optionsMonitor != null && options.ReloadOnChange)
                 return new ReloadingLogger(logProcessor, LoggerName, logProviders, contextProviders, optionsMonitor, options);
             
-            return new Logger(logProcessor, LoggerName, logProviders: logProviders, contextProviders: contextProviders);
+            return new Logger(logProcessor, LoggerName, options.Level.GetValueOrDefault(),
+                logProviders, options.IsDisabled.GetValueOrDefault(), contextProviders);
         }
 
         private bool IsEmpty(LoggerOptions options) =>
