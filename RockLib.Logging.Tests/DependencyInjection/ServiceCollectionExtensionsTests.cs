@@ -12,7 +12,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
     {
         private readonly IServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 1 adds the correct service descriptors")]
         public void AddLoggerMethod1HappyPath()
         {
             var services = new ServiceCollection();
@@ -37,7 +37,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 1 throws when services parameter is null")]
         public void AddLoggerMethod1SadPath1()
         {
             IServiceCollection services = null;
@@ -48,7 +48,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 1 throws when logProcessor parameter is null")]
         public void AddLoggerMethod1SadPath2()
         {
             var services = new ServiceCollection();
@@ -59,14 +59,14 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*logProcessor*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 2 adds the correct service descriptors")]
         public void AddLoggerMethod2HappyPath()
         {
             var services = new ServiceCollection();
             var logProcessor = new Mock<ILogProcessor>().Object;
-            Func<IServiceProvider, ILogProcessor> logProcessorRegistration = serviceProvider => logProcessor;
+            ILogProcessor LogProcessorRegistration(IServiceProvider serviceProvider) => logProcessor;
 
-            var builder = services.AddLogger(logProcessorRegistration,
+            var builder = services.AddLogger(LogProcessorRegistration,
                 configureOptions: options => options.Level = LogLevel.Info,
                 lifetime: ServiceLifetime.Scoped);
 
@@ -85,19 +85,19 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 2 throws when services parameter is null")]
         public void AddLoggerMethod2SadPath1()
         {
             IServiceCollection services = null;
             var logProcessor = new Mock<ILogProcessor>().Object;
-            Func<IServiceProvider, ILogProcessor> logProcessorRegistration = serviceProvider => logProcessor;
+            ILogProcessor LogProcessorRegistration(IServiceProvider serviceProvider) => logProcessor;
 
-            Action act = () => services.AddLogger(logProcessorRegistration);
+            Action act = () => services.AddLogger(LogProcessorRegistration);
 
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 2 throws when logProcessorRegistration parameter is null")]
         public void AddLoggerMethod2SadPath2()
         {
             var services = new ServiceCollection();
@@ -108,7 +108,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*logProcessorRegistration*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 3 adds the correct service descriptors for ProcessingMode.Background")]
         public void AddLoggerMethod3HappyPath1()
         {
             var services = new ServiceCollection();
@@ -132,7 +132,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 3 adds the correct service descriptors for ProcessingMode.FireAndForget")]
         public void AddLoggerMethod3HappyPath2()
         {
             var services = new ServiceCollection();
@@ -156,7 +156,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 3 adds the correct service descriptors for ProcessingMode.Synchronous")]
         public void AddLoggerMethod3HappyPath3()
         {
             var services = new ServiceCollection();
@@ -180,7 +180,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 3 throws when services parameter is null")]
         public void AddLoggerMethod3SadPath1()
         {
             IServiceCollection services = null;
@@ -191,7 +191,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogger method 3 throws when processingMode parameter is out of range")]
         public void AddLoggerMethod3SadPath2()
         {
             var services = new ServiceCollection();

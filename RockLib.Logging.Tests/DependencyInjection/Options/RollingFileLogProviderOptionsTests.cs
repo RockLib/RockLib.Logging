@@ -6,7 +6,7 @@ namespace RockLib.Logging.Tests.DependencyInjection.Options
 {
     public class RollingFileLogProviderOptionsTests
     {
-        [Fact]
+        [Fact(DisplayName = "RollingFileLogProviderOptions has the correct default property values")]
         public void DefaultValues()
         {
             var options = new RollingFileLogProviderOptions();

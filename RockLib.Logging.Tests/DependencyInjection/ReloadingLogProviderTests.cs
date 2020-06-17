@@ -16,7 +16,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogProvider`1, RockLib.Logging", true)
                 .MakeGenericType(typeof(TestOptions));
 
-        [Fact]
+        [Fact(DisplayName = "Constructor sets fields")]
         public void ConstructorHappyPath()
         {
             var source = new TestConfigurationSource();
@@ -49,7 +49,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             logProvider.Bar.Should().Be("abc");
         }
 
-        [Fact]
+        [Fact(DisplayName = "_logProvider field is reinstantiated when options monitor changes")]
         public void ReloadHappyPath()
         {
             var source = new TestConfigurationSource();

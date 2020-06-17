@@ -14,7 +14,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
     {
         private static readonly IServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
 
-        [Fact]
+        [Fact(DisplayName = "AddLogProvider method adds log provider of specified type")]
         public void AddLogProviderMethodHappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -41,7 +41,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             testLogProvider.Dependency.Should().BeSameAs(dependency);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogProvider method throws when builder parameter is null")]
         public void AddLogProviderMethodSadPath()
         {
             ILoggerBuilder builder = null;
@@ -51,7 +51,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*builder*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddContextProvider method adds context provider of specified type")]
         public void AddContextProviderMethodHappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -78,7 +78,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             testContextProvider.Dependency.Should().BeSameAs(dependency);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddContextProvider method throws when builder parameter is null")]
         public void AddContextProviderMethodSadPath()
         {
             ILoggerBuilder builder = null;
@@ -90,7 +90,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
         #region AddConsoleLogProvider
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 1 adds console log provider with specified template")]
         public void AddConsoleLogProviderMethod1HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -114,7 +114,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 .Which.Template.Should().Be(template);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 1 throws when template parameter is null")]
         public void AddConsoleLogProviderMethod1SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -124,7 +124,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*template*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 2 adds console log provider with specified formatter")]
         public void AddConsoleLogProviderMethod2HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -147,7 +147,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             consoleLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 2 throws when formatter parameter is null")]
         public void AddConsoleLogProviderMethod2SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -157,7 +157,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatter*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 3 adds console log provider with specified formatter")]
         public void AddConsoleLogProviderMethod3HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -191,7 +191,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             formatter.Setting.Should().Be(setting);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 4 adds console log provider with specified formatter registration")]
         public void AddConsoleLogProviderMethod4HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -215,7 +215,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             consoleLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 4 throws when formatterRegistration parameter is null")]
         public void AddConsoleLogProviderMethod4SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -225,7 +225,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatterRegistration*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 5 adds console log provider configured with configureOptions parameter")]
         public void AddConsoleLogProviderMethod5HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -252,7 +252,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             consoleLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddConsoleLogProvider method 5 throws when builder parameter is null")]
         public void AddConsoleLogProviderMethod5SadPath()
         {
             ILoggerBuilder builder = null;
@@ -266,7 +266,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
         #region AddFileLogProvider
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 1 adds file log provider with specified template")]
         public void AddFileLogProviderMethod1HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -292,7 +292,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 .Which.Template.Should().Be(template);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 1 throws when template parameter is null")]
         public void AddFileLogProviderMethod1SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -302,7 +302,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*template*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 2 adds file log provider with specified formatter")]
         public void AddFileLogProviderMethod2HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -327,7 +327,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             fileLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 2 throws when formatter parameter is null")]
         public void AddFileLogProviderMethod2SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -337,7 +337,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatter*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 3 adds file log provider with specified formatter")]
         public void AddFileLogProviderMethod3HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -373,7 +373,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             formatter.Setting.Should().Be(setting);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 4 adds file log provider with specified formatter registration")]
         public void AddFileLogProviderMethod4HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -399,7 +399,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             fileLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 4 throws when formatterRegistration parameter is null")]
         public void AddFileLogProviderMethod4SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -409,7 +409,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatterRegistration*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 5 adds file log provider configured with configureOptions parameter")]
         public void AddFileLogProviderMethod5HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -439,7 +439,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             fileLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddFileLogProvider method 5 throws when builder parameter is null")]
         public void AddFileLogProviderMethod5SadPath()
         {
             ILoggerBuilder builder = null;
@@ -453,7 +453,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
         #region AddRollingFileLogProvider
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 1 adds rolling file log provider with specified template")]
         public void AddRollingRollingFileLogProviderMethod1HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -483,7 +483,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 .Which.Template.Should().Be(template);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 1 throws when template parameter is null")]
         public void AddRollingFileLogProviderMethod1SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -494,7 +494,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*template*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 2 adds rolling file log provider with specified formatter")]
         public void AddRollingFileLogProviderMethod2HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -523,7 +523,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             rollingFileLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 2 throws when formatter parameter is null")]
         public void AddRollingFileLogProviderMethod2SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -534,7 +534,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatter*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 3 adds rolling file log provider with specified formatter")]
         public void AddRollingFileLogProviderMethod3HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -575,7 +575,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             formatter.Setting.Should().Be(setting);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 4 adds rolling file log provider with specified formatter registration")]
         public void AddRollingFileLogProviderMethod4HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -605,7 +605,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             rollingFileLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 4 throws when formatterRegistration parameter is null")]
         public void AddRollingFileLogProviderMethod4SadPath()
         {
             var builder = new Mock<ILoggerBuilder>().Object;
@@ -616,7 +616,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatterRegistration*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 5 adds rolling file log provider configured with configureOptions parameter")]
         public void AddRollingFileLogProviderMethod5HappyPath()
         {
             var builder = new TestLoggerBuilder();
@@ -652,7 +652,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             rollingFileLogProvider.Formatter.Should().BeSameAs(formatter);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddRollingFileLogProvider method 5 throws when builder parameter is null")]
         public void AddRollingFileLogProviderMethod5SadPath()
         {
             ILoggerBuilder builder = null;

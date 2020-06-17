@@ -13,7 +13,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
 {
     public class LoggerBuilderTests
     {
-        [Fact]
+        [Fact(DisplayName = "Constructor sets properties")]
         public void ConstructorHappyPath1()
         {
             var services = new ServiceCollection();
@@ -27,7 +27,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             builder.ConfigureOptions.Should().BeSameAs(configureOptions);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Constructor sets LoggerName to Logger.DefaultName if name parameter is null")]
         public void ConstructorHappyPath2()
         {
             var services = new ServiceCollection();
@@ -41,7 +41,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             builder.ConfigureOptions.Should().BeSameAs(configureOptions);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Constructor throws if services parameter is null")]
         public void ConstructorSadPath()
         {
             IServiceCollection services = null;
@@ -53,7 +53,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogProvider method adds logProviderRegistration parameter to configured LoggerOptions")]
         public void AddLogProviderMethodHappyPath()
         {
             var services = new ServiceCollection();
@@ -74,7 +74,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 .Which.Should().BeSameAs(logProviderRegistration);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddLogProvider method throws if logProviderRegistration parameter is null")]
         public void AddLogProviderMethodSadPath()
         {
             var builder = new LoggerBuilder(new ServiceCollection(), Logger.DefaultName, null);
@@ -86,7 +86,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*logProviderRegistration*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddContextProvider method adds contextProviderRegistration parameter to configured LoggerOptions")]
         public void AddContextProviderMethodHappyPath()
         {
             var services = new ServiceCollection();
@@ -107,7 +107,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 .Which.Should().BeSameAs(contextProviderRegistration);
         }
 
-        [Fact]
+        [Fact(DisplayName = "AddContextProvider method throws if contextProviderRegistration parameter is null")]
         public void AddContextProviderMethodSadPath()
         {
             var builder = new LoggerBuilder(new ServiceCollection(), Logger.DefaultName, null);
@@ -119,12 +119,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*contextProviderRegistration*");
         }
 
-        [Fact]
+        [Fact(DisplayName = "Build method returns Logger instance given non-empty options")]
         public void BuildMethodHappyPath1()
         {
-            // IsEmpty(options) returns false
-            // ReloadOnChange is false
-
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
@@ -151,12 +148,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 .Which.Should().BeSameAs(contextProvider);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Build method returns ReloadingLogger instance given non-empty options where ReloadOnChange is true")]
         public void BuildMethodHappyPath2()
         {
-            // IsEmpty(options) returns false
-            // ReloadOnChange is true
-
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
@@ -186,11 +180,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 .Which.Should().BeSameAs(contextProvider);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Build method returns logger created from configuration given empty options")]
         public void BuildMethodHappyPath3()
         {
-            // IsEmpty(options) returns true
-
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;

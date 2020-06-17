@@ -17,7 +17,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
         public static readonly Type ReloadingLogger =
             Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogger, RockLib.Logging", true);
 
-        [Fact]
+        [Fact(DisplayName = "Constructor sets fields and properties")]
         public void ConstructorHappyPath()
         {
             var source = new TestConfigurationSource();
@@ -60,7 +60,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             logger.LogProcessor.Should().BeSameAs(logProcessor);
         }
 
-        [Fact]
+        [Fact(DisplayName = "_logger field is reinstantiated when options monitor changes")]
         public void ReloadHappyPath()
         {
             var configSource = new TestConfigurationSource();
