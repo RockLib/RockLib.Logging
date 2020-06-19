@@ -20,7 +20,7 @@ namespace RockLib.Logging.Moq
         /// <param name="level">The level of the mock logger.</param>
         /// <param name="name">The name of the mock logger.</param>
         /// <returns>The same mock logger.</returns>
-        public static Mock<ILogger> Setup(this Mock<ILogger> mockLogger, LogLevel level = LogLevel.Debug, string name = Logger.DefaultName)
+        public static Mock<ILogger> SetupLogger(this Mock<ILogger> mockLogger, LogLevel level = LogLevel.Debug, string name = Logger.DefaultName)
         {
             mockLogger.Setup(m => m.Level).Returns(level);
             mockLogger.Setup(m => m.Name).Returns(name ?? Logger.DefaultName);
