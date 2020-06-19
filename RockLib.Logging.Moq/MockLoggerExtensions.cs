@@ -69,8 +69,12 @@ namespace RockLib.Logging.Moq
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, LogLevel.Audit, times, failMessage);
 
+        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, null, times, failMessage);
+
         private static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern,
-            LogLevel logLevel, Times? times, string failMessage)
+            LogLevel? logLevel, Times? times, string failMessage)
         {
             if (mockLogger == null)
                 throw new ArgumentNullException(nameof(mockLogger));
@@ -80,7 +84,8 @@ namespace RockLib.Logging.Moq
             var messageRegex = new Regex(messagePattern);
 
             Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry =>
-                messageRegex.IsMatch(logEntry.Message) && logEntry.Level == logLevel;
+                messageRegex.IsMatch(logEntry.Message)
+                && (!logLevel.HasValue || logEntry.Level == logLevel.Value);
 
             mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
                 times ?? Times.Once(), failMessage);
@@ -110,8 +115,12 @@ namespace RockLib.Logging.Moq
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(extendedProperties, LogLevel.Audit, times, failMessage);
 
+        public static void VerifyLog(this Mock<ILogger> mockLogger, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(extendedProperties, null, times, failMessage);
+
         private static void VerifyLog(this Mock<ILogger> mockLogger, object extendedProperties,
-            LogLevel logLevel, Times? times, string failMessage)
+            LogLevel? logLevel, Times? times, string failMessage)
         {
             if (mockLogger == null)
                 throw new ArgumentNullException(nameof(mockLogger));
@@ -144,7 +153,7 @@ namespace RockLib.Logging.Moq
             };
 
             Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry =>
-                logEntry.Level == logLevel
+                (!logLevel.HasValue || logEntry.Level == logLevel.Value)
                 && hasMatchingExtendedProperties(logEntry);
 
             mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
@@ -175,8 +184,12 @@ namespace RockLib.Logging.Moq
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, extendedProperties, LogLevel.Audit, times, failMessage);
 
+        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, extendedProperties, null, times, failMessage);
+
         private static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
-            LogLevel logLevel, Times? times, string failMessage)
+            LogLevel? logLevel, Times? times, string failMessage)
         {
             if (mockLogger == null)
                 throw new ArgumentNullException(nameof(mockLogger));
@@ -214,7 +227,7 @@ namespace RockLib.Logging.Moq
 
             Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry =>
                 messageRegex.IsMatch(logEntry.Message)
-                && logEntry.Level == logLevel
+                && (!logLevel.HasValue || logEntry.Level == logLevel.Value)
                 && hasMatchingExtendedProperties(logEntry);
 
             mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
