@@ -130,12 +130,29 @@ namespace RockLib.Logging.Moq
         public static void VerifyAudit(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(LogLevel.Audit, times, failMessage);
 
-        private static void VerifyLog(this Mock<ILogger> mockLogger, LogLevel logLevel, Times? times, string failMessage)
+        /// <summary>
+        /// Verifies that the mock logger logged at any <see cref="LogLevel"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at any <see cref="LogLevel"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, Times? times, string failMessage) =>
+            mockLogger.VerifyLog((LogLevel?)null, times, failMessage);
+
+        private static void VerifyLog(this Mock<ILogger> mockLogger, LogLevel? logLevel, Times? times, string failMessage)
         {
             if (mockLogger == null)
                 throw new ArgumentNullException(nameof(mockLogger));
 
-            Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry => logEntry.Level == logLevel;
+            Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry => !logLevel.HasValue || logEntry.Level == logLevel.Value;
 
             mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
                 times ?? Times.Once(), failMessage);

@@ -602,7 +602,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!");
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -614,7 +614,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!");
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyLog(Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -624,9 +624,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Info("Hello, world!");
 
-            Action act = () => mockLogger.VerifyLog(new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -636,9 +636,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Info("Hello, world!");
 
-            Action act = () => mockLogger.VerifyLog(new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -650,13 +650,37 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(new { Foo = 123 }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
 
         [Fact(DisplayName = "VerifyLog method 3 throws MockException when criteria are not met")]
         public void VerifyLogMethod3SadPath()
+        {
+            var mockLogger = new MockLogger();
+
+            mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
+
+            Action act = () => mockLogger.VerifyLog(new { Foo = 123 }, Times.Exactly(2), "My fail message");
+
+            act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
+        }
+
+        [Fact(DisplayName = "VerifyLog method 4 verifies successfully when criteria are met")]
+        public void VerifyLogMethod4HappyPath()
+        {
+            var mockLogger = new MockLogger();
+
+            mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
+
+            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+
+            act.Should().NotThrow();
+        }
+
+        [Fact(DisplayName = "VerifyLog method 4 throws MockException when criteria are not met")]
+        public void VerifyLogMethod4SadPath()
         {
             var mockLogger = new MockLogger();
 
