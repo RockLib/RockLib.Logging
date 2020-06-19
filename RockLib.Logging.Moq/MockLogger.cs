@@ -4,10 +4,10 @@ namespace RockLib.Logging.Moq
 {
     public class MockLogger : Mock<ILogger>
     {
-        public MockLogger(string name = "default", LogLevel level = LogLevel.Debug, MockBehavior behavior = MockBehavior.Default)
+        public MockLogger(LogLevel level = LogLevel.Debug, string name = Logger.DefaultName, MockBehavior behavior = MockBehavior.Default)
             : base(behavior)
         {
-            this.Setup(name, level);
+            this.Setup(level, name);
         }
     }
 }

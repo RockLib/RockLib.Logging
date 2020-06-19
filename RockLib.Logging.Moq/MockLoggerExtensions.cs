@@ -8,10 +8,10 @@ namespace RockLib.Logging.Moq
 {
     public static class MockLoggerExtensions
     {
-        public static Mock<ILogger> Setup(this Mock<ILogger> mockLogger, string name, LogLevel level)
+        public static Mock<ILogger> Setup(this Mock<ILogger> mockLogger, LogLevel level = LogLevel.Debug, string name = Logger.DefaultName)
         {
-            mockLogger.Setup(m => m.Name).Returns(name);
             mockLogger.Setup(m => m.Level).Returns(level);
+            mockLogger.Setup(m => m.Name).Returns(name ?? Logger.DefaultName);
 
             return mockLogger;
         }
