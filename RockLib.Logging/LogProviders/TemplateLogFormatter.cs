@@ -126,11 +126,9 @@ namespace RockLib.Logging
                 Template,
                 match =>
                 {
-                    Func<LogEntry, string> getValue;
-
                     return
                         HtmlEncodeIfNecessary(
-                            _simpleTokenHandlers.TryGetValue(match.Groups["token"].Value, out getValue)
+                            _simpleTokenHandlers.TryGetValue(match.Groups["token"].Value, out var getValue)
                                 ? getValue(logEntry)
                                 : match.Value);
                 });
@@ -139,9 +137,7 @@ namespace RockLib.Logging
                 formattedLogEntry,
                 match =>
                 {
-                    Func<LogEntry, DateTime> getValue;
-
-                    if (!_dateTimeTokenHandlers.TryGetValue(match.Groups["token"].Value, out getValue))
+                    if (!_dateTimeTokenHandlers.TryGetValue(match.Groups["token"].Value, out var getValue))
                     {
                         return match.Value;
                     }
@@ -177,9 +173,7 @@ namespace RockLib.Logging
                                     .ToString();
                         }
 
-                        object value;
-
-                        if (!logEntry.ExtendedProperties.TryGetValue(key, out value))
+                        if (!logEntry.ExtendedProperties.TryGetValue(key, out var value))
                         {
                             value = "N/A";
                         }

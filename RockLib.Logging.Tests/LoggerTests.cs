@@ -85,16 +85,6 @@ namespace RockLib.Logging.Tests
         }
 
         [Fact]
-        public void LogThrowsObjectDisposedExceptionAfterDisposeMethodHasBeenCalled()
-        {
-            var logger = new Logger();
-
-            logger.Dispose();
-
-            Assert.Throws<ObjectDisposedException>(() => logger.Log(new LogEntry("Hello, world!", LogLevel.Info)));
-        }
-
-        [Fact]
         public void LogThrowsObjectDisposedExceptionAfterLogProcessorHasBeenDisposed()
         {
             var mockLogProcessor = new Mock<ILogProcessor>();

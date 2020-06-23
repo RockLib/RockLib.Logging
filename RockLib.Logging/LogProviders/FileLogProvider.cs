@@ -35,7 +35,7 @@ namespace RockLib.Logging
         /// <param name="timeout">The timeout of the log provider.</param>
         public FileLogProvider(string file,
             string template = DefaultTemplate,
-            LogLevel level = default(LogLevel),
+            LogLevel level = default,
             TimeSpan? timeout = null)
             : this(file, new TemplateLogFormatter(template ?? DefaultTemplate), level, timeout)
         {
@@ -50,7 +50,7 @@ namespace RockLib.Logging
         /// <param name="timeout">The timeout of the log provider.</param>
         public FileLogProvider(string file,
             ILogFormatter formatter,
-            LogLevel level = default(LogLevel),
+            LogLevel level = default,
             TimeSpan? timeout = null)
         {
             if (!Enum.IsDefined(typeof(LogLevel), level))
@@ -100,7 +100,7 @@ namespace RockLib.Logging
         /// <param name="logEntry">The log entry to write.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe.</param>
         /// <returns>A task that completes when the log entry has been written to file.</returns>
-        public async Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken = default)
         {
             var formattedLogEntry = Formatter.Format(logEntry);
 

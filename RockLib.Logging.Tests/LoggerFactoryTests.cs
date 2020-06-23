@@ -116,7 +116,7 @@ namespace RockLib.Logging.Tests
             var name = "baz";
             Action action = () =>  config.CreateLogger(name);
 
-            action.ShouldThrow<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
+            action.Should().Throw<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace RockLib.Logging.Tests
             var name = "baz";
             Action action = () => config.CreateLogger(name);
 
-            action.ShouldThrow<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
+            action.Should().Throw<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
         }
 
         [Theory]
@@ -218,7 +218,7 @@ namespace RockLib.Logging.Tests
             var name = "baz";
             Action action = () => config.GetCachedLogger(name);
 
-            action.ShouldThrow<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
+            action.Should().Throw<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
         }
 
         [Fact]
@@ -236,7 +236,7 @@ namespace RockLib.Logging.Tests
             var name = "baz";
             Action action = () => config.GetCachedLogger(name);
 
-            action.ShouldThrow<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
+            action.Should().Throw<KeyNotFoundException>().WithMessage($"No loggers were found matching the name '{name}'.");
         }
 
         [Fact]
