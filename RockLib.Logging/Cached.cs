@@ -7,8 +7,14 @@ namespace RockLib.Logging
     internal static class Cached
     {
         private static readonly Lazy<string> _ipAddress = new Lazy<string>(GetMachineIpAddress);
+        private static readonly Lazy<string> _machineName = new Lazy<string>(() => Environment.MachineName);
+        private static readonly Lazy<string> _userName = new Lazy<string>(() => Environment.UserName);
 
         public static string IpAddress => _ipAddress.Value;
+
+        public static string MachineName => _machineName.Value;
+
+        public static string UserName => _userName.Value;
 
         private static string GetMachineIpAddress()
         {
