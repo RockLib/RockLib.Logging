@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging</PackageId>
-    <PackageVersion>2.0.0</PackageVersion>
+    <PackageVersion>2.1.0</PackageVersion>
     <Authors>Brian Friesen</Authors>
     <Description>A simple logging library.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
