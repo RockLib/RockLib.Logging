@@ -6,14 +6,14 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.AspNetCore</PackageId>
-    <PackageVersion>2.0.3</PackageVersion>
+    <PackageVersion>2.0.4</PackageVersion>
     <Authors>Brian Friesen</Authors>
     <Description>Extensions to create hooks into Microsoft.Extensions.Logging</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/RockLib/RockLib.Logging</PackageProjectUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <Copyright>Copyright 2018-2019 (c) Quicken Loans Corporation. All rights reserved.</Copyright>
+    <Copyright>Copyright 2018-2020 (c) Quicken Loans Corporation. All rights reserved.</Copyright>
     <PackageTags>RockLib Logging Logger Extensions</PackageTags>
     <Version>2.0.0</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -30,9 +30,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.0" />
-    <PackageReference Include="RockLib.Logging" Version="2.0.0" />
     <PackageReference Include="RockLib.Configuration.AspNetCore" Version="1.0.0" />
-    <PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.0" />
+    <PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
