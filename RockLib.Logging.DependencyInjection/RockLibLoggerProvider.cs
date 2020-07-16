@@ -6,6 +6,7 @@ namespace RockLib.Logging.DependencyInjection
     /// <summary>
     /// Represents a type that can create instances of <see cref="RockLibLogger"/>.
     /// </summary>
+    [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package.")]
     public class RockLibLoggerProvider : ILoggerProvider
     {
         private readonly Func<ILogger> _getLogger;

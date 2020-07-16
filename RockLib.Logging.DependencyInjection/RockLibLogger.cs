@@ -9,6 +9,7 @@ namespace RockLib.Logging.DependencyInjection
     /// An implementation of <see cref="Microsoft.Extensions.Logging.ILogger"/> that writes log entries to an
     /// instance of <see cref="ILogger"/>.
     /// </summary>
+    [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package.")]
     public class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     {
         private readonly Lazy<ConcurrentStack<object>> _scope = new Lazy<ConcurrentStack<object>>(() => new ConcurrentStack<object>());
