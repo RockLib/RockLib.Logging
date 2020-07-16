@@ -131,7 +131,7 @@ namespace RockLib.Logging
         /// Gets or sets the machine name where the current logging operation is taking place. This is
         /// set to <see cref="Environment.MachineName"/> by default.
         /// </summary>
-        public string MachineName { get; set; } = Environment.MachineName;
+        public string MachineName { get; set; } = Cached.MachineName;
 
         /// <summary>
         /// Gets or sets the message of the log entry.
@@ -147,7 +147,7 @@ namespace RockLib.Logging
         /// Gets or sets the username of the user that is performing the current logging operation.
         /// This is set to <see cref="Environment.UserName"/> by default.
         /// </summary>
-        public string UserName { get; set; } = Environment.UserName;
+        public string UserName { get; set; } = Cached.UserName;
 
         /// <summary>
         /// Gets a string representation of the <see cref="Exception"/> property, or null
