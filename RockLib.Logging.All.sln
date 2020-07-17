@@ -25,7 +25,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.GenericHost", "Exam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq", "RockLib.Logging.Moq\RockLib.Logging.Moq.csproj", "{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockLib.Logging.Moq.Tests", "RockLib.Logging.Moq.Tests\RockLib.Logging.Moq.Tests.csproj", "{86EFB7D5-CF52-476D-BA9F-1D94778517C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq.Tests", "RockLib.Logging.Moq.Tests\RockLib.Logging.Moq.Tests.csproj", "{86EFB7D5-CF52-476D-BA9F-1D94778517C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3551DC4D-4E50-4108-BDE6-7AC261366358}"
+	ProjectSection(SolutionItems) = preProject
+		docs\ConsoleLogProvider.md = docs\ConsoleLogProvider.md
+		docs\ContextProviders.md = docs\ContextProviders.md
+		docs\DI.md = docs\DI.md
+		docs\FileLogProvider.md = docs\FileLogProvider.md
+		docs\Formatting.md = docs\Formatting.md
+		docs\GettingStarted.md = docs\GettingStarted.md
+		docs\Logger.md = docs\Logger.md
+		docs\LoggerFactory.md = docs\LoggerFactory.md
+		docs\Logging.md = docs\Logging.md
+		docs\LogProcessors.md = docs\LogProcessors.md
+		docs\LogProviderErrors.md = docs\LogProviderErrors.md
+		docs\LogProviders.md = docs\LogProviders.md
+		README.md = README.md
+		docs\RollingFileLogProvider.md = docs\RollingFileLogProvider.md
+		docs\Tracing.md = docs\Tracing.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
