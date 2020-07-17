@@ -1,28 +1,48 @@
 # Getting Started
 
-In this tutorial, we will be building a console application that does basic logging.
+In this tutorial, we will be building a console application with a hosted service that writes logs when started and stopped (the service doesn't actually do anything).
 
 ---
 
-Create a .NET Core 2.0 (or above) console application named "LoggingTutorial".
+Create a .NET Core console application named "LoggingTutorial".
 
 ---
 
-Add a nuget reference for "RockLib.Logging" to the project.
+Add nuget references for "RockLib.Logging", "Microsoft.Extensions.DependencyInjection" and "Microsoft.Extensions.Hosting" to the project.
 
 ---
 
-Add a new JSON file to the project named 'appsettings.json'. Set its 'Copy to Output Directory' setting to 'Copy if newer'. Add the following configuration:
+Add a new class named 'ExampleService' to the project:
 
-```json
+```c#
+using Microsoft.Extensions.Hosting;
+using RockLib.Logging;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace LoggingTutorial
 {
-  "Rocklib.Logging": {
-    "Level": "Warn",
-    "Providers": {
-      "Type": "RockLib.Logging.FileLogProvider, RockLib.Logging",
-      "Value": { "File": "log.txt" }
+    public class ExampleService : IHostedService
+    {
+        private readonly ILogger _logger;
+
+        public ExampleService(ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            _logger.Info("Starting service...");
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.Info("Stopping service...");
+            return Task.CompletedTask;
+        }
     }
-  }
 }
 ```
 
@@ -31,47 +51,30 @@ Add a new JSON file to the project named 'appsettings.json'. Set its 'Copy to Ou
 Edit the `Program.cs` file as follows:
 
 ```c#
-using RockLib.Logging;
-using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using RockLib.Logging.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace LoggingTutorial
 {
     class Program
     {
-        private static ILogger _logger = LoggerFactory.Create();
-
-        static void Main(string[] args)
+        static Task Main(string[] args)
         {
-            if (_logger.IsDebugEnabled())
-                _logger.Debug("LoggingTutorial application started.");
-
-            Console.WriteLine($"8 / 2 = {Divide(8, 2)}");
-            Console.WriteLine($"589 / 19 = {Divide(589, 19)}");
-            Console.WriteLine($"4 / 0 = {Divide(4, 0)}");
-
-            if (_logger.IsDebugEnabled())
-                _logger.Debug("LoggingTutorial application finished.");
-
-            _logger.Dispose();
-
-            Console.Write("Press any key to continue . . . ");
-            Console.ReadKey(true);
+            return CreateHostBuilder(args)
+                .RunConsoleAsync(options => options.SuppressStatusMessages = true);
         }
 
-        private static int? Divide(int dividend, int divisor)
+        static IHostBuilder CreateHostBuilder(string[] args)
         {
-            if (_logger.IsDebugEnabled())
-                _logger.Debug("Divide method called.", new { dividend, divisor });
+            return Host.CreateDefaultBuilder(args).ConfigureServices(services =>
+            {
+                services.AddLogger()
+                    .AddConsoleLogProvider(options => options.SetTemplate("[{createTime(O)}] {level} Log: {message}"));
 
-            try
-            {
-                return dividend / divisor;
-            }
-            catch (Exception ex)
-            {
-                _logger.Error("Error in Divide method.", ex, new { dividend, divisor });
-                return null;
-            }
+                services.AddHostedService<ExampleService>();
+            });
         }
     }
 }
@@ -79,60 +82,16 @@ namespace LoggingTutorial
 
 ---
 
-Start the app. It should output the following to console:
+Start the app. It should output something similar to the following to console:
 
 ```
-8 / 2 = 4
-589 / 19 = 31
-4 / 0 =
+[2020-07-17T15:33:58.9262051Z] Info Log: Starting service...
 ```
 
 ---
 
-Open the log file `log.txt` located in the output directory of the application. Its contents should look similar to this:
+After hitting `<ctrl> + c`, it should output this, then exit:
 
 ```
-----------------------------------------------------------------------------------------------------
-LOG INFO
-
-Message: Error in Divide method.
-Create Time: 2019-04-11T15:45:36.7290529Z
-Level: Error
-Log ID: 63f5cc4e-fe35-4444-b9d3-697d87353972
-User Name: SomeUser
-Machine Name: MyComputer
-Machine IP Address: 192.168.1.1
-
-EXTENDED PROPERTY INFO
-
-dividend: 4
-divisor: 0
-
-EXCEPTION INFO
-
-Type: System.DivideByZeroException
-Message: Attempted to divide by zero.
-Properties:
-   HResult: 0x80020012
-Source: LoggingTutorial
-Stack Trace:
-   at LoggingTutorial.Program.Divide(Int32 dividend, Int32 divisor) in C:\dev\LoggingTutorial\Program.cs:line 36
+[2020-07-17T15:35:38.5859970Z] Info Log: Stopping service...
 ```
-
----
-
-Note that debug logs were not written because the logger's level is set to "Warn". To enable debug logs, modify the appsettings.json file so the level is "Debug":
-
-```json
-{
-  "Rocklib.Logging": {
-    "Level": "Debug",
-    "Providers": {
-      "Type": "RockLib.Logging.FileLogProvider, RockLib.Logging",
-      "Value": { "File": "log.txt" }
-    }
-  }
-}
-```
-
-When run, the console output of the application is the same, but the log file contains debug logs in addition to error logs.
