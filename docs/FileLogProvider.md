@@ -1,6 +1,6 @@
 # How to use and configure `FileLogProvider`
 
-The `FileLogProvider` can be instantiated one of two ways.
+The `FileLogProvider` can be instantiated in one of two ways.
 
 With a template:
 - file
@@ -13,7 +13,7 @@ With a template:
   - Type: LogLevel enum (NotSet, Debug, Info, Warn, Error, Fatal, Audit)
   - Description: The level of the log provider. If `NotSet`, the level of the containing `Logger` is used.
 - timeout
-  - Type: Nullable<TimeSpan>
+  - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
 
 Or with a formatter:
@@ -27,39 +27,110 @@ Or with a formatter:
   - Type: LogLevel enum (NotSet, Debug, Info, Warn, Error, Fatal, Audit)
   - Description: The level of the log provider. If `NotSet`, the level of the containing `Logger` is used.
 - timeout
-  - Type: Nullable<TimeSpan>
+  - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
 
-## Configuration for `FileLogProvider`
+## Adding to Dependency Injection
 
-With the default template:
+To add a `FileLogProvider` to a logger, call one of the five `AddFileLogProvider` extension method overloads. Four of the overloads are very similar, differing only by how the `ILogFormatter` is specified.
 
-```json
+---
+Specifying a custom template:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
 {
-  "Rocklib.Logging": {
-    "Level": "Warn",
-    "Providers": [
-      {
-        "Type": "RockLib.Logging.FileLogProvider, RockLib.Logging",
-        "Value": { "File": "C:\\my\\path\\log.txt" }
-      }
-    ]
-  }
+    services.AddLogger()
+        .AddFileLogProvider(
+            file:       "C:\\my\\path\\log.txt",
+            template:   "{level}: {message}",
+            level:      LogLevel.Info,
+            timeout:    TimeSpan.FromSeconds(1));
+}
+```
+---
+Specifying a custom `ILogFormatter`:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    IDependency dependency = new MyDependency();
+    int parameter = 12345;
+
+    ILogFormatter formatter = new CustomLogFormatter(dependency, parameter);
+
+    services.AddLogger()
+        .AddFileLogProvider(
+            file:       "C:\\my\\path\\log.txt",
+            formatter:  formatter,
+            level:      LogLevel.Info,
+            timeout:    TimeSpan.FromSeconds(1));
+}
+```
+---
+Specifying a custom `ILogFormatter` generically including custom constructor parameters:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddTransient<IDependency, MyDependency>();
+
+    services.AddLogger()
+        .AddFileLogProvider<CustomLogFormatter>(
+            file:                   "C:\\my\\path\\log.txt",
+            level:                  LogLevel.Info,
+            timeout:                TimeSpan.FromSeconds(1),
+            logFormatterParameters: 12345);
+}
+```
+---
+Specifying a custom `ILogFormatter` with a callback function:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddLogger()
+        .AddFileLogProvider(
+            file:                   "C:\\my\\path\\log.txt",
+            formatterRegistration:  serviceProvider => new CustomLogFormatter(new MyDependency(), 12345),
+            level:                  LogLevel.Info,
+            timeout:                TimeSpan.FromSeconds(1));
+}
+```
+---
+Completely customizing the file log provider with a callback function:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddLogger()
+        .AddFileLogProvider(options =>
+        {
+            options.File = "C:\\my\\path\\log.txt";
+            // Could also set the formatter with one of the other
+            // SetFormatter overloads or the SetTemplate method.
+            options.SetFormatter<CustomLogFormatter>(12345);
+            options.Level = LogLevel.Info;
+            options.Timeout = TimeSpan.FromSeconds(1);
+        });
 }
 ```
 
-With a custom template:
+## Configuration for `FileLogProvider`
+
+Specifying a template:
 
 ```json
 {
   "Rocklib.Logging": {
-    "Level": "Warn",
     "Providers": [
       {
         "Type": "RockLib.Logging.FileLogProvider, RockLib.Logging",
         "Value": {
           "File": "C:\\my\\path\\log.txt",
-          "Template": "{level}: {message}"
+          "Template": "{level}: {message}",
+          "Level": "Info",
+          "Timeout": "00:00:01"
         }
       }
     ]
@@ -67,92 +138,30 @@ With a custom template:
 }
 ```
 
-Or with a custom `ILogFormatter` (Assumes the class `MyAssembly.MyCustomFormatter` exists in the `MyAssembly` assembly):
+Specifying an `ILogFormatter`:
 
 ```json
 {
   "Rocklib.Logging": {
-    "Level": "Warn",
     "Providers": [
       {
         "Type": "RockLib.Logging.FileLogProvider, RockLib.Logging",
         "Value": {
-          "Value": { "File": "C:\\my\\path\\log.txt" },
+          "File": "C:\\my\\path\\log.txt",
           "Formatter": {
-            "Type" : "MyAssembly.MyCustomFormatter, MyAssembly"
-         }
+            "Type": "MyAssembly.CustomLogFormatter, MyAssembly",
+            "Value": {
+              "Dependency": {
+                "Type": "MyAssembly.MyDependency, MyAssembly"
+              },
+              "Parameter": 12345
+            }
+          },
+          "Level": "Info",
+          "Timeout": "00:00:01"
         }
       }
     ]
   }
 }
-```
-
-## Example application using a `FileLogProvider` with a default template
-
-```c#
-using System;
-using RockLib.Logging;
-
-namespace Example
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var logger = LoggerFactory.Create();
-            var dividend = 4;
-            var divisor = 0;
-            try
-            {
-                Divide(dividend, divisor);
-            }
-            catch (Exception ex)
-            {
-                logger.Error("Error in Divide method.", ex, new { dividend, divisor });
-            }
-            Console.ReadKey();
-        }
-
-        private static int? Divide(int dividend, int divisor)
-        {
-            return dividend / divisor;
-        }
-    }
-}
-```
-
----
-
-It should output the following to the file named "C:\\my\\path\\log.txt":
-
-```
-----------------------------------------------------------------------------------------------------
-LOG INFO
-
-Message: Error in Divide method.
-Create Time: 2019-08-07T21:08:52.5975104Z
-Level: Error
-Log ID: 2e8a06a2-408d-4a65-a794-f7811c020308
-User Name: XXXXXXXX
-Machine Name: XXXXXXXX
-Machine IP Address: XX.XX.XXX.XX
-XXXX:XXXX:XXXXX:XXXX::XXX
-XXX.XXX.X.XXX
-
-EXTENDED PROPERTY INFO
-
-dividend: 4
-divisor: 0
-
-EXCEPTION INFO
-
-Type: System.DivideByZeroException
-Message: Attempted to divide by zero.
-Properties:
-   HResult: 0x80020012
-Source: Example.Console.netcoreapp2.0
-Stack Trace:
-   at Example.Program.Divide(Int32 dividend, Int32 divisor) in C:\Code\GitHub\RockLib.Logging\Example.Console.netcoreapp2.0\Program.cs:line 26
-   at Example.Program.Main(String[] args) in C:\Code\GitHub\RockLib.Logging\Example.Console.netcoreapp2.0\Program.cs:line 15
 ```

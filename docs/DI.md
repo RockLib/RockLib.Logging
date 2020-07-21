@@ -1,37 +1,90 @@
 # How to add RockLib logging to the Microsoft dependency injection system
 
-In order to make it easy to add RockLib logging to the Microsoft dependency injection system, the `RockLib.Logging.DependencyInjection` package is available from [nuget.org](https://www.nuget.org/packages/RockLib.Logging.DependencyInjection). Three extension methods are provided by the package, each extending the `Microsoft.Extensions.DependencyInjection.IServiceCollection` interface.
+To add an `ILogger` to the Microsoft.Extensions.DependencyInjection system, call the `.AddLogger()` extension method on an instance of `IServiceCollection`. This extension method return an [`ILoggerBuilder`](#iloggerbuilder-interface) object, which is used to add log providers and context providers to the logger.
 
-### AddRockLibLoggerTransient
+There are three overloads of this extension method. The difference between them is how the logger's log processor is registered.
 
-This extension method adds a *transient* `ILogger` service, created with `LoggerFactory`, to the specified `IServiceCollection`.
+---
 
-Parameter                 | Required \| Default | Type              | Description
-------------------------- | ------------------- | ----------------- | -----------
-rockLibLoggerName         | No \| `"default"`   | `string`          | The name of the RockLib logger used for logging
-defaultTypes              | No \| `null`        | `DefaultTypes`    | An object that defines the default types to be used when a type is not explicitly specified by a configuration section
-valueConverters           | No \| `null`        | `ValueConverters` | An object that defines custom converter functions that are used to convert string configuration values to a target type
-addLoggerProvider         | No \| `false`       | `bool`            | Whether to also add a singleton `ILoggerProvider` service with a `RockLibLoggerProvider` implementation to the service collection
-addBackgroundLogProcessor | No \|  `true`       | `bool`            | Whether to also add a singleton `ILogProcessor` service with a `BackgroundLogProcessor` implementation to the service collection | `true`
-reloadOnConfigChange      | No \| `false`       | `bool`            | Whether instances of `ILogger` created by the service collection will reload when their configuration changes
+| Parameter        | Required | Default     | Type                     | Description                                                                               |
+|:-----------------|:---------|:------------|:-------------------------|:------------------------------------------------------------------------------------------|
+| logProcessor     | Yes      | N/A         | `ILogProcessor`          | The object that will process log entries on behalf of the logger.                         |
+| loggerName       | No       | `"default"` | `string`                 | The name of the logger to build.                                                          |
+| configureOptions | No       | `null`      | `Action<ILoggerOptions>` | A delegate to configure the `ILoggerOptions` object that is used to configure the logger. |
+| lifetime         | No       | `Transient` | `ServiceLifetime`        | The `ServiceLifetime` of the service.                                                     |
 
-### AddRockLibLoggerSingleton (using LoggerFactory)
+---
 
-This extension method adds a *singleton* `ILogger` service, created with `LoggerFactory`, to the specified `IServiceCollection`.
+| Parameter                | Required | Default     | Type                                    | Description                                                                                          |
+|:-------------------------|:---------|:------------|:----------------------------------------|:-----------------------------------------------------------------------------------------------------|
+| logProcessorRegistration | Yes      | N/A         | `Func<IServiceProvider, ILogProcessor>` | The method used to create the `ILogProcessor` that will process log entries on behalf of the logger. |
+| loggerName               | No       | `"default"` | `string`                                | The name of the logger to build.                                                                     |
+| configureOptions         | No       | `null`      | `Action<ILoggerOptions>`                | A delegate to configure the `ILoggerOptions` object that is used to configure the logger.            |
+| lifetime                 | No       | `Transient` | `ServiceLifetime`                       | The `ServiceLifetime` of the service.                                                                |
 
-Parameter                | Required \| Default | Type              | Description
------------------------- | ------------------- | ----------------- | -----------
-rockLibLoggerName        | No \|  `"default"`  | `string`          | The name of the RockLib logger used for logging
-defaultTypes             | No \| `null`        | `DefaultTypes`    | An object that defines the default types to be used when a type is not explicitly specified by a configuration section
-valueConverters          | No \| `null`        | `ValueConverters` | An object that defines custom converter functions that are used to convert string configuration values to a target type
-addLoggerProvider        | No \| `false`       | `bool`            | Whether to also add a singleton `ILoggerProvider` service with a `RockLibLoggerProvider` implementation to the service collection
-reloadOnConfigChange     | No \| `true`        | `bool`            | Whether instances of `ILogger` created by the service collection will reload when their configuration changes
+---
 
-### AddRockLibLoggerSingleton (using ILogger instance)
+| Parameter        | Required | Default      | Type                     | Description                                                                               |
+|:-----------------|:---------|:-------------|:-------------------------|:------------------------------------------------------------------------------------------|
+| loggerName       | No       | `"default"`  | `string`                 | The name of the logger to build.                                                          |
+| configureOptions | No       | `null`       | `Action<ILoggerOptions>` | A delegate to configure the `ILoggerOptions` object that is used to configure the logger. |
+| processingMode   | No       | `Background` | `ProcessingMode`         | A value that indicates how the logger will process logs.                                  |
+| lifetime         | No       | `Transient`  | `ServiceLifetime`        | The `ServiceLifetime` of the service.                                                     |
 
-This extension method adds a *singleton* `ILogger` service, specified directly, to the specified `IServiceCollection`.
+## ILoggerBuilder interface
 
-Parameter         | Required \| Default | Type              | Description
------------------ | ------------------- | ----------------- | -----------
-logger            | No \| N/A           | `ILogger`         | The instance of <see cref="ILogger"/> to add
-addLoggerProvider | No \| `false`       | `bool`            | Whether to also add a singleton `ILoggerProvider` service with a `RockLibLoggerProvider` implementation to the service collection
+This is the definition of the `ILoggerBuilder` interface:
+
+```c#
+public interface ILoggerBuilder
+{
+    string LoggerName { get; }
+
+    ILoggerBuilder AddLogProvider(Func<IServiceProvider, ILogProvider> logProviderRegistration);
+
+    ILoggerBuilder AddContextProvider(Func<IServiceProvider, IContextProvider> contextProviderRegistration);
+}
+```
+
+#### LoggerName property
+The name of the logger to build.
+
+#### AddLogProvider method
+Adds an `ILogProvider` to the logger. The `ILogProvider` is instantiated with the `logProviderRegistration` callback.
+
+| Parameter               | Required | Type   | Description                               |
+|:------------------------|:---------|:-------|:------------------------------------------|
+| logProviderRegistration | Yes      | `Func` | A method that creates the `ILogProvider`. |
+
+#### AddContextProvider method
+Adds an `IContextProvider` to the logger. The `IContextProvider` is instantiated with the `contextProviderRegistration` callback.
+
+| Parameter                   | Required | Type                                       | Description                                   |
+|:----------------------------|:---------|:-------------------------------------------|:----------------------------------------------|
+| contextProviderRegistration | Yes      | `Func<IServiceProvider, IContextProvider>` | A method that creates the `IContextProvider`. |
+
+## ILoggerBuilder extension methods
+
+The following generic extension methods for `ILoggerBuilder` are defined:
+
+```c#
+ILoggerBuilder AddLogProvider<TLogProvider>(this ILoggerBuilder builder, params object[] parameters)
+    where TLogProvider : ILogProvider;
+
+ILoggerBuilder AddContextProvider<TContextProvider>(this ILoggerBuilder builder, params object[] parameters)
+    where TContextProvider : IContextProvider;
+```
+
+#### AddLogProvider\<TLogProvider\> extension method
+Adds an `ILogProvider` of type `TLogProvider` to the logger. The `TLogProvider` is instantiated with constructor arguments directlry and/or from an `IServiceProvider`.
+
+| Parameter  | Type              | Description                                                                                    |
+|:-----------|:------------------|:-----------------------------------------------------------------------------------------------|
+| parameters | `params object[]` | Constructor arguments for type `TLogProvider` that are not provided by the `IServiceProvider`. |
+
+#### AddContextProvider extension method
+Adds an `IContextProvider` of type `TContextProvider` to the logger. The `TContextProvider` is instantiated with constructor arguments directlry and/or from an `IServiceProvider`.
+
+| Parameter  | Type              | Description                                                                                        |
+|:-----------|:------------------|:---------------------------------------------------------------------------------------------------|
+| parameters | `params object[]` | Constructor arguments for type `TContextProvider` that are not provided by the `IServiceProvider`. |
