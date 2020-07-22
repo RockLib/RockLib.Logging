@@ -76,7 +76,7 @@ ILoggerBuilder AddContextProvider<TContextProvider>(this ILoggerBuilder builder,
 ```
 
 #### AddLogProvider\<TLogProvider\> extension method
-Adds an `ILogProvider` of type `TLogProvider` to the logger. The `TLogProvider` is instantiated with constructor arguments directlry and/or from an `IServiceProvider`.
+Adds an `ILogProvider` of type `TLogProvider` to the logger. The `TLogProvider` is instantiated with constructor arguments directly and/or from an `IServiceProvider`.
 
 | Parameter  | Type              | Description                                                                                    |
 |:-----------|:------------------|:-----------------------------------------------------------------------------------------------|
