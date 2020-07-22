@@ -1,6 +1,6 @@
 # How to use and configure `ConsoleLogProvider`
 
-The `ConsoleLogProvider` can be instantiated one of two ways.
+The `ConsoleLogProvider` can be instantiated in one of two ways.
 
 With a template:
 - template
@@ -13,7 +13,7 @@ With a template:
   - Type: Output enum (StdOut, StdErr)
   - Description: The type of output stream to use.
 - timeout
-  - Type: Nullable<TimeSpan>
+  - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
 
 Or with a formatter:
@@ -27,37 +27,109 @@ Or with a formatter:
   - Type: Output enum (StdOut, StdErr)
   - Description: The type of output stream to use.
 - timeout
-  - Type: Nullable<TimeSpan>
+  - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
+
+## Adding to Dependency Injection
+
+To add a `ConsoleLogProvider` to a logger, call one of the five `AddConsoleLogProvider` extension method overloads. Four of the overloads are very similar, differing only by how the `ILogFormatter` is specified.
+
+---
+Specifying a custom template:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddLogger()
+        .AddConsoleLogProvider(
+            template:   "{level}: {message}",
+            level:      LogLevel.Info,
+            output:     ConsoleLogProvider.Output.StdOut,
+            timeout:    TimeSpan.FromSeconds(1));
+}
+```
+---
+Specifying a custom `ILogFormatter`:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    IDependency dependency = new MyDependency();
+    int parameter = 12345;
+
+    ILogFormatter formatter = new CustomLogFormatter(dependency, parameter);
+
+    services.AddLogger()
+        .AddConsoleLogProvider(
+            formatter:  formatter,
+            level:      LogLevel.Info,
+            output:     ConsoleLogProvider.Output.StdOut,
+            timeout:    TimeSpan.FromSeconds(1));
+}
+```
+---
+Specifying a custom `ILogFormatter` generically including custom constructor parameters:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddTransient<IDependency, MyDependency>();
+
+    services.AddLogger()
+        .AddConsoleLogProvider<CustomLogFormatter>(
+            level:                  LogLevel.Info,
+            output:                 ConsoleLogProvider.Output.StdOut,
+            timeout:                TimeSpan.FromSeconds(1),
+            logFormatterParameters: 12345);
+}
+```
+---
+Specifying a custom `ILogFormatter` with a callback function:
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddLogger()
+        .AddConsoleLogProvider(
+            formatterRegistration:  serviceProvider => new CustomLogFormatter(new MyDependency(), 12345),
+            level:                  LogLevel.Info,
+            output:                 ConsoleLogProvider.Output.StdOut,
+            timeout:                TimeSpan.FromSeconds(1));
+}
+```
+---
+Completely customizing the console log provider with a callback function:
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddLogger()
+        .AddConsoleLogProvider(options =>
+        {
+            // Could also set the formatter with one of the other
+            // SetFormatter overloads or the SetTemplate method.
+            options.SetFormatter<CustomLogFormatter>(12345);
+            options.Level = LogLevel.Info;
+            options.Output = ConsoleLogProvider.Output.StdOut;
+            options.Timeout = TimeSpan.FromSeconds(1);
+        });
+}
+```
 
 ## Configuration for `ConsoleLogProvider`
 
-With the default template:
+Specifying a template:
 
 ```json
 {
   "Rocklib.Logging": {
-    "Level": "Warn",
-    "Providers": [
-      {
-        "Type": "RockLib.Logging.ConsoleLogProvider, RockLib.Logging"
-      }
-    ]
-  }
-}
-```
-
-With a custom template:
-
-```json
-{
-  "Rocklib.Logging": {
-    "Level": "Warn",
     "Providers": [
       {
         "Type": "RockLib.Logging.ConsoleLogProvider, RockLib.Logging",
         "Value": {
-         "Template": "{level}: {message}"
+          "Template": "{level}: {message}",
+          "Level": "Info",
+          "Output": "StdOut",
+          "Timeout": "00:00:01"
         }
       }
     ]
@@ -65,91 +137,30 @@ With a custom template:
 }
 ```
 
-Or with a custom `ILogFormatter` (Assumes the class `MyAssembly.MyCustomFormatter` exists in the `MyAssembly` assembly):
+Specifying an `ILogFormatter`:
 
 ```json
 {
   "Rocklib.Logging": {
-    "Level": "Warn",
     "Providers": [
       {
         "Type": "RockLib.Logging.ConsoleLogProvider, RockLib.Logging",
         "Value": {
-         "Formatter": {
-             "Type" : "MyAssembly.MyCustomFormatter, MyAssembly"
-         }
+          "Formatter": {
+            "Type": "MyAssembly.CustomLogFormatter, MyAssembly",
+            "Value": {
+              "Dependency": {
+                "Type": "MyAssembly.MyDependency, MyAssembly"
+              },
+              "Parameter": 12345
+            }
+          },
+          "Level": "Info",
+          "Output": "StdOut",
+          "Timeout": "00:00:01"
         }
       }
     ]
   }
 }
-```
-
-## Example application using a `ConsoleLogProvider` with a default template
-
-```c#
-using System;
-using RockLib.Logging;
-
-namespace Example
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var logger = LoggerFactory.Create();
-            var dividend = 4;
-            var divisor = 0;
-            try
-            {
-                Divide(dividend, divisor);
-            }
-            catch (Exception ex)
-            {
-                logger.Error("Error in Divide method.", ex, new { dividend, divisor });
-            }
-            Console.ReadKey();
-        }
-
-        private static int? Divide(int dividend, int divisor)
-        {
-            return dividend / divisor;
-        }
-    }
-}
-```
-
----
-
-It should output the following to console:
-
-```
-----------------------------------------------------------------------------------------------------
-LOG INFO
-
-Message: Error in Divide method.
-Create Time: 2019-08-07T21:08:52.5975104Z
-Level: Error
-Log ID: 2e8a06a2-408d-4a65-a794-f7811c020308
-User Name: XXXXXXXX
-Machine Name: XXXXXXXX
-Machine IP Address: XX.XX.XXX.XX
-XXXX:XXXX:XXXXX:XXXX::XXX
-XXX.XXX.X.XXX
-
-EXTENDED PROPERTY INFO
-
-dividend: 4
-divisor: 0
-
-EXCEPTION INFO
-
-Type: System.DivideByZeroException
-Message: Attempted to divide by zero.
-Properties:
-   HResult: 0x80020012
-Source: Example.Console.netcoreapp2.0
-Stack Trace:
-   at Example.Program.Divide(Int32 dividend, Int32 divisor) in C:\Code\GitHub\RockLib.Logging\Example.Console.netcoreapp2.0\Program.cs:line 26
-   at Example.Program.Main(String[] args) in C:\Code\GitHub\RockLib.Logging\Example.Console.netcoreapp2.0\Program.cs:line 15
 ```

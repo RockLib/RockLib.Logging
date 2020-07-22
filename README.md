@@ -4,10 +4,6 @@
 
 ### RockLib.Logging [![Build status](https://ci.appveyor.com/api/projects/status/y06g87sp3p3q5gb4?svg=true)](https://ci.appveyor.com/project/RockLib/rocklib-logging) [![NuGet](https://img.shields.io/nuget/vpre/RockLib.Logging.svg)](https://www.nuget.org/packages/RockLib.Logging)
 
-### RockLib.Logging.AspNetCore [![Build status](https://ci.appveyor.com/api/projects/status/olwpmvt6lw5au265?svg=true)](https://ci.appveyor.com/project/RockLib/rocklib-logging-8gd5t) [![NuGet](https://img.shields.io/nuget/vpre/RockLib.Logging.AspNetCore.svg)](https://www.nuget.org/packages/RockLib.Logging.AspNetCore)
-
-### RockLib.Logging.DependencyInjection [![Build status](https://ci.appveyor.com/api/projects/status/y87bnxvq4nvo2554?svg=true)](https://ci.appveyor.com/project/RockLib/rocklib-logging-g67fd) [![NuGet](https://img.shields.io/nuget/vpre/RockLib.Logging.DependencyInjection.svg)](https://www.nuget.org/packages/RockLib.Logging.DependencyInjection)
-
 ---
 
 - [Getting started](docs/GettingStarted.md)
@@ -15,7 +11,6 @@
   - [Perform basic logging operations](docs/Logging.md)
   - [Instantiate and configure a logger](docs/Logger.md)
   - [Configure and use LoggerFactory](docs/LoggerFactory.md)
-  - [Enable logging for ASP.NET Core applications](docs/AspNetCore.md)
   - [Add RockLib logging to the Microsoft dependency injection system](docs/DI.md)
   - [Use log providers](docs/LogProviders.md)
     - [ConsoleLogProvider](docs/ConsoleLogProvider.md)
@@ -28,4 +23,3 @@
   - [Enable tracing for troubleshooting](docs/Tracing.md)
 - API Reference:
   - [RockLib.Logging](https://www.fuget.org/packages/RockLib.Logging)
-  - [RockLib.Logging.AspNetCore](https://www.fuget.org/packages/RockLib.Logging.AspNetCore)
