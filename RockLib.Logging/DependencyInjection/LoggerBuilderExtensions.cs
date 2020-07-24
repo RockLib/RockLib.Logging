@@ -175,8 +175,12 @@ namespace RockLib.Logging.DependencyInjection
 
             return builder.AddLogProvider(serviceProvider =>
             {
+                var optionsLoggerName = builder.LoggerName == Logger.DefaultName
+                    ? Options.DefaultName
+                    : builder.LoggerName;
+
                 var optionsMonitor = serviceProvider.GetService<IOptionsMonitor<ConsoleLogProviderOptions>>();
-                var options = optionsMonitor?.Get(builder.LoggerName) ?? new ConsoleLogProviderOptions();
+                var options = optionsMonitor?.Get(optionsLoggerName) ?? new ConsoleLogProviderOptions();
                 configureOptions?.Invoke(options);
 
                 var formatter = options.FormatterRegistration?.Invoke(serviceProvider)
@@ -313,8 +317,12 @@ namespace RockLib.Logging.DependencyInjection
 
             return builder.AddLogProvider(serviceProvider =>
             {
+                var optionsLoggerName = builder.LoggerName == Logger.DefaultName
+                    ? Options.DefaultName
+                    : builder.LoggerName;
+
                 var optionsMonitor = serviceProvider.GetService<IOptionsMonitor<FileLogProviderOptions>>();
-                var options = optionsMonitor?.Get(builder.LoggerName) ?? new FileLogProviderOptions();
+                var options = optionsMonitor?.Get(optionsLoggerName) ?? new FileLogProviderOptions();
                 configureOptions?.Invoke(options);
 
                 var formatter = options.FormatterRegistration?.Invoke(serviceProvider)
@@ -519,8 +527,12 @@ namespace RockLib.Logging.DependencyInjection
 
             return builder.AddLogProvider(serviceProvider =>
             {
+                var optionsLoggerName = builder.LoggerName == Logger.DefaultName
+                    ? Options.DefaultName
+                    : builder.LoggerName;
+
                 var optionsMonitor = serviceProvider.GetService<IOptionsMonitor<RollingFileLogProviderOptions>>();
-                var options = optionsMonitor?.Get(builder.LoggerName) ?? new RollingFileLogProviderOptions();
+                var options = optionsMonitor?.Get(optionsLoggerName) ?? new RollingFileLogProviderOptions();
                 configureOptions?.Invoke(options);
 
                 var formatter = options.FormatterRegistration?.Invoke(serviceProvider)
