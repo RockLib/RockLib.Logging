@@ -7,7 +7,7 @@
   <PropertyGroup>
     <PackageId>RockLib.Logging.DependencyInjection</PackageId>
     <PackageVersion>1.0.1</PackageVersion>
-    <Authors>Brian Friesen</Authors>
+    <Authors>RockLib</Authors>
     <Description>Extensions to register RockLib.Logging with Microsoft.Extensions.DependencyInjection.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
