@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.AspNetCore</PackageId>
-    <PackageVersion>2.0.4</PackageVersion>
+    <PackageVersion>2.0.5</PackageVersion>
     <Authors>RockLib</Authors>
     <Description>Extensions to create hooks into Microsoft.Extensions.Logging</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -30,8 +30,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.0" />
-    <PackageReference Include="RockLib.Configuration.AspNetCore" Version="1.0.0" />
-    <PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.1" />
+    <PackageReference Include="RockLib.Configuration.AspNetCore" Version="1.0.1" />
+    <PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.2" />
   </ItemGroup>
 
 </Project>
