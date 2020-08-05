@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.Moq</PackageId>
-    <PackageVersion>1.0.0-alpha00</PackageVersion>
+    <PackageVersion>1.0.0</PackageVersion>
     <Authors>RockLib</Authors>
     <Description>Extensions for verifying logging operations with Moq.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\RockLib.Logging.AspNetCore.xml</DocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\RockLib.Logging.Moq.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,8 +28,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.14.1" />
-    <PackageReference Include="RockLib.Logging" Version="2.0.0" />
+    <PackageReference Include="Moq" Version="4.14.5" />
+    <PackageReference Include="RockLib.Logging" Version="2.1.1" />
   </ItemGroup>
 
 </Project>
