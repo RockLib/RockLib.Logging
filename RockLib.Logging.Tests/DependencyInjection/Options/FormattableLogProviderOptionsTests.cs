@@ -5,7 +5,7 @@ using RockLib.Logging.DependencyInjection;
 using System;
 using Xunit;
 
-namespace RockLib.Logging.Tests.DependencyInjection.Options
+namespace RockLib.Logging.Tests.DependencyInjection
 {
     public class FormattableLogProviderOptionsTests
     {
