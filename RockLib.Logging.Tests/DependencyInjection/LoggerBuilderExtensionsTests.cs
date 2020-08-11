@@ -232,17 +232,16 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
             var formatter = new Mock<ILogFormatter>().Object;
 
-            builder.AddConsoleLogProvider(options =>
-            {
-                options.Level = LogLevel.Info;
-                options.SetFormatter(formatter);
-            });
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.Configure<ConsoleLogProviderOptions>(options => options.Level = LogLevel.Info);
+
+            builder.AddConsoleLogProvider(options => options.SetFormatter(formatter));
 
             var registration =
                 builder.LogProviderRegistrations.Should().ContainSingle()
                 .Subject;
 
-            var logProvider = registration.Invoke(_emptyServiceProvider);
+            var logProvider = registration.Invoke(serviceCollection.BuildServiceProvider());
 
             var consoleLogProvider =
                 logProvider.Should().BeOfType<ConsoleLogProvider>()
@@ -417,9 +416,11 @@ namespace RockLib.Logging.Tests.DependencyInjection
             var formatter = new Mock<ILogFormatter>().Object;
             var file = "c:\\foobar";
 
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.Configure<FileLogProviderOptions>(options => options.Level = LogLevel.Info);
+
             builder.AddFileLogProvider(options =>
             {
-                options.Level = LogLevel.Info;
                 options.File = file;
                 options.SetFormatter(formatter);
             });
@@ -428,7 +429,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 builder.LogProviderRegistrations.Should().ContainSingle()
                 .Subject;
 
-            var logProvider = registration.Invoke(_emptyServiceProvider);
+            var logProvider = registration.Invoke(serviceCollection.BuildServiceProvider());
 
             var fileLogProvider =
                 logProvider.Should().BeOfType<FileLogProvider>()
@@ -624,9 +625,11 @@ namespace RockLib.Logging.Tests.DependencyInjection
             var formatter = new Mock<ILogFormatter>().Object;
             var file = "c:\\foobar";
 
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.Configure<RollingFileLogProviderOptions>(options => options.Level = LogLevel.Info);
+
             builder.AddRollingFileLogProvider(options =>
             {
-                options.Level = LogLevel.Info;
                 options.File = file;
                 options.MaxFileSizeKilobytes = 123;
                 options.MaxArchiveCount = 456;
@@ -638,7 +641,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
                 builder.LogProviderRegistrations.Should().ContainSingle()
                 .Subject;
 
-            var logProvider = registration.Invoke(_emptyServiceProvider);
+            var logProvider = registration.Invoke(serviceCollection.BuildServiceProvider());
 
             var rollingFileLogProvider =
                 logProvider.Should().BeOfType<RollingFileLogProvider>()
@@ -666,7 +669,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
         private class TestLoggerBuilder : ILoggerBuilder
         {
-            public string LoggerName => "TestLogger";
+            public string LoggerName => Logger.DefaultName;
 
             public IList<Func<IServiceProvider, ILogProvider>> LogProviderRegistrations { get; } = new List<Func<IServiceProvider, ILogProvider>>();
 
