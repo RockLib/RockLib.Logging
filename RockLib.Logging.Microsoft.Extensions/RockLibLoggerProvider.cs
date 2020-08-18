@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 
 namespace RockLib.Logging
 {
+    [ProviderAlias("RockLibLogger")]
     public class RockLibLoggerProvider : ILoggerProvider
     {
         private readonly ConcurrentDictionary<string, RockLibLogger> _loggers = new ConcurrentDictionary<string, RockLibLogger>();
