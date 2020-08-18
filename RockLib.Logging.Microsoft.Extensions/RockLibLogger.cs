@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +51,7 @@ namespace RockLib.Logging
         }
 
         public IDisposable BeginScope<TState>(TState state) =>
-            ScopeProvider?.Push(state) ?? NullScope.Instance;
+            ScopeProvider?.Push(state) ?? null;
 
         private static object GetStateObject(object state)
         {
