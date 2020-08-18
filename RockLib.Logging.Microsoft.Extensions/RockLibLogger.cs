@@ -36,9 +36,8 @@ namespace RockLib.Logging
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = GetStateObject(state);
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.CategoryName"] = CategoryName;
 
-            IExternalScopeProvider scopeProvider = ScopeProvider;
-            if (scopeProvider != null)
-                logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"] = GetScopeList(scopeProvider);
+            if (ScopeProvider is IExternalScopeProvider sp && GetScope(sp) is object[] scope)
+                logEntry.ExtendedProperties["Microsoft.Extensions.Logging.Scope"] = scope;
 
             Logger.Log(logEntry);
         }
@@ -55,7 +54,7 @@ namespace RockLib.Logging
         public IDisposable BeginScope<TState>(TState state) =>
             ScopeProvider?.Push(state) ?? NullScope.Instance;
 
-        private object GetStateObject(object state)
+        private static object GetStateObject(object state)
         {
             if (typeof(IEnumerable<KeyValuePair<string, object>>).IsAssignableFrom(state.GetType())
                 && !typeof(IDictionary<string, object>).IsAssignableFrom(state.GetType()))
@@ -90,11 +89,11 @@ namespace RockLib.Logging
             }
         }
 
-        private static List<object> GetScopeList(IExternalScopeProvider scopeProvider)
+        private static object[] GetScope(IExternalScopeProvider scopeProvider)
         {
             var scopes = new List<object>();
             scopeProvider.ForEachScope((scope, list) => list.Add(scope), scopes);
-            return scopes;
+            return scopes.Count > 0 ? scopes.ToArray() : null;
         }
     }
 }

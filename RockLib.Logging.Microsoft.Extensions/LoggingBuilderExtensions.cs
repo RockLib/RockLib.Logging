@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RockLib.Logging.DependencyInjection;
@@ -13,58 +12,58 @@ namespace RockLib.Logging
     {
         public static ILoggingBuilder AddRockLibLogger(this ILoggingBuilder builder,
             ILogProcessor logProcessor,
-            string name = null,
             Action<ILoggerBuilder> configureLogger = null,
-            Action<ILoggerOptions> configureOptions = null)
+            Action<ILoggerOptions> configureOptions = null,
+            string rockLibLoggerName = null)
         {
-            var loggerBuilder = new LoggerBuilder(builder.Services, name, configureOptions);
+            var loggerBuilder = new LoggerBuilder(builder.Services, rockLibLoggerName, configureOptions);
             configureLogger?.Invoke(loggerBuilder);
 
             builder.Services.SetLogProcessor(logProcessor);
-            RegisterLoggingServices(builder, loggerBuilder, name);
+            builder.RegisterLoggingServices(loggerBuilder, rockLibLoggerName);
 
             return builder;
         }
 
         public static ILoggingBuilder AddRockLibLogger(this ILoggingBuilder builder,
             Func<IServiceProvider, ILogProcessor> logProcessorRegistration,
-            string name = null,
             Action<ILoggerBuilder> configureLogger = null,
-            Action<ILoggerOptions> configureOptions = null)
+            Action<ILoggerOptions> configureOptions = null,
+            string rockLibLoggerName = null)
         {
-            var loggerBuilder = new LoggerBuilder(builder.Services, name, configureOptions);
+            var loggerBuilder = new LoggerBuilder(builder.Services, rockLibLoggerName, configureOptions);
             configureLogger?.Invoke(loggerBuilder);
 
             builder.Services.SetLogProcessor(logProcessorRegistration);
-            RegisterLoggingServices(builder, loggerBuilder, name);
+            builder.RegisterLoggingServices(loggerBuilder, rockLibLoggerName);
 
             return builder;
         }
 
         public static ILoggingBuilder AddRockLibLogger(this ILoggingBuilder builder,
-            string name = null,
             Action<ILoggerBuilder> configureLogger = null,
             Action<ILoggerOptions> configureOptions = null,
+            string rockLibLoggerName = null,
             Logger.ProcessingMode processingMode = Logger.ProcessingMode.Background)
         {
-            var loggerBuilder = new LoggerBuilder(builder.Services, name, configureOptions);
+            var loggerBuilder = new LoggerBuilder(builder.Services, rockLibLoggerName, configureOptions);
             configureLogger?.Invoke(loggerBuilder);
 
             builder.Services.SetLogProcessor(processingMode);
-            RegisterLoggingServices(builder, loggerBuilder, name);
+            builder.RegisterLoggingServices(loggerBuilder, rockLibLoggerName);
 
             return builder;
         }
 
-        private static void RegisterLoggingServices(ILoggingBuilder builder, LoggerBuilder loggerBuilder, string name)
+        private static void RegisterLoggingServices(this ILoggingBuilder builder, LoggerBuilder loggerBuilder, string rockLibLoggerName)
         {
             builder.Services.Add(ServiceDescriptor.Singleton(loggerBuilder.Build));
             builder.Services.SetLoggerLookup();
             builder.Services.Add(ServiceDescriptor.Singleton<ILoggerProvider>(serviceProvider =>
             {
                 var lookup = serviceProvider.GetRequiredService<LoggerLookup>();
-                var options = serviceProvider.GetRequiredService<IOptionsMonitor<RockLibLoggerOptions>>();
-                return new RockLibLoggerProvider(lookup(name), options);
+                var options = serviceProvider.GetService<IOptionsMonitor<RockLibLoggerOptions>>();
+                return new RockLibLoggerProvider(lookup(rockLibLoggerName), options);
             }));
         }
     }
