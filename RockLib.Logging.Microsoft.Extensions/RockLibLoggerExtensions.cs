@@ -8,17 +8,19 @@ namespace RockLib.Logging
 {
     public static class RockLibLoggerExtensions
     {
-        public static ILoggingBuilder AddRockLibLoggerProvider(this ILoggingBuilder builder, string rockLibLoggerName = Logger.DefaultName)
+        public static ILoggingBuilder AddRockLibLoggerProvider(this ILoggingBuilder builder,
+            string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions> configureOptions = null)
         {
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
 
-            builder.Services.AddRockLibLoggerProvider(rockLibLoggerName);
+            builder.Services.AddRockLibLoggerProvider(rockLibLoggerName, configureOptions);
 
             return builder;
         }
 
-        public static IServiceCollection AddRockLibLoggerProvider(this IServiceCollection services, string rockLibLoggerName = Logger.DefaultName)
+        public static IServiceCollection AddRockLibLoggerProvider(this IServiceCollection services,
+            string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions> configureOptions = null)
         {
             if (services is null)
                 throw new ArgumentNullException(nameof(services));
@@ -29,6 +31,9 @@ namespace RockLib.Logging
                 var options = serviceProvider.GetService<IOptionsMonitor<RockLibLoggerOptions>>();
                 return new RockLibLoggerProvider(lookup(rockLibLoggerName), options);
             }));
+
+            if (configureOptions != null)
+                services.Configure(configureOptions);
 
             return services;
         }
