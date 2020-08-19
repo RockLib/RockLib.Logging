@@ -91,7 +91,7 @@ namespace RockLib.Logging
         private static object[] GetScope(IExternalScopeProvider scopeProvider)
         {
             var scopes = new List<object>();
-            scopeProvider.ForEachScope((scope, list) => list.Add(scope), scopes);
+            scopeProvider.ForEachScope((scope, list) => list.Add(GetStateObject(scope)), scopes);
             return scopes.Count > 0 ? scopes.ToArray() : null;
         }
     }
