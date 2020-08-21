@@ -5,6 +5,9 @@ using System.Collections.Concurrent;
 
 namespace RockLib.Logging
 {
+    /// <summary>
+    /// Represents a type that can create instances of <see cref="RockLibLogger"/>.
+    /// </summary>
     [ProviderAlias("RockLibLogger")]
     public class RockLibLoggerProvider : ILoggerProvider
     {
@@ -14,6 +17,13 @@ namespace RockLib.Logging
         private bool _includeScopes;
         private IExternalScopeProvider _scopeProvider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RockLibLoggerProvider"/> class.
+        /// </summary>
+        /// <param name="logger">The <see cref="ILogger"/> that will record logs.</param>
+        /// <param name="options">
+        /// A delegate to configure the <see cref="RockLibLoggerProvider"/>.
+        /// </param>
         public RockLibLoggerProvider(ILogger logger, IOptionsMonitor<RockLibLoggerOptions> options = null)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -25,8 +35,14 @@ namespace RockLib.Logging
             }
         }
 
+        /// <summary>
+        /// Gets the <see cref="ILogger"/> that ultimately records logs for the logger provider.
+        /// </summary>
         public ILogger Logger { get; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to include scopes when logging.
+        /// </summary>
         public bool IncludeScopes
         {
             get => _includeScopes;
@@ -39,6 +55,9 @@ namespace RockLib.Logging
             }
         }
 
+        /// <summary>
+        /// Gets or sets the external scope information source for the logger provider.
+        /// </summary>
         public IExternalScopeProvider ScopeProvider
         {
             get => IncludeScopes
@@ -53,12 +72,20 @@ namespace RockLib.Logging
             }
         }
 
-        public RockLibLogger CreateLogger(string categoryName) =>
+        /// <summary>
+        /// Gets the <see cref="RockLibLogger"/> for the specified category name.
+        /// </summary>
+        /// <param name="categoryName">The category name of the logger.</param>
+        /// <returns>
+        /// The same instance of <see cref="RockLibLogger"/> given the same category name.
+        /// </returns>
+        public RockLibLogger GetLogger(string categoryName) =>
             _loggers.GetOrAdd(categoryName, CreateLoggerInstance);
 
         Microsoft.Extensions.Logging.ILogger ILoggerProvider.CreateLogger(string categoryName) =>
-            CreateLogger(categoryName);
+            GetLogger(categoryName);
 
+        /// <inheritdoc/>
         public void Dispose() =>
             _optionsReloadToken?.Dispose();
 

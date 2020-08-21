@@ -6,12 +6,35 @@ using System;
 
 namespace RockLib.Logging
 {
+    /// <summary>
+    /// Defines extension methods for registering <see cref="RockLibLoggerProvider"/> with a
+    /// <see cref="ILoggingBuilder"/> or <see cref="IServiceCollection"/>.
+    /// </summary>
     public static class RockLibLoggerExtensions
     {
+        /// <summary>
+        /// Adds a RockLib logger named 'RockLibLogger' to the factory.
+        /// </summary>
+        /// <param name="builder">The <see cref="ILoggingBuilder"/> to use.</param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="RockLibLogger"/>.
+        /// </param>
+        /// <returns>The same <see cref="ILoggingBuilder"/>.</returns>
         public static ILoggingBuilder AddRockLibLoggerProvider(this ILoggingBuilder builder,
             Action<RockLibLoggerOptions> configureOptions) =>
             builder.AddRockLibLoggerProvider(Logger.DefaultName, configureOptions);
 
+        /// <summary>
+        /// Adds a RockLib logger named 'RockLibLogger' to the factory.
+        /// </summary>
+        /// <param name="builder">The <see cref="ILoggingBuilder"/> to use.</param>
+        /// <param name="rockLibLoggerName">
+        /// The name of the <see cref="ILogger"/> that will ultimately records logs.
+        /// </param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="RockLibLogger"/>.
+        /// </param>
+        /// <returns>The same <see cref="ILoggingBuilder"/>.</returns>
         public static ILoggingBuilder AddRockLibLoggerProvider(this ILoggingBuilder builder,
             string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions> configureOptions = null)
         {
@@ -23,10 +46,33 @@ namespace RockLib.Logging
             return builder;
         }
 
+        /// <summary>
+        /// Adds a <see cref="RockLibLoggerProvider"/> to the service collection.
+        /// </summary>
+        /// <param name="services">
+        /// The <see cref="IServiceCollection"/> to add the logger provider to.
+        /// </param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="RockLibLogger"/>.
+        /// </param>
+        /// <returns>The same <see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddRockLibLoggerProvider(this IServiceCollection services,
             Action<RockLibLoggerOptions> configureOptions) =>
             services.AddRockLibLoggerProvider(Logger.DefaultName, configureOptions);
 
+        /// <summary>
+        /// Adds a <see cref="RockLibLoggerProvider"/> to the service collection.
+        /// </summary>
+        /// <param name="services">
+        /// The <see cref="IServiceCollection"/> to add the logger provider to.
+        /// </param>
+        /// <param name="rockLibLoggerName">
+        /// The name of the <see cref="ILogger"/> that will ultimately records logs.
+        /// </param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="RockLibLogger"/>.
+        /// </param>
+        /// <returns>The same <see cref="IServiceCollection"/>.</returns>
         public static IServiceCollection AddRockLibLoggerProvider(this IServiceCollection services,
             string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions> configureOptions = null)
         {

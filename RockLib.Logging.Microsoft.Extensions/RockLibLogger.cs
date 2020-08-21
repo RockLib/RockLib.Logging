@@ -5,8 +5,20 @@ using System.Linq;
 
 namespace RockLib.Logging
 {
+    /// <summary>
+    /// An implementation of <see cref="Microsoft.Extensions.Logging.ILogger"/> that writes log
+    /// entries using an instance of <see cref="ILogger"/>.
+    /// </summary>
     public class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RockLibLogger"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The <see cref="ILogger"/> that ultimately records logs.
+        /// </param>
+        /// <param name="categoryName"></param>
+        /// <param name="scopeProvider"></param>
         public RockLibLogger(ILogger logger, string categoryName, IExternalScopeProvider scopeProvider)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -14,12 +26,22 @@ namespace RockLib.Logging
             ScopeProvider = scopeProvider;
         }
 
+        /// <summary>
+        /// Gets the <see cref="ILogger"/> that ultimately records logs.
+        /// </summary>
         public ILogger Logger { get; }
 
+        /// <summary>
+        /// Gets the category name of the logger.
+        /// </summary>
         public string CategoryName { get; }
 
+        /// <summary>
+        /// Gets the external scope information source for the logger.
+        /// </summary>
         public IExternalScopeProvider ScopeProvider { get; internal set; }
 
+        /// <inheritdoc/>
         public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             if (formatter == null)
@@ -41,6 +63,7 @@ namespace RockLib.Logging
             Logger.Log(logEntry);
         }
 
+        /// <inheritdoc/>
         public bool IsEnabled(Microsoft.Extensions.Logging.LogLevel logLevel)
         {
             if (logLevel == Microsoft.Extensions.Logging.LogLevel.None)
@@ -50,6 +73,7 @@ namespace RockLib.Logging
             return Logger.IsEnabled(convertedLogLevel);
         }
 
+        /// <inheritdoc/>
         public IDisposable BeginScope<TState>(TState state) =>
             ScopeProvider?.Push(state) ?? null;
 
