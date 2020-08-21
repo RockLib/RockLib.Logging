@@ -10,7 +10,7 @@ namespace RockLib.Logging
     /// Defines extension methods for registering <see cref="RockLibLoggerProvider"/> with a
     /// <see cref="ILoggingBuilder"/> or <see cref="IServiceCollection"/>.
     /// </summary>
-    public static class RockLibLoggerExtensions
+    public static class RockLibLoggerProviderExtensions
     {
         /// <summary>
         /// Adds a RockLib logger named 'RockLibLogger' to the factory.
