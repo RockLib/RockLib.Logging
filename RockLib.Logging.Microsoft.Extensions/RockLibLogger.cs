@@ -54,7 +54,10 @@ namespace RockLib.Logging
             var logEntry = new LogEntry(formatter(state, exception), exception, convertedLogLevel);
 
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.EventId"] = eventId;
-            logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = GetStateObject(state);
+
+            if (state != null)
+                logEntry.ExtendedProperties["Microsoft.Extensions.Logging.State"] = GetStateObject(state);
+
             logEntry.ExtendedProperties["Microsoft.Extensions.Logging.CategoryName"] = CategoryName;
 
             if (ScopeProvider is IExternalScopeProvider sp && GetScope(sp) is object[] scope)
