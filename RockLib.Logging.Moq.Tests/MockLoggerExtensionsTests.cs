@@ -84,9 +84,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Debug("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Debug("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyDebug(new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -132,9 +132,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Debug("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Debug("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -252,9 +252,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Info("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyInfo(new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -300,9 +300,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Info("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -420,9 +420,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Warn("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Warn("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyWarn(new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -468,9 +468,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Warn("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Warn("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -588,9 +588,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Error("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Error("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyError(new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -636,9 +636,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Error("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Error("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -756,9 +756,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Fatal("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Fatal("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyFatal(new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -804,9 +804,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Fatal("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Fatal("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -924,9 +924,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Audit("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Audit("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyAudit(new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -972,9 +972,9 @@ namespace RockLib.Logging.Moq.Tests
         {
             var mockLogger = new MockLogger();
 
-            mockLogger.Object.Audit("Hello, world!", new { Foo = 123 });
+            mockLogger.Object.Audit("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
