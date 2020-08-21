@@ -9,6 +9,10 @@ namespace RockLib.Logging
     public static class RockLibLoggerExtensions
     {
         public static ILoggingBuilder AddRockLibLoggerProvider(this ILoggingBuilder builder,
+            Action<RockLibLoggerOptions> configureOptions) =>
+            builder.AddRockLibLoggerProvider(Logger.DefaultName, configureOptions);
+
+        public static ILoggingBuilder AddRockLibLoggerProvider(this ILoggingBuilder builder,
             string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions> configureOptions = null)
         {
             if (builder is null)
@@ -18,6 +22,10 @@ namespace RockLib.Logging
 
             return builder;
         }
+
+        public static IServiceCollection AddRockLibLoggerProvider(this IServiceCollection services,
+            Action<RockLibLoggerOptions> configureOptions) =>
+            services.AddRockLibLoggerProvider(Logger.DefaultName, configureOptions);
 
         public static IServiceCollection AddRockLibLoggerProvider(this IServiceCollection services,
             string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions> configureOptions = null)
