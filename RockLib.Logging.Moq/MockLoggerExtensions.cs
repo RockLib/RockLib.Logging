@@ -509,17 +509,8 @@ namespace RockLib.Logging.Moq
                         || !value.GetType().IsAssignableFrom(property.Value.GetType()))
                         return false;
 
-                    switch (property.Value)
-                    {
-                        case string pattern:
-                            if (!Regex.IsMatch((string)value, pattern))
-                                return false;
-                            break;
-                        default:
-                            if (!Equals(property.Value, value))
-                                return false;
-                            break;
-                    }
+                    if (!AreEquivalent(property.Value, value))
+                        return false;
                 }
                 return true;
             };
@@ -750,17 +741,9 @@ namespace RockLib.Logging.Moq
                         || !value.GetType().IsAssignableFrom(property.Value.GetType()))
                         return false;
 
-                    switch (property.Value)
-                    {
-                        case string pattern:
-                            if (!Regex.IsMatch((string)value, pattern))
-                                return false;
-                            break;
-                        default:
-                            if (!Equals(property.Value, value))
-                                return false;
-                            break;
-                    }
+                    if (!AreEquivalent(property.Value, value))
+                        return false;
+                    
                 }
                 return true;
             };
@@ -772,6 +755,24 @@ namespace RockLib.Logging.Moq
 
             mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
                 times ?? Times.Once(), failMessage);
+        }
+
+        private static bool AreEquivalent(object lhs, object rhs)
+        {
+            switch (lhs)
+            {
+                case string pattern:
+                    return Regex.IsMatch((string)rhs, pattern);
+                default:
+                    if (lhs is object[] lhsArray && rhs is object[] rhsArray && lhsArray.Length == rhsArray.Length)
+                    {
+                        for (int i = 0; i < lhsArray.Length; i++)
+                            if (!AreEquivalent(lhsArray[i], rhsArray[i]))
+                                return false;
+                        return true;
+                    }
+                    return Equals(lhs, rhs);
+            }
         }
 
         private static Dictionary<string, object> GetExtendedPropertiesDictionary(object extendedProperties)
