@@ -14,7 +14,7 @@ namespace RockLib.Logging
         private bool _includeScopes;
         private IExternalScopeProvider _scopeProvider;
 
-        public RockLibLoggerProvider(ILogger logger, IOptionsMonitor<RockLibLoggerOptions> options)
+        public RockLibLoggerProvider(ILogger logger, IOptionsMonitor<RockLibLoggerOptions> options = null)
         {
             Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             if (options != null)
@@ -25,13 +25,33 @@ namespace RockLib.Logging
             }
         }
 
-        public RockLibLoggerProvider(ILogger logger, bool includeScopes = false)
+        public ILogger Logger { get; }
+
+        public bool IncludeScopes
         {
-            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _includeScopes = includeScopes;
+            get => _includeScopes;
+            set
+            {
+                _includeScopes = value;
+                var scopeProvider = ScopeProvider;
+                foreach (var logger in _loggers.Values)
+                    logger.ScopeProvider = scopeProvider;
+            }
         }
 
-        public ILogger Logger { get; }
+        public IExternalScopeProvider ScopeProvider
+        {
+            get => IncludeScopes
+                ? _scopeProvider ?? (_scopeProvider = new LoggerExternalScopeProvider())
+                : null;
+            set
+            {
+                _scopeProvider = value;
+                if (IncludeScopes)
+                    foreach (var logger in _loggers.Values)
+                        logger.ScopeProvider = value;
+            }
+        }
 
         public RockLibLogger CreateLogger(string categoryName) =>
             _loggers.GetOrAdd(categoryName, CreateLoggerInstance);
@@ -42,27 +62,19 @@ namespace RockLib.Logging
         public void Dispose() =>
             _optionsReloadToken?.Dispose();
 
-        public void SetScopeProvider(IExternalScopeProvider scopeProvider) =>
-            _scopeProvider = scopeProvider;
-
         private void ReloadLoggerOptions(RockLibLoggerOptions options, string optionsName)
         {
             if (OptionsNameMatchesLoggerName(optionsName))
             {
                 _includeScopes = options.IncludeScopes;
-                var scopeProvider = GetScopeProvider();
+                var scopeProvider = ScopeProvider;
                 foreach (var logger in _loggers.Values)
                     logger.ScopeProvider = scopeProvider;
             }
         }
 
         private RockLibLogger CreateLoggerInstance(string categoryName) =>
-            new RockLibLogger(Logger, categoryName, GetScopeProvider());
-
-        private IExternalScopeProvider GetScopeProvider() =>
-            _includeScopes
-                ? _scopeProvider ?? (_scopeProvider = new LoggerExternalScopeProvider())
-                : null;
+            new RockLibLogger(Logger, categoryName, ScopeProvider);
 
         private bool OptionsNameMatchesLoggerName(string optionsName) =>
             string.Equals(optionsName, Logger.Name, StringComparison.OrdinalIgnoreCase)
