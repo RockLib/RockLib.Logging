@@ -44,7 +44,7 @@ namespace RockLib.Logging.AspNetCore
         /// method, passing it the instance of <see cref="IConfiguration"/> obtained from the local
         /// <see cref="IServiceProvider"/>.
         /// </remarks>
-        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package.")]
+        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package. To replicate what happens when the registerAspNetCoreLogger parameter is is true, use the RockLib.Logging.Microsoft.Extensions package.")]
         public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, string rockLibLoggerName = Logger.DefaultName,
             DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
             bool setConfigRoot = true, bool registerAspNetCoreLogger = false)
@@ -76,7 +76,7 @@ namespace RockLib.Logging.AspNetCore
         /// have any side-effects. As such, applications using this extension method many need to call the
         /// <see cref="Config.SetRoot(IConfiguration)"/> method in the constructor of their <code>Startup</code> class.
         /// </remarks>
-        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package.")]
+        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package. To replicate what happens when the registerAspNetCoreLogger parameter is is true, use the RockLib.Logging.Microsoft.Extensions package.")]
         public static IWebHostBuilder UseRockLibLogging(this IWebHostBuilder builder, ILogger logger, bool registerAspNetCoreLogger = false)
         {
             if (builder == null)

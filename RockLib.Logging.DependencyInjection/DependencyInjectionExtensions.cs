@@ -39,7 +39,7 @@ namespace RockLib.Logging.DependencyInjection
         /// configuration changes.
         /// </param>
         /// <returns>The same <see cref="IServiceCollection"/>.</returns>
-        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package.")]
+        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package. To replicate what happens when the addLoggerProvider parameter is is true, use the RockLib.Logging.Microsoft.Extensions package.")]
         public static IServiceCollection AddRockLibLoggerTransient(this IServiceCollection services,
             string rockLibLoggerName = Logger.DefaultName, DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
             bool addLoggerProvider = false, bool addBackgroundLogProcessor = true, bool reloadOnConfigChange = false)
@@ -88,7 +88,7 @@ namespace RockLib.Logging.DependencyInjection
         /// configuration changes.
         /// </param>
         /// <returns>The same <see cref="IServiceCollection"/>.</returns>
-        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package.")]
+        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package. To replicate what happens when the addLoggerProvider parameter is is true, use the RockLib.Logging.Microsoft.Extensions package.")]
         public static IServiceCollection AddRockLibLoggerSingleton(this IServiceCollection services, string rockLibLoggerName = Logger.DefaultName,
             DefaultTypes defaultTypes = null, ValueConverters valueConverters = null, bool addLoggerProvider = false, bool reloadOnConfigChange = true)
         {
@@ -120,7 +120,7 @@ namespace RockLib.Logging.DependencyInjection
         /// implementation to the service collection.
         /// </param>
         /// <returns>The same <see cref="IServiceCollection"/>.</returns>
-        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package.")]
+        [Obsolete("Please use the dependency injection functionality from the main RockLib.Logging package. To replicate what happens when the addLoggerProvider parameter is is true, use the RockLib.Logging.Microsoft.Extensions package.")]
         public static IServiceCollection AddRockLibLoggerSingleton(this IServiceCollection services, ILogger logger,
             bool addLoggerProvider = false)
         {
@@ -140,6 +140,7 @@ namespace RockLib.Logging.DependencyInjection
             return services;
         }
 
+        [Obsolete]
         private static void AddRockLibLoggerProviderSingleton(this IServiceCollection services) =>
             services.AddSingleton<ILoggerProvider>(serviceProvider => new RockLibLoggerProvider(() => serviceProvider.GetRequiredService<ILogger>()));
     }
