@@ -7,15 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging", "RockLib.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Tests", "RockLib.Logging.Tests\RockLib.Logging.Tests.csproj", "{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore", "RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj", "{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{1E143C4D-C527-4038-8CD3-5F26EC7E644B}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RockLib.Reflection.Optimized.Shared", "RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.shproj", "{1F65CBB1-529E-407C-B7D6-8BE5A59EBE14}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.DependencyInjection", "RockLib.Logging.DependencyInjection\RockLib.Logging.DependencyInjection.csproj", "{6365906E-F127-4B3D-B602-4B3CC20171D4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.DependencyInjection.Tests", "RockLib.Logging.DependencyInjection.Tests\RockLib.Logging.DependencyInjection.Tests.csproj", "{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq", "RockLib.Logging.Moq\RockLib.Logging.Moq.csproj", "{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}"
 EndProject
@@ -48,7 +40,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Logging.Appsettings
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions", "RockLib.Logging.Microsoft.Extensions\RockLib.Logging.Microsoft.Extensions.csproj", "{E581497D-5D5A-4788-BDF3-C40097BAAA32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockLib.Logging.Microsoft.Extensions.Tests", "RockLib.Logging.Microsoft.Extensions.Tests\RockLib.Logging.Microsoft.Extensions.Tests.csproj", "{F0320E13-ADB6-4067-B749-2DB67ED79F30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions.Tests", "RockLib.Logging.Microsoft.Extensions.Tests\RockLib.Logging.Microsoft.Extensions.Tests.csproj", "{F0320E13-ADB6-4067-B749-2DB67ED79F30}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -68,22 +60,6 @@ Global
 		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1E143C4D-C527-4038-8CD3-5F26EC7E644B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1E143C4D-C527-4038-8CD3-5F26EC7E644B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1E143C4D-C527-4038-8CD3-5F26EC7E644B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1E143C4D-C527-4038-8CD3-5F26EC7E644B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6365906E-F127-4B3D-B602-4B3CC20171D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6365906E-F127-4B3D-B602-4B3CC20171D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6365906E-F127-4B3D-B602-4B3CC20171D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6365906E-F127-4B3D-B602-4B3CC20171D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B6FFB79-EFCE-40B9-8736-2B4167D75FBE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}.Release|Any CPU.ActiveCfg = Release|Any CPU
