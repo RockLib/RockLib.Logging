@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.Microsoft.Extensions</PackageId>
-    <PackageVersion>1.0.0-alpha00</PackageVersion>
+    <PackageVersion>1.0.0-alpha01</PackageVersion>
     <Authors>RockLib</Authors>
     <Description>An implementation of Microsoft.Extensions.Logging that uses RockLib.Logging.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
