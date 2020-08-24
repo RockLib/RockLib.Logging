@@ -5,10 +5,12 @@ using System.Collections.Concurrent;
 
 namespace RockLib.Logging
 {
+    using static Logger;
+
     /// <summary>
     /// Represents a type that can create instances of <see cref="RockLibLogger"/>.
     /// </summary>
-    [ProviderAlias("RockLibLogger")]
+    [ProviderAlias(nameof(RockLibLogger))]
     public class RockLibLoggerProvider : ILoggerProvider
     {
         private readonly ConcurrentDictionary<string, RockLibLogger> _loggers = new ConcurrentDictionary<string, RockLibLogger>();
@@ -65,7 +67,7 @@ namespace RockLib.Logging
                 : null;
             set
             {
-                _scopeProvider = value;
+                _scopeProvider = value ?? throw new ArgumentNullException();
                 if (IncludeScopes)
                     foreach (var logger in _loggers.Values)
                         logger.ScopeProvider = value;
@@ -80,7 +82,7 @@ namespace RockLib.Logging
         /// The same instance of <see cref="RockLibLogger"/> given the same category name.
         /// </returns>
         public RockLibLogger GetLogger(string categoryName) =>
-            _loggers.GetOrAdd(categoryName, CreateLoggerInstance);
+            _loggers.GetOrAdd(categoryName ?? throw new ArgumentNullException(nameof(categoryName)), CreateLoggerInstance);
 
         Microsoft.Extensions.Logging.ILogger ILoggerProvider.CreateLogger(string categoryName) =>
             GetLogger(categoryName);
@@ -106,10 +108,10 @@ namespace RockLib.Logging
         private bool OptionsNameMatchesLoggerName(string optionsName) =>
             string.Equals(optionsName, Logger.Name, StringComparison.OrdinalIgnoreCase)
                 || (string.Equals(optionsName, Options.DefaultName, StringComparison.OrdinalIgnoreCase)
-                    && string.Equals(Logger.Name, Logging.Logger.DefaultName, StringComparison.OrdinalIgnoreCase));
+                    && string.Equals(Logger.Name, DefaultName, StringComparison.OrdinalIgnoreCase));
 
         private static string GetOptionsName(ILogger logger) =>
-            string.Equals(logger.Name, Logging.Logger.DefaultName, StringComparison.OrdinalIgnoreCase)
+            string.Equals(logger.Name, DefaultName, StringComparison.OrdinalIgnoreCase)
                 ? Options.DefaultName
                 : logger.Name;
     }
