@@ -126,9 +126,6 @@ namespace RockLib.Logging.LogProcessing
         /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
-            if (IsDisposed)
-                return;
-
             lock (_disposeLocker)
             {
                 if (IsDisposed)
