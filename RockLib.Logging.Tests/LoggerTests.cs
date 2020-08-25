@@ -85,14 +85,15 @@ namespace RockLib.Logging.Tests
         }
 
         [Fact]
-        public void LogThrowsObjectDisposedExceptionAfterLogProcessorHasBeenDisposed()
+        public void LogDoesNotCallLogProcessorWhenItHasBeenDisposed()
         {
             var mockLogProcessor = new Mock<ILogProcessor>();
             mockLogProcessor.Setup(m => m.IsDisposed).Returns(true);
 
             var logger = new Logger(mockLogProcessor.Object);
 
-            Assert.Throws<ObjectDisposedException>(() => logger.Log(new LogEntry("Hello, world!", LogLevel.Info)));
+            mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>()),
+                Times.Never);
         }
 
         [Fact]
