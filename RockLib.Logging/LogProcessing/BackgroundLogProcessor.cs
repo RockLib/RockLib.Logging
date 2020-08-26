@@ -30,9 +30,6 @@ namespace RockLib.Logging.LogProcessing
             _processingThread.Start();
             _trackingThread = new Thread(TrackWriteTasks) { IsBackground = true };
             _trackingThread.Start();
-
-            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => Dispose(true);
-            AppDomain.CurrentDomain.DomainUnload += (sender, eventArgs) => Dispose(true);
         }
 
         /// <summary>

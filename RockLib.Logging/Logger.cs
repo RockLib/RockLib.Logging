@@ -12,8 +12,7 @@ namespace RockLib.Logging
     /// </summary>
     /// <remarks>
     /// This class is expensive to initialize and is intended to be a long-lived object.
-    /// With the exception of the <see cref="Dispose()"/> method, all public instance members
-    /// of this class are thread-safe.
+    /// All public instance members of this class are thread-safe.
     /// </remarks>
     public sealed class Logger : ILogger
     {
@@ -45,6 +44,8 @@ namespace RockLib.Logging
         /// </summary>
         public const string DefaultName = "default";
 
+        private static readonly Lazy<BackgroundLogProcessor> _backgroundLogProcessor = new Lazy<BackgroundLogProcessor>(GetBackgroundLogProcessor);
+
         private static readonly IReadOnlyCollection<ILogProvider> _emptyLogProviders = new ILogProvider[0];
         private static readonly IReadOnlyCollection<IContextProvider> _emptyContextProviders = new IContextProvider[0];
 
@@ -73,7 +74,7 @@ namespace RockLib.Logging
             bool isDisabled = false,
             ProcessingMode processingMode = ProcessingMode.Background,
             IReadOnlyCollection<IContextProvider> contextProviders = null)
-            : this(CreateLogProcessor(processingMode), name, level, logProviders, isDisabled, contextProviders)
+            : this(GetLogProcessor(processingMode), name, level, logProviders, isDisabled, contextProviders)
         {
         }
 
@@ -176,12 +177,12 @@ namespace RockLib.Logging
         /// </summary>
         public void Dispose() { }
 
-        private static ILogProcessor CreateLogProcessor(ProcessingMode processingMode)
+        private static ILogProcessor GetLogProcessor(ProcessingMode processingMode)
         {
             switch (processingMode)
             {
                 case ProcessingMode.Background:
-                    return new BackgroundLogProcessor();
+                    return _backgroundLogProcessor.Value;
                 case ProcessingMode.Synchronous:
                     return new SynchronousLogProcessor();
                 case ProcessingMode.FireAndForget:
@@ -189,6 +190,16 @@ namespace RockLib.Logging
                 default:
                     throw new ArgumentException($"Processing mode is not defined: {processingMode}.", nameof(processingMode));
             }
+        }
+
+        private static BackgroundLogProcessor GetBackgroundLogProcessor()
+        {
+            var processor = new BackgroundLogProcessor();
+
+            AppDomain.CurrentDomain.ProcessExit += (sender, eventArgs) => processor.Dispose();
+            AppDomain.CurrentDomain.DomainUnload += (sender, eventArgs) => processor.Dispose();
+
+            return processor;
         }
     }
 }
