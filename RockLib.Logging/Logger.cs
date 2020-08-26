@@ -162,9 +162,8 @@ namespace RockLib.Logging
             [CallerLineNumber] int callerLineNumber = 0)
         {
             if (logEntry == null) throw new ArgumentNullException(nameof(logEntry));
-            if (LogProcessor.IsDisposed) throw new ObjectDisposedException("Cannot log to a Logger with a disposed LogProcessor.");
 
-            if (!_canProcessLogs || logEntry.Level < Level)
+            if (LogProcessor.IsDisposed || !_canProcessLogs || logEntry.Level < Level)
                 return;
 
             logEntry.CallerInfo = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
