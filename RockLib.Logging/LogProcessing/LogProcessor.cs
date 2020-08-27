@@ -44,7 +44,7 @@ namespace RockLib.Logging.LogProcessing
         {
             foreach (var contextProvider in logger.ContextProviders)
             {
-                try 
+                try
                 {
                     contextProvider.AddContext(logEntry);
                 }

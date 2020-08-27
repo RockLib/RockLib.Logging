@@ -92,7 +92,7 @@ namespace RockLib.Logging.DependencyInjection
                 throw new ArgumentNullException(nameof(serviceProvider));
 
             var optionsMonitor = serviceProvider.GetService<IOptionsMonitor<LoggerOptions>>();
-            var options = optionsMonitor?.Get(LoggerName) ?? new LoggerOptions();            
+            var options = optionsMonitor?.Get(LoggerName) ?? new LoggerOptions();
             ConfigureOptions?.Invoke(options);
 
             if (IsEmpty(options))
@@ -110,7 +110,7 @@ namespace RockLib.Logging.DependencyInjection
 
             if (optionsMonitor != null && options.ReloadOnChange)
                 return new ReloadingLogger(logProcessor, LoggerName, logProviders, contextProviders, optionsMonitor, options);
-            
+
             return new Logger(logProcessor, LoggerName, options.Level.GetValueOrDefault(),
                 logProviders, options.IsDisabled.GetValueOrDefault(), contextProviders);
         }

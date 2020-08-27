@@ -78,7 +78,7 @@ namespace RockLib.Logging
         /// </exception>
         public static ILogger GetCached(string name = Logger.DefaultName,
             DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
-            IResolver resolver = null, bool reloadOnConfigChange = true) => 
+            IResolver resolver = null, bool reloadOnConfigChange = true) =>
             Configuration.GetCachedLogger(name, defaultTypes, valueConverters, resolver, reloadOnConfigChange);
 
         /// <summary>
