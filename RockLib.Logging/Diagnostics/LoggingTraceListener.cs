@@ -6,7 +6,7 @@ namespace RockLib.Logging.Diagnostics
     using static Logger;
 
     /// <summary>
-    /// A trace listener that outputs to an <see cref="ILogger"/>.
+    /// A trace listener that records trace messages with an <see cref="ILogger"/>.
     /// </summary>
     public class LoggingTraceListener : TraceListener
     {
@@ -26,8 +26,8 @@ namespace RockLib.Logging.Diagnostics
         /// Initializes a new instance of the <see cref="LoggingTraceListener"/> class.
         /// </summary>
         /// <param name="loggerName">
-        /// The name of the logger that will record trace messages.
-        /// <para>This logger is created by calling <see cref="LoggerFactory.Create"/>.</para>
+        /// The name of the logger to create, using <see cref="LoggerFactory"/>, that will record
+        /// trace messages.
         /// </param>
         /// <param name="logLevel">The level that trace messages will be logged at.</param>
         public LoggingTraceListener(string loggerName = DefaultName, LogLevel? logLevel = null)
