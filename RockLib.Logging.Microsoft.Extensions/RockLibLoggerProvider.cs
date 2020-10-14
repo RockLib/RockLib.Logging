@@ -67,7 +67,7 @@ namespace RockLib.Logging
                 : null;
             set
             {
-                _scopeProvider = value ?? throw new ArgumentNullException();
+                _scopeProvider = value ?? throw new ArgumentNullException(nameof(value));
                 if (IncludeScopes)
                     foreach (var logger in _loggers.Values)
                         logger.ScopeProvider = value;

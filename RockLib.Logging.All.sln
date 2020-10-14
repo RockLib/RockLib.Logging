@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3551DC4D-4
 		docs\LogProcessors.md = docs\LogProcessors.md
 		docs\LogProviderErrors.md = docs\LogProviderErrors.md
 		docs\LogProviders.md = docs\LogProviders.md
+		docs\Microsoft.md = docs\Microsoft.md
 		README.md = README.md
 		docs\RollingFileLogProvider.md = docs\RollingFileLogProvider.md
 		docs\Tracing.md = docs\Tracing.md
@@ -41,6 +42,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions", "RockLib.Logging.Microsoft.Extensions\RockLib.Logging.Microsoft.Extensions.csproj", "{E581497D-5D5A-4788-BDF3-C40097BAAA32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions.Tests", "RockLib.Logging.Microsoft.Extensions.Tests\RockLib.Logging.Microsoft.Extensions.Tests.csproj", "{F0320E13-ADB6-4067-B749-2DB67ED79F30}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Logging.Microsoft.Extensions", "Examples\Example.Logging.Microsoft.Extensions\Example.Logging.Microsoft.Extensions.csproj", "{CC271C12-367D-4C6A-A9C8-0EC9FE210FF6}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -84,6 +87,10 @@ Global
 		{F0320E13-ADB6-4067-B749-2DB67ED79F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0320E13-ADB6-4067-B749-2DB67ED79F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0320E13-ADB6-4067-B749-2DB67ED79F30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC271C12-367D-4C6A-A9C8-0EC9FE210FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC271C12-367D-4C6A-A9C8-0EC9FE210FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC271C12-367D-4C6A-A9C8-0EC9FE210FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC271C12-367D-4C6A-A9C8-0EC9FE210FF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,6 +98,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4C6737B1-8404-4A43-A7B0-929DA58154B1} = {4E9347EA-62E7-4C45-8186-F0767B8303DA}
 		{DBD30467-311B-4C2F-A614-730535F0C71D} = {4E9347EA-62E7-4C45-8186-F0767B8303DA}
+		{CC271C12-367D-4C6A-A9C8-0EC9FE210FF6} = {4E9347EA-62E7-4C45-8186-F0767B8303DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {806D89B7-78D1-4038-944B-AFFE3C7A0F00}

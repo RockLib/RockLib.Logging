@@ -12,6 +12,8 @@
   - [Instantiate and configure a logger](docs/Logger.md)
   - [Configure and use LoggerFactory](docs/LoggerFactory.md)
   - [Add RockLib logging to the Microsoft dependency injection system](docs/DI.md)
+  - [Add RockLib logging to the Microsoft logging system](docs/Microsoft.md)
+  - TODO: Add docs for LoggingTraceListener
   - [Use log providers](docs/LogProviders.md)
     - [ConsoleLogProvider](docs/ConsoleLogProvider.md)
     - [FileLogProvider](docs/FileLogProvider.md)
