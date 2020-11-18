@@ -1,4 +1,5 @@
-﻿using RockLib.Reflection.Optimized;
+﻿using RockLib.Logging.SafeLogging;
+using RockLib.Reflection.Optimized;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -19,6 +20,7 @@ namespace RockLib.Logging
         private const BindingFlags PublicInstance = BindingFlags.Public | BindingFlags.Instance;
 
         private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setExtendedPropertyActionsCache = new ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>>();
+        private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setSafeExtendedPropertyActionsCache = new ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>>();
 
         private static readonly ConcurrentDictionary<Type, (Func<object, string> getKey, Func<object, object> getValue)> _stringDictionaryItemAccessors = new ConcurrentDictionary<Type, (Func<object, string>, Func<object, object>)>();
 
@@ -190,6 +192,33 @@ namespace RockLib.Logging
                     setExtendedProperty(this, extendedProperties);
         }
 
+        /// <summary>
+        /// Sets values of the <see cref="ExtendedProperties"/> property according to the
+        /// <paramref name="extendedProperties"/> parameter.
+        /// </summary>
+        /// <param name="extendedProperties">
+        /// An object whose properties are added to the <see cref="ExtendedProperties"/> dictionary.
+        /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
+        /// its items are added to <see cref="ExtendedProperties"/>.
+        /// </param>
+        public void SetSafeExtendedProperties(object extendedProperties)
+        {
+            if (extendedProperties == null)
+                return;
+            if (extendedProperties is IEnumerable<KeyValuePair<string, object>> stringDictionary)
+                foreach (var item in stringDictionary)
+                    ExtendedProperties[item.Key] = RedactEngine.Redact(item.Value);
+            else if (TryGetStringDictionaryItemAccessors(extendedProperties, out var getKey, out var getValue))
+                foreach (object item in (IEnumerable)extendedProperties)
+                    ExtendedProperties[getKey(item)] = RedactEngine.Redact(getValue(item));
+            else if (extendedProperties is IDictionary dictionary)
+                foreach (var key in dictionary.Keys.OfType<string>())
+                    ExtendedProperties[key] = RedactEngine.Redact(dictionary[key]);
+            else
+                foreach (var setSafeExtendedProperty in GetSetSafeExtendedPropertyActions(extendedProperties.GetType()))
+                    setSafeExtendedProperty(this, extendedProperties);
+        }
+
         private static bool TryGetStringDictionaryItemAccessors(object extendedProperties, out Func<object, string> getKey, out Func<object, object> getValue)
         {
             (getKey, getValue) = _stringDictionaryItemAccessors.GetOrAdd(extendedProperties.GetType(), CreateStringDictionaryItemAccessors);
@@ -227,6 +256,17 @@ namespace RockLib.Logging
             var getPropertyValue = property.CreateGetter();
             return (logEntry, extendedPropertiesObject) =>
                 logEntry.ExtendedProperties[property.Name] = getPropertyValue(extendedPropertiesObject);
+        }
+
+        private static IReadOnlyCollection<Action<LogEntry, object>> GetSetSafeExtendedPropertyActions(Type type) =>
+            _setSafeExtendedPropertyActionsCache.GetOrAdd(type, t =>
+                t.GetProperties(PublicInstance).Select(GetSetSafeExtendedPropertyAction).ToArray());
+
+        private static Action<LogEntry, object> GetSetSafeExtendedPropertyAction(PropertyInfo property)
+        {
+            var getPropertyValue = property.CreateGetter();
+            return (logEntry, extendedPropertiesObject) =>
+                logEntry.ExtendedProperties[property.Name] = RedactEngine.Redact(getPropertyValue(extendedPropertiesObject));
         }
     }
 }
