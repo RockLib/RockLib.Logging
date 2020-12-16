@@ -10,7 +10,8 @@ namespace RockLib.Logging.SafeLogging
     public static class SafeLoggingExtensions
     {
         /// <summary>
-        /// Safely logs at the debug level.
+        /// Logs at the debug level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the debug logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -25,10 +26,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Debug(
+        public static void DebugSafe(
             this ILogger logger,
             string message,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -39,7 +40,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the debug level.
+        /// Logs at the debug level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the debug logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -55,10 +57,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Debug(this ILogger logger,
+        public static void DebugSafe(this ILogger logger,
             string message,
             Exception exception,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -69,7 +71,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the info level.
+        /// Logs at the info level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the info logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -84,10 +87,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Info(
+        public static void InfoSafe(
             this ILogger logger,
             string message,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -98,7 +101,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the info level.
+        /// Logs at the info level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the info logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -114,10 +118,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Info(this ILogger logger,
+        public static void InfoSafe(this ILogger logger,
             string message,
             Exception exception,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -128,7 +132,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the warn level.
+        /// Logs at the warn level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the warn logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -143,10 +148,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Warn(
+        public static void WarnSafe(
             this ILogger logger,
             string message,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -157,7 +162,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the warn level.
+        /// Logs at the warn level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the warn logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -173,10 +179,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Warn(this ILogger logger,
+        public static void WarnSafe(this ILogger logger,
             string message,
             Exception exception,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -187,7 +193,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the error level.
+        /// Logs at the error level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the error logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -202,10 +209,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Error(
+        public static void ErrorSafe(
             this ILogger logger,
             string message,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -216,7 +223,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the error level.
+        /// Logs at the error level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the error logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -232,10 +240,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Error(this ILogger logger,
+        public static void ErrorSafe(this ILogger logger,
             string message,
             Exception exception,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -246,7 +254,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the fatal level.
+        /// Logs at the fatal level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the fatal logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -261,10 +270,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Fatal(
+        public static void FatalSafe(
             this ILogger logger,
             string message,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -275,7 +284,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the fatal level.
+        /// Logs at the fatal level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the fatal logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -291,10 +301,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Fatal(this ILogger logger,
+        public static void FatalSafe(this ILogger logger,
             string message,
             Exception exception,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -305,7 +315,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the audit level.
+        /// Logs at the audit level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the audit logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -320,10 +331,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Audit(
+        public static void AuditSafe(
             this ILogger logger,
             string message,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -334,7 +345,8 @@ namespace RockLib.Logging.SafeLogging
                 businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
 
         /// <summary>
-        /// Safely logs at the audit level.
+        /// Logs at the audit level. The value of each extended property is sanitized using the <see
+        /// cref="SanitizeEngine.Sanitize(object)"/> method.
         /// </summary>
         /// <param name="logger">The logger that performs the audit logging operation.</param>
         /// <param name="message">The log message.</param>
@@ -350,10 +362,10 @@ namespace RockLib.Logging.SafeLogging
         /// <param name="callerMemberName">The method or property name of the caller.</param>
         /// <param name="callerFilePath">The path of the source file that contains the caller.</param>
         /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
-        public static void Audit(this ILogger logger,
+        public static void AuditSafe(this ILogger logger,
             string message,
             Exception exception,
-            object extendedProperties = null,
+            object extendedProperties,
             string correlationId = null,
             string businessProcessId = null,
             string businessActivityId = null,
@@ -383,8 +395,7 @@ namespace RockLib.Logging.SafeLogging
                 CorrelationId = correlationId,
                 BusinessProcessId = businessProcessId,
                 BusinessActivityId = businessActivityId
-            };
-            logEntry.SetSafeExtendedProperties(extendedProperties);
+            }.SetSafeExtendedProperties(extendedProperties);
 
             logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
         }

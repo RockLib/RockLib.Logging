@@ -194,29 +194,48 @@ namespace RockLib.Logging
 
         /// <summary>
         /// Sets values of the <see cref="ExtendedProperties"/> property according to the
-        /// <paramref name="extendedProperties"/> parameter.
+        /// <paramref name="extendedProperties"/> parameter. Each extended property value is
+        /// sanitized using the <see cref="SanitizeEngine.Sanitize"/> method.
         /// </summary>
         /// <param name="extendedProperties">
         /// An object whose properties are added to the <see cref="ExtendedProperties"/> dictionary.
         /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
         /// its items are added to <see cref="ExtendedProperties"/>.
         /// </param>
-        public void SetSafeExtendedProperties(object extendedProperties)
+        /// <returns>This log entry.</returns>
+        public LogEntry SetSafeExtendedProperties(object extendedProperties)
         {
-            if (extendedProperties == null)
-                return;
-            if (extendedProperties is IEnumerable<KeyValuePair<string, object>> stringDictionary)
+            if (extendedProperties is null)
+                return this;
+            else if (extendedProperties is IEnumerable<KeyValuePair<string, object>> stringDictionary)
                 foreach (var item in stringDictionary)
-                    ExtendedProperties[item.Key] = RedactEngine.Redact(item.Value);
+                    ExtendedProperties[item.Key] = SanitizeEngine.Sanitize(item.Value);
             else if (TryGetStringDictionaryItemAccessors(extendedProperties, out var getKey, out var getValue))
                 foreach (object item in (IEnumerable)extendedProperties)
-                    ExtendedProperties[getKey(item)] = RedactEngine.Redact(getValue(item));
+                    ExtendedProperties[getKey(item)] = SanitizeEngine.Sanitize(getValue(item));
             else if (extendedProperties is IDictionary dictionary)
                 foreach (var key in dictionary.Keys.OfType<string>())
-                    ExtendedProperties[key] = RedactEngine.Redact(dictionary[key]);
+                    ExtendedProperties[key] = SanitizeEngine.Sanitize(dictionary[key]);
             else
                 foreach (var setSafeExtendedProperty in GetSetSafeExtendedPropertyActions(extendedProperties.GetType()))
                     setSafeExtendedProperty(this, extendedProperties);
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the value of an extended property. The <paramref name="value"/> is sanitized using
+        /// the <see cref="SanitizeEngine.Sanitize"/> method.
+        /// </summary>
+        /// <param name="propertyName">The name of the extended property.</param>
+        /// <param name="value">
+        /// The value of the extended property. This will be sanitized using the  <see cref=
+        /// "SanitizeEngine.Sanitize"/> method.
+        /// </param>
+        /// <returns></returns>
+        public LogEntry SetSafeExtendedProperty(string propertyName, object value)
+        {
+            ExtendedProperties[propertyName] = SanitizeEngine.Sanitize(value);
+            return this;
         }
 
         private static bool TryGetStringDictionaryItemAccessors(object extendedProperties, out Func<object, string> getKey, out Func<object, object> getValue)
@@ -266,7 +285,7 @@ namespace RockLib.Logging
         {
             var getPropertyValue = property.CreateGetter();
             return (logEntry, extendedPropertiesObject) =>
-                logEntry.ExtendedProperties[property.Name] = RedactEngine.Redact(getPropertyValue(extendedPropertiesObject));
+                logEntry.ExtendedProperties[property.Name] = SanitizeEngine.Sanitize(getPropertyValue(extendedPropertiesObject));
         }
     }
 }
