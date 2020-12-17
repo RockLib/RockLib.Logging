@@ -14,7 +14,7 @@ namespace RockLib.Logging.SafeLogging
     /// </summary>
     public static class SanitizeEngine
     {
-        private static readonly ConcurrentDictionary<Type, Func<object, object>> _redactFunctions = new ConcurrentDictionary<Type, Func<object, object>>();
+        private static readonly ConcurrentDictionary<Type, Func<object, object>> _sanitizeFunctions = new ConcurrentDictionary<Type, Func<object, object>>();
 
         /// <summary>
         /// Ensures that any properties not decorated with the [SafeToLog] attribute are excluded
@@ -35,20 +35,19 @@ namespace RockLib.Logging.SafeLogging
         {
             if (value is null)
                 return null;
-            var redact = _redactFunctions.GetOrAdd(value.GetType(), GetSanitizeFunction);
-            return redact(value);
+            var sanitize = _sanitizeFunctions.GetOrAdd(value.GetType(), GetSanitizeFunction);
+            return sanitize(value);
         }
 
         /// <summary>
-        /// A function that determines whether a given type is "clean", meaning there is nothing to
-        /// sanitize.
+        /// A function that determines whether a given type is safe to log.
         /// <para>Set this value at the "beginning" of your application.</para>
         /// </summary>
-        public static Func<Type, bool> IsCleanTypeFunction { get; set; }
+        public static Func<Type, bool> IsTypeSafeToLog { get; set; }
 
         private static Func<object, object> GetSanitizeFunction(Type runtimeType)
         {
-            if (IsCleanType(runtimeType) || IsValueType(runtimeType))
+            if (IsSafeToLogType(runtimeType) || IsValueType(runtimeType))
                 return SanitizeNothing;
 
             if (IsStringDictionary(runtimeType))
@@ -66,8 +65,8 @@ namespace RockLib.Logging.SafeLogging
             return GetSanitizeObjectFunction(runtimeType);
         }
 
-        private static bool IsCleanType(Type runtimeType) =>
-            IsCleanTypeFunction?.Invoke(runtimeType) == true;
+        private static bool IsSafeToLogType(Type runtimeType) =>
+            IsTypeSafeToLog?.Invoke(runtimeType) == true;
 
         private static bool IsValueType(Type runtimeType) =>
             runtimeType.IsPrimitive
@@ -147,10 +146,10 @@ namespace RockLib.Logging.SafeLogging
 
         private static Func<object, object> GetSanitizeKeyValuePairFunction(Type keyType, Type valueType)
         {
-            var redactKeyValuePairMethod = typeof(SanitizeEngine)
+            var sanitizeKeyValuePairMethod = typeof(SanitizeEngine)
                 .GetMethod(nameof(GetSanitizeKeyValuePairFunction), BindingFlags.NonPublic | BindingFlags.Static, null, Type.EmptyTypes, null)
                 .MakeGenericMethod(keyType, valueType);
-            return (Func<object, object>)redactKeyValuePairMethod.Invoke(null, null);
+            return (Func<object, object>)sanitizeKeyValuePairMethod.Invoke(null, null);
         }
 
         private static Func<object, object> GetSanitizeKeyValuePairFunction<TKey, TValue>() =>

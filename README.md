@@ -10,6 +10,7 @@
 - How to:
   - [Perform basic logging operations](docs/Logging.md)
   - [Instantiate and configure a logger](docs/Logger.md)
+  - [Add log extended properties "safely" (i.e. automatically remove PII)](docs/SafeLogging.md)
   - [Configure and use LoggerFactory](docs/LoggerFactory.md)
   - [Add RockLib logging to the Microsoft dependency injection system](docs/DI.md)
   - [Add RockLib logging to the Microsoft logging system](docs/Microsoft.md)

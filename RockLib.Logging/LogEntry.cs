@@ -203,7 +203,7 @@ namespace RockLib.Logging
         /// its items are added to <see cref="ExtendedProperties"/>.
         /// </param>
         /// <returns>This log entry.</returns>
-        public LogEntry SetSafeExtendedProperties(object extendedProperties)
+        public LogEntry SetSanitizedExtendedProperties(object extendedProperties)
         {
             if (extendedProperties is null)
                 return this;
@@ -232,7 +232,7 @@ namespace RockLib.Logging
         /// "SanitizeEngine.Sanitize"/> method.
         /// </param>
         /// <returns></returns>
-        public LogEntry SetSafeExtendedProperty(string propertyName, object value)
+        public LogEntry SetSanitizedExtendedProperty(string propertyName, object value)
         {
             ExtendedProperties[propertyName] = SanitizeEngine.Sanitize(value);
             return this;

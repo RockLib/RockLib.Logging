@@ -31,6 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3551DC4D-4
 		docs\Microsoft.md = docs\Microsoft.md
 		README.md = README.md
 		docs\RollingFileLogProvider.md = docs\RollingFileLogProvider.md
+		docs\SafeLogging.md = docs\SafeLogging.md
 		docs\Tracing.md = docs\Tracing.md
 	EndProjectSection
 EndProject
