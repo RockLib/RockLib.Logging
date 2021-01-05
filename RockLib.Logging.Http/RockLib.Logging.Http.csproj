@@ -30,9 +30,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
-    <PackageReference Include="RockLib.Logging" Version="2.2.0" />
     <PackageReference Include="RockLib.Http" Version="1.0.0-alpha03" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RockLib.Logging\RockLib.Logging.csproj" />
   </ItemGroup>
 
 </Project>
