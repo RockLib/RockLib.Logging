@@ -19,9 +19,9 @@ namespace RockLib.Logging.Http.Tests
         [Fact(DisplayName = "Constructor sets properties from non-null parameters")]
         public void ConstructorHappyPath1()
         {
-            string messageFormat = "My message format: {0}.";
-            string loggerName = "MyLogger";
-            LogLevel logLevel = LogLevel.Warn;
+            const string messageFormat = "My message format: {0}.";
+            const string loggerName = "MyLogger";
+            const LogLevel logLevel = LogLevel.Warn;
 
             var loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, loggerName, logLevel).Object;
 
@@ -33,24 +33,25 @@ namespace RockLib.Logging.Http.Tests
         [Fact(DisplayName = "Constructor sets properties from null parameters")]
         public void ConstructorHappyPath2()
         {
-            string messageFormat = null;
-            string loggerName = null;
-
-            var loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, loggerName, LogLevel.Error).Object;
+            var loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Error).Object;
 
             loggingActionFilter.MessageFormat.Should().Be(LoggingActionFilter.DefaultMessageFormat);
             loggingActionFilter.LoggerName.Should().BeNull();
         }
 
-        [Fact(DisplayName = "OnActionExecuting method sets logging context")]
+        [Fact(DisplayName = "OnActionExecuting method sets logging context in HttpContext.Items")]
         public void OnActionExecutingMethodHappyPath()
         {
-            IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Info).Object;
+            const string messageFormat = "My message format: {0}.";
+            const LogLevel logLevel = LogLevel.Info;
+            const string actionName = "MyAction";
+
+            IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
 
             var mockLogger = new MockLogger();
 
             var httpContext = new DefaultHttpContext() { RequestServices = GetServiceProvider(mockLogger.Object) };
-            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor() { DisplayName = "MyAction" });
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor() { DisplayName = actionName });
             var context = new ActionExecutingContext(actionContext, Array.Empty<IFilterMetadata>(), new Dictionary<string, object>(), null);
             context.ActionArguments.Add("foo", 123);
 
@@ -63,13 +64,13 @@ namespace RockLib.Logging.Http.Tests
 
             logger.Should().BeSameAs(mockLogger.Object);
 
-            logEntry.Level.Should().Be(LogLevel.Info);
-            logEntry.Message.Should().Be(@"Request handled by MyAction.");
+            logEntry.Level.Should().Be(logLevel);
+            logEntry.Message.Should().Be(string.Format(messageFormat, actionName));
             logEntry.ExtendedProperties.Should().ContainKey("foo")
                 .WhichValue.Should().Be(123);
         }
 
-        [Fact(DisplayName = "OnActionExecuted method retrieves the logging context and logs it")]
+        [Fact(DisplayName = "OnActionExecuted method retrieves logging context from HttpContext.Items and logs it")]
         public void OnActionExecutedMethodHappyPath1()
         {
             IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Info).Object;
@@ -86,7 +87,7 @@ namespace RockLib.Logging.Http.Tests
             mockLogger.Verify(m => m.Log(logEntry, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
         }
 
-        [Fact(DisplayName = "OnActionExecuted method sets Exception from context.Exception if present")]
+        [Fact(DisplayName = "OnActionExecuted method sets logEntry exception from context.Exception if present")]
         public void OnActionExecutedMethodHappyPath2()
         {
             IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Info).Object;
