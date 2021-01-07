@@ -14,6 +14,9 @@ using Xunit;
 
 namespace RockLib.Logging.Http.Tests
 {
+    using static LoggingActionFilter;
+    using static Logger;
+
     public class LoggingActionFilterTests
     {
         [Fact(DisplayName = "Constructor sets properties from non-null parameters")]
@@ -35,8 +38,8 @@ namespace RockLib.Logging.Http.Tests
         {
             var loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Error).Object;
 
-            loggingActionFilter.MessageFormat.Should().Be(LoggingActionFilter.DefaultMessageFormat);
-            loggingActionFilter.LoggerName.Should().BeNull();
+            loggingActionFilter.MessageFormat.Should().Be(DefaultMessageFormat);
+            loggingActionFilter.LoggerName.Should().Be(DefaultName);
         }
 
         [Fact(DisplayName = "OnActionExecuting method sets logging context in HttpContext.Items")]
@@ -45,6 +48,8 @@ namespace RockLib.Logging.Http.Tests
             const string messageFormat = "My message format: {0}.";
             const LogLevel logLevel = LogLevel.Info;
             const string actionName = "MyAction";
+            const string actionArgumentName = "foo";
+            const int actionArgument = 123;
 
             IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
 
@@ -53,12 +58,12 @@ namespace RockLib.Logging.Http.Tests
             var httpContext = new DefaultHttpContext() { RequestServices = GetServiceProvider(mockLogger.Object) };
             var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor() { DisplayName = actionName });
             var context = new ActionExecutingContext(actionContext, Array.Empty<IFilterMetadata>(), new Dictionary<string, object>(), null);
-            context.ActionArguments.Add("foo", 123);
+            context.ActionArguments.Add(actionArgumentName, actionArgument);
 
             loggingActionFilter.OnActionExecuting(context);
 
             var (logger, logEntry) =
-                httpContext.Items.Should().ContainKey("RockLib.Logging.LogActionFilter.LoggingContext")
+                httpContext.Items.Should().ContainKey(LoggingContextItemsKey)
                     .WhichValue.Should().BeOfType<(ILogger, LogEntry)>()
                     .Subject;
 
@@ -66,8 +71,8 @@ namespace RockLib.Logging.Http.Tests
 
             logEntry.Level.Should().Be(logLevel);
             logEntry.Message.Should().Be(string.Format(messageFormat, actionName));
-            logEntry.ExtendedProperties.Should().ContainKey("foo")
-                .WhichValue.Should().Be(123);
+            logEntry.ExtendedProperties.Should().ContainKey(actionArgumentName)
+                .WhichValue.Should().Be(actionArgument);
         }
 
         [Fact(DisplayName = "OnActionExecuted method retrieves logging context from HttpContext.Items and logs it")]
@@ -78,7 +83,7 @@ namespace RockLib.Logging.Http.Tests
             var mockLogger = new MockLogger();
             var logEntry = new LogEntry();
 
-            var httpContext = new DefaultHttpContext { Items = { ["RockLib.Logging.LogActionFilter.LoggingContext"] = (mockLogger.Object, logEntry) } };
+            var httpContext = new DefaultHttpContext { Items = { [LoggingContextItemsKey] = (mockLogger.Object, logEntry) } };
             var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
             var context = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
 
@@ -95,7 +100,7 @@ namespace RockLib.Logging.Http.Tests
             var mockLogger = new MockLogger();
             var logEntry = new LogEntry();
 
-            var httpContext = new DefaultHttpContext { Items = { ["RockLib.Logging.LogActionFilter.LoggingContext"] = (mockLogger.Object, logEntry) } };
+            var httpContext = new DefaultHttpContext { Items = { [LoggingContextItemsKey] = (mockLogger.Object, logEntry) } };
             var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
             var context = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
             var exception = context.Exception = new Exception();
@@ -106,23 +111,25 @@ namespace RockLib.Logging.Http.Tests
             mockLogger.Verify(m => m.Log(logEntry, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
         }
 
-        [Fact(DisplayName = "OnActionExecuted method adds 'ResponseObject' extended property if context.Result is ObjectResult")]
+        [Fact(DisplayName = "OnActionExecuted method adds 'ResultObject' extended property if context.Result is ObjectResult")]
         public void OnActionExecutedMethodHappyPath3()
         {
+            const int resultObject = 123;
+
             IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Info).Object;
 
             var mockLogger = new MockLogger();
             var logEntry = new LogEntry();
 
-            var httpContext = new DefaultHttpContext { Items = { ["RockLib.Logging.LogActionFilter.LoggingContext"] = (mockLogger.Object, logEntry) } };
+            var httpContext = new DefaultHttpContext { Items = { [LoggingContextItemsKey] = (mockLogger.Object, logEntry) } };
             var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
             var context = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
-            context.Result = new ObjectResult(123);
+            context.Result = new ObjectResult(resultObject);
 
             loggingActionFilter.OnActionExecuted(context);
 
-            logEntry.ExtendedProperties.Should().ContainKey("ResponseObject")
-                .WhichValue.Should().Be(123);
+            logEntry.ExtendedProperties.Should().ContainKey(ResultObjectExtendedPropertiesKey)
+                .WhichValue.Should().Be(resultObject);
             mockLogger.Verify(m => m.Log(logEntry, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
         }
 

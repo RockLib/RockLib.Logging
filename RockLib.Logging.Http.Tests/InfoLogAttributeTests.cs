@@ -3,6 +3,9 @@ using Xunit;
 
 namespace RockLib.Logging.Http.Tests
 {
+    using static LoggingActionFilter;
+    using static Logger;
+
     public class InfoLogAttributeTests
     {
         [Fact(DisplayName = "Constructor sets properties from non-null parameters")]
@@ -23,8 +26,8 @@ namespace RockLib.Logging.Http.Tests
         {
             var infoLogAttribute = new InfoLogAttribute(null, null);
 
-            infoLogAttribute.MessageFormat.Should().Be(LoggingActionFilter.DefaultMessageFormat);
-            infoLogAttribute.LoggerName.Should().BeNull();
+            infoLogAttribute.MessageFormat.Should().Be(DefaultMessageFormat);
+            infoLogAttribute.LoggerName.Should().Be(DefaultName);
             infoLogAttribute.LogLevel.Should().Be(LogLevel.Info);
         }
     }

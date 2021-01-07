@@ -1,7 +1,7 @@
 ﻿namespace RockLib.Logging.Http
 {
     /// <summary>
-    /// An action filter that records an audit log for each request.
+    /// An action filter that records an audit log each time the action is executed.
     /// </summary>
     public class AuditLogAttribute : LoggingActionFilter
     {
