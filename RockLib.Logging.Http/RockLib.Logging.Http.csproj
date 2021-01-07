@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.Http</PackageId>
-    <PackageVersion>1.0.0-alpha01</PackageVersion>
+    <PackageVersion>1.0.0-alpha03</PackageVersion>
     <Authors>RockLib</Authors>
     <Description>RockLib.Logging extension methods and context providers related to and HTTP.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -31,8 +31,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
-    <PackageReference Include="RockLib.Logging" Version="2.1.4" />
-    <PackageReference Include="RockLib.Http" Version="1.0.0-alpha01" />
+    <PackageReference Include="RockLib.Logging" Version="2.2.0" />
+    <PackageReference Include="RockLib.Http" Version="1.0.0-alpha03" />
   </ItemGroup>
 
 </Project>
