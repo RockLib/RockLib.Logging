@@ -43,7 +43,7 @@ namespace RockLib.Logging.Moq
         /// <paramref name="times"/>.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(LogLevel.Debug, times, failMessage);
+            mockLogger.VerifyLog(null, null, null, LogLevel.Debug, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged at <see cref="LogLevel.Info"/> the number of times specified
@@ -60,7 +60,7 @@ namespace RockLib.Logging.Moq
         /// <paramref name="times"/>.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(LogLevel.Info, times, failMessage);
+            mockLogger.VerifyLog(null, null, null, LogLevel.Info, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged at <see cref="LogLevel.Warn"/> the number of times specified
@@ -77,7 +77,7 @@ namespace RockLib.Logging.Moq
         /// <paramref name="times"/>.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(LogLevel.Warn, times, failMessage);
+            mockLogger.VerifyLog(null, null, null, LogLevel.Warn, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged at <see cref="LogLevel.Error"/> the number of times specified
@@ -94,7 +94,7 @@ namespace RockLib.Logging.Moq
         /// <paramref name="times"/>.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(LogLevel.Error, times, failMessage);
+            mockLogger.VerifyLog(null, null, null, LogLevel.Error, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged at <see cref="LogLevel.Fatal"/> the number of times specified
@@ -111,7 +111,7 @@ namespace RockLib.Logging.Moq
         /// <paramref name="times"/>.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(LogLevel.Fatal, times, failMessage);
+            mockLogger.VerifyLog(null, null, null, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged at <see cref="LogLevel.Audit"/> the number of times specified
@@ -128,7 +128,7 @@ namespace RockLib.Logging.Moq
         /// <paramref name="times"/>.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(LogLevel.Audit, times, failMessage);
+            mockLogger.VerifyLog(null, null, null, LogLevel.Audit, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged at any <see cref="LogLevel"/> the number of times specified
@@ -144,19 +144,8 @@ namespace RockLib.Logging.Moq
         /// The logger did not log at any <see cref="LogLevel"/> the number of times specified by
         /// <paramref name="times"/>.
         /// </exception>
-        public static void VerifyLog(this Mock<ILogger> mockLogger, Times? times, string failMessage) =>
-            mockLogger.VerifyLog((LogLevel?)null, times, failMessage);
-
-        private static void VerifyLog(this Mock<ILogger> mockLogger, LogLevel? logLevel, Times? times, string failMessage)
-        {
-            if (mockLogger == null)
-                throw new ArgumentNullException(nameof(mockLogger));
-
-            Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry => !logLevel.HasValue || logEntry.Level == logLevel.Value;
-
-            mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
-                times ?? Times.Once(), failMessage);
-        }
+        public static void VerifyLog(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, null, null, null, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -178,7 +167,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, LogLevel.Debug, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, null, LogLevel.Debug, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -200,7 +189,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, LogLevel.Info, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, null, LogLevel.Info, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -222,7 +211,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, LogLevel.Warn, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, null, LogLevel.Warn, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -244,7 +233,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, LogLevel.Error, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, null, LogLevel.Error, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -266,7 +255,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, LogLevel.Fatal, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, null, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -288,7 +277,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, LogLevel.Audit, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, null, LogLevel.Audit, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -310,25 +299,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, null, times, failMessage);
-
-        private static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern,
-            LogLevel? logLevel, Times? times, string failMessage)
-        {
-            if (mockLogger == null)
-                throw new ArgumentNullException(nameof(mockLogger));
-            if (messagePattern == null)
-                throw new ArgumentNullException(nameof(messagePattern));
-
-            var messageRegex = new Regex(messagePattern);
-
-            Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry =>
-                messageRegex.IsMatch(logEntry.Message)
-                && (!logLevel.HasValue || logEntry.Level == logLevel.Value);
-
-            mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
-                times ?? Times.Once(), failMessage);
-        }
+            mockLogger.VerifyLog(messagePattern, null, null, null, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the extended properties specified by
@@ -351,7 +322,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(extendedProperties, LogLevel.Debug, times, failMessage);
+            mockLogger.VerifyLog(null, null, extendedProperties, LogLevel.Debug, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the extended properties specified by
@@ -374,7 +345,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(extendedProperties, LogLevel.Info, times, failMessage);
+            mockLogger.VerifyLog(null, null, extendedProperties, LogLevel.Info, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the extended properties specified by
@@ -397,7 +368,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(extendedProperties, LogLevel.Warn, times, failMessage);
+            mockLogger.VerifyLog(null, null, extendedProperties, LogLevel.Warn, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the extended properties specified by
@@ -420,7 +391,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(extendedProperties, LogLevel.Error, times, failMessage);
+            mockLogger.VerifyLog(null, null, extendedProperties, LogLevel.Error, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the extended properties specified by
@@ -443,7 +414,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(extendedProperties, LogLevel.Fatal, times, failMessage);
+            mockLogger.VerifyLog(null, null, extendedProperties, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the extended properties specified by
@@ -466,7 +437,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(extendedProperties, LogLevel.Audit, times, failMessage);
+            mockLogger.VerifyLog(null, null, extendedProperties, LogLevel.Audit, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the extended properties specified by
@@ -489,39 +460,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(extendedProperties, null, times, failMessage);
-
-        private static void VerifyLog(this Mock<ILogger> mockLogger, object extendedProperties,
-            LogLevel? logLevel, Times? times, string failMessage)
-        {
-            if (mockLogger == null)
-                throw new ArgumentNullException(nameof(mockLogger));
-            if (extendedProperties == null)
-                throw new ArgumentNullException(nameof(extendedProperties));
-
-            var properties = GetExtendedPropertiesDictionary(extendedProperties);
-
-            Func<LogEntry, bool> hasMatchingExtendedProperties = logEntry =>
-            {
-                foreach (var property in properties)
-                {
-                    if (!logEntry.ExtendedProperties.TryGetValue(property.Key, out var value)
-                        || !value.GetType().IsAssignableFrom(property.Value.GetType()))
-                        return false;
-
-                    if (!AreEquivalent(property.Value, value))
-                        return false;
-                }
-                return true;
-            };
-
-            Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry =>
-                (!logLevel.HasValue || logEntry.Level == logLevel.Value)
-                && hasMatchingExtendedProperties(logEntry);
-
-            mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
-                times ?? Times.Once(), failMessage);
-        }
+            mockLogger.VerifyLog(null, null, extendedProperties, null, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -549,7 +488,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, extendedProperties, LogLevel.Debug, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, extendedProperties, LogLevel.Debug, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -577,7 +516,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, extendedProperties, LogLevel.Info, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, extendedProperties, LogLevel.Info, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -605,7 +544,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, extendedProperties, LogLevel.Warn, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, extendedProperties, LogLevel.Warn, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -633,7 +572,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, extendedProperties, LogLevel.Error, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, extendedProperties, LogLevel.Error, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -661,7 +600,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, extendedProperties, LogLevel.Fatal, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, extendedProperties, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -689,7 +628,7 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, extendedProperties, LogLevel.Audit, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, extendedProperties, LogLevel.Audit, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
@@ -717,40 +656,1573 @@ namespace RockLib.Logging.Moq
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
-            mockLogger.VerifyLog(messagePattern, extendedProperties, null, times, failMessage);
+            mockLogger.VerifyLog(messagePattern, null, extendedProperties, null, times, failMessage);
 
-        private static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Debug"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Debug"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Debug, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Info"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Info"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Info, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Warn"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Warn"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Warn, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Error"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Error"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyError(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Error, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Fatal"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Fatal"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Fatal, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Audit"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Audit"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Audit, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at any <see cref="LogLevel"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at any <see cref="LogLevel"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, null, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), null, LogLevel.Debug, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), null, LogLevel.Info, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), null, LogLevel.Warn, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), null, LogLevel.Error, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), null, LogLevel.Fatal, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), null, LogLevel.Audit, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), null, null, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Debug"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Debug, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Info"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Info, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Warn"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Warn, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Error"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyError(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Error, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Fatal"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Fatal, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Audit"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Audit, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at any <see cref="LogLevel"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, null, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Debug, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Info, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Warn, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Error, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Fatal, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Audit, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at any
+        /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="exception">
+        /// The exception instance that a log entry's <see cref="LogEntry.Exception"/> must be a
+        /// reference to in order for successful verification to occur. Pass <see langword="null"/>
+        /// if <see cref="LogEntry.Exception"/> is expected to be <see langword="null"/>.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at any
+        /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, null, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Debug"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Debug"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Debug, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Info"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Info"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Info, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Warn"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Warn"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Warn, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Error"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Error"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyError(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Error, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Fatal"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Fatal"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Fatal, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at <see cref="LogLevel.Audit"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at <see cref="LogLevel.Audit"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Audit, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged at any <see cref="LogLevel"/> the number of times specified
+        /// by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log at any <see cref="LogLevel"/> the number of times specified by
+        /// <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, null, null, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Debug, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Info, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Warn, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Error, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Fatal, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Audit, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, null, null, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Debug"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Debug, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Info"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Info, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Warn"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Warn, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Error"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyError(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Error, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Fatal"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Fatal, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Audit"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Audit, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the extended properties specified by
+        /// <paramref name="extendedProperties"/> at any <see cref="LogLevel"/> the number of times
+        /// specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
+        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, null, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Debug, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Info, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Warn, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Error, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Fatal, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Audit, times, failMessage);
+
+        /// <summary>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at any
+        /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </summary>
+        /// <param name="mockLogger">The mock logger to verify.</param>
+        /// <param name="messagePattern">
+        /// A regular expression pattern that the message of a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="hasMatchingException">
+        /// A function evaluated with a log entry's <see cref="LogEntry.Exception"/> that must
+        /// return <see langword="true"/> in order for successful verification to occur.
+        /// </param>
+        /// <param name="extendedProperties">
+        /// An object representing the extended properties that a log must match in order for successful
+        /// verification to occur.
+        /// </param>
+        /// <param name="times">
+        /// The number of times the mock logger is expected to have logged. If <see langword="null"/>,
+        /// <see cref="Times.Once()"/> is used.
+        /// </param>
+        /// <param name="failMessage">Message to show if verification fails.</param>
+        /// <exception cref="MockException">
+        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
+        /// and the extended properties specified by <paramref name="extendedProperties"/> at any
+        /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// </exception>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+            Times? times = null, string failMessage = null) =>
+            mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, null, times, failMessage);
+
+        private static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern,
+            Func<Exception, bool> hasMatchingException, object extendedProperties,
             LogLevel? logLevel, Times? times, string failMessage)
         {
             if (mockLogger == null)
                 throw new ArgumentNullException(nameof(mockLogger));
-            if (messagePattern == null)
-                throw new ArgumentNullException(nameof(messagePattern));
-            if (extendedProperties == null)
-                throw new ArgumentNullException(nameof(extendedProperties));
+            if (hasMatchingException is null)
+                hasMatchingException = logEntry => true;
 
-            var messageRegex = new Regex(messagePattern);
+            Func<LogEntry, bool> hasMatchingMessage, hasMatchingExtendedProperties, hasMatchingLogLevel;
 
-            var properties = GetExtendedPropertiesDictionary(extendedProperties);
-
-            Func<LogEntry, bool> hasMatchingExtendedProperties = logEntry =>
+            if (messagePattern is null)
+                hasMatchingMessage = logEntry => true;
+            else
             {
-                foreach (var property in properties)
-                {
-                    if (!logEntry.ExtendedProperties.TryGetValue(property.Key, out var value)
-                        || !value.GetType().IsAssignableFrom(property.Value.GetType()))
-                        return false;
+                var messageRegex = new Regex(messagePattern);
+                hasMatchingMessage = logEntry => messageRegex.IsMatch(logEntry.Message);
+            }
 
-                    if (!AreEquivalent(property.Value, value))
-                        return false;
-                    
-                }
-                return true;
-            };
+            if (extendedProperties is null)
+                hasMatchingExtendedProperties = logEntry => true;
+            else
+            {
+                var properties = GetExtendedPropertiesDictionary(extendedProperties);
+
+                hasMatchingExtendedProperties = logEntry =>
+                {
+                    foreach (var property in properties)
+                    {
+                        if (!logEntry.ExtendedProperties.TryGetValue(property.Key, out var value)
+                            || !value.GetType().IsAssignableFrom(property.Value.GetType()))
+                            return false;
+
+                        if (!AreEquivalent(property.Value, value))
+                            return false;
+
+                    }
+                    return true;
+                };
+            }
+
+            if (logLevel is null)
+                hasMatchingLogLevel = logEntry => true;
+            else
+            {
+                var level = logLevel.Value;
+                hasMatchingLogLevel = logEntry => logEntry.Level == level;
+            }
 
             Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry =>
-                messageRegex.IsMatch(logEntry.Message)
-                && (!logLevel.HasValue || logEntry.Level == logLevel.Value)
+                hasMatchingMessage(logEntry)
+                && hasMatchingLogLevel(logEntry)
+                && hasMatchingException(logEntry.Exception)
                 && hasMatchingExtendedProperties(logEntry);
 
             mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
