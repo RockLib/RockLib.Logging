@@ -95,8 +95,7 @@ namespace RockLib.Logging.Http.Tests
 
             await loggingActionFilter.OnActionExecutionAsync(context, next);
 
-            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), new { foo = 123 }, Times.Once());
-            mockLogger.Verify(m => m.Log(It.Is<LogEntry>(x => x.Exception == exception), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once());
+            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), exception, new { foo = 123 }, Times.Once());
         }
 
         [Fact(DisplayName = "OnActionExecutionAsync method adds 'ResultObject' extended property if context.Result is ObjectResult")]
