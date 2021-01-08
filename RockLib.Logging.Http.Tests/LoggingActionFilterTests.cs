@@ -10,6 +10,7 @@ using RockLib.Logging.DependencyInjection;
 using RockLib.Logging.Moq;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace RockLib.Logging.Http.Tests
@@ -42,16 +43,16 @@ namespace RockLib.Logging.Http.Tests
             loggingActionFilter.LoggerName.Should().Be(DefaultName);
         }
 
-        [Fact(DisplayName = "OnActionExecuting method sets logging context in HttpContext.Items")]
-        public void OnActionExecutingMethodHappyPath()
+        [Fact(DisplayName = "OnActionExecutionAsync method logs the action")]
+        public async Task OnActionExecutionAsyncMethodHappyPath1()
         {
-            const string messageFormat = "My message format: {0}.";
+            const string messageFormat = "My message format: {0}";
             const LogLevel logLevel = LogLevel.Info;
             const string actionName = "MyAction";
             const string actionArgumentName = "foo";
             const int actionArgument = 123;
 
-            IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
+            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
 
             var mockLogger = new MockLogger();
 
@@ -60,77 +61,71 @@ namespace RockLib.Logging.Http.Tests
             var context = new ActionExecutingContext(actionContext, Array.Empty<IFilterMetadata>(), new Dictionary<string, object>(), null);
             context.ActionArguments.Add(actionArgumentName, actionArgument);
 
-            loggingActionFilter.OnActionExecuting(context);
+            var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
 
-            var (logger, logEntry) =
-                httpContext.Items.Should().ContainKey(LoggingContextItemsKey)
-                    .WhichValue.Should().BeOfType<(ILogger, LogEntry)>()
-                    .Subject;
+            ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-            logger.Should().BeSameAs(mockLogger.Object);
+            await loggingActionFilter.OnActionExecutionAsync(context, next);
 
-            logEntry.Level.Should().Be(logLevel);
-            logEntry.Message.Should().Be(string.Format(messageFormat, actionName));
-            logEntry.ExtendedProperties.Should().ContainKey(actionArgumentName)
-                .WhichValue.Should().Be(actionArgument);
+            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), new { foo = 123 }, Times.Once());
         }
 
-        [Fact(DisplayName = "OnActionExecuted method retrieves logging context from HttpContext.Items and logs it")]
-        public void OnActionExecutedMethodHappyPath1()
+        [Fact(DisplayName = "OnActionExecutionAsync method sets logEntry exception from context.Exception if present")]
+        public async Task OnActionExecutionAsyncMethodHappyPath2()
         {
-            IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Info).Object;
+            const string messageFormat = "My message format: {0}";
+            const LogLevel logLevel = LogLevel.Info;
+            const string actionName = "MyAction";
+            const string actionArgumentName = "foo";
+            const int actionArgument = 123;
+
+            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
 
             var mockLogger = new MockLogger();
-            var logEntry = new LogEntry();
 
-            var httpContext = new DefaultHttpContext { Items = { [LoggingContextItemsKey] = (mockLogger.Object, logEntry) } };
-            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
-            var context = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
+            var httpContext = new DefaultHttpContext() { RequestServices = GetServiceProvider(mockLogger.Object) };
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor() { DisplayName = actionName });
+            var context = new ActionExecutingContext(actionContext, Array.Empty<IFilterMetadata>(), new Dictionary<string, object>(), null);
+            context.ActionArguments.Add(actionArgumentName, actionArgument);
 
-            loggingActionFilter.OnActionExecuted(context);
+            var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
+            var exception = actionExecutedContext.Exception = new Exception();
 
-            mockLogger.Verify(m => m.Log(logEntry, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+            ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
+
+            await loggingActionFilter.OnActionExecutionAsync(context, next);
+
+            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), new { foo = 123 }, Times.Once());
+            mockLogger.Verify(m => m.Log(It.Is<LogEntry>(x => x.Exception == exception), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once());
         }
 
-        [Fact(DisplayName = "OnActionExecuted method sets logEntry exception from context.Exception if present")]
-        public void OnActionExecutedMethodHappyPath2()
+        [Fact(DisplayName = "OnActionExecutionAsync method adds 'ResultObject' extended property if context.Result is ObjectResult")]
+        public async Task OnActionExecutionAsyncMethodHappyPath3()
         {
-            IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Info).Object;
-
-            var mockLogger = new MockLogger();
-            var logEntry = new LogEntry();
-
-            var httpContext = new DefaultHttpContext { Items = { [LoggingContextItemsKey] = (mockLogger.Object, logEntry) } };
-            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
-            var context = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
-            var exception = context.Exception = new Exception();
-
-            loggingActionFilter.OnActionExecuted(context);
-
-            logEntry.Exception.Should().BeSameAs(exception);
-            mockLogger.Verify(m => m.Log(logEntry, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
-        }
-
-        [Fact(DisplayName = "OnActionExecuted method adds 'ResultObject' extended property if context.Result is ObjectResult")]
-        public void OnActionExecutedMethodHappyPath3()
-        {
+            const string messageFormat = "My message format: {0}";
+            const LogLevel logLevel = LogLevel.Info;
+            const string actionName = "MyAction";
+            const string actionArgumentName = "foo";
+            const int actionArgument = 123;
             const int resultObject = 123;
 
-            IActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Info).Object;
+            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
 
             var mockLogger = new MockLogger();
-            var logEntry = new LogEntry();
 
-            var httpContext = new DefaultHttpContext { Items = { [LoggingContextItemsKey] = (mockLogger.Object, logEntry) } };
-            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
-            var context = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
-            context.Result = new ObjectResult(resultObject);
+            var httpContext = new DefaultHttpContext() { RequestServices = GetServiceProvider(mockLogger.Object) };
+            var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor() { DisplayName = actionName });
+            var context = new ActionExecutingContext(actionContext, Array.Empty<IFilterMetadata>(), new Dictionary<string, object>(), null);
+            context.ActionArguments.Add(actionArgumentName, actionArgument);
 
-            loggingActionFilter.OnActionExecuted(context);
+            var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
+            actionExecutedContext.Result = new ObjectResult(resultObject);
 
-            logEntry.ExtendedProperties.Should().ContainKey(ResultObjectExtendedPropertiesKey)
-                .WhichValue.Should().Be(resultObject);
-            mockLogger.Verify(m => m.Log(logEntry, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
+            ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
+
+            await loggingActionFilter.OnActionExecutionAsync(context, next);
+
+            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), new { foo = 123, ResultObject = resultObject }, Times.Once());
         }
 
         private static IServiceProvider GetServiceProvider(ILogger logger)

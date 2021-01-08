@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using RockLib.Logging.DependencyInjection;
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RockLib.Logging.Http
 {
     /// <summary>
     /// An action filter that records a log each time the action is executed.
     /// </summary>
-    public abstract class LoggingActionFilter : Attribute, IActionFilter
+    public abstract class LoggingActionFilter : Attribute, IAsyncActionFilter
     {
         /// <summary>
         /// The default value of the <see cref="MessageFormat"/> property.
@@ -66,42 +66,23 @@ namespace RockLib.Logging.Http
         /// </summary>
         public LogLevel LogLevel { get; }
 
-        void IActionFilter.OnActionExecuting(ActionExecutingContext context)
+        async Task IAsyncActionFilter.OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var loggerLookup = context.HttpContext.RequestServices.GetRequiredService<LoggerLookup>();
             var logger = loggerLookup(LoggerName);
 
             var message = string.Format(MessageFormat, context.ActionDescriptor.DisplayName);
             var logEntry = new LogEntry(message, LogLevel, context.ActionArguments);
+            
+            var actionExecutedContext = await next();
 
-            SetLoggingContext(context.HttpContext.Items, logger, logEntry);
-        }
+            if (actionExecutedContext.Exception != null)
+                logEntry.Exception = actionExecutedContext.Exception;
 
-        void IActionFilter.OnActionExecuted(ActionExecutedContext context)
-        {
-            if (!TryGetLoggingContext(context.HttpContext.Items, out var logger, out var logEntry))
-                return;
-
-            if (context.Exception != null)
-                logEntry.Exception = context.Exception;
-
-            if (context.Result is ObjectResult objectResult)
+            if (actionExecutedContext.Result is ObjectResult objectResult)
                 logEntry.SetSanitizedExtendedProperty(ResultObjectExtendedPropertiesKey, objectResult.Value);
 
             logger.Log(logEntry);
-        }
-
-        private static void SetLoggingContext(IDictionary<object, object> httpContextItems, ILogger logger, LogEntry logEntry) =>
-            httpContextItems.Add(LoggingContextItemsKey, (logger, logEntry));
-
-        private static bool TryGetLoggingContext(IDictionary<object, object> httpContextItems, out ILogger logger, out LogEntry logEntry)
-        {
-            (logger, logEntry) =
-                httpContextItems.TryGetValue(LoggingContextItemsKey, out object value)
-                    && value is ValueTuple<ILogger, LogEntry> loggingContext
-                    ? loggingContext
-                    : (null, null);
-            return logger != null && logEntry != null;
         }
     }
 }
