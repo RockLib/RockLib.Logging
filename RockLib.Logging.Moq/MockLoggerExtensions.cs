@@ -39,8 +39,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Debug"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, null, null, LogLevel.Debug, times, failMessage);
@@ -56,8 +55,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Info"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, null, null, LogLevel.Info, times, failMessage);
@@ -73,8 +71,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Warn"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, null, null, LogLevel.Warn, times, failMessage);
@@ -90,8 +87,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Error"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, null, null, LogLevel.Error, times, failMessage);
@@ -107,8 +103,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Fatal"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, null, null, LogLevel.Fatal, times, failMessage);
@@ -124,8 +119,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Audit"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, null, null, LogLevel.Audit, times, failMessage);
@@ -141,8 +135,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at any <see cref="LogLevel"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, null, null, null, times, failMessage);
@@ -162,8 +155,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
@@ -184,8 +176,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
@@ -206,8 +197,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
@@ -228,8 +218,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
@@ -250,8 +239,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
@@ -272,8 +260,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
@@ -294,8 +281,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern,
             Times? times = null, string failMessage = null) =>
@@ -317,8 +303,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -340,8 +325,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -363,8 +347,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -386,8 +369,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -409,8 +391,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -432,8 +413,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -455,8 +435,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -482,9 +461,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -510,9 +487,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -538,9 +513,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -566,9 +539,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -594,9 +565,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -622,9 +591,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
@@ -650,17 +617,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at any
-        /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, null, extendedProperties, null, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Debug"/> the number of times specified
-        /// by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/>
+        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -674,15 +639,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Debug"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Debug, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Info"/> the number of times specified
-        /// by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/>
+        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -696,15 +660,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Info"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Info, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Warn"/> the number of times specified
-        /// by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/>
+        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -718,15 +681,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Warn"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Warn, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Error"/> the number of times specified
-        /// by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/>
+        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -740,15 +702,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Error"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Error, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Fatal"/> the number of times specified
-        /// by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/>
+        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -762,15 +723,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Fatal"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Audit"/> the number of times specified
-        /// by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/>
+        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -784,15 +744,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Audit"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, LogLevel.Audit, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at any <see cref="LogLevel"/> the number of times specified
-        /// by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/>
+        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -806,15 +765,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at any <see cref="LogLevel"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, Exception exception, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), null, null, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// and the exception specified by <paramref name="exception"/> at <see cref="LogLevel.Debug"/> the
+        /// number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="messagePattern">
@@ -832,8 +791,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
             Times? times = null, string failMessage = null) =>
@@ -841,7 +799,8 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// and the exception specified by <paramref name="exception"/> at <see cref="LogLevel.Info"/> the
+        /// number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -859,8 +818,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
             Times? times = null, string failMessage = null) =>
@@ -868,7 +826,8 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// and the exception specified by <paramref name="exception"/> at <see cref="LogLevel.Warn"/> the
+        /// number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -886,8 +845,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
             Times? times = null, string failMessage = null) =>
@@ -895,7 +853,8 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// and the exception specified by <paramref name="exception"/> at <see cref="LogLevel.Error"/> the
+        /// number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -913,8 +872,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
             Times? times = null, string failMessage = null) =>
@@ -922,7 +880,8 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// and the exception specified by <paramref name="exception"/> at <see cref="LogLevel.Fatal"/> the
+        /// number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -940,8 +899,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
             Times? times = null, string failMessage = null) =>
@@ -949,7 +907,8 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// and the exception specified by <paramref name="exception"/> at <see cref="LogLevel.Audit"/> the
+        /// number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -967,8 +926,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
             Times? times = null, string failMessage = null) =>
@@ -976,7 +934,8 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
-        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// and the exception specified by <paramref name="exception"/> at any <see cref="LogLevel"/> the
+        /// number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -994,17 +953,16 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Exception exception,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), null, null, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
-        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Debug"/> the number of times
-        /// specified by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/> and
+        /// the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -1022,17 +980,16 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Debug, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
-        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Info"/> the number of times
-        /// specified by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/> and
+        /// the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -1050,17 +1007,16 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Info, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
-        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Warn"/> the number of times
-        /// specified by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/> and
+        /// the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -1078,17 +1034,16 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Warn, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
-        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Error"/> the number of times
-        /// specified by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/> and
+        /// the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -1106,17 +1061,16 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Error, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
-        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Fatal"/> the number of times
-        /// specified by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/> and
+        /// the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -1134,17 +1088,16 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
-        /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Audit"/> the number of times
-        /// specified by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/> and
+        /// the extended properties specified by <paramref name="extendedProperties"/> at
+        /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -1162,17 +1115,16 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Audit, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
-        /// <paramref name="extendedProperties"/> at any <see cref="LogLevel"/> the number of times
-        /// specified by <paramref name="times"/>.
+        /// Verifies that the mock logger logged with the exception specified by <paramref name="exception"/> and
+        /// the extended properties specified by <paramref name="extendedProperties"/> at any
+        /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
         /// <param name="exception">
@@ -1190,15 +1142,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, ex => ReferenceEquals(ex, exception), extendedProperties, null, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// the exception specified by <paramref name="exception"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -1222,16 +1174,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Debug, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// the exception specified by <paramref name="exception"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -1255,16 +1206,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Info, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// the exception specified by <paramref name="exception"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -1288,16 +1238,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Warn, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// the exception specified by <paramref name="exception"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -1321,16 +1270,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Error, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// the exception specified by <paramref name="exception"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -1354,16 +1302,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// the exception specified by <paramref name="exception"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -1387,16 +1334,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, LogLevel.Audit, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// the exception specified by <paramref name="exception"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at any
         /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -1420,16 +1366,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at any
-        /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Exception exception, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, ex => ReferenceEquals(ex, exception), extendedProperties, null, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Debug"/> the number of times specified
+        /// Verifies that the mock logger logged with an exception that returns true from the function specified
+        /// by <paramref name="hasMatchingException"/> at <see cref="LogLevel.Debug"/> the number of times specified
         /// by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1443,14 +1388,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Debug"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Debug, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Info"/> the number of times specified
+        /// Verifies that the mock logger logged with an exception that returns true from the function specified
+        /// by <paramref name="hasMatchingException"/> at <see cref="LogLevel.Info"/> the number of times specified
         /// by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1464,14 +1409,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Info"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Info, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Warn"/> the number of times specified
+        /// Verifies that the mock logger logged with an exception that returns true from the function specified
+        /// by <paramref name="hasMatchingException"/> at <see cref="LogLevel.Warn"/> the number of times specified
         /// by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1485,14 +1430,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Warn"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Warn, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Error"/> the number of times specified
+        /// Verifies that the mock logger logged with an exception that returns true from the function specified
+        /// by <paramref name="hasMatchingException"/> at <see cref="LogLevel.Error"/> the number of times specified
         /// by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1506,14 +1451,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Error"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Error, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Fatal"/> the number of times specified
+        /// Verifies that the mock logger logged with an exception that returns true from the function specified
+        /// by <paramref name="hasMatchingException"/> at <see cref="LogLevel.Fatal"/> the number of times specified
         /// by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1527,14 +1472,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Fatal"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at <see cref="LogLevel.Audit"/> the number of times specified
+        /// Verifies that the mock logger logged with an exception that returns true from the function specified
+        /// by <paramref name="hasMatchingException"/> at <see cref="LogLevel.Audit"/> the number of times specified
         /// by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1548,14 +1493,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at <see cref="LogLevel.Audit"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Audit, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged at any <see cref="LogLevel"/> the number of times specified
+        /// Verifies that the mock logger logged with an exception that returns true from the function specified
+        /// by <paramref name="hasMatchingException"/> at any <see cref="LogLevel"/> the number of times specified
         /// by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1569,14 +1514,14 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log at any <see cref="LogLevel"/> the number of times specified by
-        /// <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, null, times, failMessage);
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and an exception that returns true from the function specified by <paramref name="hasMatchingException"/>
         /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1594,8 +1539,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
             Times? times = null, string failMessage = null) =>
@@ -1603,6 +1547,7 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and an exception that returns true from the function specified by <paramref name="hasMatchingException"/>
         /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1620,8 +1565,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
             Times? times = null, string failMessage = null) =>
@@ -1629,6 +1573,7 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and an exception that returns true from the function specified by <paramref name="hasMatchingException"/>
         /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1646,8 +1591,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
             Times? times = null, string failMessage = null) =>
@@ -1655,6 +1599,7 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and an exception that returns true from the function specified by <paramref name="hasMatchingException"/>
         /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1672,8 +1617,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
             Times? times = null, string failMessage = null) =>
@@ -1681,6 +1625,7 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and an exception that returns true from the function specified by <paramref name="hasMatchingException"/>
         /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1698,8 +1643,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
             Times? times = null, string failMessage = null) =>
@@ -1707,6 +1651,7 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and an exception that returns true from the function specified by <paramref name="hasMatchingException"/>
         /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1724,8 +1669,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
             Times? times = null, string failMessage = null) =>
@@ -1733,6 +1677,7 @@ namespace RockLib.Logging.Moq
 
         /// <summary>
         /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// and an exception that returns true from the function specified by <paramref name="hasMatchingException"/>
         /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
         /// <param name="mockLogger">The mock logger to verify.</param>
@@ -1750,15 +1695,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, null, null, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
+        /// Verifies that the mock logger logged with an exception that returns true from the function
+        /// specified by <paramref name="hasMatchingException"/> and the extended properties specified by
         /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Debug"/> the number of times
         /// specified by <paramref name="times"/>.
         /// </summary>
@@ -1777,15 +1722,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Debug, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
+        /// Verifies that the mock logger logged with an exception that returns true from the function
+        /// specified by <paramref name="hasMatchingException"/> and the extended properties specified by
         /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Info"/> the number of times
         /// specified by <paramref name="times"/>.
         /// </summary>
@@ -1804,15 +1749,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Info, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
+        /// Verifies that the mock logger logged with an exception that returns true from the function
+        /// specified by <paramref name="hasMatchingException"/> and the extended properties specified by
         /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Warn"/> the number of times
         /// specified by <paramref name="times"/>.
         /// </summary>
@@ -1831,15 +1776,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Warn, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
+        /// Verifies that the mock logger logged with an exception that returns true from the function
+        /// specified by <paramref name="hasMatchingException"/> and the extended properties specified by
         /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Error"/> the number of times
         /// specified by <paramref name="times"/>.
         /// </summary>
@@ -1858,15 +1803,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Error, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
+        /// Verifies that the mock logger logged with an exception that returns true from the function
+        /// specified by <paramref name="hasMatchingException"/> and the extended properties specified by
         /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Fatal"/> the number of times
         /// specified by <paramref name="times"/>.
         /// </summary>
@@ -1885,15 +1830,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
+        /// Verifies that the mock logger logged with an exception that returns true from the function
+        /// specified by <paramref name="hasMatchingException"/> and the extended properties specified by
         /// <paramref name="extendedProperties"/> at <see cref="LogLevel.Audit"/> the number of times
         /// specified by <paramref name="times"/>.
         /// </summary>
@@ -1912,15 +1857,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Audit, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the extended properties specified by
+        /// Verifies that the mock logger logged with an exception that returns true from the function
+        /// specified by <paramref name="hasMatchingException"/> and the extended properties specified by
         /// <paramref name="extendedProperties"/> at any <see cref="LogLevel"/> the number of times
         /// specified by <paramref name="times"/>.
         /// </summary>
@@ -1939,15 +1884,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the extended properties specified by <paramref name="extendedProperties"/>
-        /// at any <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, null, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// an exception that returns true from the function specified by <paramref name="hasMatchingException"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -1970,16 +1915,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Debug"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Debug, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// an exception that returns true from the function specified by <paramref name="hasMatchingException"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -2002,16 +1946,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Info"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Info, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// an exception that returns true from the function specified by <paramref name="hasMatchingException"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -2034,16 +1977,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Warn"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Warn, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// an exception that returns true from the function specified by <paramref name="hasMatchingException"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -2066,16 +2008,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Error"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Error, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// an exception that returns true from the function specified by <paramref name="hasMatchingException"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -2098,16 +2039,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Fatal"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// an exception that returns true from the function specified by <paramref name="hasMatchingException"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at
         /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -2130,16 +2070,15 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at
-        /// <see cref="LogLevel.Audit"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Audit, times, failMessage);
 
         /// <summary>
-        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>
+        /// Verifies that the mock logger logged with the message specified by <paramref name="messagePattern"/>,
+        /// an exception that returns true from the function specified by <paramref name="hasMatchingException"/>,
         /// and the extended properties specified by <paramref name="extendedProperties"/> at any
         /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
         /// </summary>
@@ -2162,9 +2101,7 @@ namespace RockLib.Logging.Moq
         /// </param>
         /// <param name="failMessage">Message to show if verification fails.</param>
         /// <exception cref="MockException">
-        /// The logger did not log with the message specified by <paramref name="messagePattern"/>
-        /// and the extended properties specified by <paramref name="extendedProperties"/> at any
-        /// <see cref="LogLevel"/> the number of times specified by <paramref name="times"/>.
+        /// The logger did not log according to the specified criteria.
         /// </exception>
         public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
