@@ -6,16 +6,16 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.AspNetCore</PackageId>
-    <PackageVersion>2.0.5</PackageVersion>
+    <PackageVersion>3.0.0-alpha00</PackageVersion>
     <Authors>RockLib</Authors>
-    <Description>Extensions to create hooks into Microsoft.Extensions.Logging</Description>
+    <Description>RockLib.Logging for AspNetCore. Includes context providers and a logging action filter.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/RockLib/RockLib.Logging</PackageProjectUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <Copyright>Copyright 2018-2020 (c) Quicken Loans Corporation. All rights reserved.</Copyright>
-    <PackageTags>RockLib Logging Logger Extensions</PackageTags>
-    <Version>2.0.0</Version>
+    <PackageTags>RockLib Logging Logger AspNetCore HttpContext ActionFilter</PackageTags>
+    <Version>3.0.0</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -25,13 +25,10 @@
 
   <ItemGroup>
     <None Include="..\LICENSE.md" Pack="true" PackagePath="" />
+    <None Include="..\icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.0.0" />
-    <PackageReference Include="RockLib.Configuration.AspNetCore" Version="1.0.1" />
-    <PackageReference Include="RockLib.Logging.DependencyInjection" Version="1.0.2" />
   </ItemGroup>
 
 </Project>
