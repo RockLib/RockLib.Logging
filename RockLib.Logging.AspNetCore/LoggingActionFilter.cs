@@ -82,13 +82,19 @@ namespace RockLib.Logging.AspNetCore
             
             var actionExecutedContext = await next();
 
-            logEntry.ExtendedProperties[ResponseStatusCodeExtendedPropertiesKey] = actionExecutedContext.HttpContext.Response.StatusCode;
+            if (actionExecutedContext.HttpContext.Response != null)
+                logEntry.ExtendedProperties[ResponseStatusCodeExtendedPropertiesKey] = actionExecutedContext.HttpContext.Response.StatusCode;
 
             if (actionExecutedContext.Exception != null)
                 logEntry.Exception = actionExecutedContext.Exception;
 
-            if (actionExecutedContext.Result is ObjectResult objectResult)
-                logEntry.SetSanitizedExtendedProperty(ResultObjectExtendedPropertiesKey, objectResult.Value);
+            if (actionExecutedContext.Result != null)
+            {
+                logEntry.ExtendedProperties["ResultType"] = actionExecutedContext.Result.GetType().Name;
+
+                if (actionExecutedContext.Result is ObjectResult objectResult)
+                    logEntry.SetSanitizedExtendedProperty(ResultObjectExtendedPropertiesKey, objectResult.Value);
+            }
 
             logger.Log(logEntry);
         }

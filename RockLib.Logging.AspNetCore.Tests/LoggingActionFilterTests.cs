@@ -62,12 +62,13 @@ namespace RockLib.Logging.AspNetCore.Tests
             context.ActionArguments.Add(actionArgumentName, actionArgument);
 
             var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
+            actionExecutedContext.Result = new OkResult();
 
             ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
             await loggingActionFilter.OnActionExecutionAsync(context, next);
 
-            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), new { foo = 123 }, Times.Once());
+            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), new { foo = 123, ResultType = nameof(OkResult) }, Times.Once());
         }
 
         [Fact(DisplayName = "OnActionExecutionAsync method sets logEntry exception from context.Exception if present")]
@@ -124,7 +125,7 @@ namespace RockLib.Logging.AspNetCore.Tests
 
             await loggingActionFilter.OnActionExecutionAsync(context, next);
 
-            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), new { foo = 123, ResultObject = resultObject }, Times.Once());
+            mockLogger.VerifyInfo(string.Format(messageFormat, actionName), new { foo = 123, ResultType = nameof(ObjectResult), ResultObject = resultObject }, Times.Once());
         }
 
         private static IServiceProvider GetServiceProvider(ILogger logger)
