@@ -15,6 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq.Tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3551DC4D-4E50-4108-BDE6-7AC261366358}"
 	ProjectSection(SolutionItems) = preProject
+		docs\AspNetCore.md = docs\AspNetCore.md
 		docs\ConsoleLogProvider.md = docs\ConsoleLogProvider.md
 		docs\ContextProviders.md = docs\ContextProviders.md
 		docs\DI.md = docs\DI.md
