@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.Extensions.Primitives;
 using Moq;
-using RockLib.Http;
+using RockLib.DistributedTracing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +14,13 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace RockLib.Logging.Http.Tests
+using static Microsoft.Net.Http.Headers.HeaderNames;
+using static RockLib.DistributedTracing.AspNetCore.HeaderNames;
+
+namespace RockLib.Logging.AspNetCore.Tests
 {
+    using static HeaderNames;
+
     public class ContextProviderTests
     {
         [Fact(DisplayName = "CorrelationIdContextProvider uses IHttpContextAccessor correctly")]
@@ -24,7 +29,7 @@ namespace RockLib.Logging.Http.Tests
             var correlationId = new StringValues("CorrelationId1");
             
             var headers = new RequestHeaders(new HeaderDictionary());
-            headers.Set(HeaderNames.CorrelationId, correlationId);
+            headers.Set(CorrelationId, correlationId);
 
             var requestMock = new Mock<HttpRequest>();
             requestMock.Setup(rm => rm.Headers).Returns(headers.Headers);
@@ -400,9 +405,9 @@ namespace RockLib.Logging.Http.Tests
             connectionMock.Setup(cm => cm.RemoteIpAddress).Returns(IPAddress.Parse(remoteIpAddress));
 
             var headers = new RequestHeaders(new HeaderDictionary());
-            headers.Set(HeaderNames.CorrelationId, correlationId);
-            headers.Set(HeaderNames.ForwardedFor, forwardedFor);
-            headers.Set(Microsoft.Net.Http.Headers.HeaderNames.UserAgent, userAgent);
+            headers.Set(CorrelationId, correlationId);
+            headers.Set(ForwardedFor, forwardedFor);
+            headers.Set(UserAgent, userAgent);
             headers.Referer = referrer;
 
             var requestMock = new Mock<HttpRequest>();

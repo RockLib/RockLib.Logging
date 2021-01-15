@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using RockLib.Http;
 using System.Net;
 
-namespace RockLib.Logging.Http
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// An implementation of <see cref="IContextProvider"/> used to add the remote ip address value to a <see cref="LogEntry"/>.

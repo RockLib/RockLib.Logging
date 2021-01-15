@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
-namespace RockLib.Logging.Http
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// An implementation of <see cref="IContextProvider"/> used to add various http context values to a <see cref="LogEntry"/>.

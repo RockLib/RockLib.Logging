@@ -6,7 +6,7 @@ using RockLib.Logging.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace RockLib.Logging.Http
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// An action filter that records a log each time the action is executed.
@@ -29,6 +29,12 @@ namespace RockLib.Logging.Http
         /// "LogEntry.ExtendedProperties"/> dictionary.
         /// </summary>
         public const string ResultObjectExtendedPropertiesKey = "ResultObject";
+
+        /// <summary>
+        /// The name of the key used to store an HTTP response status code in a <see cref=
+        /// "LogEntry.ExtendedProperties"/> dictionary.
+        /// </summary>
+        public const string ResponseStatusCodeExtendedPropertiesKey = "ResponseStatusCode";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoggingActionFilter"/> class.
@@ -75,6 +81,8 @@ namespace RockLib.Logging.Http
             var logEntry = new LogEntry(message, LogLevel, context.ActionArguments);
             
             var actionExecutedContext = await next();
+
+            logEntry.ExtendedProperties[ResponseStatusCodeExtendedPropertiesKey] = actionExecutedContext.HttpContext.Response.StatusCode;
 
             if (actionExecutedContext.Exception != null)
                 logEntry.Exception = actionExecutedContext.Exception;

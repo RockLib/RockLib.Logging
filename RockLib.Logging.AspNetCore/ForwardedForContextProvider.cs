@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
-using RockLib.Http;
 
-namespace RockLib.Logging.Http
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// An implementation of <see cref="IContextProvider"/> used to add the ForwardedFor value to a <see cref="LogEntry"/>.

@@ -1,6 +1,6 @@
 ﻿using RockLib.Logging.DependencyInjection;
 
-namespace RockLib.Logging.Http
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// Extensions for <see cref="ILoggerBuilder"/>.

@@ -6,15 +6,19 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.Extensions.Primitives;
 using Moq;
-using RockLib.Http;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace RockLib.Logging.Http.Tests
+using static Microsoft.Net.Http.Headers.HeaderNames;
+using static RockLib.DistributedTracing.AspNetCore.HeaderNames;
+
+namespace RockLib.Logging.AspNetCore.Tests
 {
+    using static HeaderNames;
+
     public class LogEntryExtensionsTests
     {
         [Fact(DisplayName = "SetHttpContext sets all HttpContext related extended properties")]
@@ -38,9 +42,9 @@ namespace RockLib.Logging.Http.Tests
             connectionMock.Setup(cm => cm.RemoteIpAddress).Returns(IPAddress.Parse(remoteIpAddress));
 
             var headers = new RequestHeaders(new HeaderDictionary());
-            headers.Set(HeaderNames.CorrelationId, correlationId);
-            headers.Set(HeaderNames.ForwardedFor, forwardedFor);
-            headers.Set(Microsoft.Net.Http.Headers.HeaderNames.UserAgent, userAgent);
+            headers.Set(CorrelationId, correlationId);
+            headers.Set(ForwardedFor, forwardedFor);
+            headers.Set(UserAgent, userAgent);
             headers.Referer = referrer;
 
             var requestMock = new Mock<HttpRequest>();

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using RockLib.Http;
 
-namespace RockLib.Logging.Http
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// An implementation of <see cref="IContextProvider"/> used to add the request method value to a <see cref="LogEntry"/>.
