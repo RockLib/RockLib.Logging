@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using RockLib.Logging.DependencyInjection;
 using System;
@@ -23,7 +24,13 @@ namespace RockLib.Logging.AspNetCore
         /// dictionary.
         /// </summary>
         public const string LoggingContextItemsKey = "LoggingActionFilter.LoggingContext";
-        
+
+        /// <summary>
+        /// The name of the key used to store the type of an action's result in a <see cref=
+        /// "LogEntry.ExtendedProperties"/> dictionary.
+        /// </summary>
+        public const string ResultTypeExtendedPropertiesKey = "ResultType";
+
         /// <summary>
         /// The name of the key used to store an action's result object in a <see cref=
         /// "LogEntry.ExtendedProperties"/> dictionary.
@@ -82,18 +89,21 @@ namespace RockLib.Logging.AspNetCore
             
             var actionExecutedContext = await next();
 
-            if (actionExecutedContext.HttpContext.Response != null)
-                logEntry.ExtendedProperties[ResponseStatusCodeExtendedPropertiesKey] = actionExecutedContext.HttpContext.Response.StatusCode;
-
             if (actionExecutedContext.Exception != null)
+            {
                 logEntry.Exception = actionExecutedContext.Exception;
+                logEntry.ExtendedProperties[ResponseStatusCodeExtendedPropertiesKey] = 500;
+            }
 
             if (actionExecutedContext.Result != null)
             {
-                logEntry.ExtendedProperties["ResultType"] = actionExecutedContext.Result.GetType().Name;
+                logEntry.ExtendedProperties[ResultTypeExtendedPropertiesKey] = actionExecutedContext.Result.GetType().Name;
 
                 if (actionExecutedContext.Result is ObjectResult objectResult)
-                    logEntry.SetSanitizedExtendedProperty(ResultObjectExtendedPropertiesKey, objectResult.Value);
+                    logEntry.SetSanitizedExtendedProperty(ResultObjectExtendedPropertiesKey, objectResult.Value ?? "[null]");
+
+                if (actionExecutedContext.Result is IStatusCodeActionResult statusCodeActionResult)
+                    logEntry.ExtendedProperties[ResponseStatusCodeExtendedPropertiesKey] = statusCodeActionResult.StatusCode ?? 200;
             }
 
             logger.Log(logEntry);
