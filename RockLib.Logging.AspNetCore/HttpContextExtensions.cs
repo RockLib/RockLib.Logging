@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Primitives;
-using RockLib.DistributedTracing.AspNetCore;
 using System;
 using System.Net;
 
