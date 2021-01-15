@@ -1,14 +1,15 @@
-﻿using RockLib.Http;
-using System;
+﻿using System;
 
-namespace RockLib.Logging.Http
+using static RockLib.DistributedTracing.AspNetCore.HeaderNames;
+
+namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// Defines options for <see cref="CorrelationIdContextProvider"/>.
     /// </summary>
     public class CorrelationIdContextProviderOptions
     {
-        private string _correlationIdHeader = HeaderNames.CorrelationId;
+        private string _correlationIdHeader = CorrelationId;
 
         /// <summary>
         /// The name of the correlation id header.

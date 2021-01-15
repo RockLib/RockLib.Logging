@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
-using RockLib.Http;
+using RockLib.DistributedTracing.AspNetCore;
 using System;
 using System.Net;
 
-namespace RockLib.Logging.Http
+using static RockLib.DistributedTracing.AspNetCore.HeaderNames;
+
+namespace RockLib.Logging.AspNetCore
 {
-    using static HeaderNames;
- 
     /// <summary>
     /// Extensions for <see cref="LogEntry"/>.
     /// </summary>

@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Xunit;
 
-namespace RockLib.Logging.Http.Tests
+namespace RockLib.Logging.AspNetCore.Tests
 {
     using static LoggingActionFilter;
     using static Logger;

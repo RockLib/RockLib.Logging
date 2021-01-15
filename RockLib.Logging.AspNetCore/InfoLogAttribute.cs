@@ -1,4 +1,4 @@
-﻿namespace RockLib.Logging.Http
+﻿namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
     /// An action filter that records an info log each time the action is executed.

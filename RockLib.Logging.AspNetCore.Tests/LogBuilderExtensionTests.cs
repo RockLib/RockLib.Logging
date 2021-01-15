@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace RockLib.Logging.Http.Tests
+namespace RockLib.Logging.AspNetCore.Tests
 {
     public class LogBuilderExtensionTests
     {

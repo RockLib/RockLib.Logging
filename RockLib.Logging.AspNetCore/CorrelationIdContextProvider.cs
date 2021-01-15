@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using RockLib.Http;
+using RockLib.DistributedTracing;
+using RockLib.DistributedTracing.AspNetCore;
 
-namespace RockLib.Logging.Http
+using static RockLib.DistributedTracing.AspNetCore.HeaderNames;
+
+namespace RockLib.Logging.AspNetCore
 {
-    using static HeaderNames;
-
     /// <summary>
     /// An implementation of <see cref="IContextProvider"/> used to add a correlation id to a <see cref="LogEntry"/>.
     /// </summary>
