@@ -2,10 +2,61 @@
 
 This package contains context providers and action filters for use by AspNetCore applications.
 
-<!--### Context providers
+### Context providers
 
-talk about HttpContextProvider, which contains all the other ones
-talk about the other ones-->
+To automatically capture information from the current HttpContext for each log sent, call the `AddHttpContextProvider` extension method when adding the logger to a service collection.
+
+*Note: A logger must have `Singleton` lifetime (which is the default) in order for any of the context providers mentioned in this document to function properly.*
+
+```c#
+using RockLib.Logging.AspNetCore;
+using RockLib.Logging.DependencyInjection;
+
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddLogger()
+        .AddConsoleLogProvider()
+        .AddHttpContextProvider();
+}
+```
+
+Logs sent by this logger will include the following extended properties:
+
+| Extended property | Description                                                  |
+|:------------------|:-------------------------------------------------------------|
+| Method            | The request method (GET, POST, etc.)                         |
+| Path              | The route pattern (if available), or request path (if not)   |
+| UserAgent         | The 'User-Agent' header of the request                       |
+| Referer           | The 'Referer' header of the request                          |
+| RemoteIpAddress   | The remote IP address of the request's underlying connection |
+| X-Forwarded-For   | The 'X-Forwarded-For' header of the request                  |
+
+Logs sent by this logger will also have their `CorrelationId` property set using the `ICorrelationIdAccessor` associated with the HttpContext via the RockLib.DistributedTracing.AspNetCore package's `GetCorrelationIdAccessor` extension method.
+
+---
+
+To customize the name of the correlation id header, configure its options:
+
+```c#
+services.Configure<CorrelationIdContextProviderOptions>(options =>
+    options.CorrelationIdHeader = "MyCorrelationIdHeader");
+```
+
+---
+
+There are also individual context providers available (configuring the correlation id header is the same as above):
+
+```c#
+services.AddLogger()
+    .AddConsoleLogProvider()
+    .AddContextProvider<RequestMethodContextProvider>()
+    .AddContextProvider<PathContextProvider>()
+    .AddContextProvider<UserAgentContextProvider>()
+    .AddContextProvider<ReferrerContextProvider>()
+    .AddContextProvider<RemoteIpAddressContextProvider>()
+    .AddContextProvider<ForwardedForContextProvider>()
+    .AddContextProvider<CorrelationIdContextProvider>();
+```
 
 ### Logging action filters
 
