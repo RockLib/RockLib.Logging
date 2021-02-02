@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace RockLib.Logging
 {
@@ -236,6 +237,31 @@ namespace RockLib.Logging
         {
             ExtendedProperties[propertyName] = SanitizeEngine.Sanitize(value);
             return this;
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            var sb = new StringBuilder()
+                .AppendLine(nameof(LogEntry) + ": {")
+                .Append("  " + nameof(Message) + ": ").AppendLine(Message)
+                .Append("  " + nameof(Level) + ": ").Append(Level).AppendLine();
+
+            if (Exception != null)
+                sb.Append("  " + nameof(Exception) + ": '").Append(Exception.GetType().Name).Append(": ").AppendLine(Exception.Message);
+
+            if (ExtendedProperties.Count > 0)
+            {
+                sb.AppendLine("  " + nameof(ExtendedProperties) + ": {");
+
+                foreach (var property in ExtendedProperties)
+                    sb.Append("    ").Append(property.Key).Append(": ").Append(property.Value).AppendLine();
+
+                sb.AppendLine("  }");
+            }
+
+            sb.Append('}');
+            return sb.ToString();
         }
 
         private static bool TryGetStringDictionaryItemAccessors(object extendedProperties, out Func<object, string> getKey, out Func<object, object> getValue)
