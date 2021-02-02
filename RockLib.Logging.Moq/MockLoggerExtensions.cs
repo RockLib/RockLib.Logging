@@ -2124,12 +2124,21 @@ namespace RockLib.Logging.Moq
 
             if (messagePattern != null)
             {
-                var logEntryParameter = Expression.Parameter(typeof(LogEntry), "logEntry");
-                var isMatchMethod = typeof(Regex).GetMethod(nameof(Regex.IsMatch), new Type[] { typeof(string), typeof(string) });
-                var body = Expression.Call(isMatchMethod,
-                    Expression.Property(logEntryParameter, nameof(LogEntry.Message)),
-                    Expression.Constant(messagePattern));
-                hasMatchingMessage = Expression.Lambda<Func<LogEntry, bool>>(body, logEntryParameter);
+                if (messagePattern.StartsWith("/") && messagePattern.EndsWith("/"))
+                {
+                    var logEntryParameter = Expression.Parameter(typeof(LogEntry), "logEntry");
+                    var isMatchMethod = typeof(Regex).GetMethod(nameof(Regex.IsMatch), new Type[] { typeof(string), typeof(string) });
+                    var body = Expression.Call(isMatchMethod,
+                        Expression.Property(logEntryParameter, nameof(LogEntry.Message)),
+                        Expression.Constant(messagePattern.Substring(1, messagePattern.Length - 2)));
+                    hasMatchingMessage = Expression.Lambda<Func<LogEntry, bool>>(body, logEntryParameter);
+                }
+                else
+                {
+                    var logEntryParameter = Expression.Parameter(typeof(LogEntry), "logEntry");
+                    var body = Expression.Equal(Expression.Property(logEntryParameter, nameof(LogEntry.Message)), Expression.Constant(messagePattern));
+                    hasMatchingMessage = Expression.Lambda<Func<LogEntry, bool>>(body, logEntryParameter);
+                }
             }
 
             if (extendedProperties != null)
@@ -2219,7 +2228,9 @@ namespace RockLib.Logging.Moq
             switch (lhs)
             {
                 case string pattern:
-                    return Regex.IsMatch((string)rhs, pattern);
+                    if (pattern.StartsWith("/") && pattern.EndsWith("/"))
+                        return Regex.IsMatch((string)rhs, pattern.Substring(1, pattern.Length - 2));
+                    return (string)rhs == pattern;
                 default:
                     if (lhs is object[] lhsArray && rhs is object[] rhsArray && lhsArray.Length == rhsArray.Length)
                     {

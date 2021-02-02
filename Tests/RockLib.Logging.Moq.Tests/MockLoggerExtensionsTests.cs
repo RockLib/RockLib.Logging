@@ -50,7 +50,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!");
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -62,7 +62,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!");
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -74,7 +74,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Good-bye, cruel world!");
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -122,7 +122,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyDebug(new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -134,7 +134,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -146,7 +146,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -158,7 +158,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Good-bye, cruel world!", new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -170,7 +170,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar ="^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123, Bar ="/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -182,7 +182,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -235,7 +235,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -248,7 +248,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -261,7 +261,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -275,7 +275,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -327,7 +327,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyDebug(exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -341,7 +341,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyDebug(wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -354,7 +354,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -367,7 +367,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -380,7 +380,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -393,7 +393,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -406,7 +406,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -420,7 +420,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", wrongException, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -473,7 +473,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -486,7 +486,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", ex => ex == exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -499,7 +499,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -513,7 +513,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", ex => ex == wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -565,7 +565,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyDebug(ex => ex == exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(ex => ex == exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -579,7 +579,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyDebug(ex => ex == wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(ex => ex == wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -592,7 +592,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -605,7 +605,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -618,7 +618,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -631,7 +631,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -644,7 +644,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -658,7 +658,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyDebug(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyDebug("Hello, world!", ex => ex == wrongException, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -694,7 +694,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!");
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -706,7 +706,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!");
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -718,7 +718,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!");
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -766,7 +766,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyInfo(new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -778,7 +778,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -790,7 +790,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -802,7 +802,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -814,7 +814,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -826,7 +826,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -879,7 +879,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -892,7 +892,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -905,7 +905,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -919,7 +919,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -971,7 +971,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyInfo(exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -985,7 +985,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyInfo(wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -998,7 +998,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1011,7 +1011,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1024,7 +1024,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1037,7 +1037,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1050,7 +1050,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1064,7 +1064,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", wrongException, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1117,7 +1117,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1130,7 +1130,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", ex => ex == exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1143,7 +1143,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1157,7 +1157,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", ex => ex == wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1209,7 +1209,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyInfo(ex => ex == exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(ex => ex == exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1223,7 +1223,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyInfo(ex => ex == wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(ex => ex == wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1236,7 +1236,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1249,7 +1249,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1262,7 +1262,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1275,7 +1275,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1288,7 +1288,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1302,7 +1302,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyInfo(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyInfo("Hello, world!", ex => ex == wrongException, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1338,7 +1338,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!");
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1350,7 +1350,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!");
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1362,7 +1362,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Good-bye, cruel world!");
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1410,7 +1410,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyWarn(new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1422,7 +1422,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1434,7 +1434,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1446,7 +1446,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Good-bye, cruel world!", new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1458,7 +1458,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1470,7 +1470,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1523,7 +1523,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1536,7 +1536,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1549,7 +1549,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1563,7 +1563,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1615,7 +1615,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyWarn(exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1629,7 +1629,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyWarn(wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1642,7 +1642,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1655,7 +1655,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1668,7 +1668,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1681,7 +1681,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1694,7 +1694,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1708,7 +1708,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", wrongException, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1761,7 +1761,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1774,7 +1774,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", ex => ex == exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1787,7 +1787,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1801,7 +1801,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", ex => ex == wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1853,7 +1853,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyWarn(ex => ex == exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(ex => ex == exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1867,7 +1867,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyWarn(ex => ex == wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(ex => ex == wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1880,7 +1880,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1893,7 +1893,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -1906,7 +1906,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1919,7 +1919,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1932,7 +1932,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1946,7 +1946,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyWarn(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyWarn("Hello, world!", ex => ex == wrongException, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -1982,7 +1982,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!");
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -1994,7 +1994,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!");
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2006,7 +2006,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Good-bye, cruel world!");
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2054,7 +2054,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyError(new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2066,7 +2066,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2078,7 +2078,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2090,7 +2090,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Good-bye, cruel world!", new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2102,7 +2102,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2114,7 +2114,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2167,7 +2167,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2180,7 +2180,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2193,7 +2193,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2207,7 +2207,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2259,7 +2259,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyError(exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2273,7 +2273,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyError(wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2286,7 +2286,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2299,7 +2299,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2312,7 +2312,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2325,7 +2325,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2338,7 +2338,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2352,7 +2352,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", wrongException, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2405,7 +2405,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2418,7 +2418,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", ex => ex == exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2431,7 +2431,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2445,7 +2445,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", ex => ex == wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2497,7 +2497,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyError(ex => ex == exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(ex => ex == exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2511,7 +2511,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyError(ex => ex == wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(ex => ex == wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2524,7 +2524,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2537,7 +2537,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2550,7 +2550,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2563,7 +2563,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2576,7 +2576,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2590,7 +2590,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyError(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyError("Hello, world!", ex => ex == wrongException, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2626,7 +2626,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!");
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2638,7 +2638,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!");
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2650,7 +2650,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Good-bye, cruel world!");
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2698,7 +2698,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyFatal(new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2710,7 +2710,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2722,7 +2722,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2734,7 +2734,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Good-bye, cruel world!", new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2746,7 +2746,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2758,7 +2758,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2811,7 +2811,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2824,7 +2824,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2837,7 +2837,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2851,7 +2851,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2903,7 +2903,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyFatal(exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2917,7 +2917,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyFatal(wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2930,7 +2930,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -2943,7 +2943,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -2956,7 +2956,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2969,7 +2969,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2982,7 +2982,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -2996,7 +2996,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", wrongException, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3049,7 +3049,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3062,7 +3062,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", ex => ex == exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3075,7 +3075,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3089,7 +3089,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", ex => ex == wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3141,7 +3141,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyFatal(ex => ex == exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(ex => ex == exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3155,7 +3155,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyFatal(ex => ex == wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(ex => ex == wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3168,7 +3168,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3181,7 +3181,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3194,7 +3194,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3207,7 +3207,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3220,7 +3220,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3234,7 +3234,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyFatal(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyFatal("Hello, world!", ex => ex == wrongException, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3270,7 +3270,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!");
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3282,7 +3282,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!");
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3294,7 +3294,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Good-bye, cruel world!");
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3342,7 +3342,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyAudit(new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3354,7 +3354,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3366,7 +3366,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3378,7 +3378,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Good-bye, cruel world!", new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3390,7 +3390,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3402,7 +3402,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3455,7 +3455,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3468,7 +3468,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3481,7 +3481,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3495,7 +3495,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3547,7 +3547,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyAudit(exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3561,7 +3561,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyAudit(wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3574,7 +3574,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3587,7 +3587,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3600,7 +3600,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3613,7 +3613,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3626,7 +3626,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3640,7 +3640,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", wrongException, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3693,7 +3693,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3706,7 +3706,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", ex => ex == exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3719,7 +3719,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3733,7 +3733,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello world!", exception);
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", ex => ex == wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3785,7 +3785,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyAudit(ex => ex == exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(ex => ex == exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3799,7 +3799,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyAudit(ex => ex == wrongException, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(ex => ex == wrongException, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3812,7 +3812,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = new object[] { 456 } }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3825,7 +3825,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3838,7 +3838,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3851,7 +3851,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3864,7 +3864,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3878,7 +3878,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyAudit(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyAudit("Hello, world!", ex => ex == wrongException, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3914,7 +3914,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!");
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -3926,7 +3926,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!");
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -3938,7 +3938,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!");
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3986,7 +3986,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyLog(new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -3998,7 +3998,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", new { Foo = 123 }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -4010,7 +4010,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -4022,7 +4022,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4034,7 +4034,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4046,7 +4046,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4099,7 +4099,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -4112,7 +4112,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -4125,7 +4125,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4139,7 +4139,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4191,7 +4191,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyLog(exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4204,7 +4204,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123 }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -4217,7 +4217,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -4230,7 +4230,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4243,7 +4243,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4256,7 +4256,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4313,7 +4313,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -4326,7 +4326,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -4339,7 +4339,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", exception);
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == exception, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", ex => ex == exception, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4353,7 +4353,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception);
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == wrongException, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", ex => ex == wrongException, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4405,7 +4405,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
-            Action act = () => mockLogger.VerifyLog(ex => ex == exception, new { Foo = "^foo$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(ex => ex == exception, new { Foo = "/^foo$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4418,7 +4418,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123 }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", ex => ex == exception, new { Foo = 123 }, Times.Once(), "My fail message");
 
             act.Should().NotThrow();
         }
@@ -4431,7 +4431,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123 }, Times.Exactly(2), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock exactly 2 times, but was 1 times*");
         }
@@ -4444,7 +4444,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4457,7 +4457,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog(@"/(?i)hello,\s+world[.!?]/", ex => ex == exception, new { Foo = 123, Bar = "/^abc$/" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
@@ -4470,7 +4470,7 @@ namespace RockLib.Logging.Moq.Tests
 
             mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
-            Action act = () => mockLogger.VerifyLog(@"(?i)hello,\s+world[.!?]", ex => ex == exception, new { Foo = 123, Bar = "^abc$" }, Times.Once(), "My fail message");
+            Action act = () => mockLogger.VerifyLog("Hello, world!", ex => ex == exception, new { Foo = 123, Bar = "abc" }, Times.Once(), "My fail message");
 
             act.Should().ThrowExactly<MockException>().WithMessage("*My fail message*Expected invocation on the mock once, but was 0 times*");
         }
