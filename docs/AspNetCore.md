@@ -6,7 +6,7 @@ This package contains context providers and action filters for use by AspNetCore
 
 To automatically capture information from the current HttpContext for each log sent, call the `AddHttpContextProvider` extension method when adding the logger to a service collection.
 
-*Note: A logger must have `Singleton` lifetime (which is the default) in order for any of the context providers mentioned in this document to function properly.*
+*Note: A logger must have `Transient` lifetime (which is the default) in order for any of the context providers mentioned in this document to function properly.*
 
 ```c#
 using RockLib.Logging.AspNetCore;
