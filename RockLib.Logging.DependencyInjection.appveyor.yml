@@ -4,7 +4,7 @@ configuration: Release
 only_commits:
   files:
   - RockLib.Logging.DependencyInjection/
-  - RockLib.Logging.DependencyInjection.Tests/
+  - Tests/RockLib.Logging.DependencyInjection.Tests/
   - RockLib.Logging.DependencyInjection.sln
   - RockLib.Logging.DependencyInjection.appveyor.yml
 before_build:

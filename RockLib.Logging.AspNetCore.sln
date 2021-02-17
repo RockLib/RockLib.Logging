@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore", "RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj", "{A07A8BEF-6786-44A5-8E2D-60A14FFBE772}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{1E143C4D-C527-4038-8CD3-5F26EC7E644B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "Tests\RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{1E143C4D-C527-4038-8CD3-5F26EC7E644B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
