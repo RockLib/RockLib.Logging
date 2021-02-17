@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging", "RockLib.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Tests", "RockLib.Logging.Tests\RockLib.Logging.Tests.csproj", "{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RockLib.Reflection.Optimized.Shared", "RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.shproj", "{1F65CBB1-529E-407C-B7D6-8BE5A59EBE14}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq", "RockLib.Logging.Moq\RockLib.Logging.Moq.csproj", "{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq.Tests", "RockLib.Logging.Moq.Tests\RockLib.Logging.Moq.Tests.csproj", "{86EFB7D5-CF52-476D-BA9F-1D94778517C9}"
@@ -53,10 +51,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.projitems*{0f6f91d3-e6a9-4694-9598-d0cac6b115b3}*SharedItemsImports = 5
-		RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.projitems*{1f65cbb1-529e-407c-b7d6-8be5a59ebe14}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

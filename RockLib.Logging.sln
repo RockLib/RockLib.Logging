@@ -7,12 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging", "RockLib.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Tests", "RockLib.Logging.Tests\RockLib.Logging.Tests.csproj", "{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RockLib.Reflection.Optimized.Shared", "RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.shproj", "{1F65CBB1-529E-407C-B7D6-8BE5A59EBE14}"
-EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		RockLib.Reflection.Optimized\RockLib.Reflection.Optimized.Shared\RockLib.Reflection.Optimized.Shared.projitems*{1f65cbb1-529e-407c-b7d6-8be5a59ebe14}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
