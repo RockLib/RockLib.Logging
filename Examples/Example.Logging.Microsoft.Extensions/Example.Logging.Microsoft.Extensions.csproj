@@ -5,12 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RockLib.Logging" Version="2.2.0" />
-    <!--<PackageReference Include="RockLib.Logging.Microsoft.Extensions" Version="1.0.0-alpha02" />-->
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\RockLib.Logging.Microsoft.Extensions\RockLib.Logging.Microsoft.Extensions.csproj" />
+    <PackageReference Include="RockLib.Logging.Microsoft.Extensions" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
