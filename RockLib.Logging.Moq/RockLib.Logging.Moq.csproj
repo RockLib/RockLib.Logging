@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.Moq</PackageId>
-    <PackageVersion>1.2.0</PackageVersion>
+    <PackageVersion>1.2.1</PackageVersion>
     <Authors>RockLib</Authors>
     <Description>Extensions for verifying logging operations with Moq.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
