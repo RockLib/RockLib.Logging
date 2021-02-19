@@ -118,7 +118,7 @@ namespace RockLib.Logging.Tests
 
             try
             {
-                var output = await File.ReadAllTextAsync(_file);
+                var output = File.ReadAllText(_file);
                 output.Should().Be($"Info:Hello, world!{Environment.NewLine}");
             }
             finally

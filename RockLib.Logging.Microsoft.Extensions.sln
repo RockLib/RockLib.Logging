@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions", "RockLib.Logging.Microsoft.Extensions\RockLib.Logging.Microsoft.Extensions.csproj", "{16C1DBC6-BE39-4109-932F-EE33A601ADB6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions.Tests", "RockLib.Logging.Microsoft.Extensions.Tests\RockLib.Logging.Microsoft.Extensions.Tests.csproj", "{88065170-E5E2-4E4B-8E04-B6B68F862076}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions.Tests", "Tests\RockLib.Logging.Microsoft.Extensions.Tests\RockLib.Logging.Microsoft.Extensions.Tests.csproj", "{88065170-E5E2-4E4B-8E04-B6B68F862076}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

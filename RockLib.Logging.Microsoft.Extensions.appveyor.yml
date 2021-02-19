@@ -4,7 +4,7 @@ configuration: Release
 only_commits:
   files:
   - RockLib.Logging.Microsoft.Extensions/
-  - RockLib.Logging.Microsoft.Extensions.Tests/
+  - Tests/RockLib.Logging.Microsoft.Extensions.Tests/
   - RockLib.Logging.Microsoft.Extensions.sln
   - RockLib.Logging.Microsoft.Extensions.appveyor.yml
   - .gitmodules
