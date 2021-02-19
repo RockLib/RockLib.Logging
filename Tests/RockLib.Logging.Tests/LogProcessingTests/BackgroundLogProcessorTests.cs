@@ -82,7 +82,7 @@ namespace RockLib.Logging.Tests.LogProcessingTests
 
             logProcessor.Unlock().SendToLogProvider(mockLogProvider.Object, logEntry, errorHandler, 1);
 
-            waitHandle.WaitOne(2000).Should().BeTrue();
+            waitHandle.WaitOne(10000).Should().BeTrue();
 
             capturedError.Should().NotBeNull();
             capturedError.IsTimeout.Should().BeTrue();
