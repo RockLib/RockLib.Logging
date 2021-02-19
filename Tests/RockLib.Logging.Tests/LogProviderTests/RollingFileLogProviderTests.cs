@@ -190,7 +190,8 @@ namespace RockLib.Logging.Tests
 
             await rollingFileLogProvider.WriteAsync(logEntry);
 
-            var output = await File.ReadAllTextAsync(_logFilePath);
+            var output = File.ReadAllText(_logFilePath);
+
             output.Should().Be($"Info:Hello, world!{Environment.NewLine}");
         }
 
