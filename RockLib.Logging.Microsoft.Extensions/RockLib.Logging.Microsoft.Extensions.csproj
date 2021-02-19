@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+    <TargetFrameworks>net5.0;netstandard2.0;net462</TargetFrameworks>
     <RootNamespace>RockLib.Logging</RootNamespace>
   </PropertyGroup>
 
@@ -29,10 +29,17 @@
     <None Include="..\LICENSE.md" Pack="true" PackagePath="" />
     <None Include="..\icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)'=='net5.0'">
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+  </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net5.0'">
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
-    <PackageReference Include="RockLib.Logging" Version="2.2.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="RockLib.Logging" Version="2.3.0" />
   </ItemGroup>
 
 </Project>
