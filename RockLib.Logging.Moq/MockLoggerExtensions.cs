@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 using Moq;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo(RockLib.Logging.Moq.MockLoggerExtensions.GeneratedAssemblyName)]
 
 namespace RockLib.Logging.Moq
 {
@@ -10,8 +11,10 @@ namespace RockLib.Logging.Moq
     /// Provides extension methods for setting up and verifying instances of <see cref="Mock{T}"/> of type
     /// <see cref="ILogger"/>.
     /// </summary>
-    public static class MockLoggerExtensions
+    public static partial class MockLoggerExtensions
     {
+        internal const string GeneratedAssemblyName = "RockLib.Logging.Moq.MockLoggerExtensions";
+
         /// <summary>
         /// Specifies setups on the mock logger for the <see cref="ILogger.Level"/> and <see cref="ILogger.Name"/>
         /// properties.
@@ -1390,7 +1393,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyDebug(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Debug, times, failMessage);
 
         /// <summary>
@@ -1411,7 +1414,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyInfo(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Info, times, failMessage);
 
         /// <summary>
@@ -1432,7 +1435,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyWarn(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Warn, times, failMessage);
 
         /// <summary>
@@ -1453,7 +1456,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyError(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+        public static void VerifyError(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Error, times, failMessage);
 
         /// <summary>
@@ -1474,7 +1477,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyFatal(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Fatal, times, failMessage);
 
         /// <summary>
@@ -1495,7 +1498,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyAudit(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, LogLevel.Audit, times, failMessage);
 
         /// <summary>
@@ -1516,7 +1519,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyLog(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, Times? times = null, string failMessage = null) =>
+        public static void VerifyLog(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, null, null, times, failMessage);
 
         /// <summary>
@@ -1541,7 +1544,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Debug, times, failMessage);
 
@@ -1567,7 +1570,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Info, times, failMessage);
 
@@ -1593,7 +1596,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Warn, times, failMessage);
 
@@ -1619,7 +1622,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+        public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Error, times, failMessage);
 
@@ -1645,7 +1648,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Fatal, times, failMessage);
 
@@ -1671,7 +1674,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, null, LogLevel.Audit, times, failMessage);
 
@@ -1697,7 +1700,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException,
+        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, null, null, times, failMessage);
 
@@ -1724,7 +1727,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyDebug(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Debug, times, failMessage);
 
@@ -1751,7 +1754,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyInfo(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Info, times, failMessage);
 
@@ -1778,7 +1781,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyWarn(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Warn, times, failMessage);
 
@@ -1805,7 +1808,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyError(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyError(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Error, times, failMessage);
 
@@ -1832,7 +1835,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyFatal(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Fatal, times, failMessage);
 
@@ -1859,7 +1862,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyAudit(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, LogLevel.Audit, times, failMessage);
 
@@ -1886,7 +1889,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyLog(this Mock<ILogger> mockLogger, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyLog(this Mock<ILogger> mockLogger, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(null, hasMatchingException, extendedProperties, null, times, failMessage);
 
@@ -1917,7 +1920,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyDebug(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Debug, times, failMessage);
 
@@ -1948,7 +1951,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyInfo(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Info, times, failMessage);
 
@@ -1979,7 +1982,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyWarn(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Warn, times, failMessage);
 
@@ -2010,7 +2013,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyError(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Error, times, failMessage);
 
@@ -2041,7 +2044,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyFatal(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Fatal, times, failMessage);
 
@@ -2072,7 +2075,7 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyAudit(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, LogLevel.Audit, times, failMessage);
 
@@ -2103,92 +2106,8 @@ namespace RockLib.Logging.Moq
         /// <exception cref="MockException">
         /// The logger did not log according to the specified criteria.
         /// </exception>
-        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Func<Exception, bool> hasMatchingException, object extendedProperties,
+        public static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern, Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             Times? times = null, string failMessage = null) =>
             mockLogger.VerifyLog(messagePattern, hasMatchingException, extendedProperties, null, times, failMessage);
-
-        private static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern,
-            Func<Exception, bool> hasMatchingException, object extendedProperties,
-            LogLevel? logLevel, Times? times, string failMessage)
-        {
-            if (mockLogger == null)
-                throw new ArgumentNullException(nameof(mockLogger));
-            if (hasMatchingException is null)
-                hasMatchingException = logEntry => true;
-
-            Func<LogEntry, bool> hasMatchingMessage, hasMatchingExtendedProperties, hasMatchingLogLevel;
-
-            if (messagePattern is null)
-                hasMatchingMessage = logEntry => true;
-            else
-            {
-                var messageRegex = new Regex(messagePattern);
-                hasMatchingMessage = logEntry => messageRegex.IsMatch(logEntry.Message);
-            }
-
-            if (extendedProperties is null)
-                hasMatchingExtendedProperties = logEntry => true;
-            else
-            {
-                var properties = GetExtendedPropertiesDictionary(extendedProperties);
-
-                hasMatchingExtendedProperties = logEntry =>
-                {
-                    foreach (var property in properties)
-                    {
-                        if (!logEntry.ExtendedProperties.TryGetValue(property.Key, out var value)
-                            || !value.GetType().IsAssignableFrom(property.Value.GetType()))
-                            return false;
-
-                        if (!AreEquivalent(property.Value, value))
-                            return false;
-
-                    }
-                    return true;
-                };
-            }
-
-            if (logLevel is null)
-                hasMatchingLogLevel = logEntry => true;
-            else
-            {
-                var level = logLevel.Value;
-                hasMatchingLogLevel = logEntry => logEntry.Level == level;
-            }
-
-            Expression<Func<LogEntry, bool>> matchingLogEntry = logEntry =>
-                hasMatchingMessage(logEntry)
-                && hasMatchingLogLevel(logEntry)
-                && hasMatchingException(logEntry.Exception)
-                && hasMatchingExtendedProperties(logEntry);
-
-            mockLogger.Verify(m => m.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
-                times ?? Times.Once(), failMessage);
-        }
-
-        private static bool AreEquivalent(object lhs, object rhs)
-        {
-            switch (lhs)
-            {
-                case string pattern:
-                    return Regex.IsMatch((string)rhs, pattern);
-                default:
-                    if (lhs is object[] lhsArray && rhs is object[] rhsArray && lhsArray.Length == rhsArray.Length)
-                    {
-                        for (int i = 0; i < lhsArray.Length; i++)
-                            if (!AreEquivalent(lhsArray[i], rhsArray[i]))
-                                return false;
-                        return true;
-                    }
-                    return Equals(lhs, rhs);
-            }
-        }
-
-        private static Dictionary<string, object> GetExtendedPropertiesDictionary(object extendedProperties)
-        {
-            var logEntry = new LogEntry();
-            logEntry.SetExtendedProperties(extendedProperties);
-            return logEntry.ExtendedProperties;
-        }
     }
 }
