@@ -248,7 +248,7 @@ namespace RockLib.Logging
                 .Append("  " + nameof(Level) + ": ").Append(Level).AppendLine();
 
             if (Exception != null)
-                sb.Append("  " + nameof(Exception) + ": '").Append(Exception.GetType().Name).Append(": ").AppendLine(Exception.Message);
+                sb.Append("  " + nameof(Exception) + ": ").Append(Exception.GetType().Name).Append(": ").AppendLine(Exception.Message);
 
             if (ExtendedProperties.Count > 0)
             {
