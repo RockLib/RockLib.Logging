@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.AspNetCore</PackageId>
-    <PackageVersion>3.0.0</PackageVersion>
+    <PackageVersion>3.0.1</PackageVersion>
     <Authors>RockLib</Authors>
     <Description>RockLib.Logging for AspNetCore. Includes context providers and a logging action filter.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -32,7 +32,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
     <PackageReference Include="RockLib.DistributedTracing.AspNetCore" Version="1.0.0" />
-    <PackageReference Include="RockLib.Logging" Version="2.3.0" />
+    <PackageReference Include="RockLib.Logging" Version="2.3.1" />
   </ItemGroup>
 
 </Project>
