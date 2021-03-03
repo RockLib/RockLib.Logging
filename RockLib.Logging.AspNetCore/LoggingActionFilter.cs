@@ -85,7 +85,8 @@ namespace RockLib.Logging.AspNetCore
             var logger = loggerLookup(LoggerName);
 
             var message = string.Format(MessageFormat, context.ActionDescriptor.DisplayName);
-            var logEntry = new LogEntry(message, LogLevel, context.ActionArguments);
+            var logEntry = new LogEntry(message, LogLevel);
+            logEntry.SetSanitizedExtendedProperties(context.ActionArguments);
             
             var actionExecutedContext = await next();
 
