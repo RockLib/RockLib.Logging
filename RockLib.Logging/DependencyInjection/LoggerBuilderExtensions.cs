@@ -330,7 +330,7 @@ namespace RockLib.Logging.DependencyInjection
 
                 if (optionsMonitor != null && options.ReloadOnChange)
                     return new ReloadingLogProvider<FileLogProviderOptions>(
-                        optionsMonitor, options, CreateLogProvider, builder.LoggerName);
+                        optionsMonitor, options, CreateLogProvider, builder.LoggerName, configureOptions);
 
                 return CreateLogProvider(options);
 
@@ -540,7 +540,7 @@ namespace RockLib.Logging.DependencyInjection
 
                 if (optionsMonitor != null && options.ReloadOnChange)
                     return new ReloadingLogProvider<RollingFileLogProviderOptions>(
-                        optionsMonitor, options, CreateLogProvider, builder.LoggerName);
+                        optionsMonitor, options, CreateLogProvider, builder.LoggerName, configureOptions);
 
                 return CreateLogProvider(options);
 
