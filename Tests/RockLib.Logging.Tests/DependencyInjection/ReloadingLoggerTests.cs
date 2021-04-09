@@ -88,9 +88,13 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
             var reloadingLogger = ReloadingLogger.New(logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
 
+            var errorHandler = new Mock<IErrorHandler>().Object;
+            reloadingLogger.ErrorHandler = errorHandler;
+
             ILogger logger1 = reloadingLogger._logger;
             logger1.Level.Should().Be(LogLevel.Warn);
             logger1.IsDisabled.Should().BeFalse();
+            logger1.ErrorHandler.Should().BeSameAs(errorHandler);
 
             configSource.Provider.Set("CustomLogger:Level", "Debug");
             configSource.Provider.Set("CustomLogger:IsDisabled", "true");
@@ -100,6 +104,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             logger2.Should().NotBeSameAs(logger1);
             logger2.Level.Should().Be(LogLevel.Debug);
             logger2.IsDisabled.Should().BeTrue();
+            logger2.ErrorHandler.Should().BeSameAs(errorHandler);
         }
     }
 }

@@ -191,6 +191,139 @@ namespace RockLib.Logging.DependencyInjection
         }
 
         #endregion
+        #region DebugLogProvider
+
+        /// <summary>
+        /// Adds a <see cref="DebugLogProvider"/>, formatted with a <see cref="TemplateLogFormatter"/>,
+        /// to the logger.
+        /// </summary>
+        /// <param name="builder">The <see cref="ILoggerBuilder"/>.</param>
+        /// <param name="template">
+        /// The template of the <see cref="TemplateLogFormatter"/> that the log provider uses for formatting
+        /// logs.
+        /// </param>
+        /// <param name="level">The logging level of the log provider.</param>
+        /// <param name="timeout">The timeout of the log provider.</param>
+        /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
+        public static ILoggerBuilder AddDebugLogProvider(this ILoggerBuilder builder,
+            string template,
+            LogLevel? level = null,
+            TimeSpan? timeout = null)
+        {
+            if (template is null)
+                throw new ArgumentNullException(nameof(template));
+
+            return builder.AddDebugLogProvider<TemplateLogFormatter>(level, timeout, template);
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DebugLogProvider"/>, formatted with the specified <see cref="ILogFormatter"/>,
+        /// to the logger.
+        /// </summary>
+        /// <param name="builder">The <see cref="ILoggerBuilder"/>.</param>
+        /// <param name="formatter">
+        /// The <see cref="ILogFormatter"/> that the log provider uses for formatting logs.
+        /// </param>
+        /// <param name="level">The logging level of the log provider.</param>
+        /// <param name="timeout">The timeout of the log provider.</param>
+        /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
+        public static ILoggerBuilder AddDebugLogProvider(this ILoggerBuilder builder,
+            ILogFormatter formatter,
+            LogLevel? level = null,
+            TimeSpan? timeout = null)
+        {
+            if (formatter is null)
+                throw new ArgumentNullException(nameof(formatter));
+
+            return builder.AddDebugLogProvider(serviceProvider => formatter, level, timeout);
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DebugLogProvider"/>, formatted with a <see cref="ILogFormatter"/> of
+        /// type <typeparamref name="TLogFormatter"/>, to the logger.
+        /// </summary>
+        /// <typeparam name="TLogFormatter">
+        /// The type of <see cref="ILogFormatter"/> that the log provider uses for formatting logs.
+        /// </typeparam>
+        /// <param name="builder">The <see cref="ILoggerBuilder"/>.</param>
+        /// <param name="level">The logging level of the log provider.</param>
+        /// <param name="timeout">The timeout of the log provider.</param>
+        /// <param name="logFormatterParameters">
+        /// Constructor arguments for type <typeparamref name="TLogFormatter"/> that are not provided
+        /// by the <see cref="IServiceProvider"/>.
+        /// </param>
+        /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
+        public static ILoggerBuilder AddDebugLogProvider<TLogFormatter>(this ILoggerBuilder builder,
+            LogLevel? level = null,
+            TimeSpan? timeout = null,
+            params object[] logFormatterParameters)
+            where TLogFormatter : ILogFormatter
+        {
+            return builder.AddDebugLogProvider(serviceProvider =>
+                ActivatorUtilities.CreateInstance<TLogFormatter>(serviceProvider, logFormatterParameters),
+                level, timeout);
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DebugLogProvider"/>, formatted with the <see cref="ILogFormatter"/>
+        /// returned by the formatter registration, to the logger.
+        /// </summary>
+        /// <param name="builder">The <see cref="ILoggerBuilder"/>.</param>
+        /// <param name="formatterRegistration">
+        /// The method used to create the <see cref="ILogFormatter"/> of the log provider.
+        /// </param>
+        /// <param name="level">The logging level of the log provider.</param>
+        /// <param name="timeout">The timeout of the log provider.</param>
+        /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
+        public static ILoggerBuilder AddDebugLogProvider(this ILoggerBuilder builder,
+            Func<IServiceProvider, ILogFormatter> formatterRegistration,
+            LogLevel? level = null,
+            TimeSpan? timeout = null)
+        {
+            if (formatterRegistration is null)
+                throw new ArgumentNullException(nameof(formatterRegistration));
+
+            return builder.AddDebugLogProvider(options =>
+            {
+                options.FormatterRegistration = formatterRegistration;
+                if (level != null) options.Level = level.Value;
+                if (timeout != null) options.Timeout = timeout;
+            });
+        }
+
+        /// <summary>
+        /// Adds a <see cref="DebugLogProvider"/> to the logger.
+        /// </summary>
+        /// <param name="builder">The <see cref="ILoggerBuilder"/>.</param>
+        /// <param name="configureOptions">
+        /// A delegate to configure the <see cref="DebugLogProviderOptions"/> object that is used to
+        /// configure the log provider.
+        /// </param>
+        /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
+        public static ILoggerBuilder AddDebugLogProvider(this ILoggerBuilder builder,
+            Action<DebugLogProviderOptions> configureOptions = null)
+        {
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+
+            return builder.AddLogProvider(serviceProvider =>
+            {
+                var optionsLoggerName = builder.LoggerName == Logger.DefaultName
+                    ? Options.DefaultName
+                    : builder.LoggerName;
+
+                var optionsMonitor = serviceProvider.GetService<IOptionsMonitor<DebugLogProviderOptions>>();
+                var options = optionsMonitor?.Get(optionsLoggerName) ?? new DebugLogProviderOptions();
+                configureOptions?.Invoke(options);
+
+                var formatter = options.FormatterRegistration?.Invoke(serviceProvider)
+                    ?? new TemplateLogFormatter(DebugLogProvider.DefaultTemplate);
+
+                return new DebugLogProvider(formatter, options.Level, options.Timeout);
+            });
+        }
+
+        #endregion
         #region FileLogProvider
 
         /// <summary>
