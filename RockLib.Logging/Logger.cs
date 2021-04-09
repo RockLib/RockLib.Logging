@@ -42,7 +42,7 @@ namespace RockLib.Logging
         /// <summary>
         /// The default logger name.
         /// </summary>
-        public const string DefaultName = "default";
+        public const string DefaultName = "";
 
         private static readonly Lazy<BackgroundLogProcessor> _backgroundLogProcessor = new Lazy<BackgroundLogProcessor>(GetBackgroundLogProcessor);
 
