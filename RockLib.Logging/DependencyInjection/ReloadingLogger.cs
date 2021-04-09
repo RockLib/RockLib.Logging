@@ -56,7 +56,14 @@ namespace RockLib.Logging.DependencyInjection
             if (NamesEqual(Name, name))
             {
                 _configureOptions?.Invoke(options);
-                _logger = CreateLogger(options);
+
+                var oldLogger = _logger;
+                var newLogger = CreateLogger(options);
+
+                if (oldLogger.ErrorHandler != null && newLogger.ErrorHandler == null)
+                    newLogger.ErrorHandler = oldLogger.ErrorHandler;
+
+                _logger = newLogger;
             }
         }
 
