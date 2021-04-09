@@ -109,7 +109,7 @@ namespace RockLib.Logging.DependencyInjection
             var contextProviders = options.ContextProviderRegistrations.Select(createContextProvider => createContextProvider(serviceProvider)).ToArray();
 
             if (optionsMonitor != null && options.ReloadOnChange)
-                return new ReloadingLogger(logProcessor, LoggerName, logProviders, contextProviders, optionsMonitor, options);
+                return new ReloadingLogger(logProcessor, LoggerName, logProviders, contextProviders, optionsMonitor, options, ConfigureOptions);
 
             return new Logger(logProcessor, LoggerName, options.Level.GetValueOrDefault(),
                 logProviders, options.IsDisabled.GetValueOrDefault(), contextProviders);

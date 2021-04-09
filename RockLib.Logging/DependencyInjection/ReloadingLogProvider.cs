@@ -11,14 +11,15 @@ namespace RockLib.Logging.DependencyInjection
     {
         private readonly Func<TOptions, ILogProvider> _createLogProvider;
         private readonly string _name;
-
+        private readonly Action<TOptions> _configureOptions;
         private ILogProvider _logProvider;
 
         public ReloadingLogProvider(IOptionsMonitor<TOptions> optionsMonitor, TOptions options,
-            Func<TOptions, ILogProvider> createLogProvider, string name)
+            Func<TOptions, ILogProvider> createLogProvider, string name, Action<TOptions> configureOptions)
         {
             _createLogProvider = createLogProvider;
             _name = name;
+            _configureOptions = configureOptions;
             _logProvider = _createLogProvider(options);
 
             optionsMonitor.OnChange(OptionsMonitorChanged);
@@ -34,7 +35,10 @@ namespace RockLib.Logging.DependencyInjection
         private void OptionsMonitorChanged(TOptions options, string name)
         {
             if (NamesEqual(_name, name))
+            {
+                _configureOptions?.Invoke(options);
                 _logProvider = _createLogProvider(options);
+            }
         }
     }
 }

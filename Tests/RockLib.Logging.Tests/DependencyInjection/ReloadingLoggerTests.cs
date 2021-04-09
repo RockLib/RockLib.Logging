@@ -38,18 +38,21 @@ namespace RockLib.Logging.Tests.DependencyInjection
             var contextProviders = new[] { new Mock<IContextProvider>().Object };
             var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<LoggerOptions>>();
             var options = optionsMonitor.Get("MyLogger");
+            Action<LoggerOptions> configureOptions = opt => { };
 
-            var reloadingLogger = ReloadingLogger.New(logProcessor, name, logProviders, contextProviders, optionsMonitor, options);
+            var reloadingLogger = ReloadingLogger.New(logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
 
             string actualName = reloadingLogger.Name;
             ILogProcessor actualLogProcessor = reloadingLogger._logProcessor;
             IReadOnlyCollection<ILogProvider> actualLogProviders = reloadingLogger._logProviders;
             IReadOnlyCollection<IContextProvider> actualContextProviders = reloadingLogger._contextProviders;
+            Action<LoggerOptions> actualConfigureOptions = reloadingLogger._configureOptions;
 
             actualName.Should().BeSameAs(name);
             actualLogProcessor.Should().BeSameAs(logProcessor);
             actualLogProviders.Should().BeSameAs(logProviders);
             actualContextProviders.Should().BeSameAs(contextProviders);
+            actualConfigureOptions.Should().BeSameAs(configureOptions);
 
             Logger logger = reloadingLogger._logger;
             logger.Name.Should().Be(name);
@@ -81,8 +84,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
             var contextProviders = new[] { new Mock<IContextProvider>().Object };
             var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<LoggerOptions>>();
             var options = optionsMonitor.Get("MyLogger");
+            Action<LoggerOptions> configureOptions = null;
 
-            var reloadingLogger = ReloadingLogger.New(logProcessor, name, logProviders, contextProviders, optionsMonitor, options);
+            var reloadingLogger = ReloadingLogger.New(logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
 
             ILogger logger1 = reloadingLogger._logger;
             logger1.Level.Should().Be(LogLevel.Warn);

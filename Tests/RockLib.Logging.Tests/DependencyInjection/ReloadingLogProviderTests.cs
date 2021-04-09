@@ -37,8 +37,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
             Func<TestOptions, ILogProvider> createLogProvider = o =>
                 new TestLogProvider { Foo = o.Foo, Bar = o.Bar };
             string name = "MyLogger";
+            Action<TestOptions> configureOptions = opt => { };
 
-            var reloadingLogProvider = ReloadingLogProviderOfTestOptions.New(optionsMonitor, options, createLogProvider, name);
+            var reloadingLogProvider = ReloadingLogProviderOfTestOptions.New(optionsMonitor, options, createLogProvider, name, configureOptions);
 
             string actualName = reloadingLogProvider._name;
             
@@ -47,6 +48,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
             TestLogProvider logProvider = reloadingLogProvider._logProvider;
             logProvider.Foo.Should().Be(123);
             logProvider.Bar.Should().Be("abc");
+
+            Action<TestOptions> actualConfigureOptions = reloadingLogProvider._configureOptions;
+            actualConfigureOptions.Should().BeSameAs(configureOptions);
         }
 
         [Fact(DisplayName = "_logProvider field is reinstantiated when options monitor changes")]
@@ -70,8 +74,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
             Func<TestOptions, ILogProvider> createLogProvider = o =>
                 new TestLogProvider { Foo = o.Foo, Bar = o.Bar };
             string name = "MyLogger";
+            Action<TestOptions> configureOptions = null;
 
-            var reloadingLogProvider = ReloadingLogProviderOfTestOptions.New(optionsMonitor, options, createLogProvider, name);
+            var reloadingLogProvider = ReloadingLogProviderOfTestOptions.New(optionsMonitor, options, createLogProvider, name, configureOptions);
 
             TestLogProvider logProvider1 = reloadingLogProvider._logProvider;
             logProvider1.Foo.Should().Be(123);
