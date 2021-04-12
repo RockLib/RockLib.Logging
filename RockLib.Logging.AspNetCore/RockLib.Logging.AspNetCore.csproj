@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging.AspNetCore</PackageId>
-    <PackageVersion>3.1.0</PackageVersion>
+    <PackageVersion>3.1.1</PackageVersion>
     <Authors>RockLib</Authors>
     <Description>RockLib.Logging for AspNetCore. Includes context providers and a logging action filter.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <PackageReference Include="RockLib.DistributedTracing.AspNetCore" Version="1.0.1" />
-    <PackageReference Include="RockLib.Logging" Version="3.0.0" />
+    <PackageReference Include="RockLib.Logging" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net5.0'">
