@@ -20,36 +20,8 @@ namespace RockLib.Logging.AspNetCore.Tests
 
     public class LoggingActionFilterTests
     {
-        [Fact(DisplayName = "Constructor 1 sets properties from non-null parameters")]
-        public void Constructor1HappyPath1()
-        {
-            const string messageFormat = "My message format: {0}.";
-            const string loggerName = "MyLogger";
-            const LogLevel logLevel = LogLevel.Warn;
-            const string exceptionMessageFormat = "My exception message format: {0}.";
-            const LogLevel exceptionLogLevel = LogLevel.Fatal;
-
-            var loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, loggerName, logLevel, exceptionMessageFormat, exceptionLogLevel).Object;
-
-            loggingActionFilter.MessageFormat.Should().Be(messageFormat);
-            loggingActionFilter.LoggerName.Should().Be(loggerName);
-            loggingActionFilter.LogLevel.Should().Be(logLevel);
-            loggingActionFilter.ExceptionMessageFormat.Should().Be(exceptionMessageFormat);
-            loggingActionFilter.ExceptionLogLevel.Should().Be(exceptionLogLevel);
-        }
-
-        [Fact(DisplayName = "Constructor 1 sets properties from null parameters")]
-        public void Constructor1HappyPath2()
-        {
-            var loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Error, null, LogLevel.Fatal).Object;
-
-            loggingActionFilter.MessageFormat.Should().Be(DefaultMessageFormat);
-            loggingActionFilter.LoggerName.Should().Be(DefaultName);
-            loggingActionFilter.ExceptionMessageFormat.Should().Be(DefaultExceptionMessageFormat);
-        }
-
-        [Fact(DisplayName = "Constructor 2 sets properties from non-null parameters")]
-        public void Constructor2HappyPath1()
+        [Fact(DisplayName = "Constructor sets properties from non-null parameters")]
+        public void ConstructorHappyPath1()
         {
             const string messageFormat = "My message format: {0}.";
             const string loggerName = "MyLogger";
@@ -62,8 +34,8 @@ namespace RockLib.Logging.AspNetCore.Tests
             loggingActionFilter.LogLevel.Should().Be(logLevel);
         }
 
-        [Fact(DisplayName = "Constructor 2 sets properties from null parameters")]
-        public void Constructor2HappyPath2()
+        [Fact(DisplayName = "Constructor sets properties from null parameters")]
+        public void ConstructorHappyPath2()
         {
             var loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Error).Object;
 
@@ -111,7 +83,11 @@ namespace RockLib.Logging.AspNetCore.Tests
             const string actionArgumentName = "foo";
             const int actionArgument = 123;
 
-            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel, exceptionMessageFormat, exceptionLogLevel).Object;
+            var mockActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel);
+            mockActionFilter.Object.ExceptionMessageFormat = exceptionMessageFormat;
+            mockActionFilter.Object.ExceptionLogLevel = exceptionLogLevel;
+
+            IAsyncActionFilter loggingActionFilter = mockActionFilter.Object;
 
             var mockLogger = new MockLogger();
 

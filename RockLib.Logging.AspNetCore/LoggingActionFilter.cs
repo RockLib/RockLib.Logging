@@ -52,38 +52,7 @@ namespace RockLib.Logging.AspNetCore
         /// "LogEntry.ExtendedProperties"/> dictionary.
         /// </summary>
         public const string ResponseStatusCodeExtendedPropertiesKey = "ResponseStatusCode";
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LoggingActionFilter"/> class.
-        /// </summary>
-        /// <param name="messageFormat">
-        /// The message format string. The action name is used as the <c>{0}</c> placeholder when
-        /// formatting the message.
-        /// </param>
-        /// <param name="loggerName">The name of the logger.</param>
-        /// <param name="logLevel">The level to log at.</param>
-        /// <param name="exceptionMessageFormat">
-        /// The message format string to use when a request has an uncaught exception. The action
-        /// name is used as the <c>{0}</c> placeholder when formatting the message.
-        /// </param>
-        /// <param name="exceptionLogLevel">
-        /// The level to log at when a request has an uncaught exception.
-        /// </param>
-        protected LoggingActionFilter(string messageFormat, string loggerName, LogLevel logLevel,
-            string exceptionMessageFormat, LogLevel exceptionLogLevel)
-        {
-            LoggerName = string.IsNullOrEmpty(loggerName)
-                ? Logger.DefaultName
-                : loggerName;
-            MessageFormat = string.IsNullOrEmpty(messageFormat)
-                ? DefaultMessageFormat
-                : messageFormat;
-            LogLevel = logLevel;
-            ExceptionMessageFormat = string.IsNullOrEmpty(exceptionMessageFormat)
-                ? DefaultExceptionMessageFormat
-                : exceptionMessageFormat;
-            ExceptionLogLevel = exceptionLogLevel;
-        }
+        private string _exceptionMessageFormat = DefaultExceptionMessageFormat;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoggingActionFilter"/> class.
@@ -95,8 +64,14 @@ namespace RockLib.Logging.AspNetCore
         /// <param name="loggerName">The name of the logger.</param>
         /// <param name="logLevel">The level to log at.</param>
         protected LoggingActionFilter(string messageFormat, string loggerName, LogLevel logLevel)
-            : this(messageFormat, loggerName, logLevel, null, DefaultExceptionLogLevel)
         {
+            LoggerName = string.IsNullOrEmpty(loggerName)
+                ? Logger.DefaultName
+                : loggerName;
+            MessageFormat = string.IsNullOrEmpty(messageFormat)
+                ? DefaultMessageFormat
+                : messageFormat;
+            LogLevel = logLevel;
         }
 
         /// <summary>
@@ -116,15 +91,18 @@ namespace RockLib.Logging.AspNetCore
         public LogLevel LogLevel { get; }
 
         /// <summary>
-        /// Gets the message format string to use when a request has an uncaught exception. The
-        /// action name is used as the <c>{0}</c> placeholder when formatting the message.
+        /// Gets or sets the message format string to use when a request has an uncaught exception.
+        /// The action name is used as the <c>{0}</c> placeholder when formatting the message.
         /// </summary>
-        public string ExceptionMessageFormat { get; }
-
+        public string ExceptionMessageFormat
+        {
+            get => _exceptionMessageFormat;
+            set => _exceptionMessageFormat = value ?? throw new ArgumentNullException(nameof(value));
+        }
         /// <summary>
-        /// Gets the level to log at when a request has an uncaught exception.
+        /// Gets or sets the level to log at when a request has an uncaught exception.
         /// </summary>
-        public LogLevel ExceptionLogLevel { get; }
+        public LogLevel ExceptionLogLevel { get; set; } = DefaultExceptionLogLevel;
 
         async Task IAsyncActionFilter.OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
