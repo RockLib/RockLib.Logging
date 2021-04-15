@@ -81,7 +81,6 @@ namespace RockLib.Logging.Tests
         public void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
         {
             var logFormatter = new Mock<ILogFormatter>().Object;
-            var timeout = TimeSpan.FromMilliseconds(1234);
 
             var consoleLogProvider = new ConsoleLogProvider(logFormatter, timeout: null);
 

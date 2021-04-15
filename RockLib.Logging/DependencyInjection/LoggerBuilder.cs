@@ -115,7 +115,7 @@ namespace RockLib.Logging.DependencyInjection
                 logProviders, options.IsDisabled.GetValueOrDefault(), contextProviders);
         }
 
-        private bool IsEmpty(LoggerOptions options) =>
+        private static bool IsEmpty(LoggerOptions options) =>
             options.LogProviderRegistrations.Count == 0 && options.ContextProviderRegistrations.Count == 0
                 && options.Level == null && options.IsDisabled == null;
     }

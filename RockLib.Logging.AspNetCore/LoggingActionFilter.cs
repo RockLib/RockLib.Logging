@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
-    /// An action filter that records a log each time the action is executed.
+    /// An action filter that records a log each time an action is executed.
     /// </summary>
     public abstract class LoggingActionFilter : Attribute, IAsyncActionFilter
     {
@@ -52,6 +52,7 @@ namespace RockLib.Logging.AspNetCore
         /// "LogEntry.ExtendedProperties"/> dictionary.
         /// </summary>
         public const string ResponseStatusCodeExtendedPropertiesKey = "ResponseStatusCode";
+
         private string _exceptionMessageFormat = DefaultExceptionMessageFormat;
 
         /// <summary>

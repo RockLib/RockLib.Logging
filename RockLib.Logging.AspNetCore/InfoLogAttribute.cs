@@ -1,7 +1,7 @@
 ﻿namespace RockLib.Logging.AspNetCore
 {
     /// <summary>
-    /// An action filter that records an info log each time the action is executed.
+    /// An action filter that records an info log each time an action is executed.
     /// </summary>
     public class InfoLogAttribute : LoggingActionFilter
     {
