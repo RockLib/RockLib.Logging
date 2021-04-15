@@ -17,6 +17,11 @@ namespace RockLib.Logging.DependencyInjection
         /// The timeout of the log provider.
         /// </summary>
         public TimeSpan? Timeout { get; set; }
+
+        /// <summary>
+        /// Whether to create a log provider that automatically reloads itself when its options change.
+        /// </summary>
+        public bool ReloadOnChange { get; set; }
     }
 }
 #endif

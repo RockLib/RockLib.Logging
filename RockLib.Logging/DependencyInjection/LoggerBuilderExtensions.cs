@@ -186,7 +186,14 @@ namespace RockLib.Logging.DependencyInjection
                 var formatter = options.FormatterRegistration?.Invoke(serviceProvider)
                     ?? new TemplateLogFormatter(ConsoleLogProvider.DefaultTemplate);
 
-                return new ConsoleLogProvider(formatter, options.Level, options.Output, options.Timeout);
+                if (optionsMonitor != null && options.ReloadOnChange)
+                    return new ReloadingLogProvider<ConsoleLogProviderOptions>(
+                        optionsMonitor, options, CreateLogProvider, builder.LoggerName, configureOptions);
+
+                return CreateLogProvider(options);
+
+                ILogProvider CreateLogProvider(ConsoleLogProviderOptions o) =>
+                    new ConsoleLogProvider(formatter, o.Level, o.Output, o.Timeout);
             });
         }
 
@@ -319,7 +326,14 @@ namespace RockLib.Logging.DependencyInjection
                 var formatter = options.FormatterRegistration?.Invoke(serviceProvider)
                     ?? new TemplateLogFormatter(DebugLogProvider.DefaultTemplate);
 
-                return new DebugLogProvider(formatter, options.Level, options.Timeout);
+                if (optionsMonitor != null && options.ReloadOnChange)
+                    return new ReloadingLogProvider<DebugLogProviderOptions>(
+                        optionsMonitor, options, CreateLogProvider, builder.LoggerName, configureOptions);
+
+                return CreateLogProvider(options);
+
+                ILogProvider CreateLogProvider(DebugLogProviderOptions o) =>
+                    new DebugLogProvider(formatter, options.Level, options.Timeout);
             });
         }
 

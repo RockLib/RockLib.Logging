@@ -18,11 +18,6 @@ namespace RockLib.Logging.DependencyInjection
             get => _file;
             set => _file = value ?? throw new ArgumentNullException(nameof(value));
         }
-
-        /// <summary>
-        /// Whether to create a log provider that automatically reloads itself when its options change.
-        /// </summary>
-        public bool ReloadOnChange { get; set; }
     }
 }
 #endif
