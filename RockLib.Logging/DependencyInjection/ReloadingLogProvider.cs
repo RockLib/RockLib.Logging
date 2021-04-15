@@ -13,6 +13,7 @@ namespace RockLib.Logging.DependencyInjection
         private readonly string _name;
         private readonly Action<TOptions> _configureOptions;
         private ILogProvider _logProvider;
+        private readonly IDisposable _changeListener;
 
         public ReloadingLogProvider(IOptionsMonitor<TOptions> optionsMonitor, TOptions options,
             Func<TOptions, ILogProvider> createLogProvider, string name, Action<TOptions> configureOptions)
@@ -22,7 +23,7 @@ namespace RockLib.Logging.DependencyInjection
             _configureOptions = configureOptions;
             _logProvider = _createLogProvider(options);
 
-            optionsMonitor.OnChange(OptionsMonitorChanged);
+            _changeListener = optionsMonitor.OnChange(OptionsMonitorChanged);
         }
 
         public TimeSpan Timeout => _logProvider.Timeout;
@@ -39,6 +40,11 @@ namespace RockLib.Logging.DependencyInjection
                 _configureOptions?.Invoke(options);
                 _logProvider = _createLogProvider(options);
             }
+        }
+
+        ~ReloadingLogProvider()
+        {
+            _changeListener.Dispose();
         }
     }
 }

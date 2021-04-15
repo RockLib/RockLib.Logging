@@ -15,6 +15,7 @@ namespace RockLib.Logging.DependencyInjection
         private readonly IReadOnlyCollection<IContextProvider> _contextProviders;
         private readonly Action<LoggerOptions> _configureOptions;
         private Logger _logger;
+        private readonly IDisposable _changeListener;
 
         public ReloadingLogger(ILogProcessor logProcessor,
             string name,
@@ -31,7 +32,7 @@ namespace RockLib.Logging.DependencyInjection
             _configureOptions = configureOptions;
             _logger = CreateLogger(options);
 
-            optionsMonitor.OnChange(OptionsMonitorChanged);
+            _changeListener = optionsMonitor.OnChange(OptionsMonitorChanged);
         }
 
         public bool IsDisabled => _logger.IsDisabled;
@@ -46,7 +47,11 @@ namespace RockLib.Logging.DependencyInjection
 
         public IReadOnlyCollection<IContextProvider> ContextProviders => _logger.ContextProviders;
 
-        public void Dispose() => _logger.Dispose();
+        public void Dispose()
+        {
+            _changeListener.Dispose();
+            _logger.Dispose();
+        }
 
         public void Log(LogEntry logEntry, [CallerMemberName] string callerMemberName = null, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int callerLineNumber = 0) =>
             _logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
