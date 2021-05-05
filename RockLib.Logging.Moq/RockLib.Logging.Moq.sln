@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq", "RockLib.Logging.Moq\RockLib.Logging.Moq.csproj", "{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq", "RockLib.Logging.Moq.csproj", "{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq.Tests", "Tests\RockLib.Logging.Moq.Tests\RockLib.Logging.Moq.Tests.csproj", "{86EFB7D5-CF52-476D-BA9F-1D94778517C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq.Tests", "..\Tests\RockLib.Logging.Moq.Tests\RockLib.Logging.Moq.Tests.csproj", "{86EFB7D5-CF52-476D-BA9F-1D94778517C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
