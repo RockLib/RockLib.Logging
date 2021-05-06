@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/RockLib/RockLib.Logging</PackageProjectUrl>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <PackageIcon>icon.png</PackageIcon>
-    <Copyright>Copyright 2018-2020 (c) Quicken Loans Corporation. All rights reserved.</Copyright>
+    <Copyright>Copyright 2018-2021 (c) Quicken Loans Corporation. All rights reserved.</Copyright>
     <PackageTags>RockLib Logging Logger</PackageTags>
     <Version>3.0.0</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>

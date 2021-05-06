@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Adds SourceLink to nuget package.
 
-## Changed
+#### Changed
 
 - Updates RockLib.Diagnostics and RockLib.Reflection.Optimized packages to latest versions, which include SourceLink.
 
