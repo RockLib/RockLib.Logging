@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Changed
 
-- Updates RockLib.Logging package to latest version, which include SourceLink.
+- Updates RockLib.Logging package to latest version, which includes SourceLink.
 
 ----
 
