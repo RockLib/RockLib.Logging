@@ -81,12 +81,12 @@ namespace RockLib.Logging.Microsoft.Extensions.Tests
             var extendedProperties = new Dictionary<string, object>
             {
                 ["Microsoft.Extensions.Logging.EventId"] = eventId,
-                ["Microsoft.Extensions.Logging.State"] = "^Hello, world!$",
-                ["Microsoft.Extensions.Logging.CategoryName"] = "^MyCategory$",
-                ["Microsoft.Extensions.Logging.Scope"] = new object[] { "^MyState$" }
+                ["Microsoft.Extensions.Logging.State"] = "Hello, world!",
+                ["Microsoft.Extensions.Logging.CategoryName"] = "MyCategory",
+                ["Microsoft.Extensions.Logging.Scope"] = new object[] { "MyState" }
             };
 
-            mockLogger.VerifyWarn("^formatted$", extendedProperties, Times.Once());
+            mockLogger.VerifyWarn("formatted", extendedProperties, Times.Once());
 
             capturedState.Should().Be("Hello, world!");
             capturedException.Should().BeSameAs(ex);

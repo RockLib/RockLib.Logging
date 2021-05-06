@@ -61,7 +61,7 @@ namespace RockLib.Logging.Tests.Diagnostics
 
             listener.Write("Hello, world!");
 
-            mockLogger.VerifyInfo("^Hello, world!$", Times.Once());
+            mockLogger.VerifyInfo("Hello, world!", Times.Once());
         }
 
         [Fact(DisplayName = "Write does not log if the level is not high enough for the logger")]
@@ -85,7 +85,7 @@ namespace RockLib.Logging.Tests.Diagnostics
 
             listener.WriteLine("Hello, world!");
 
-            mockLogger.VerifyInfo("^Hello, world!$", Times.Once());
+            mockLogger.VerifyInfo("Hello, world!", Times.Once());
         }
 
         [Fact(DisplayName = "WriteLine does not log if the level is not high enough for the logger")]
