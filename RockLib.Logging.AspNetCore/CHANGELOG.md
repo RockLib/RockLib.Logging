@@ -7,17 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 3.1.3
 
-#### Fixed
-
-- Actually adds SourceLink to nuget package (fixes copypasta error in csproj file).
-
-## 3.1.2
-
 #### Added
 
 - Adds SourceLink to nuget package.
 
-## Changed
+#### Changed
 
 - Updates RockLib.Logging and RockLib.DistributedTracing.AspNetCore packages to latest versions, which include SourceLink.
 
