@@ -115,3 +115,27 @@ The [InfoLog] action filter has two optional parameters.
 |:---------------|:--------------------------------------------------------------------------------------|
 | messageFormat  | A format string for the log message. The action name is used as the `{0}` placeholder|
 | loggerName     | The name of the logger that is registered with the service collection.                |
+
+### Route not found middleware
+
+To automatically record a log whenever a non-existant endpoint is hit, use the RouteNotFoundMiddleware class. This can easily be done by using the `UseRouteNotFoundLogging` extension.
+
+```c#
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    app.UseRouteNotFoundLogging();
+}
+```
+
+By default, a logger with the name 'default' will be used to send a `Warn` level log with the message 'There was an attempt to access a non-existant endpoint.' These defaults can be overridden by configuring a `RouteNotFoundMiddlewareOptions`.
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.Configure<RouteNotFoundMiddlewareOptions>(options => {
+        options.LoggerName = "NotDefault";
+        options.LogLevel = LogLevel.Error;
+        options.LogMessage = "Some other message about hitting a 404";
+    });
+}
+```
