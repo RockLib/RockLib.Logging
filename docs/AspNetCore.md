@@ -127,7 +127,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 }
 ```
 
-By default, a logger with the name 'default' will be used to send a `Warn` level log with the message 'There was an attempt to access a non-existant endpoint.' These defaults can be overridden by configuring a `RouteNotFoundMiddlewareOptions`.
+By default, a logger with the default name (which is empty string) will be used to send a `Warn` level log with the message 'There was an attempt to access a non-existant endpoint.' These defaults can be overridden by configuring a `RouteNotFoundMiddlewareOptions`.
 
 ```c#
 public void ConfigureServices(IServiceCollection services)
