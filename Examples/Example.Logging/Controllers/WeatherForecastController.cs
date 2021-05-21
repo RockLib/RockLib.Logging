@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using RockLib.Logging;
+using RockLib.Logging.SafeLogging;
 
 namespace Example.Logging.Controllers
 {
@@ -35,7 +35,7 @@ namespace Example.Logging.Controllers
             })
             .ToArray();
 
-            _logger.Info($"Forecasts: {JsonConvert.SerializeObject(forecasts)}");
+            _logger.InfoSanitized("GET /WeatherForecast", new { Result = forecasts });
 
             return forecasts;
         }

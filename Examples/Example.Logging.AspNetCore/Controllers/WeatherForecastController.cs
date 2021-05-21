@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using RockLib.Logging.AspNetCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using RockLib.Logging;
-using RockLib.Logging.SafeLogging;
 
-namespace Example.Logging.Controllers
+namespace Example.Logging.AspNetCore.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -16,28 +16,25 @@ namespace Example.Logging.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger _logger;
+        private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
         }
 
         [HttpGet]
+        [InfoLog]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
-            var forecasts =  Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
-
-            _logger.InfoSanitized("GET /WeatherForecast", new { Result = forecasts });
-
-            return forecasts;
         }
     }
 }
