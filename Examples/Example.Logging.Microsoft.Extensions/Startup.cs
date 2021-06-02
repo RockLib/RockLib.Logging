@@ -23,8 +23,10 @@ namespace Example.Logging.Microsoft.Extensions
         {
             services.AddControllers();
 
+            services.Configure<LoggerOptions>(Configuration.GetSection("Logger"));
+
             services.AddLogger(processingMode: Logger.ProcessingMode.Synchronous)
-                .AddConsoleLogProvider(@"{message}");
+                .AddConsoleLogProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

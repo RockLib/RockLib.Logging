@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C29F653B-26C7-4896-AD4B-101519786379}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.Logging.AspNetCore", "Examples\Example.Logging.AspNetCore\Example.Logging.AspNetCore.csproj", "{4EC96A12-65AA-4879-B55E-F97BFA4896E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EC96A12-65AA-4879-B55E-F97BFA4896E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EC96A12-65AA-4879-B55E-F97BFA4896E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EC96A12-65AA-4879-B55E-F97BFA4896E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EC96A12-65AA-4879-B55E-F97BFA4896E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,6 +121,7 @@ Global
 		{F0320E13-ADB6-4067-B749-2DB67ED79F30} = {C29F653B-26C7-4896-AD4B-101519786379}
 		{CC271C12-367D-4C6A-A9C8-0EC9FE210FF6} = {4E9347EA-62E7-4C45-8186-F0767B8303DA}
 		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA} = {C29F653B-26C7-4896-AD4B-101519786379}
+		{4EC96A12-65AA-4879-B55E-F97BFA4896E7} = {4E9347EA-62E7-4C45-8186-F0767B8303DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {806D89B7-78D1-4038-944B-AFFE3C7A0F00}

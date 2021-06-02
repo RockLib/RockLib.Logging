@@ -1,7 +1,9 @@
+using RockLib.Logging.SafeLogging;
 using System;
 
 namespace Example.Logging
 {
+    [SafeToLog]
     public class WeatherForecast
     {
         public DateTime Date { get; set; }

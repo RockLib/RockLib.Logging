@@ -1,7 +1,7 @@
 using RockLib.Logging.SafeLogging;
 using System;
 
-namespace Example.Logging
+namespace Example.Logging.AspNetCore
 {
     [SafeToLog]
     public class WeatherForecast
