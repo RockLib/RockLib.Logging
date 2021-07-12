@@ -49,7 +49,7 @@ namespace RockLib.Logging.DependencyInjection
 
             services.SetLogProcessor(logProcessor);
             services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
-            services.SetLoggerLookupDescriptor();
+            services.SetLoggerLookupDescriptor(lifetime);
 
             return builder;
         }
@@ -93,7 +93,7 @@ namespace RockLib.Logging.DependencyInjection
 
             services.SetLogProcessor(logProcessorRegistration);
             services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
-            services.SetLoggerLookupDescriptor();
+            services.SetLoggerLookupDescriptor(lifetime);
 
             return builder;
         }
@@ -132,7 +132,7 @@ namespace RockLib.Logging.DependencyInjection
 
             services.SetLogProcessor(processingMode);
             services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
-            services.SetLoggerLookupDescriptor();
+            services.SetLoggerLookupDescriptor(lifetime);
 
             return builder;
         }
@@ -175,7 +175,7 @@ namespace RockLib.Logging.DependencyInjection
                     services.RemoveAt(i--);
         }
 
-        private static void SetLoggerLookupDescriptor(this IServiceCollection services)
+        private static void SetLoggerLookupDescriptor(this IServiceCollection services, ServiceLifetime lifetime)
         {
             // Clear the existing LoggerLookup descriptor, if it exists.
             for (int i = 0; i < services.Count; i++)
@@ -201,7 +201,7 @@ namespace RockLib.Logging.DependencyInjection
                 return selectedLogger;
             };
 
-            services.AddSingleton(LoggerLookupRegistration);
+            services.Add(new ServiceDescriptor(typeof(LoggerLookup), LoggerLookupRegistration, lifetime));
         }
 
         internal static bool NamesEqual(string loggerName, string lookupName)
