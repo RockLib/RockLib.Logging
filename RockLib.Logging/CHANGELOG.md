@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixes memory leak when using `LoggerLookup`.
 
+#### Changed
+
+- Updates RockLib.Logging.Analyzers to latest version, 1.0.1.
+
 ## 3.0.3
 
 #### Added
