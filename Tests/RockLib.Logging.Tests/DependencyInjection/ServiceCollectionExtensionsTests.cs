@@ -33,7 +33,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
 
             services[2].ServiceType.Should().Be<LoggerLookup>();
-            services[2].Lifetime.Should().Be(ServiceLifetime.Singleton);
+            services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
@@ -81,7 +81,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
 
             services[2].ServiceType.Should().Be<LoggerLookup>();
-            services[2].Lifetime.Should().Be(ServiceLifetime.Singleton);
+            services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
@@ -128,7 +128,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
 
             services[2].ServiceType.Should().Be<LoggerLookup>();
-            services[2].Lifetime.Should().Be(ServiceLifetime.Singleton);
+            services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
@@ -152,7 +152,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
 
             services[2].ServiceType.Should().Be<LoggerLookup>();
-            services[2].Lifetime.Should().Be(ServiceLifetime.Singleton);
+            services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
@@ -176,7 +176,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
 
             services[2].ServiceType.Should().Be<LoggerLookup>();
-            services[2].Lifetime.Should().Be(ServiceLifetime.Singleton);
+            services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
             services[2].ImplementationFactory.Should().NotBeNull();
         }
 
