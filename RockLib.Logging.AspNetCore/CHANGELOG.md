@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updates RockLib.Logging to latest version, 3.0.4.
 
+#### Added
+
+- Adds RockLib.Logging.AspNetCore.Analyzers package reference.
+
 ## 3.2.0
 
 #### Added
