@@ -11,7 +11,7 @@ namespace RockLib.Logging.Tests.SafeLogging
 {
     public class SanitizeEngineTests
     {
-        [Fact(DisplayName = "Sanitize method transforms safe-to-log type into string dictionary")]
+        [Fact(DisplayName = "Sanitize method transforms safe-to-log type (defined at compile-time) into string dictionary")]
         public void SanitizeMethodTest1()
         {
             var value = new ExampleSafeToLogType { Foo = "abc", Bar = "xyz" };
@@ -22,7 +22,7 @@ namespace RockLib.Logging.Tests.SafeLogging
                 .Which.Should().BeEquivalentTo(new Dictionary<string, object> { { "Foo", "abc" } });
         }
 
-        [Fact(DisplayName = "Sanitize method transforms type with safe-to-log properties into string dictionary")]
+        [Fact(DisplayName = "Sanitize method transforms type with safe-to-log properties (defined at compile-time) into string dictionary")]
         public void SanitizeMethodTest2()
         {
             var value = new ExampleSafeToLogProperty { Foo = "abc", Bar = "xyz" };
@@ -44,8 +44,35 @@ namespace RockLib.Logging.Tests.SafeLogging
                 .Which.Should().Be($"All properties from the {typeof(ExampleNotSafeToLog1).FullName} type have been excluded from the log entry extended properties because none were decorated with the [SafeToLog] attribute.");
         }
 
-        [Fact(DisplayName = "Sanitize method sanitizes the values of a string dictionary")]
+        [Fact(DisplayName = "Sanitize method transforms safe-to-log type (defined at run-time) into string dictionary")]
         public void SanitizeMethodTest4()
+        {
+            SafeToLogAttribute.Decorate<ExampleNotSafeToLog2>();
+            NotSafeToLogAttribute.Decorate<ExampleNotSafeToLog2>(x => x.Bar);
+
+            var value = new ExampleNotSafeToLog2 { Foo = "abc", Bar = "xyz" };
+
+            var sanitizedValue = SanitizeEngine.Sanitize(value);
+
+            sanitizedValue.Should().BeOfType<Dictionary<string, object>>()
+                .Which.Should().BeEquivalentTo(new Dictionary<string, object> { { "Foo", "abc" } });
+        }
+
+        [Fact(DisplayName = "Sanitize method transforms type with safe-to-log properties (defined at run-time) into string dictionary")]
+        public void SanitizeMethodTest5()
+        {
+            SafeToLogAttribute.Decorate<ExampleNotSafeToLog3>(x => x.Foo);
+
+            var value = new ExampleNotSafeToLog3 { Foo = "abc", Bar = "xyz" };
+
+            var sanitizedValue = SanitizeEngine.Sanitize(value);
+
+            sanitizedValue.Should().BeOfType<Dictionary<string, object>>()
+                .Which.Should().BeEquivalentTo(new Dictionary<string, object> { { "Foo", "abc" } });
+        }
+
+        [Fact(DisplayName = "Sanitize method sanitizes the values of a string dictionary")]
+        public void SanitizeMethodTest6()
         {
             var value = new Dictionary<string, object>
             {
@@ -69,7 +96,7 @@ namespace RockLib.Logging.Tests.SafeLogging
         }
 
         [Fact(DisplayName = "Sanitize method sanitizes the values of a non-string generic dictionary")]
-        public void SanitizeMethodTest5()
+        public void SanitizeMethodTest7()
         {
             var value = new Dictionary<string, object>
             {
@@ -93,7 +120,7 @@ namespace RockLib.Logging.Tests.SafeLogging
         }
 
         [Fact(DisplayName = "Sanitize method sanitizes the values of a non-generic dictionary")]
-        public void SanitizeMethodTest6()
+        public void SanitizeMethodTest8()
         {
             var value = new Hashtable
             {
@@ -116,7 +143,7 @@ namespace RockLib.Logging.Tests.SafeLogging
         }
 
         [Fact(DisplayName = "Sanitize method sanitizes the values of a collection")]
-        public void SanitizeMethodTest7()
+        public void SanitizeMethodTest9()
         {
             var value = new List<object>
             {
@@ -140,7 +167,7 @@ namespace RockLib.Logging.Tests.SafeLogging
         }
 
         [Fact(DisplayName = "Sanitize method does not change types whitelisted by IsTypeSafeToLog")]
-        public void SanitizeMethodTest8()
+        public void SanitizeMethodTest10()
         {
             SanitizeEngine.IsTypeSafeToLog = type => type == typeof(ExampleNotSafeToLog4);
 
@@ -160,7 +187,7 @@ namespace RockLib.Logging.Tests.SafeLogging
 
         [Theory(DisplayName = "Sanitize method does not change \"value\" types")]
         [MemberData(nameof(SanitizeMethodTest1TestData))]
-        public void SanitizeMethodTest9(object value)
+        public void SanitizeMethodTest11(object value)
         {
             var sanitizedValue = SanitizeEngine.Sanitize(value);
 

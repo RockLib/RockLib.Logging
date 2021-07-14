@@ -18,6 +18,10 @@ namespace RockLib.Logging.SafeLogging
 
         private static readonly ConcurrentDictionary<Type, Func<object, object>> _sanitizeFunctions = new ConcurrentDictionary<Type, Func<object, object>>();
 
+        internal static readonly HashSet<Type> SafeTypes = new HashSet<Type>();
+        internal static readonly HashSet<PropertyInfo> SafeProperties = new HashSet<PropertyInfo>();
+        internal static readonly HashSet<PropertyInfo> NotSafeProperties = new HashSet<PropertyInfo>();
+
         /// <summary>
         /// Ensures that any properties not decorated with the [SafeToLog] attribute are excluded
         /// from logs. Note that non-complex types (e.g. primitive types, enums, string) are not
@@ -192,12 +196,15 @@ namespace RockLib.Logging.SafeLogging
 
         private static IEnumerable<PropertyInfo> GetSafeProperties(Type type, IReadOnlyCollection<PropertyInfo> allProperties)
         {
-            if (Attribute.IsDefined(type, typeof(SafeToLogAttribute), inherit: false))
+            if (Attribute.IsDefined(type, typeof(SafeToLogAttribute), inherit: false)
+                    || SafeTypes.Contains(type))
                 return allProperties.Where(property =>
-                    !Attribute.IsDefined(property, typeof(NotSafeToLogAttribute), inherit: false));
+                    !Attribute.IsDefined(property, typeof(NotSafeToLogAttribute), inherit: false)
+                        && !NotSafeProperties.Contains(property));
 
             return allProperties.Where(property =>
-                Attribute.IsDefined(property, typeof(SafeToLogAttribute), inherit: false));
+                Attribute.IsDefined(property, typeof(SafeToLogAttribute), inherit: false)
+                    || SafeProperties.Contains(property));
         }
     }
 }
