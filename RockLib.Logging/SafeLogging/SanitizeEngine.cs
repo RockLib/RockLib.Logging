@@ -14,6 +14,8 @@ namespace RockLib.Logging.SafeLogging
     /// </summary>
     public static class SanitizeEngine
     {
+        private static readonly Type _runtimeTypeType = typeof(SanitizeEngine).GetType();
+
         private static readonly ConcurrentDictionary<Type, Func<object, object>> _sanitizeFunctions = new ConcurrentDictionary<Type, Func<object, object>>();
 
         /// <summary>
@@ -78,8 +80,8 @@ namespace RockLib.Logging.SafeLogging
             || runtimeType == typeof(DateTimeOffset)
             || runtimeType == typeof(Guid)
             || runtimeType == typeof(Uri)
-            || runtimeType == typeof(Encoding)
-            || runtimeType == typeof(Type);
+            | typeof(Encoding).IsAssignableFrom(runtimeType)
+            || runtimeType == _runtimeTypeType;
 
         private static bool IsCollection(Type runtimeType) =>
             typeof(IEnumerable).IsAssignableFrom(runtimeType);
