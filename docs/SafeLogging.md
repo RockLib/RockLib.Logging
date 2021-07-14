@@ -19,7 +19,7 @@ public class Client
 }
 ```
 
-Alternatively, decorate the class with `[SafeToLog]` and exclude the unsafe properties by marking them with `[NotSafeToLog]`:
+Alternatively, decorate the class with `[SafeToLog]` and exclude the unsafe properties by decorating them with `[NotSafeToLog]`:
 
 ```c#
 [SafeToLog]
@@ -32,6 +32,22 @@ public class Client
     [NotSafeToLog]
     public string SSN { get; set; }
 }
+```
+
+#### Decorating at runtime
+
+If you do not own the type that needs to be marked as safe to log, you can add `SafeToLogAttribute` and `NotSafeToLogAttribute` attributes at runtime.
+
+```c#
+SafeToLogAttribute.Decorate<Client>(client => client.FirstName);
+SafeToLogAttribute.Decorate<Client>(client => client.LastName);
+```
+
+Alternatively, decorate the class with `SafeToLogAttribute` and exclude the unsafe properties by decorating them with `NotSafeToLogAttribute`:
+
+```c#
+SafeToLogAttribute.Decorate<Client>();
+NotSafeToLogAttribute.Decorate<Client>(client => client.SSN);
 ```
 
 ## LogEntry methods
