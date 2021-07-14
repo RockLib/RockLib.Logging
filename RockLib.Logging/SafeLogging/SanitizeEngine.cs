@@ -14,7 +14,13 @@ namespace RockLib.Logging.SafeLogging
     /// </summary>
     public static class SanitizeEngine
     {
+        private static readonly Type _runtimeTypeType = typeof(SanitizeEngine).GetType();
+
         private static readonly ConcurrentDictionary<Type, Func<object, object>> _sanitizeFunctions = new ConcurrentDictionary<Type, Func<object, object>>();
+
+        internal static readonly HashSet<Type> SafeTypes = new HashSet<Type>();
+        internal static readonly HashSet<PropertyInfo> SafeProperties = new HashSet<PropertyInfo>();
+        internal static readonly HashSet<PropertyInfo> NotSafeProperties = new HashSet<PropertyInfo>();
 
         /// <summary>
         /// Ensures that any properties not decorated with the [SafeToLog] attribute are excluded
@@ -78,8 +84,8 @@ namespace RockLib.Logging.SafeLogging
             || runtimeType == typeof(DateTimeOffset)
             || runtimeType == typeof(Guid)
             || runtimeType == typeof(Uri)
-            || runtimeType == typeof(Encoding)
-            || runtimeType == typeof(Type);
+            | typeof(Encoding).IsAssignableFrom(runtimeType)
+            || runtimeType == _runtimeTypeType;
 
         private static bool IsCollection(Type runtimeType) =>
             typeof(IEnumerable).IsAssignableFrom(runtimeType);
@@ -190,12 +196,15 @@ namespace RockLib.Logging.SafeLogging
 
         private static IEnumerable<PropertyInfo> GetSafeProperties(Type type, IReadOnlyCollection<PropertyInfo> allProperties)
         {
-            if (Attribute.IsDefined(type, typeof(SafeToLogAttribute), inherit: false))
+            if (Attribute.IsDefined(type, typeof(SafeToLogAttribute), inherit: false)
+                    || SafeTypes.Contains(type))
                 return allProperties.Where(property =>
-                    !Attribute.IsDefined(property, typeof(NotSafeToLogAttribute), inherit: false));
+                    !Attribute.IsDefined(property, typeof(NotSafeToLogAttribute), inherit: false)
+                        && !NotSafeProperties.Contains(property));
 
             return allProperties.Where(property =>
-                Attribute.IsDefined(property, typeof(SafeToLogAttribute), inherit: false));
+                Attribute.IsDefined(property, typeof(SafeToLogAttribute), inherit: false)
+                    || SafeProperties.Contains(property));
         }
     }
 }
