@@ -42,7 +42,7 @@
   
   <ItemGroup>
     <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="RockLib.Logging" Version="3.0.2" />
+    <PackageReference Include="RockLib.Logging" Version="3.0.6" />
   </ItemGroup>
 
 </Project>
