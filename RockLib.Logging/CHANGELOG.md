@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Changed
 
-- Updates RockLib.Logging.Analyzers to latest version, 1.0.2.
+- Updates RockLib.Logging.Analyzers to latest version, [1.0.2](https://github.com/RockLib/RockLib.Analyzers/blob/main/Logging/CHANGELOG.md#102---2021-07-21).
 
 ## 3.0.5 - 2021-07-13
 
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Changed
 
-- Updates RockLib.Logging.Analyzers to latest version, 1.0.1.
+- Updates RockLib.Logging.Analyzers to latest version, [1.0.1](https://github.com/RockLib/RockLib.Analyzers/blob/main/Logging/CHANGELOG.md#101---2021-07-13).
 
 ## 3.0.3 - 2021-06-09
 

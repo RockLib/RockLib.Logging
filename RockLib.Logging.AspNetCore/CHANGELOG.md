@@ -9,17 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Changed
 
-- Updates RockLib.Logging and RockLib.Logging.AspNetCore.Analyzers packages to latest versions.
+- Updates [RockLib.Logging](https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging/CHANGELOG.md#306---2021-07-22) and [RockLib.Logging.AspNetCore.Analyzers](https://github.com/RockLib/RockLib.Analyzers/blob/main/Logging.AspNetCore/CHANGELOG.md#101---2021-07-22) packages to latest versions.
 
 ## 3.2.1 - 2021-07-13
 
 #### Changed
 
-- Updates RockLib.Logging to latest version, 3.0.4.
+- Updates RockLib.Logging to latest version, [3.0.4](https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging/CHANGELOG.md#304---2021-07-13).
 
 #### Added
 
-- Adds RockLib.Logging.AspNetCore.Analyzers package reference.
+- Adds [RockLib.Logging.AspNetCore.Analyzers](https://github.com/RockLib/RockLib.Analyzers/blob/main/Logging.AspNetCore/CHANGELOG.md#100---2021-07-13) package reference.
 
 ## 3.2.0 - 2021-05-20
 

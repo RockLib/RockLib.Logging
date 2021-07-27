@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Changed
 
-- Updates RockLib.Logging package to latest version.
+- Updates [RockLib.Logging](https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging/CHANGELOG.md#306---2021-07-22) package to latest version.
 
 #### Added
 
-- Adds RockLib.Logging.Microsoft.Extensions.Analyzers package reference.
+- Adds [RockLib.Logging.Microsoft.Extensions.Analyzers](https://github.com/RockLib/RockLib.Analyzers/blob/main/Logging.Microsoft.Extensions/CHANGELOG.md#100---2021-07-21) package reference.
 
 ## 1.0.2 - 2021-05-06
 
