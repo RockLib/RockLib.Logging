@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 3.2.3 - 2021-07-30
+## 1.0.4 - 2021-07-30
 
 #### Changed
 
--  Updates [RockLib.Logging](https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging/CHANGELOG.md#307---2021-07-30).
+-  Updates [RockLib.Logging](https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging/CHANGELOG.md#307---2021-07-30) package to latest version.
 
 ## 1.0.3 - 2021-07-27
 
