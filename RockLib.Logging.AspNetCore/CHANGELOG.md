@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Changed
 
 - Changes "Quicken Loans" to "Rocket Mortgage".
+- Updates RockLib.Logging to latest version, [3.0.8](https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging/CHANGELOG.md#308---2021-08-11).
 
 ## 3.2.3 - 2021-07-30
 
