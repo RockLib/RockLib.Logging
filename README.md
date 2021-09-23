@@ -41,7 +41,8 @@ Extensions for verifying logging operations with Moq.
   - [Automatically capture HttpContext information in AspNetCore apps](docs/AspNetCore.md#context-providers)
   - [Automatically log AspNetCore controller actions](docs/AspNetCore.md#logging-action-filters)
   - [Automatically log 404 http responses](docs/AspNetCore.md#route-not-found-middleware)
-  - [Change a logger's settings "on the fly" (in a running application)](docs/Reloading.md) 🆕
+  - [Change a logger's settings "on the fly" (in a running application)](docs/Reloading.md)
+  - [Test logging in an application using RockLib.Logging.Moq](docs/Moq.md)
 - API Reference:
   - [RockLib.Logging](https://www.fuget.org/packages/RockLib.Logging)
   - [RockLib.Logging.AspNetCore](https://www.fuget.org/packages/RockLib.Logging.AspNetCore)
