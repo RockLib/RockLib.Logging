@@ -11,7 +11,7 @@ Note that all extension methods target the `Mock<ILogger>` type.
 The `SetupLogger` extension methods sets up the provided `Mock<ILogger>` so that it will properly function whenever any logging or safe-logging extension methods are called.
 
 | Parameter Name | Type | Default Value | Description |
-|---|---|
+|---|---|---|---|
 | level | `LogLevel` | `Debug` | The level of the mock logger. Logs below this level are not recorded. |
 | name | `string` | `""` | The name of the mock logger. |
 
