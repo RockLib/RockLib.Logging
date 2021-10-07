@@ -10,7 +10,7 @@ namespace RockLib.Logging.Moq
 {
     partial class MockLoggerExtensions
     {
-        private static void VerifyLog(this Mock<ILogger> mockLogger, string messagePattern,
+        private static void VerifyLog(this Mock<ILogger> mockLogger, string message,
             Expression<Func<Exception, bool>> hasMatchingException, object extendedProperties,
             LogLevel? logLevel, Times? times, string failMessage)
         {
@@ -19,8 +19,8 @@ namespace RockLib.Logging.Moq
 
             Expression<Func<LogEntry, bool>> matchingMessage = null, matchingExtendedProperties = null, matchingLogLevel = null;
 
-            if (messagePattern != null)
-                matchingMessage = GetMatchingMessageExpression(messagePattern);
+            if (message != null)
+                matchingMessage = GetMatchingMessageExpression(message);
 
             if (extendedProperties != null)
                 matchingExtendedProperties = GetMatchingExtendedPropertiesExpression(extendedProperties);
@@ -34,20 +34,20 @@ namespace RockLib.Logging.Moq
                 times ?? Times.Once(), failMessage);
         }
 
-        private static Expression<Func<LogEntry, bool>> GetMatchingMessageExpression(string messagePattern)
+        private static Expression<Func<LogEntry, bool>> GetMatchingMessageExpression(string message)
         {
             var logEntryParameter = Expression.Parameter(typeof(LogEntry), "logEntry");
             Expression body;
 
-            if (messagePattern.StartsWith("/") && messagePattern.EndsWith("/"))
+            if (message.StartsWith("/") && message.EndsWith("/"))
             {
                 var isMatchMethod = typeof(Regex).GetMethod(nameof(Regex.IsMatch), new Type[] { typeof(string), typeof(string) });
                 body = Expression.Call(isMatchMethod,
                     Expression.Property(logEntryParameter, nameof(LogEntry.Message)),
-                    Expression.Constant(messagePattern.Substring(1, messagePattern.Length - 2)));
+                    Expression.Constant(message.Substring(1, message.Length - 2)));
             }            
             else
-                body = Expression.Equal(Expression.Property(logEntryParameter, nameof(LogEntry.Message)), Expression.Constant(messagePattern));
+                body = Expression.Equal(Expression.Property(logEntryParameter, nameof(LogEntry.Message)), Expression.Constant(message));
 
             return Expression.Lambda<Func<LogEntry, bool>>(body, logEntryParameter);
         }

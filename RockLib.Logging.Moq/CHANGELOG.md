@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+#### Fixed
+
+- Fixes parameter name and doc comments in VerifyLog extension methods.
+
 ## 1.2.5 - 2021-08-11
 
 #### Changed
@@ -31,7 +37,8 @@ RockLib.Logging.Moq. What follows below are the original release notes.
 
 ## 1.2.2 - 2021-02-25
 
-Improves the error message when logging verification fails.
+- Improves the error message when logging verification fails.
+- Use string equality comparison by default. Match as regex only if the value starts and ends with '/'. For example "/(?i)hello,\s+world[.!?]/".
 
 ## 1.2.1 - 2021-02-19
 
