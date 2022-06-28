@@ -14,7 +14,9 @@ namespace RockLib.Logging.LogProviders
         /// <summary>
         /// Retrieves the currently active <see cref="LogLevel"/>
         /// </summary>
-        /// <returns>The current <see cref="LogLevel"/></returns>
-        LogLevel GetLogLevel();
+        /// <returns>The current <see cref="LogLevel"/> or null if it cannot be determined</returns>
+        /// <remarks>If the <see cref="LogLevel"/> cannot be determined, and is returned as null, then the default <see cref="LogLevel"/> 
+        /// of the <see cref="ILogger"/> will be used instead</remarks>
+        LogLevel? GetLogLevel();
     }
 }
