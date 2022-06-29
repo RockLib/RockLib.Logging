@@ -121,10 +121,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
         }
 
         [Theory(DisplayName = "Build method returns Logger instance given non-empty options")]
-        [InlineData(true), InlineData(false)]
-        public void BuildMethodHappyPath1(bool customLogLevelResolver)
+        [InlineData(true, LogLevel.Error), InlineData(false, LogLevel.Info)]
+        public void BuildMethodHappyPath1(bool customLogLevelResolver, LogLevel expectedLogLevel)
         {
-            var expectedLogLevel = customLogLevelResolver ? LogLevel.Error : LogLevel.Info;
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
@@ -159,10 +158,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
         }
 
         [Theory(DisplayName = "Build method returns ReloadingLogger instance given non-empty options where ReloadOnChange is true")]
-        [InlineData(true), InlineData(false)]
-        public void BuildMethodHappyPath2(bool customLogLevelResolver)
+        [InlineData(true, LogLevel.Error), InlineData(false, LogLevel.Info)]
+        public void BuildMethodHappyPath2(bool customLogLevelResolver, LogLevel expectedLogLevel)
         {
-            var expectedLogLevel = customLogLevelResolver ? LogLevel.Error : LogLevel.Info;
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
@@ -200,10 +198,9 @@ namespace RockLib.Logging.Tests.DependencyInjection
         }
 
         [Theory(DisplayName = "Build method returns logger created from configuration given empty options")]
-        [InlineData(true), InlineData(false)]
-        public void BuildMethodHappyPath3(bool customLogLevelResolver)
+        [InlineData(true, LogLevel.Error), InlineData(false, LogLevel.Warn)]
+        public void BuildMethodHappyPath3(bool customLogLevelResolver, LogLevel expectedLogLevel)
         {
-            var expectedLogLevel = customLogLevelResolver ? LogLevel.Error : LogLevel.Warn;
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
