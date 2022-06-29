@@ -124,6 +124,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
         [InlineData(true), InlineData(false)]
         public void BuildMethodHappyPath1(bool customLogLevelResolver)
         {
+            var expectedLogLevel = customLogLevelResolver ? LogLevel.Error : LogLevel.Info;
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
@@ -150,7 +151,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
             logger.Should().BeOfType<Logger>()
                 .Which.LogProcessor.Should().BeSameAs(logProcessor);
-            logger.Level.Should().Be(customLogLevelResolver ? LogLevel.Error : LogLevel.Info);
+            logger.Level.Should().Be(expectedLogLevel);
             logger.LogProviders.Should().ContainSingle()
                 .Which.Should().BeSameAs(logProvider);
             logger.ContextProviders.Should().ContainSingle()
@@ -161,6 +162,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
         [InlineData(true), InlineData(false)]
         public void BuildMethodHappyPath2(bool customLogLevelResolver)
         {
+            var expectedLogLevel = customLogLevelResolver ? LogLevel.Error : LogLevel.Info;
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
@@ -190,7 +192,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             var logger = builder.Build(serviceProvider);
 
             logger.Should().BeOfType(ReloadingLoggerTests.ReloadingLogger);
-            logger.Level.Should().Be(customLogLevelResolver ? LogLevel.Error : LogLevel.Info);
+            logger.Level.Should().Be(expectedLogLevel);
             logger.LogProviders.Should().ContainSingle()
                 .Which.Should().BeSameAs(logProvider);
             logger.ContextProviders.Should().ContainSingle()
@@ -201,6 +203,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
         [InlineData(true), InlineData(false)]
         public void BuildMethodHappyPath3(bool customLogLevelResolver)
         {
+            var expectedLogLevel = customLogLevelResolver ? LogLevel.Error : LogLevel.Warn;
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
@@ -231,7 +234,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
             logger.Should().BeOfType<Logger>()
                 .Which.LogProcessor.Should().BeSameAs(logProcessor);
-            logger.Level.Should().Be(customLogLevelResolver ? LogLevel.Error : LogLevel.Warn);
+            logger.Level.Should().Be(expectedLogLevel);
             logger.LogProviders.Should().ContainSingle()
                 .Which.Should().BeOfType<ConsoleLogProvider>()
                 .Which.Formatter.Should().BeOfType<TemplateLogFormatter>()
