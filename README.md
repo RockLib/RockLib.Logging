@@ -35,6 +35,7 @@ Extensions for verifying logging operations with Moq.
   - [Handle log provider errors](docs/LogProviderErrors.md)
   - [Use context providers](docs/ContextProviders.md)
   - [Use log processors / processing mode](docs/LogProcessors.md)
+  - [Use log level resolver](docs/LogLevelResolver.md)
   - [Format logs](docs/Formatting.md)
   - [Enable tracing for troubleshooting](docs/Tracing.md)
   - [Use LoggingTraceListener to log trace messages](docs/LoggingTraceListener.md)
