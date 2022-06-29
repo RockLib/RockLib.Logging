@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using Moq;
 using RockLib.Logging.LogProcessing;
+using RockLib.Logging.LogProviders;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace RockLib.Logging.Tests
@@ -170,6 +172,38 @@ namespace RockLib.Logging.Tests
             logger.Log(logEntry);
 
             logEntry.CallerInfo.Should().NotBeNullOrWhiteSpace();
+        }
+
+        public static IEnumerable<object[]> LogLevelResolverProvider_TestsCases
+        {
+            get
+            {
+                foreach (LogLevel level in Enum.GetValues(typeof(LogLevel)))
+                {
+                    yield return new object[] { level };
+                }
+
+                yield return new object[] { null };
+            }
+        }
+        [Theory, MemberData(nameof(LogLevelResolverProvider_TestsCases))]
+        public void LogLevelResolverProvider(LogLevel? expected)
+        {
+            var logLevelResolver = new Mock<ILogLevelResolver>();
+            logLevelResolver.Setup(i => i.GetLogLevel()).Returns(expected);
+
+            var logger = new Logger(level: LogLevel.Warn, logLevelResolver: logLevelResolver.Object);
+
+            LogLevel actual = logger.Level;
+
+            if (expected != null)
+            {
+                actual.Should().Be(expected);
+            }
+            else
+            {
+                actual.Should().Be(LogLevel.Warn);
+            }
         }
     }
 }

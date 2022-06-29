@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using RockLib.Logging.DependencyInjection;
 using RockLib.Logging.LogProcessing;
+using RockLib.Logging.LogProviders;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -119,13 +120,21 @@ namespace RockLib.Logging.Tests.DependencyInjection
             act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*contextProviderRegistration*");
         }
 
-        [Fact(DisplayName = "Build method returns Logger instance given non-empty options")]
-        public void BuildMethodHappyPath1()
+        [Theory(DisplayName = "Build method returns Logger instance given non-empty options")]
+        [InlineData(true), InlineData(false)]
+        public void BuildMethodHappyPath1(bool customLogLevelResolver)
         {
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
             services.AddSingleton(logProcessor);
+
+            var logLevelResolver = new Mock<ILogLevelResolver>();
+            logLevelResolver.Setup(i => i.GetLogLevel()).Returns(LogLevel.Error);
+            if (customLogLevelResolver)
+            {
+                services.AddSingleton(logLevelResolver.Object);
+            }
 
             var builder = new LoggerBuilder(services, Logger.DefaultName, options => options.Level = LogLevel.Info);
 
@@ -141,20 +150,28 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
             logger.Should().BeOfType<Logger>()
                 .Which.LogProcessor.Should().BeSameAs(logProcessor);
-            logger.Level.Should().Be(LogLevel.Info);
+            logger.Level.Should().Be(customLogLevelResolver ? LogLevel.Error : LogLevel.Info);
             logger.LogProviders.Should().ContainSingle()
                 .Which.Should().BeSameAs(logProvider);
             logger.ContextProviders.Should().ContainSingle()
                 .Which.Should().BeSameAs(contextProvider);
         }
 
-        [Fact(DisplayName = "Build method returns ReloadingLogger instance given non-empty options where ReloadOnChange is true")]
-        public void BuildMethodHappyPath2()
+        [Theory(DisplayName = "Build method returns ReloadingLogger instance given non-empty options where ReloadOnChange is true")]
+        [InlineData(true), InlineData(false)]
+        public void BuildMethodHappyPath2(bool customLogLevelResolver)
         {
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
             services.AddSingleton(logProcessor);
+
+            var logLevelResolver = new Mock<ILogLevelResolver>();
+            logLevelResolver.Setup(i => i.GetLogLevel()).Returns(LogLevel.Error);
+            if (customLogLevelResolver)
+            {
+                services.AddSingleton(logLevelResolver.Object);
+            }
 
             var builder = new LoggerBuilder(services, Logger.DefaultName, options =>
             {
@@ -173,20 +190,28 @@ namespace RockLib.Logging.Tests.DependencyInjection
             var logger = builder.Build(serviceProvider);
 
             logger.Should().BeOfType(ReloadingLoggerTests.ReloadingLogger);
-            logger.Level.Should().Be(LogLevel.Info);
+            logger.Level.Should().Be(customLogLevelResolver ? LogLevel.Error : LogLevel.Info);
             logger.LogProviders.Should().ContainSingle()
                 .Which.Should().BeSameAs(logProvider);
             logger.ContextProviders.Should().ContainSingle()
                 .Which.Should().BeSameAs(contextProvider);
         }
 
-        [Fact(DisplayName = "Build method returns logger created from configuration given empty options")]
-        public void BuildMethodHappyPath3()
+        [Theory(DisplayName = "Build method returns logger created from configuration given empty options")]
+        [InlineData(true), InlineData(false)]
+        public void BuildMethodHappyPath3(bool customLogLevelResolver)
         {
             var services = new ServiceCollection();
 
             var logProcessor = new Mock<ILogProcessor>().Object;
             services.AddSingleton(logProcessor);
+
+            var logLevelResolver = new Mock<ILogLevelResolver>();
+            logLevelResolver.Setup(i => i.GetLogLevel()).Returns(LogLevel.Error);
+            if (customLogLevelResolver)
+            {
+                services.AddSingleton(logLevelResolver.Object);
+            }
 
             var configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(new Dictionary<string, string>
@@ -206,7 +231,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
 
             logger.Should().BeOfType<Logger>()
                 .Which.LogProcessor.Should().BeSameAs(logProcessor);
-            logger.Level.Should().Be(LogLevel.Warn);
+            logger.Level.Should().Be(customLogLevelResolver ? LogLevel.Error : LogLevel.Warn);
             logger.LogProviders.Should().ContainSingle()
                 .Which.Should().BeOfType<ConsoleLogProvider>()
                 .Which.Formatter.Should().BeOfType<TemplateLogFormatter>()
