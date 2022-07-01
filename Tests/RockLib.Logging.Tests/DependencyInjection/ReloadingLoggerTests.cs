@@ -6,6 +6,7 @@ using Moq;
 using RockLib.Dynamic;
 using RockLib.Logging.DependencyInjection;
 using RockLib.Logging.LogProcessing;
+using RockLib.Logging.LogProviders;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -40,7 +41,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             var options = optionsMonitor.Get("MyLogger");
             Action<LoggerOptions> configureOptions = opt => { };
 
-            var reloadingLogger = ReloadingLogger.New(logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
+            var reloadingLogger = ReloadingLogger.New(serviceProvider, logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
 
             string actualName = reloadingLogger.Name;
             ILogProcessor actualLogProcessor = reloadingLogger._logProcessor;
@@ -86,7 +87,7 @@ namespace RockLib.Logging.Tests.DependencyInjection
             var options = optionsMonitor.Get("MyLogger");
             Action<LoggerOptions> configureOptions = null;
 
-            var reloadingLogger = ReloadingLogger.New(logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
+            var reloadingLogger = ReloadingLogger.New(serviceProvider, logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
 
             var errorHandler = new Mock<IErrorHandler>().Object;
             reloadingLogger.ErrorHandler = errorHandler;
@@ -105,6 +106,44 @@ namespace RockLib.Logging.Tests.DependencyInjection
             logger2.Level.Should().Be(LogLevel.Debug);
             logger2.IsDisabled.Should().BeTrue();
             logger2.ErrorHandler.Should().BeSameAs(errorHandler);
+        }
+
+        [Fact(DisplayName = "_logger field uses the correct ILogLevelResolver")]
+        public void CustomLogLevelResolver()
+        {
+            var configSource = new TestConfigurationSource();
+            configSource.Provider.Set("CustomLogger:Level", "Warn");
+
+            var configuration = new ConfigurationBuilder()
+                .Add(configSource)
+                .Build();
+
+            var services = new ServiceCollection();
+            services.Configure<LoggerOptions>("MyLogger", configuration.GetSection("CustomLogger"));
+
+            var logLevelResolver = new Mock<ILogLevelResolver>();
+            logLevelResolver.Setup(i => i.GetLogLevel()).Returns(LogLevel.Fatal);
+            services.AddSingleton(logLevelResolver.Object);
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var logProcessor = new Mock<ILogProcessor>().Object;
+            var name = "MyLogger";
+            var logProviders = new[] { new Mock<ILogProvider>().Object };
+            var contextProviders = new[] { new Mock<IContextProvider>().Object };
+            var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<LoggerOptions>>();
+            var options = optionsMonitor.Get("MyLogger");
+            Action<LoggerOptions> configureOptions = null;
+
+            var reloadingLogger = ReloadingLogger.New(serviceProvider, logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
+
+            var errorHandler = new Mock<IErrorHandler>().Object;
+            reloadingLogger.ErrorHandler = errorHandler;
+
+            ILogger logger1 = reloadingLogger._logger;
+            logger1.Level.Should().Be(LogLevel.Fatal);
+            logger1.IsDisabled.Should().BeFalse();
+            logger1.ErrorHandler.Should().BeSameAs(errorHandler);
         }
     }
 }

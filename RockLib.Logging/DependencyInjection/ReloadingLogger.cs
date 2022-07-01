@@ -4,12 +4,15 @@ using RockLib.Logging.LogProcessing;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
 using static RockLib.Logging.DependencyInjection.ServiceCollectionExtensions;
+using RockLib.Logging.LogProviders;
 
 namespace RockLib.Logging.DependencyInjection
 {
     internal class ReloadingLogger : ILogger
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogProcessor _logProcessor;
         private readonly IReadOnlyCollection<ILogProvider> _logProviders;
         private readonly IReadOnlyCollection<IContextProvider> _contextProviders;
@@ -17,7 +20,8 @@ namespace RockLib.Logging.DependencyInjection
         private Logger _logger;
         private readonly IDisposable _changeListener;
 
-        public ReloadingLogger(ILogProcessor logProcessor,
+        public ReloadingLogger(IServiceProvider serviceProvider,
+            ILogProcessor logProcessor,
             string name,
             IReadOnlyCollection<ILogProvider> logProviders,
             IReadOnlyCollection<IContextProvider> contextProviders,
@@ -26,11 +30,12 @@ namespace RockLib.Logging.DependencyInjection
             Action<LoggerOptions> configureOptions)
         {
             Name = name;
+            _serviceProvider = serviceProvider;
             _logProcessor = logProcessor;
             _logProviders = logProviders;
             _contextProviders = contextProviders;
             _configureOptions = configureOptions;
-            _logger = CreateLogger(options);
+            _logger = CreateLogger(_serviceProvider, options);
 
             _changeListener = optionsMonitor.OnChange(OptionsMonitorChanged);
         }
@@ -63,7 +68,7 @@ namespace RockLib.Logging.DependencyInjection
                 _configureOptions?.Invoke(options);
 
                 var oldLogger = _logger;
-                var newLogger = CreateLogger(options);
+                var newLogger = CreateLogger(_serviceProvider, options);
 
                 if (oldLogger.ErrorHandler != null && newLogger.ErrorHandler == null)
                     newLogger.ErrorHandler = oldLogger.ErrorHandler;
@@ -72,8 +77,8 @@ namespace RockLib.Logging.DependencyInjection
             }
         }
 
-        private Logger CreateLogger(LoggerOptions options) =>
-            new Logger(_logProcessor, Name, options.Level.GetValueOrDefault(),
+        private Logger CreateLogger(IServiceProvider serviceProvider, LoggerOptions options) =>
+            new Logger(_logProcessor, Name, options.Level.GetValueOrDefault(), serviceProvider.GetService<ILogLevelResolver>(),
                 _logProviders, options.IsDisabled.GetValueOrDefault(), _contextProviders);
     }
 }

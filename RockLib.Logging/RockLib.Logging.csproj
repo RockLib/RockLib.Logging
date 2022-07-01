@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <PackageId>RockLib.Logging</PackageId>
-    <PackageVersion>3.0.8</PackageVersion>
+    <PackageVersion>3.1.0</PackageVersion>
     <Authors>RockLib</Authors>
     <Description>A simple logging library.</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

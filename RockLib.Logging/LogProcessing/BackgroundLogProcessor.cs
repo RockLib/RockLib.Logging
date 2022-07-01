@@ -73,11 +73,22 @@ namespace RockLib.Logging.LogProcessing
         {
             foreach (var (task, logEntry, logProvider, source, failureCount, errorHandler) in _trackingQueue.GetConsumingEnumerable())
             {
-                var success = false;
-
                 try
                 {
-                    success = task.Wait(logProvider.Timeout);
+                    if (task.Wait(logProvider.Timeout))
+                    {
+                        TraceSource.TraceEvent(TraceEventType.Information, 0,
+                            "[{0:s}] - [" + nameof(BackgroundLogProcessor) + "] - Successfully processed log entry {1} from log provider {2}.",
+                            DateTime.Now, logEntry.UniqueId, logProvider);
+                    }
+                    else
+                    {
+                        source.Cancel();
+
+                        HandleError(null, logProvider, logEntry, errorHandler, failureCount + 1,
+                            "Log entry {0} from log provider {1} timed out after {2}.",
+                            logEntry.UniqueId, logProvider, logProvider.Timeout);
+                    }
                 }
                 catch (AggregateException aggregateException)
                 {
@@ -99,20 +110,9 @@ namespace RockLib.Logging.LogProcessing
 
                     continue;
                 }
-
-                if (success)
+                finally
                 {
-                    TraceSource.TraceEvent(TraceEventType.Information, 0,
-                        "[{0:s}] - [" + nameof(BackgroundLogProcessor) + "] - Successfully processed log entry {1} from log provider {2}.",
-                        DateTime.Now, logEntry.UniqueId, logProvider);
-                }
-                else
-                {
-                    source.Cancel();
-
-                    HandleError(null, logProvider, logEntry, errorHandler, failureCount + 1,
-                        "Log entry {0} from log provider {1} timed out after {2}.",
-                        logEntry.UniqueId, logProvider, logProvider.Timeout);
+                    source.Dispose();
                 }
             }
         }

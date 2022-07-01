@@ -1,5 +1,6 @@
 ﻿using RockLib.Configuration.ObjectFactory;
 using RockLib.Logging.LogProcessing;
+using RockLib.Logging.LogProviders;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -54,13 +55,16 @@ namespace RockLib.Logging
         /// </summary>
         public const string TraceSourceName = "rocklib.logging";
 
+        private readonly ILogLevelResolver _logLevelResolver;
         private readonly bool _canProcessLogs;
+        private LogLevel _level;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Logger"/> class.
         /// </summary>
         /// <param name="name">The name of the logger.</param>
         /// <param name="level">The logging level of the logger.</param>
+        /// <param name="logLevelResolver">A value that can be used to provide the <see cref="LogLevel"/> at runtime</param>
         /// <param name="logProviders">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
         /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
         /// <param name="processingMode">A value that indicates how the logger will process logs.</param>
@@ -70,11 +74,12 @@ namespace RockLib.Logging
         public Logger(
             string name = DefaultName,
             LogLevel level = LogLevel.NotSet,
+            ILogLevelResolver logLevelResolver = null,
             [AlternateName("providers")] IReadOnlyCollection<ILogProvider> logProviders = null,
             bool isDisabled = false,
             ProcessingMode processingMode = ProcessingMode.Background,
             IReadOnlyCollection<IContextProvider> contextProviders = null)
-            : this(GetLogProcessor(processingMode), name, level, logProviders, isDisabled, contextProviders)
+            : this(GetLogProcessor(processingMode), name, level, logLevelResolver, logProviders, isDisabled, contextProviders)
         {
         }
 
@@ -84,6 +89,7 @@ namespace RockLib.Logging
         /// <param name="logProcessor">The object responsible for processing logs.</param>
         /// <param name="name">The name of the logger.</param>
         /// <param name="level">The logging level of the logger.</param>
+        /// <param name="logLevelResolver">A value that can be used to provide the <see cref="LogLevel"/> at runtime</param>
         /// <param name="logProviders">A collection of <see cref="ILogProvider"/> objects used by this logger.</param>
         /// <param name="isDisabled">A value indicating whether the logger is disabled.</param>
         /// <param name="contextProviders">
@@ -93,6 +99,7 @@ namespace RockLib.Logging
             ILogProcessor logProcessor,
             string name = DefaultName,
             LogLevel level = LogLevel.NotSet,
+            ILogLevelResolver logLevelResolver = null,
             [AlternateName("providers")] IReadOnlyCollection<ILogProvider> logProviders = null,
             bool isDisabled = false,
             IReadOnlyCollection<IContextProvider> contextProviders = null)
@@ -101,13 +108,14 @@ namespace RockLib.Logging
                 throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
 
             Name = name ?? DefaultName;
-            Level = level;
             LogProviders = logProviders ?? _emptyLogProviders;
             IsDisabled = isDisabled;
             ContextProviders = contextProviders ?? _emptyContextProviders;
             LogProcessor = logProcessor ?? throw new ArgumentNullException(nameof(logProcessor));
 
+            _level = level;
             _canProcessLogs = !IsDisabled && LogProviders.Count > 0;
+            _logLevelResolver = logLevelResolver;
         }
 
         /// <summary>
@@ -122,7 +130,13 @@ namespace RockLib.Logging
         /// Log entries with a level lower than the value of this property are
         /// not logged by this logger.
         /// </remarks>
-        public LogLevel Level { get; }
+        public LogLevel Level
+        {
+            get
+            {
+                return _logLevelResolver?.GetLogLevel() ?? _level;
+            }
+        }
 
         /// <summary>
         /// Gets the collection of <see cref="ILogProvider"/> objects used by this logger.
