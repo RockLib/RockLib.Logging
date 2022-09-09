@@ -6,125 +6,124 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace RockLib.Logging.Tests
+namespace RockLib.Logging.Tests;
+
+public class ConsoleLogProviderTests
 {
-    public class ConsoleLogProviderTests
+    [Fact]
+    public void Constructor1SetsFormatterToTemplateLogFormatter()
     {
-        [Fact]
-        public void Constructor1SetsFormatterToTemplateLogFormatter()
+        var consoleLogProvider = new ConsoleLogProvider("foo");
+
+        consoleLogProvider.Formatter.Should().BeOfType<TemplateLogFormatter>();
+        var formatter = (TemplateLogFormatter)consoleLogProvider.Formatter;
+        formatter.Template.Should().Be("foo");
+    }
+
+    [Fact]
+    public void Constructor1SetsLevel()
+    {
+        var consoleLogProvider = new ConsoleLogProvider(level: LogLevel.Warn);
+
+        consoleLogProvider.Level.Should().Be(LogLevel.Warn);
+    }
+
+    [Fact]
+    public void Constructor1SetsTimeout()
+    {
+        var timeout = TimeSpan.FromMilliseconds(1234);
+        var consoleLogProvider = new ConsoleLogProvider(timeout: timeout);
+
+        consoleLogProvider.Timeout.Should().Be(timeout);
+    }
+
+    [Fact]
+    public void Constructor1SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
+    {
+        var timeout = TimeSpan.FromMilliseconds(1234);
+        var consoleLogProvider = new ConsoleLogProvider(timeout: null);
+
+        consoleLogProvider.Timeout.Should().Be(ConsoleLogProvider.DefaultTimeout);
+    }
+
+    [Fact]
+    public void Constructor2SetsFormatter()
+    {
+        var logFormatter = new Mock<ILogFormatter>().Object;
+
+        var consoleLogProvider = new ConsoleLogProvider(logFormatter);
+
+        consoleLogProvider.Formatter.Should().BeSameAs(logFormatter);
+    }
+
+    [Fact]
+    public void Constructor2SetsLevel()
+    {
+        var logFormatter = new Mock<ILogFormatter>().Object;
+
+        var consoleLogProvider = new ConsoleLogProvider(logFormatter, level: LogLevel.Warn);
+
+        consoleLogProvider.Level.Should().Be(LogLevel.Warn);
+    }
+
+    [Fact]
+    public void Constructor2SetsTimeout()
+    {
+        var logFormatter = new Mock<ILogFormatter>().Object;
+        var timeout = TimeSpan.FromMilliseconds(1234);
+
+        var consoleLogProvider = new ConsoleLogProvider(logFormatter, timeout: timeout);
+
+        consoleLogProvider.Timeout.Should().Be(timeout);
+    }
+
+    [Fact]
+    public void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
+    {
+        var logFormatter = new Mock<ILogFormatter>().Object;
+
+        var consoleLogProvider = new ConsoleLogProvider(logFormatter, timeout: null);
+
+        consoleLogProvider.Timeout.Should().Be(ConsoleLogProvider.DefaultTimeout);
+    }
+
+    [Theory]
+    [InlineData(ConsoleLogProvider.Output.StdOut)]
+    [InlineData(ConsoleLogProvider.Output.StdErr)]
+    public async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToConsole(ConsoleLogProvider.Output output)
+    {
+        var sb = new StringBuilder();
+        using (var writer = new StringWriter(sb))
         {
-            var consoleLogProvider = new ConsoleLogProvider("foo");
+            Action revert;
 
-            consoleLogProvider.Formatter.Should().BeOfType<TemplateLogFormatter>();
-            var formatter = (TemplateLogFormatter)consoleLogProvider.Formatter;
-            formatter.Template.Should().Be("foo");
-        }
-
-        [Fact]
-        public void Constructor1SetsLevel()
-        {
-            var consoleLogProvider = new ConsoleLogProvider(level: LogLevel.Warn);
-
-            consoleLogProvider.Level.Should().Be(LogLevel.Warn);
-        }
-
-        [Fact]
-        public void Constructor1SetsTimeout()
-        {
-            var timeout = TimeSpan.FromMilliseconds(1234);
-            var consoleLogProvider = new ConsoleLogProvider(timeout: timeout);
-
-            consoleLogProvider.Timeout.Should().Be(timeout);
-        }
-
-        [Fact]
-        public void Constructor1SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
-        {
-            var timeout = TimeSpan.FromMilliseconds(1234);
-            var consoleLogProvider = new ConsoleLogProvider(timeout: null);
-
-            consoleLogProvider.Timeout.Should().Be(ConsoleLogProvider.DefaultTimeout);
-        }
-
-        [Fact]
-        public void Constructor2SetsFormatter()
-        {
-            var logFormatter = new Mock<ILogFormatter>().Object;
-
-            var consoleLogProvider = new ConsoleLogProvider(logFormatter);
-
-            consoleLogProvider.Formatter.Should().BeSameAs(logFormatter);
-        }
-
-        [Fact]
-        public void Constructor2SetsLevel()
-        {
-            var logFormatter = new Mock<ILogFormatter>().Object;
-
-            var consoleLogProvider = new ConsoleLogProvider(logFormatter, level: LogLevel.Warn);
-
-            consoleLogProvider.Level.Should().Be(LogLevel.Warn);
-        }
-
-        [Fact]
-        public void Constructor2SetsTimeout()
-        {
-            var logFormatter = new Mock<ILogFormatter>().Object;
-            var timeout = TimeSpan.FromMilliseconds(1234);
-
-            var consoleLogProvider = new ConsoleLogProvider(logFormatter, timeout: timeout);
-
-            consoleLogProvider.Timeout.Should().Be(timeout);
-        }
-
-        [Fact]
-        public void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
-        {
-            var logFormatter = new Mock<ILogFormatter>().Object;
-
-            var consoleLogProvider = new ConsoleLogProvider(logFormatter, timeout: null);
-
-            consoleLogProvider.Timeout.Should().Be(ConsoleLogProvider.DefaultTimeout);
-        }
-
-        [Theory]
-        [InlineData(ConsoleLogProvider.Output.StdOut)]
-        [InlineData(ConsoleLogProvider.Output.StdErr)]
-        public async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToConsole(ConsoleLogProvider.Output output)
-        {
-            var sb = new StringBuilder();
-            using (var writer = new StringWriter(sb))
+            if (output == ConsoleLogProvider.Output.StdOut)
             {
-                Action revert;
-
-                if (output == ConsoleLogProvider.Output.StdOut)
-                {
-                    var original = Console.Out;
-                    Console.SetOut(writer);
-                    revert = () => Console.SetOut(original);
-                }
-                else
-                {
-                    var original = Console.Error;
-                    Console.SetError(writer);
-                    revert = () => Console.SetError(original);
-                }
-
-                try
-                {
-                    var consoleLogProvider = new ConsoleLogProvider("{level}:{message}", output: output);
-
-                    var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
-
-                    await consoleLogProvider.WriteAsync(logEntry);
-                }
-                finally
-                {
-                    revert();
-                }
+                var original = Console.Out;
+                Console.SetOut(writer);
+                revert = () => Console.SetOut(original);
+            }
+            else
+            {
+                var original = Console.Error;
+                Console.SetError(writer);
+                revert = () => Console.SetError(original);
             }
 
-            sb.ToString().Should().Be($"Info:Hello, world!{Environment.NewLine}");
+            try
+            {
+                var consoleLogProvider = new ConsoleLogProvider("{level}:{message}", output: output);
+
+                var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+
+                await consoleLogProvider.WriteAsync(logEntry);
+            }
+            finally
+            {
+                revert();
+            }
         }
+
+        sb.ToString().Should().Be($"Info:Hello, world!{Environment.NewLine}");
     }
 }

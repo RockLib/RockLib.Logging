@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace RockLib.Logging.Tests.DependencyInjection
+namespace RockLib.Logging.Tests.DependencyInjection;
+
+public class TestConfigurationProvider : ConfigurationProvider
 {
-    public class TestConfigurationProvider : ConfigurationProvider
-    {
-        public void Reload() => OnReload();
-    }
+    public void Reload() => OnReload();
 }
