@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Changed
 - Supported targets: net6.0, netcoreapp3.1, and net48.
 - As the package now uses nullable reference types, some method parameters now specify if they can accept nullable values.
+- `EnabledExtensions.IsEnabled()` will now throw `ArgumentNullException` if the given `logger` is `null`.
+- `ErrorHandlerExtensions.SetErrorHandler()` will now throw `ArgumentNullException` if the given `logger` is `null`.
 
 ## 3.1.0 - 2022-07-01
 

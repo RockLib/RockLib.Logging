@@ -22,7 +22,11 @@ public abstract class LogProcessor : ILogProcessor
     /// <summary>
     /// Disposes the log processor.
     /// </summary>
-    public void Dispose() => Dispose(true);
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
     /// <summary>
     /// Disposes the log processor.

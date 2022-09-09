@@ -14,12 +14,12 @@ namespace RockLib.Logging.LogProcessing;
 /// </summary>
 public sealed class BackgroundLogProcessor : LogProcessor
 {
-    private readonly object _disposeLocker = new object();
+    private readonly object _disposeLocker = new();
 
-    private readonly BlockingCollection<(ILogger, LogEntry)> _processingQueue = new BlockingCollection<(ILogger, LogEntry)>();
+    private readonly BlockingCollection<(ILogger, LogEntry)> _processingQueue = new();
     private readonly Thread _processingThread;
 
-    private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, IErrorHandler)> _trackingQueue = new BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, IErrorHandler)>();
+    private readonly BlockingCollection<(Task, LogEntry, ILogProvider, CancellationTokenSource, int, IErrorHandler)> _trackingQueue = new();
     private readonly Thread _trackingThread;
 
     /// <summary>
@@ -44,7 +44,9 @@ public sealed class BackgroundLogProcessor : LogProcessor
     public override void ProcessLogEntry(ILogger logger, LogEntry logEntry)
     {
         if (IsDisposed)
+        {
             return;
+        }
 
         try
         {
@@ -59,7 +61,9 @@ public sealed class BackgroundLogProcessor : LogProcessor
     private void ProcessLogEntries()
     {
         foreach (var (logger, logEntry) in _processingQueue.GetConsumingEnumerable())
+        {
             base.ProcessLogEntry(logger, logEntry);
+        }
     }
 
     /// <inheritdoc/>
@@ -127,12 +131,11 @@ public sealed class BackgroundLogProcessor : LogProcessor
         lock (_disposeLocker)
         {
             if (IsDisposed)
+            {
                 return;
+            }
 
             base.Dispose(disposing);
-
-            if (disposing)
-                GC.SuppressFinalize(this);
 
             _processingQueue.CompleteAdding();
             _processingThread.Join();

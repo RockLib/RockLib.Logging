@@ -15,14 +15,14 @@ namespace RockLib.Logging;
 /// </summary>
 public class TemplateLogFormatter : ILogFormatter
 {
-    private static readonly Dictionary<string, Func<LogEntry, string>> _simpleTokenHandlers = new Dictionary<string, Func<LogEntry, string>>();
-    private static readonly Dictionary<string, Func<LogEntry, DateTime>> _dateTimeTokenHandlers = new Dictionary<string, Func<LogEntry, DateTime>>();
+    private static readonly Dictionary<string, Func<LogEntry, string>> _simpleTokenHandlers = new();
+    private static readonly Dictionary<string, Func<LogEntry, DateTime>> _dateTimeTokenHandlers = new();
 
-    private static readonly Regex _simpleTokenRegex = new Regex(@"{(?<token>[a-zA-Z_][a-zA-Z0-9_]*?)}", RegexOptions.Compiled);
-    private static readonly Regex _parentheticalTokenRegex = new Regex(@"{(?<token>[a-zA-Z_][a-zA-Z0-9_]*?)(?:\((?<format>.*?)\))?}", RegexOptions.Compiled);
+    private static readonly Regex _simpleTokenRegex = new(@"{(?<token>[a-zA-Z_][a-zA-Z0-9_]*?)}", RegexOptions.Compiled);
+    private static readonly Regex _parentheticalTokenRegex = new(@"{(?<token>[a-zA-Z_][a-zA-Z0-9_]*?)(?:\((?<format>.*?)\))?}", RegexOptions.Compiled);
 
     private static readonly Regex _extendedPropertiesRegex =
-        new Regex(@"
+        new(@"
         {                                       # Opening curly brace
             extendedProperties                  # extendedProperties
                 \(                              # Opening parenthesis
@@ -36,9 +36,9 @@ public class TemplateLogFormatter : ILogFormatter
         }                                       # Closing curly brace",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.Compiled);
 
-    private static readonly Regex _containsHtmlTagsRegex = new Regex("&lt;.+?&gt;", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
+    private static readonly Regex _containsHtmlTagsRegex = new("&lt;.+?&gt;", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
-    private static readonly CultureInfo _culture = new CultureInfo("en-US");
+    private static readonly CultureInfo _culture = new("en-US");
 
     private readonly bool _isHtmlEncoded;
 

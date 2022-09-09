@@ -20,8 +20,13 @@ public static class ErrorHandlerExtensions
     /// The delegate to be invoked when the <see cref="IErrorHandler.HandleError"/> method
     /// of the logger's <see cref="ILogger.ErrorHandler"/> property is called.
     /// </param>
-    public static void SetErrorHandler(this ILogger logger, Action<Error> errorHandler) =>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="logger"/> is <c>null</c></exception>
+    public static void SetErrorHandler(this ILogger logger, Action<Error> errorHandler)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
         logger.ErrorHandler = new DelegateErrorHandler(errorHandler);
+    }
 
     private class DelegateErrorHandler : IErrorHandler
     {

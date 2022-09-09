@@ -49,17 +49,19 @@ public class LoggingTraceListener : TraceListener
     /// Writes the specified message to <see cref="Logger"/>.
     /// </summary>
     /// <param name="message">The message to write.</param>
-    public override void Write(string message) => WriteLog(message);
+    public override void Write(string? message) => WriteLog(message);
 
     /// <summary>
     /// Writes the specified message to <see cref="Logger"/>.
     /// </summary>
     /// <param name="message">The message to write.</param>
-    public override void WriteLine(string message) => WriteLog(message);
+    public override void WriteLine(string? message) => WriteLog(message);
 
-    private void WriteLog(string message)
+    private void WriteLog(string? message)
     {
         if (Logger.IsEnabled(LogLevel))
+        {
             Logger.Log(new LogEntry(message, LogLevel));
+        }
     }
 }

@@ -52,7 +52,7 @@ public interface ILogger : IDisposable
     /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
     void Log(
         LogEntry logEntry,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0);
 }

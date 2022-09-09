@@ -79,6 +79,6 @@ internal class ReloadingLogger : ILogger
     }
 
     private Logger CreateLogger(IServiceProvider serviceProvider, LoggerOptions options) => 
-        new Logger(_logProcessor, Name, options.Level.GetValueOrDefault(), serviceProvider.GetService<ILogLevelResolver>()!,
+        new(_logProcessor, Name, options.Level.GetValueOrDefault(), serviceProvider.GetService<ILogLevelResolver>()!,
             _logProviders, options.IsDisabled.GetValueOrDefault(), _contextProviders);
 }

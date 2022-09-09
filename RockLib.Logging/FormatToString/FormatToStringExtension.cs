@@ -16,20 +16,14 @@ internal static class FormatToStringExtension
     private const string _indent = "   ";
 
     private static readonly string[] _skipProperties = { "InnerException", "InnerExceptions", "Message", "Data", "StackTrace", "TargetSite", "Source", "EntityValidationErrors" };
-
-    private static readonly ConcurrentDictionary<Type, Func<Exception, string, string>> _formatExceptionFuncs =
-        new ConcurrentDictionary<Type, Func<Exception, string, string>>();
-
+    private static readonly ConcurrentDictionary<Type, Func<Exception, string, string>> _formatExceptionFuncs = new();
     private static readonly Type _dbEntityValidationExceptionType;
     private static readonly Action<Exception, StringBuilder, string> _addValidationErrorMessages;
 
-    static FormatToStringExtension()
-    {
-        InitDbEntityValidationExceptionHandler(
-            out _dbEntityValidationExceptionType, out _addValidationErrorMessages);
-    }
+    static FormatToStringExtension() => InitDbEntityValidationExceptionHandler(
+        out _dbEntityValidationExceptionType, out _addValidationErrorMessages);
 
-    public static string FormatToString(this Exception exception)
+    public static string? FormatToString(this Exception exception)
     {
         if (exception is null)
         {

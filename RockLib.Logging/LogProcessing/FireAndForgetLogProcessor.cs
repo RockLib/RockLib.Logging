@@ -11,7 +11,7 @@ namespace RockLib.Logging.LogProcessing;
 public sealed class FireAndForgetLogProcessor : LogProcessor
 {
     /// <inheritdoc/>
-    protected override async void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry,
+    protected async override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry,
         IErrorHandler errorHandler, int failureCount)
     {
         try

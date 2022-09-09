@@ -6,19 +6,11 @@ using System.Threading.Tasks;
 
 namespace RockLib.Logging;
 
-#if !NET451
-using static Task;
-#endif
-
 /// <summary>
 /// An implementation of <see cref="ILogProvider"/> that writes log entries to debug.
 /// </summary>
 public class DebugLogProvider : ILogProvider
 {
-#if NET451
-    private static readonly Task CompletedTask = Task.FromResult(0);
-#endif
-
     /// <summary>
     /// The default template.
     /// </summary>
@@ -51,9 +43,14 @@ public class DebugLogProvider : ILogProvider
         ILogFormatter formatter, LogLevel level = default, TimeSpan? timeout = null)
     {
         if (!Enum.IsDefined(typeof(LogLevel), level))
+        {
             throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
+        }
+
         if (timeout.HasValue && timeout.Value < TimeSpan.Zero)
+        {
             throw new ArgumentException("Timeout cannot be negative.", nameof(timeout));
+        }
 
         Formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
         Level = level;
@@ -85,7 +82,7 @@ public class DebugLogProvider : ILogProvider
     {
         var formattedLog = Formatter.Format(logEntry);
         WriteToDebug(formattedLog);
-        return CompletedTask;
+        return Task.CompletedTask;
     }
 
     protected virtual void WriteToDebug(string formattedLog) => Debug.WriteLine(formattedLog);

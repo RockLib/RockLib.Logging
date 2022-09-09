@@ -45,7 +45,7 @@ public sealed class Logger : ILogger
     /// </summary>
     public const string DefaultName = "";
 
-    private static readonly Lazy<BackgroundLogProcessor> _backgroundLogProcessor = new Lazy<BackgroundLogProcessor>(GetBackgroundLogProcessor);
+    private static readonly Lazy<BackgroundLogProcessor> _backgroundLogProcessor = new(GetBackgroundLogProcessor);
 
     private static readonly IReadOnlyCollection<ILogProvider> _emptyLogProviders = new ILogProvider[0];
     private static readonly IReadOnlyCollection<IContextProvider> _emptyContextProviders = new IContextProvider[0];

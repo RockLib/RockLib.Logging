@@ -12,7 +12,7 @@ namespace RockLib.Logging;
 public class FileLogProvider : ILogProvider
 {
     // TODO: Use case insensitive comparer for Windows, case sensitive comparer for Mac/Linux.
-    private static readonly ConcurrentDictionary<string, SemaphoreSlim> _semaphoreCache = new ConcurrentDictionary<string, SemaphoreSlim>();
+    private static readonly ConcurrentDictionary<string, SemaphoreSlim> _semaphoreCache = new();
 
     /// <summary>
     /// The default template.

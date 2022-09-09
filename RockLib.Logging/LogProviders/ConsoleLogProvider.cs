@@ -62,9 +62,14 @@ public class ConsoleLogProvider : ILogProvider
         ILogFormatter formatter, LogLevel level = default, Output output = default, TimeSpan? timeout = null)
     {
         if (!Enum.IsDefined(typeof(LogLevel), level))
+        {
             throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
+        }
+
         if (timeout.HasValue && timeout.Value < TimeSpan.Zero)
+        {
             throw new ArgumentException("Timeout cannot be negative.", nameof(timeout));
+        }
 
         Formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
         Level = level;

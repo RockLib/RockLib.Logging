@@ -25,7 +25,7 @@ public static class LoggerFactory
     public const string AlternateSectionName = "RockLib_Logging";
 
     private static readonly Semimutable<IConfiguration> _configuration =
-        new Semimutable<IConfiguration>(() => Config.Root.GetCompositeSection(AlternateSectionName, SectionName));
+        new(() => Config.Root.GetCompositeSection(AlternateSectionName, SectionName));
 
     /// <summary>
     /// Sets the instance of <see cref="IConfiguration"/> that defines the loggers that can be created

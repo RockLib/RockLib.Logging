@@ -15,7 +15,7 @@ namespace RockLib.Logging;
 /// </summary>
 public static class LoggerFactoryExtensions
 {
-    private static readonly ConditionalWeakTable<IConfiguration, ConcurrentDictionary<string, ILogger>> _cache = new ConditionalWeakTable<IConfiguration, ConcurrentDictionary<string, ILogger>>();
+    private static readonly ConditionalWeakTable<IConfiguration, ConcurrentDictionary<string, ILogger>> _cache = new();
 
     /// <summary>
     /// Gets a cached instance of <see cref="ILogger"/> with a name matching the <paramref name="name"/>

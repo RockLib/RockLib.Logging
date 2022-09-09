@@ -28,14 +28,19 @@ public static class LoggingExtensions
     public static void Debug(
         this ILogger logger,
         string message,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Debug, message, null, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Debug, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the debug level.
@@ -57,14 +62,19 @@ public static class LoggingExtensions
     public static void Debug(this ILogger logger,
         string message,
         Exception exception,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Debug, message, exception, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Debug, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the info level.
@@ -85,14 +95,19 @@ public static class LoggingExtensions
     public static void Info(
         this ILogger logger,
         string message,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Info, message, null, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Info, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the info level.
@@ -114,14 +129,19 @@ public static class LoggingExtensions
     public static void Info(this ILogger logger,
         string message,
         Exception exception,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Info, message, exception, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Info, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the warn level.
@@ -142,14 +162,19 @@ public static class LoggingExtensions
     public static void Warn(
         this ILogger logger,
         string message,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Warn, message, null, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Warn, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the warn level.
@@ -171,14 +196,19 @@ public static class LoggingExtensions
     public static void Warn(this ILogger logger,
         string message,
         Exception exception,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Warn, message, exception, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Warn, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the error level.
@@ -199,14 +229,19 @@ public static class LoggingExtensions
     public static void Error(
         this ILogger logger,
         string message,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Error, message, null, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Error, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the error level.
@@ -228,14 +263,19 @@ public static class LoggingExtensions
     public static void Error(this ILogger logger,
         string message,
         Exception exception,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Error, message, exception, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Error, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the fatal level.
@@ -256,14 +296,19 @@ public static class LoggingExtensions
     public static void Fatal(
         this ILogger logger,
         string message,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Fatal, message, null, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Fatal, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the fatal level.
@@ -285,14 +330,19 @@ public static class LoggingExtensions
     public static void Fatal(this ILogger logger,
         string message,
         Exception exception,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Fatal, message, exception, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Fatal, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the audit level.
@@ -313,14 +363,19 @@ public static class LoggingExtensions
     public static void Audit(
         this ILogger logger,
         string message,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) => logger.Log(LogLevel.Audit, message, null, extendedProperties, correlationId, businessProcessId,
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        logger.Log(LogLevel.Audit, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the audit level.
@@ -342,26 +397,30 @@ public static class LoggingExtensions
     public static void Audit(this ILogger logger,
         string message,
         Exception exception,
-        object extendedProperties = null,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        object? extendedProperties = null,
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
         logger.Log(LogLevel.Audit, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     private static void Log(this ILogger logger,
         LogLevel level,
         string message,
-        Exception exception,
-        object extendedProperties,
-        string correlationId,
-        string businessProcessId,
-        string businessActivityId,
-        string callerMemberName,
-        string callerFilePath,
+        Exception? exception,
+        object? extendedProperties,
+        string? correlationId,
+        string? businessProcessId,
+        string? businessActivityId,
+        string? callerMemberName,
+        string? callerFilePath,
         int callerLineNumber)
     {
         if (logger.IsDisabled || level < logger.Level)

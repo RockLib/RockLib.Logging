@@ -16,11 +16,11 @@ public static class SanitizeEngine
 {
     private static readonly Type _runtimeTypeType = typeof(SanitizeEngine).GetType();
 
-    private static readonly ConcurrentDictionary<Type, Func<object, object>> _sanitizeFunctions = new ConcurrentDictionary<Type, Func<object, object>>();
+    private static readonly ConcurrentDictionary<Type, Func<object, object>> _sanitizeFunctions = new();
 
-    internal static readonly HashSet<Type> SafeTypes = new HashSet<Type>();
-    internal static readonly HashSet<PropertyInfo> SafeProperties = new HashSet<PropertyInfo>();
-    internal static readonly HashSet<PropertyInfo> NotSafeProperties = new HashSet<PropertyInfo>();
+    internal static readonly HashSet<Type> SafeTypes = new();
+    internal static readonly HashSet<PropertyInfo> SafeProperties = new();
+    internal static readonly HashSet<PropertyInfo> NotSafeProperties = new();
 
     /// <summary>
     /// Ensures that any properties not decorated with the [SafeToLog] attribute are excluded

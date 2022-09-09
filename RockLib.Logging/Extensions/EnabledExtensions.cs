@@ -1,4 +1,6 @@
-﻿namespace RockLib.Logging;
+﻿using System;
+
+namespace RockLib.Logging;
 
 /// <summary>
 /// Defines extension method that determine if a given logging level is enabled.
@@ -53,6 +55,11 @@ public static class EnabledExtensions
     /// <param name="logger">The logger to check.</param>
     /// <param name="level">The level to check.</param>
     /// <returns>True if logging is enabled for the given level, otherwise false.</returns>
-    public static bool IsEnabled(this ILogger logger, LogLevel level) =>
-        !logger.IsDisabled && level >= logger.Level;
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="logger"/> is <c>null</c></exception>
+    public static bool IsEnabled(this ILogger logger, LogLevel level)
+    {
+        if(logger is null) { throw new ArgumentNullException(nameof(logger)); }
+
+        return !logger.IsDisabled && level >= logger.Level;
+    }
 }

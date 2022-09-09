@@ -20,10 +20,9 @@ public sealed class LogEntry
 
     private const BindingFlags PublicInstance = BindingFlags.Public | BindingFlags.Instance;
 
-    private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setExtendedPropertyActionsCache = new ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>>();
-    private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setSafeExtendedPropertyActionsCache = new ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>>();
-
-    private static readonly ConcurrentDictionary<Type, (Func<object, string> getKey, Func<object, object> getValue)> _stringDictionaryItemAccessors = new ConcurrentDictionary<Type, (Func<object, string>, Func<object, object>)>();
+    private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setExtendedPropertyActionsCache = new();
+    private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setSafeExtendedPropertyActionsCache = new();
+    private static readonly ConcurrentDictionary<Type, (Func<object, string> getKey, Func<object, object> getValue)> _stringDictionaryItemAccessors = new();
 
     private LogLevel _level;
 
@@ -46,7 +45,7 @@ public sealed class LogEntry
     /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
     /// its items are added to <see cref="ExtendedProperties"/>.
     /// </param>
-    public LogEntry(string message, LogLevel level = DefaultLevel, object extendedProperties = null)
+    public LogEntry(string? message, LogLevel level = DefaultLevel, object? extendedProperties = null)
         : this(message, null, level, extendedProperties)
     {
     }
@@ -62,7 +61,7 @@ public sealed class LogEntry
     /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
     /// its items are added to <see cref="ExtendedProperties"/>.
     /// </param>
-    public LogEntry(string message, Exception exception, LogLevel level = DefaultLevel, object extendedProperties = null)
+    public LogEntry(string? message, Exception? exception, LogLevel level = DefaultLevel, object? extendedProperties = null)
     {
         Level = level;
         Message = message;
@@ -112,17 +111,17 @@ public sealed class LogEntry
     /// <summary>
     /// Gets or sets the ID used to corralate a transaction across many service calls for this log entry.
     /// </summary>
-    public string CorrelationId { get; set; }
+    public string? CorrelationId { get; set; }
 
     /// <summary>
     /// Gets or sets the business process ID.
     /// </summary>
-    public string BusinessProcessId { get; set; }
+    public string? BusinessProcessId { get; set; }
 
     /// <summary>
     /// Gets or sets the business activity ID.
     /// </summary>
-    public string BusinessActivityId { get; set; }
+    public string? BusinessActivityId { get; set; }
 
     /// <summary>
     /// Gets or sets the IP addess of the machine where the current logging operation is taking place.
@@ -139,7 +138,7 @@ public sealed class LogEntry
     /// <summary>
     /// Gets or sets the message of the log entry.
     /// </summary>
-    public string Message { get; set; }
+    public string? Message { get; set; }
 
     /// <summary>
     /// Gets or sets the caller information of the log entry.
