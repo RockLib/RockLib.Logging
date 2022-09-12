@@ -9,7 +9,7 @@ namespace RockLib.Logging.SafeLogging;
 /// marked with the <see cref="SafeToLogAttribute"/>.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property)]
-public class NotSafeToLogAttribute : Attribute
+public sealed class NotSafeToLogAttribute : Attribute
 {
     /// <summary>
     /// Decorate the specified property with the <see cref="NotSafeToLogAttribute"/>.
@@ -18,7 +18,9 @@ public class NotSafeToLogAttribute : Attribute
     public static void Decorate(PropertyInfo property)
     {
         if (property is null)
+        {
             throw new ArgumentNullException(nameof(property));
+        }
 
         SanitizeEngine.NotSafeProperties.Add(property);
     }
@@ -31,7 +33,9 @@ public class NotSafeToLogAttribute : Attribute
     public static void Decorate<T>(Expression<Func<T, object>> expression)
     {
         if (expression is null)
+        {
             throw new ArgumentNullException(nameof(expression));
+        }
 
         if (expression.Body is MemberExpression memberExpression
             && memberExpression.Expression == expression.Parameters[0]

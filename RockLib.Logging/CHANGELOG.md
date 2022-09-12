@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - As the package now uses nullable reference types, some method parameters now specify if they can accept nullable values.
 - `EnabledExtensions.IsEnabled()` will now throw `ArgumentNullException` if the given `logger` is `null`.
 - `ErrorHandlerExtensions.SetErrorHandler()` will now throw `ArgumentNullException` if the given `logger` is `null`.
+- Attributes have been `sealed`
+  - `NotSafeToLogAttribute`
+  - `SafeToLogAttribute`
 
 ## 3.1.0 - 2022-07-01
 

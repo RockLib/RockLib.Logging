@@ -5,7 +5,9 @@ namespace RockLib.Logging;
 /// <summary>
 /// Defines an error to be handled by the <see cref="IErrorHandler"/> interface.
 /// </summary>
+#pragma warning disable CA1716 // Identifiers should not match keywords
 public sealed class Error
+#pragma warning restore CA1716 // Identifiers should not match keywords
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Error"/> class.
@@ -22,7 +24,9 @@ public sealed class Error
     public Error(string message, Exception exception, ILogProvider logProvider, LogEntry logEntry, int failureCount)
     {
         if (failureCount < 0)
+        {
             throw new ArgumentException("Cannot be less than zero.", nameof(failureCount));
+        }
 
         Message = message ?? throw new ArgumentNullException(nameof(message));
         Exception = exception;

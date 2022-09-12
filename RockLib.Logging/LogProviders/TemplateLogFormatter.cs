@@ -72,9 +72,7 @@ public class TemplateLogFormatter : ILogFormatter
         if (template is null) throw new ArgumentNullException(nameof(template));
         Template = WebUtility.HtmlDecode(template);
 
-        _isHtmlEncoded =
-            template is not null
-            && _containsHtmlTagsRegex.IsMatch(template);
+        _isHtmlEncoded = _containsHtmlTagsRegex.IsMatch(template);
     }
 
     /// <summary>

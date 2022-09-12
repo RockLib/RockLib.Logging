@@ -30,14 +30,17 @@ public static class SafeLoggingExtensions
         this ILogger logger,
         string message,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Debug, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the debug level. The value of each extended property is sanitized using the <see
@@ -59,16 +62,19 @@ public static class SafeLoggingExtensions
     /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
     public static void DebugSanitized(this ILogger logger,
         string message,
-        Exception exception,
+        Exception? exception,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Debug, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the info level. The value of each extended property is sanitized using the <see
@@ -91,14 +97,17 @@ public static class SafeLoggingExtensions
         this ILogger logger,
         string message,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Info, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the info level. The value of each extended property is sanitized using the <see
@@ -120,16 +129,19 @@ public static class SafeLoggingExtensions
     /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
     public static void InfoSanitized(this ILogger logger,
         string message,
-        Exception exception,
+        Exception? exception,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Info, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the warn level. The value of each extended property is sanitized using the <see
@@ -152,14 +164,17 @@ public static class SafeLoggingExtensions
         this ILogger logger,
         string message,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Warn, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the warn level. The value of each extended property is sanitized using the <see
@@ -181,16 +196,19 @@ public static class SafeLoggingExtensions
     /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
     public static void WarnSanitized(this ILogger logger,
         string message,
-        Exception exception,
+        Exception? exception,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Warn, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the error level. The value of each extended property is sanitized using the <see
@@ -213,14 +231,17 @@ public static class SafeLoggingExtensions
         this ILogger logger,
         string message,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Error, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the error level. The value of each extended property is sanitized using the <see
@@ -242,16 +263,19 @@ public static class SafeLoggingExtensions
     /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
     public static void ErrorSanitized(this ILogger logger,
         string message,
-        Exception exception,
+        Exception? exception,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Error, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the fatal level. The value of each extended property is sanitized using the <see
@@ -274,14 +298,17 @@ public static class SafeLoggingExtensions
         this ILogger logger,
         string message,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Fatal, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the fatal level. The value of each extended property is sanitized using the <see
@@ -303,16 +330,19 @@ public static class SafeLoggingExtensions
     /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
     public static void FatalSanitized(this ILogger logger,
         string message,
-        Exception exception,
+        Exception? exception,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Fatal, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the audit level. The value of each extended property is sanitized using the <see
@@ -335,14 +365,17 @@ public static class SafeLoggingExtensions
         this ILogger logger,
         string message,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Audit, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     /// <summary>
     /// Logs at the audit level. The value of each extended property is sanitized using the <see
@@ -364,31 +397,36 @@ public static class SafeLoggingExtensions
     /// <param name="callerLineNumber">The line number in the source file at which this method is called.</param>
     public static void AuditSanitized(this ILogger logger,
         string message,
-        Exception exception,
+        Exception? exception,
         object extendedProperties,
-        string correlationId = null,
-        string businessProcessId = null,
-        string businessActivityId = null,
-        [CallerMemberName] string callerMemberName = null,
-        [CallerFilePath] string callerFilePath = null,
-        [CallerLineNumber] int callerLineNumber = 0) =>
+        string? correlationId = null,
+        string? businessProcessId = null,
+        string? businessActivityId = null,
+        [CallerMemberName] string? callerMemberName = null,
+        [CallerFilePath] string? callerFilePath = null,
+        [CallerLineNumber] int callerLineNumber = 0)
+    {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         logger.LogSanitized(LogLevel.Audit, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
+    }
 
     private static void LogSanitized(this ILogger logger,
         LogLevel level,
         string message,
-        Exception exception,
+        Exception? exception,
         object extendedProperties,
-        string correlationId,
-        string businessProcessId,
-        string businessActivityId,
-        string callerMemberName,
-        string callerFilePath,
+        string? correlationId,
+        string? businessProcessId,
+        string? businessActivityId,
+        string? callerMemberName,
+        string? callerFilePath,
         int callerLineNumber)
     {
         if (logger.IsDisabled || level < logger.Level)
+        {
             return;
+        }
 
         var logEntry = new LogEntry(message, exception, level)
         {

@@ -6,17 +6,17 @@ namespace RockLib.Logging;
 
 internal static class Cached
 {
-    private static readonly Lazy<string> _ipAddress = new(GetMachineIpAddress);
+    private static readonly Lazy<string?> _ipAddress = new(GetMachineIpAddress);
     private static readonly Lazy<string> _machineName = new(() => Environment.MachineName);
     private static readonly Lazy<string> _userName = new(() => Environment.UserName);
 
-    public static string IpAddress => _ipAddress.Value;
+    public static string? IpAddress => _ipAddress.Value;
 
     public static string MachineName => _machineName.Value;
 
     public static string UserName => _userName.Value;
 
-    private static string GetMachineIpAddress()
+    private static string? GetMachineIpAddress()
     {
         try
         {
@@ -39,15 +39,8 @@ internal static class Cached
     private static bool IsValidNetworkInterface(NetworkInterface networkInterface) => networkInterface.OperationalStatus == OperationalStatus.Up
             && (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet || networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211);
 
-    private static bool IsDuplicateAddressDetectionStatePreferred(UnicastIPAddressInformation addressInfo)
-    {
-        try { return addressInfo.DuplicateAddressDetectionState == DuplicateAddressDetectionState.Preferred; }
-        catch { return true; }
-    }
+    private static bool IsDuplicateAddressDetectionStatePreferred(UnicastIPAddressInformation addressInfo) => 
+        addressInfo.DuplicateAddressDetectionState == DuplicateAddressDetectionState.Preferred;
 
-    private static bool IsDnsEligible(UnicastIPAddressInformation addressInfo)
-    {
-        try { return addressInfo.IsDnsEligible; }
-        catch { return true; }
-    }
+    private static bool IsDnsEligible(UnicastIPAddressInformation addressInfo) => addressInfo.IsDnsEligible;
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -37,10 +38,13 @@ public static class SanitizeEngine
     /// Either a <c>Dictionary&lt;string, object&gt;</c> or the <paramref name="value"/>
     /// parameter itself, depending on whether the object is a complex type.
     /// </returns>
-    public static object Sanitize(object value)
+    public static object? Sanitize(object? value)
     {
         if (value is null)
+        {
             return null;
+        }
+
         var sanitize = _sanitizeFunctions.GetOrAdd(value.GetType(), GetSanitizeFunction);
         return sanitize(value);
     }
@@ -49,32 +53,40 @@ public static class SanitizeEngine
     /// A function that determines whether a given type is safe to log.
     /// <para>Set this value at the "beginning" of your application.</para>
     /// </summary>
-    public static Func<Type, bool> IsTypeSafeToLog { get; set; }
+    public static Func<Type, bool>? IsTypeSafeToLog { get; set; }
 
     private static Func<object, object> GetSanitizeFunction(Type runtimeType)
     {
-        if (IsSafeToLogType(runtimeType) || IsValueType(runtimeType))
+        if (IsSafeToLogType(runtimeType) || IsBasicType(runtimeType))
+        {
             return SanitizeNothing;
-
-        if (IsStringDictionary(runtimeType))
+        }
+        else if (IsStringDictionary(runtimeType))
+        {
             return SanitizeStringDictionary;
-
-        if (IsCollection(runtimeType))
+        }
+        else if (IsCollection(runtimeType))
+        {
             return SanitizeCollection;
-
-        if (IsDictionaryEntry(runtimeType))
+        }
+        else if (IsDictionaryEntry(runtimeType))
+        {
             return SanitizeDictionaryEntry;
-
-        if (IsKeyValuePair(runtimeType, out var keyType, out var valueType))
+        }
+        else if (IsKeyValuePair(runtimeType, out var keyType, out var valueType))
+        {
             return GetSanitizeKeyValuePairFunction(keyType, valueType);
-
-        return GetSanitizeObjectFunction(runtimeType);
+        }
+        else
+        {
+            return GetSanitizeObjectFunction(runtimeType);
+        }
     }
 
     private static bool IsSafeToLogType(Type runtimeType) =>
         IsTypeSafeToLog?.Invoke(runtimeType) == true;
 
-    private static bool IsValueType(Type runtimeType) =>
+    private static bool IsBasicType(Type runtimeType) =>
         runtimeType.IsPrimitive
         || runtimeType.IsEnum
         || runtimeType == typeof(string)
@@ -84,13 +96,13 @@ public static class SanitizeEngine
         || runtimeType == typeof(DateTimeOffset)
         || runtimeType == typeof(Guid)
         || runtimeType == typeof(Uri)
-        | typeof(Encoding).IsAssignableFrom(runtimeType)
+        || typeof(Encoding).IsAssignableFrom(runtimeType)
         || runtimeType == _runtimeTypeType;
 
     private static bool IsCollection(Type runtimeType) =>
         typeof(IEnumerable).IsAssignableFrom(runtimeType);
 
-    private static bool IsKeyValuePair(Type runtimeType, out Type keyType, out Type valueType)
+    private static bool IsKeyValuePair(Type runtimeType, out Type? keyType, out Type? valueType)
     {
         if (runtimeType.IsValueType
             && runtimeType.IsGenericType
@@ -129,7 +141,9 @@ public static class SanitizeEngine
     {
         var collection = new ArrayList();
         foreach (var item in (IEnumerable)value)
+        {
             collection.Add(Sanitize(item));
+        }
         return collection;
     }
 
@@ -142,7 +156,7 @@ public static class SanitizeEngine
     private static object SanitizeKeyValuePair<TKey, TValue>(object value)
     {
         var item = (KeyValuePair<TKey, TValue>)value;
-        return new KeyValuePair<TKey, object>(item.Key, Sanitize(item.Value));
+        return new KeyValuePair<TKey, object>(item.Key, Sanitize(item.Value)!);
     }
 
     private static object SanitizeStringDictionary(object value) =>
@@ -150,7 +164,7 @@ public static class SanitizeEngine
             .Cast<KeyValuePair<string, object>>()
             .ToDictionary(item => item.Key, item => item.Value);
 
-    private static Func<object, object> GetSanitizeKeyValuePairFunction(Type keyType, Type valueType)
+    private static Func<object, object> GetSanitizeKeyValuePairFunction(Type? keyType, Type? valueType)
     {
         var sanitizeKeyValuePairMethod = typeof(SanitizeEngine)
             .GetMethod(nameof(GetSanitizeKeyValuePairFunction), BindingFlags.NonPublic | BindingFlags.Static, null, Type.EmptyTypes, null)
@@ -166,7 +180,9 @@ public static class SanitizeEngine
         var allProperties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
         if (allProperties.Length == 0)
+        {
             return SanitizeNothing;
+        }
 
         var safeProperties = GetSafeProperties(type, allProperties)
             .Select(property => new { property.Name, GetValue = property.CreateGetter() })
@@ -186,7 +202,9 @@ public static class SanitizeEngine
         {
             var dictionary = new Dictionary<string, object>();
             foreach (var property in safeProperties)
-                dictionary.Add(property.Name, Sanitize(property.GetValue(value)));
+            {
+                dictionary.Add(property.Name, Sanitize(property.GetValue(value))!);
+            }
             return dictionary;
         }
     }
@@ -198,9 +216,11 @@ public static class SanitizeEngine
     {
         if (Attribute.IsDefined(type, typeof(SafeToLogAttribute), inherit: false)
                 || SafeTypes.Contains(type))
+        {
             return allProperties.Where(property =>
                 !Attribute.IsDefined(property, typeof(NotSafeToLogAttribute), inherit: false)
                     && !NotSafeProperties.Contains(property));
+        }
 
         return allProperties.Where(property =>
             Attribute.IsDefined(property, typeof(SafeToLogAttribute), inherit: false)

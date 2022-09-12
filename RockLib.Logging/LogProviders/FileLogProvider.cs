@@ -54,9 +54,14 @@ public class FileLogProvider : ILogProvider
         TimeSpan? timeout = null)
     {
         if (!Enum.IsDefined(typeof(LogLevel), level))
+        {
             throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
+        }
+
         if (timeout.HasValue && timeout.Value < TimeSpan.Zero)
+        {
             throw new ArgumentException("Timeout cannot be negative.", nameof(timeout));
+        }
 
         File = file ?? throw new ArgumentNullException(nameof(file));
         Formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
@@ -123,11 +128,9 @@ public class FileLogProvider : ILogProvider
     /// <param name="formattedLogEntry">The formatted log entry.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe.</param>
     /// <returns>A task that represents the asynchronous write operation.</returns>
-    protected virtual async Task SynchronizedWriteAsync(string formattedLogEntry, CancellationToken cancellationToken)
+    protected async virtual Task SynchronizedWriteAsync(string formattedLogEntry, CancellationToken cancellationToken)
     {
-        using (var writer = new StreamWriter(File, true))
-        {
-            await writer.WriteLineAsync(formattedLogEntry).ConfigureAwait(false);
-        }
+        using var writer = new StreamWriter(File, true);
+        await writer.WriteLineAsync(formattedLogEntry).ConfigureAwait(false);
     }
 }

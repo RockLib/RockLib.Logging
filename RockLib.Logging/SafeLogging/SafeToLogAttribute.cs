@@ -10,7 +10,7 @@ namespace RockLib.Logging.SafeLogging;
 /// that should not be logged.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-public class SafeToLogAttribute : Attribute
+public sealed class SafeToLogAttribute : Attribute
 {
     /// <summary>
     /// Decorate the specified type with the <see cref="SafeToLogAttribute"/>.
@@ -19,7 +19,9 @@ public class SafeToLogAttribute : Attribute
     public static void Decorate(Type type)
     {
         if (type is null)
+        {
             throw new ArgumentNullException(nameof(type));
+        }
 
         SanitizeEngine.SafeTypes.Add(type);
     }
@@ -37,7 +39,9 @@ public class SafeToLogAttribute : Attribute
     public static void Decorate(PropertyInfo property)
     {
         if (property is null)
+        {
             throw new ArgumentNullException(nameof(property));
+        }
 
         SanitizeEngine.SafeProperties.Add(property);
     }
@@ -50,7 +54,9 @@ public class SafeToLogAttribute : Attribute
     public static void Decorate<T>(Expression<Func<T, object>> expression)
     {
         if (expression is null)
+        {
             throw new ArgumentNullException(nameof(expression));
+        }
 
         if (expression.Body is MemberExpression memberExpression
             && memberExpression.Expression == expression.Parameters[0]

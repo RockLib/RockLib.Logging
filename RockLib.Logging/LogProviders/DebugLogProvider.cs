@@ -1,5 +1,4 @@
-﻿#define DEBUG
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,5 +84,9 @@ public class DebugLogProvider : ILogProvider
         return Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Writes to the <see cref="Debug"/> class
+    /// </summary>
+    /// <param name="formattedLog">The formatted log message.</param>
     protected virtual void WriteToDebug(string formattedLog) => Debug.WriteLine(formattedLog);
 }

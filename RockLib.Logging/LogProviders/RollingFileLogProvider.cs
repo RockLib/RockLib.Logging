@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -129,13 +130,21 @@ public class RollingFileLogProvider : FileLogProvider
         : base(file, formatter, level, timeout)
     {
         if (maxFileSizeKilobytes < 0)
+        {
             throw new ArgumentException("MaxFileSizeKilobytes cannot be negative.", nameof(maxFileSizeKilobytes));
+        }
         if (maxFileSizeKilobytes > (int.MaxValue / 1024))
+        {
             throw new ArgumentException($"MaxFileSizeKilobytes cannot be greater than {int.MaxValue / 1024}.", nameof(maxFileSizeKilobytes));
+        }
         if (maxArchiveCount < 0)
+        {
             throw new ArgumentException("MaxArchiveCount cannot be negative.", nameof(maxArchiveCount));
+        }
         if (!Enum.IsDefined(typeof(RolloverPeriod), rolloverPeriod))
+        {
             throw new ArgumentException($"Rollover period is not defined: {rolloverPeriod}.", nameof(rolloverPeriod));
+        }
 
         _getCurrentTime = getCurrentTime ?? throw new ArgumentNullException(nameof(getCurrentTime));
         _getFileCreationTime = getFileCreationTime ?? throw new ArgumentNullException(nameof(getFileCreationTime));
@@ -264,7 +273,7 @@ public class RollingFileLogProvider : FileLogProvider
             from file in Directory.GetFiles(directory, searchPattern)
             let archiveNumberString = GetArchiveNumberString(file)
             where IsNumber(archiveNumberString)
-            select new ArchiveFile { File = file, ArchiveNumber = int.Parse(archiveNumberString) };
+            select new ArchiveFile { File = file, ArchiveNumber = int.Parse(archiveNumberString, CultureInfo.CurrentCulture) };
     }
 
     private struct ArchiveFile
