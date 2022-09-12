@@ -25,7 +25,7 @@ public static class LoggerFactory
     public const string AlternateSectionName = "RockLib_Logging";
 
     private static readonly Semimutable<IConfiguration> _configuration =
-        new(() => Config.Root.GetCompositeSection(AlternateSectionName, SectionName));
+        new(() => Config.Root!.GetCompositeSection(AlternateSectionName, SectionName));
 
     /// <summary>
     /// Sets the instance of <see cref="IConfiguration"/> that defines the loggers that can be created
@@ -46,7 +46,7 @@ public static class LoggerFactory
     /// Only the extension methods in this class that do not have an <see cref="IConfiguration"/> parameter
     /// use this property.
     /// </remarks>
-    public static IConfiguration Configuration => _configuration.Value;
+    public static IConfiguration Configuration => _configuration.Value!;
 
     /// <summary>
     /// Gets a cached instance of <see cref="ILogger"/> with a name matching the <paramref name="name"/>
@@ -77,8 +77,8 @@ public static class LoggerFactory
     /// the value of the <see cref="Configuration"/> property.
     /// </exception>
     public static ILogger GetCached(string name = Logger.DefaultName,
-        DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
-        IResolver resolver = null, bool reloadOnConfigChange = true) =>
+        DefaultTypes? defaultTypes = null, ValueConverters? valueConverters = null,
+        IResolver? resolver = null, bool reloadOnConfigChange = true) =>
         Configuration.GetCachedLogger(name, defaultTypes, valueConverters, resolver, reloadOnConfigChange);
 
     /// <summary>
@@ -110,7 +110,7 @@ public static class LoggerFactory
     /// the value of the <see cref="Configuration"/> property.
     /// </exception>
     public static ILogger Create(string name = Logger.DefaultName,
-        DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
-        IResolver resolver = null, bool reloadOnConfigChange = true) =>
+        DefaultTypes? defaultTypes = null, ValueConverters? valueConverters = null,
+        IResolver? resolver = null, bool reloadOnConfigChange = true) =>
         Configuration.CreateLogger(name, defaultTypes, valueConverters, resolver, reloadOnConfigChange);
 }

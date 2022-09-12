@@ -41,7 +41,7 @@ public interface ILogger : IDisposable
     /// <summary>
     /// Gets or sets the object that handles errors that occur during log processing.
     /// </summary>
-    IErrorHandler ErrorHandler { get; set; }
+    IErrorHandler? ErrorHandler { get; set; }
 
     /// <summary>
     /// Logs the specified log entry.

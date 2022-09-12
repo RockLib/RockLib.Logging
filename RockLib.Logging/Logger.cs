@@ -47,15 +47,15 @@ public sealed class Logger : ILogger
 
     private static readonly Lazy<BackgroundLogProcessor> _backgroundLogProcessor = new(GetBackgroundLogProcessor);
 
-    private static readonly IReadOnlyCollection<ILogProvider> _emptyLogProviders = new ILogProvider[0];
-    private static readonly IReadOnlyCollection<IContextProvider> _emptyContextProviders = new IContextProvider[0];
+    private static readonly IReadOnlyCollection<ILogProvider> _emptyLogProviders = Array.Empty<ILogProvider>();
+    private static readonly IReadOnlyCollection<IContextProvider> _emptyContextProviders = Array.Empty<IContextProvider>();
 
     /// <summary>
     /// The name of the <see cref="TraceSource"/> used by this class for trace logging.
     /// </summary>
     public const string TraceSourceName = "rocklib.logging";
 
-    private readonly ILogLevelResolver _logLevelResolver;
+    private readonly ILogLevelResolver? _logLevelResolver;
     private readonly bool _canProcessLogs;
     private LogLevel _level;
 
@@ -74,11 +74,11 @@ public sealed class Logger : ILogger
     public Logger(
         string name = DefaultName,
         LogLevel level = LogLevel.NotSet,
-        ILogLevelResolver logLevelResolver = null,
-        [AlternateName("providers")] IReadOnlyCollection<ILogProvider> logProviders = null,
+        ILogLevelResolver? logLevelResolver = null,
+        [AlternateName("providers")] IReadOnlyCollection<ILogProvider>? logProviders = null,
         bool isDisabled = false,
         ProcessingMode processingMode = ProcessingMode.Background,
-        IReadOnlyCollection<IContextProvider> contextProviders = null)
+        IReadOnlyCollection<IContextProvider>? contextProviders = null)
         : this(GetLogProcessor(processingMode), name, level, logLevelResolver, logProviders, isDisabled, contextProviders)
     {
     }
@@ -99,10 +99,10 @@ public sealed class Logger : ILogger
         ILogProcessor logProcessor,
         string name = DefaultName,
         LogLevel level = LogLevel.NotSet,
-        ILogLevelResolver logLevelResolver = null,
-        [AlternateName("providers")] IReadOnlyCollection<ILogProvider> logProviders = null,
+        ILogLevelResolver? logLevelResolver = null,
+        [AlternateName("providers")] IReadOnlyCollection<ILogProvider>? logProviders = null,
         bool isDisabled = false,
-        IReadOnlyCollection<IContextProvider> contextProviders = null)
+        IReadOnlyCollection<IContextProvider>? contextProviders = null)
     {
         if (!Enum.IsDefined(typeof(LogLevel), level))
             throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
@@ -130,13 +130,7 @@ public sealed class Logger : ILogger
     /// Log entries with a level lower than the value of this property are
     /// not logged by this logger.
     /// </remarks>
-    public LogLevel Level
-    {
-        get
-        {
-            return _logLevelResolver?.GetLogLevel() ?? _level;
-        }
-    }
+    public LogLevel Level => _logLevelResolver?.GetLogLevel() ?? _level;
 
     /// <summary>
     /// Gets the collection of <see cref="ILogProvider"/> objects used by this logger.
@@ -161,7 +155,7 @@ public sealed class Logger : ILogger
     /// <summary>
     /// Gets or sets the object that handles errors that occur during log processing.
     /// </summary>
-    public IErrorHandler ErrorHandler { get; set; }
+    public IErrorHandler? ErrorHandler { get; set; }
 
     /// <summary>
     /// Logs the specified log entry.
@@ -179,7 +173,9 @@ public sealed class Logger : ILogger
         if (logEntry is null) throw new ArgumentNullException(nameof(logEntry));
 
         if (LogProcessor.IsDisposed || !_canProcessLogs || logEntry.Level < Level)
+        {
             return;
+        }
 
         logEntry.CallerInfo = $"{callerFilePath}:{callerMemberName}({callerLineNumber})";
 
@@ -191,20 +187,14 @@ public sealed class Logger : ILogger
     /// </summary>
     public void Dispose() { }
 
-    private static ILogProcessor GetLogProcessor(ProcessingMode processingMode)
-    {
-        switch (processingMode)
+    private static ILogProcessor GetLogProcessor(ProcessingMode processingMode) => 
+        processingMode switch
         {
-            case ProcessingMode.Background:
-                return _backgroundLogProcessor.Value;
-            case ProcessingMode.Synchronous:
-                return new SynchronousLogProcessor();
-            case ProcessingMode.FireAndForget:
-                return new FireAndForgetLogProcessor();
-            default:
-                throw new ArgumentException($"Processing mode is not defined: {processingMode}.", nameof(processingMode));
-        }
-    }
+            ProcessingMode.Background => _backgroundLogProcessor.Value,
+            ProcessingMode.Synchronous => new SynchronousLogProcessor(),
+            ProcessingMode.FireAndForget => new FireAndForgetLogProcessor(),
+            _ => throw new ArgumentException($"Processing mode is not defined: {processingMode}.", nameof(processingMode)),
+        };
 
     private static BackgroundLogProcessor GetBackgroundLogProcessor()
     {

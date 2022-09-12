@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -22,7 +23,7 @@ public sealed class LogEntry
 
     private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setExtendedPropertyActionsCache = new();
     private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<Action<LogEntry, object>>> _setSafeExtendedPropertyActionsCache = new();
-    private static readonly ConcurrentDictionary<Type, (Func<object, string> getKey, Func<object, object> getValue)> _stringDictionaryItemAccessors = new();
+    private static readonly ConcurrentDictionary<Type, (Func<object, string>? getKey, Func<object, object>? getValue)> _stringDictionaryItemAccessors = new();
 
     private LogLevel _level;
 
@@ -30,10 +31,7 @@ public sealed class LogEntry
     /// Initializes a new instance of the <see cref="LogEntry"/> class with its <see cref="Level"/> set
     /// to <see cref="DefaultLevel"/>.
     /// </summary>
-    public LogEntry()
-    {
-        _level = DefaultLevel;
-    }
+    public LogEntry() => _level = DefaultLevel;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LogEntry"/> class.
@@ -83,13 +81,13 @@ public sealed class LogEntry
     /// <summary>
     /// Gets or sets the <see cref="System.Exception"/> associated with this log entry.
     /// </summary>
-    public Exception Exception { get; set; }
+    public Exception? Exception { get; set; }
 
     /// <summary>
     /// Gets the extended properties for this log entry. This property enables any kind of data to
     /// be attached to a logging operation by name.
     /// </summary>
-    public Dictionary<string, object> ExtendedProperties { get; } = new Dictionary<string, object>();
+    public Dictionary<string, object?> ExtendedProperties { get; } = new Dictionary<string, object?>();
 
     /// <summary>
     /// Gets or sets the logging level of the current logging operation.
@@ -100,9 +98,13 @@ public sealed class LogEntry
         set
         {
             if (!Enum.IsDefined(typeof(LogLevel), value))
+            {
                 throw new ArgumentException($"Log level is not defined: {value}.", nameof(value));
+            }
             if (value == LogLevel.NotSet)
+            {
                 throw new ArgumentException($"Cannot set the level of a log entry to {LogLevel.NotSet}.", nameof(value));
+            }
 
             _level = value;
         }
@@ -127,7 +129,7 @@ public sealed class LogEntry
     /// Gets or sets the IP addess of the machine where the current logging operation is taking place.
     /// This is set to a default value, detected at runtime.
     /// </summary>
-    public string MachineIpAddress { get; set; } = Cached.IpAddress;
+    public string? MachineIpAddress { get; set; } = Cached.IpAddress;
 
     /// <summary>
     /// Gets or sets the machine name where the current logging operation is taking place. This is
@@ -143,7 +145,7 @@ public sealed class LogEntry
     /// <summary>
     /// Gets or sets the caller information of the log entry.
     /// </summary>
-    public string CallerInfo { get; set; }
+    public string? CallerInfo { get; set; }
 
     /// <summary>
     /// Gets or sets the username of the user that is performing the current logging operation.
@@ -163,7 +165,7 @@ public sealed class LogEntry
     /// This method is different than calling <see cref="Exception.ToString()"/>. The formatting is
     /// much better, and it displays the names/values of all public properties.
     /// </remarks>
-    public string GetExceptionData() => Exception?.FormatToString();
+    public string? GetExceptionData() => Exception?.FormatToString();
 
     /// <summary>
     /// Sets values of the <see cref="ExtendedProperties"/> property according to the
@@ -174,22 +176,40 @@ public sealed class LogEntry
     /// If this object is an <see cref="IDictionary{TKey, TValue}"/> with a string key, then each of
     /// its items are added to <see cref="ExtendedProperties"/>.
     /// </param>
-    public void SetExtendedProperties(object extendedProperties)
+    public void SetExtendedProperties(object? extendedProperties)
     {
         if (extendedProperties is null)
+        {
             return;
+        }
         if (extendedProperties is IEnumerable<KeyValuePair<string, object>> stringDictionary)
+        {
             foreach (var item in stringDictionary)
+            {
                 ExtendedProperties[item.Key] = item.Value;
+            }
+        }
         else if (TryGetStringDictionaryItemAccessors(extendedProperties, out var getKey, out var getValue))
+        {
             foreach (var item in (IEnumerable)extendedProperties)
+            {
                 ExtendedProperties[getKey(item)] = getValue(item);
+            }
+        }
         else if (extendedProperties is IDictionary dictionary)
+        {
             foreach (var key in dictionary.Keys.OfType<string>())
+            {
                 ExtendedProperties[key] = dictionary[key];
+            }
+        }
         else
+        {
             foreach (var setExtendedProperty in GetSetExtendedPropertyActions(extendedProperties.GetType()))
+            {
                 setExtendedProperty(this, extendedProperties);
+            }
+        }
     }
 
     /// <summary>
@@ -203,22 +223,41 @@ public sealed class LogEntry
     /// its items are added to <see cref="ExtendedProperties"/>.
     /// </param>
     /// <returns>This log entry.</returns>
-    public LogEntry SetSanitizedExtendedProperties(object extendedProperties)
+    public LogEntry SetSanitizedExtendedProperties(object? extendedProperties)
     {
         if (extendedProperties is null)
+        {
             return this;
+        }
         else if (extendedProperties is IEnumerable<KeyValuePair<string, object>> stringDictionary)
+        {
             foreach (var item in stringDictionary)
+            {
                 ExtendedProperties[item.Key] = SanitizeEngine.Sanitize(item.Value);
+            }
+        }
         else if (TryGetStringDictionaryItemAccessors(extendedProperties, out var getKey, out var getValue))
+        {
             foreach (var item in (IEnumerable)extendedProperties)
+            {
                 ExtendedProperties[getKey(item)] = SanitizeEngine.Sanitize(getValue(item));
+            }
+        }
         else if (extendedProperties is IDictionary dictionary)
+        {
             foreach (var key in dictionary.Keys.OfType<string>())
+            {
                 ExtendedProperties[key] = SanitizeEngine.Sanitize(dictionary[key]);
+            }
+        }
         else
+        {
             foreach (var setSafeExtendedProperty in GetSetSafeExtendedPropertyActions(extendedProperties.GetType()))
+            {
                 setSafeExtendedProperty(this, extendedProperties);
+            }
+        }
+
         return this;
     }
 
@@ -241,35 +280,40 @@ public sealed class LogEntry
     /// <inheritdoc/>
     public override string ToString()
     {
-        var sb = new StringBuilder()
+        var builder = new StringBuilder()
             .AppendLine(nameof(LogEntry) + ": {")
             .Append("  " + nameof(Message) + ": ").AppendLine(Message)
             .Append("  " + nameof(Level) + ": ").Append(Level).AppendLine();
 
         if (Exception is not null)
-            sb.Append("  " + nameof(Exception) + ": ").Append(Exception.GetType().Name).Append(": ").AppendLine(Exception.Message);
+        {
+            builder.Append("  " + nameof(Exception) + ": ").Append(Exception.GetType().Name).Append(": ").AppendLine(Exception.Message);
+        }
 
         if (ExtendedProperties.Count > 0)
         {
-            sb.AppendLine("  " + nameof(ExtendedProperties) + ": {");
+            builder.AppendLine("  " + nameof(ExtendedProperties) + ": {");
 
             foreach (var property in ExtendedProperties)
-                sb.Append("    ").Append(property.Key).Append(": ").Append(property.Value).AppendLine();
+            {
+                builder.Append("    ").Append(property.Key).Append(": ").Append(property.Value).AppendLine();
+            }
 
-            sb.AppendLine("  }");
+            builder.AppendLine("  }");
         }
 
-        sb.Append('}');
-        return sb.ToString();
+        builder.Append('}');
+        return builder.ToString();
     }
 
-    private static bool TryGetStringDictionaryItemAccessors(object extendedProperties, out Func<object, string> getKey, out Func<object, object> getValue)
+    private static bool TryGetStringDictionaryItemAccessors(object extendedProperties, 
+        [NotNullWhen(true)] out Func<object, string>? getKey, [NotNullWhen(true)]  out Func<object, object>? getValue)
     {
         (getKey, getValue) = _stringDictionaryItemAccessors.GetOrAdd(extendedProperties.GetType(), CreateStringDictionaryItemAccessors);
         return getKey is not null && getValue is not null;
     }
 
-    private static (Func<object, string>, Func<object, object>) CreateStringDictionaryItemAccessors(Type type)
+    private static (Func<object, string>?, Func<object, object>?) CreateStringDictionaryItemAccessors(Type type)
     {
         var kvpValueTypes =
            (from typeInterface in type.GetInterfaces()
@@ -281,14 +325,16 @@ public sealed class LogEntry
             select kvpTypeArgs[1]).ToList();
 
         if (kvpValueTypes.Count != 1)
+        {
             return (null, null);
+        }
 
         var kvpType = typeof(KeyValuePair<,>).MakeGenericType(typeof(string), kvpValueTypes[0]);
 
         var keyProperty = kvpType.GetProperty("Key");
         var valueProperty = kvpType.GetProperty("Value");
 
-        return (keyProperty.CreateGetter<string>(), valueProperty.CreateGetter());
+        return (keyProperty?.CreateGetter<string>(), valueProperty?.CreateGetter());
     }
 
     private static IReadOnlyCollection<Action<LogEntry, object>> GetSetExtendedPropertyActions(Type type) =>

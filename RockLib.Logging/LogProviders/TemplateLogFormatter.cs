@@ -15,7 +15,7 @@ namespace RockLib.Logging;
 /// </summary>
 public class TemplateLogFormatter : ILogFormatter
 {
-    private static readonly Dictionary<string, Func<LogEntry, string>> _simpleTokenHandlers = new();
+    private static readonly Dictionary<string, Func<LogEntry, string?>> _simpleTokenHandlers = new();
     private static readonly Dictionary<string, Func<LogEntry, DateTime>> _dateTimeTokenHandlers = new();
 
     private static readonly Regex _simpleTokenRegex = new(@"{(?<token>[a-zA-Z_][a-zA-Z0-9_]*?)}", RegexOptions.Compiled);
@@ -85,20 +85,22 @@ public class TemplateLogFormatter : ILogFormatter
     /// </summary>
     /// <param name="key">The key of the token.</param>
     /// <param name="extendedProperty">The extended property to retrieve.</param>
-    public static void AddExtendedPropertyTokenHandler(string key, string extendedProperty) => AddSimpleTokenHandler(key, logEntry => FormatSpecificExtendedProperty(logEntry, extendedProperty));
+    public static void AddExtendedPropertyTokenHandler(string key, string? extendedProperty) => 
+        AddSimpleTokenHandler(key, logEntry => FormatSpecificExtendedProperty(logEntry, extendedProperty));
 
     /// <summary>
     /// Add a token handler for a log entry.
     /// </summary>
     /// <param name="key">The key of the token.</param>
     /// <param name="getValue">A function that returns the token value.</param>
-    public static void AddSimpleTokenHandler(string key, Func<LogEntry, string> getValue) => _simpleTokenHandlers[key] = getValue;
+    public static void AddSimpleTokenHandler(string key, Func<LogEntry, string?> getValue) => _simpleTokenHandlers[key] = getValue;
 
     private static void AddDateTimeTokenHandler(string key, Func<LogEntry, DateTime> getDateTime) => _dateTimeTokenHandlers[key] = getDateTime;
 
-    private static string FormatSpecificExtendedProperty(LogEntry logEntry, string extendedProperty) => logEntry.ExtendedProperties.ContainsKey(extendedProperty)
-                ? ConvertToString(logEntry.ExtendedProperties[extendedProperty])
-                : "N/A";
+    private static string FormatSpecificExtendedProperty(LogEntry logEntry, string? extendedProperty) => 
+        logEntry.ExtendedProperties.ContainsKey(extendedProperty)
+            ? ConvertToString(logEntry.ExtendedProperties[extendedProperty])
+            : "N/A";
 
     /// <summary>
     /// Formats the specified log entry according to the <see cref="Template"/> property.
@@ -154,7 +156,8 @@ public class TemplateLogFormatter : ILogFormatter
                             logEntry.ExtendedProperties
                                 .Aggregate(
                                     new StringBuilder(),
-                                    (sb, kvp) => sb.Append(before).Append(omitKey ? null : kvp.Key).Append(between).Append(HtmlEncodeIfNecessary(ConvertToString(kvp.Value))).AppendLine(after))
+                                    (sb, kvp) => sb.Append(before).Append(omitKey ? null : kvp.Key)
+                                        .Append(between).Append(HtmlEncodeIfNecessary(ConvertToString(kvp.Value))).AppendLine(after))
                                 .ToString();
                     }
 
@@ -171,10 +174,13 @@ public class TemplateLogFormatter : ILogFormatter
 
     private string HtmlEncodeIfNecessary(string value) => _isHtmlEncoded ? WebUtility.HtmlEncode(value) : value;
 
-    private static string ConvertToString(object value)
+    private static string ConvertToString(object? value)
     {
         if (value is string stringValue)
+        {
             return stringValue;
+        }
+
         return JsonConvert.SerializeObject(value);
     }
 }

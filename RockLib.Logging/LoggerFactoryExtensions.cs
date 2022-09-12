@@ -3,6 +3,7 @@ using RockLib.Configuration.ObjectFactory;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Resolver = RockLib.Configuration.ObjectFactory.Resolver;
@@ -50,8 +51,8 @@ public static class LoggerFactoryExtensions
     /// the value of the <paramref name="configuration"/> parameter.
     /// </exception>
     public static ILogger GetCachedLogger(this IConfiguration configuration, string name = Logger.DefaultName,
-        DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
-        IResolver resolver = null, bool reloadOnConfigChange = true)
+        DefaultTypes? defaultTypes = null, ValueConverters? valueConverters = null,
+        IResolver? resolver = null, bool reloadOnConfigChange = true)
     {
         if (configuration is null) throw new ArgumentNullException(nameof(configuration));
         if (name is null) throw new ArgumentNullException(nameof(name));
@@ -93,49 +94,65 @@ public static class LoggerFactoryExtensions
     /// the value of the <paramref name="configuration"/> parameter.
     /// </exception>
     public static ILogger CreateLogger(this IConfiguration configuration, string name = Logger.DefaultName,
-        DefaultTypes defaultTypes = null, ValueConverters valueConverters = null,
-        IResolver resolver = null, bool reloadOnConfigChange = true)
+        DefaultTypes? defaultTypes = null, ValueConverters? valueConverters = null,
+        IResolver? resolver = null, bool reloadOnConfigChange = true)
     {
-        if (defaultTypes is null)
-            defaultTypes = new DefaultTypes();
+        if(configuration is null) throw new ArgumentNullException(nameof(configuration));
+        if(name is null) throw new ArgumentNullException(nameof(name));
+
+        defaultTypes ??= new DefaultTypes();
+        
         if (!defaultTypes.TryGet(typeof(ILogger), out var dummy))
+        {
             defaultTypes.Add(typeof(ILogger), typeof(Logger));
+        }
 
         if (configuration.IsList())
         {
             foreach (var child in configuration.GetChildren())
+            {
                 if (name.Equals(child.GetSectionName(), StringComparison.OrdinalIgnoreCase))
+                {
                     return reloadOnConfigChange
-                        ? child.CreateReloadingProxy<ILogger>(defaultTypes, valueConverters, resolver)
-                        : child.Create<ILogger>(defaultTypes, valueConverters, resolver);
+                        ? child.CreateReloadingProxy<ILogger>(defaultTypes, valueConverters, resolver)!
+                        : child.Create<ILogger>(defaultTypes, valueConverters, resolver)!;
+                }
+            }
         }
         else if (name.Equals(configuration.GetSectionName(), StringComparison.OrdinalIgnoreCase))
+        {
             return reloadOnConfigChange
-                ? configuration.CreateReloadingProxy<ILogger>(defaultTypes, valueConverters, resolver)
-                : configuration.Create<ILogger>(defaultTypes, valueConverters, resolver);
+                ? configuration.CreateReloadingProxy<ILogger>(defaultTypes, valueConverters, resolver)!
+                : configuration.Create<ILogger>(defaultTypes, valueConverters, resolver)!;
+        }
 
         throw new KeyNotFoundException($"No loggers were found matching the name '{name}'.");
     }
 
-    private static bool IsEmpty(this IConfiguration configuration)
-    {
-        switch (configuration)
+    private static bool IsEmpty(this IConfiguration configuration) => 
+        configuration switch
         {
-            case IConfigurationSection section:
-                return section.Value is null && !section.GetChildren().Any();
-            default:
-                return !configuration.GetChildren().Any();
-        }
-    }
+            IConfigurationSection section => section.Value is null && !section.GetChildren().Any(),
+            _ => !configuration.GetChildren().Any(),
+        };
 
     private static bool IsList(this IConfiguration configuration)
     {
         if (configuration is IConfigurationSection section && section.Value is not null)
+        {
             return false;
+        }
+
         var i = 0;
+        
         foreach (var child in configuration.GetChildren())
-            if (child.Key != i++.ToString())
+        {
+            if (child.Key != i++.ToString(CultureInfo.InvariantCulture))
+            {
                 return false;
+            }
+        }
+
         return i > 0;
     }
 
@@ -144,7 +161,9 @@ public static class LoggerFactoryExtensions
         var section = configuration;
 
         if (configuration["type"] is not null && !configuration.GetSection("value").IsEmpty())
+        {
             section = configuration.GetSection("value");
+        }
 
         return section["name"] ?? Logger.DefaultName;
     }
