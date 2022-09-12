@@ -262,12 +262,11 @@ public class RollingFileLogProvider : FileLogProvider
 
     private IEnumerable<ArchiveFile> GetArchiveFiles(out string directory, out string fileName, out string fileExtension)
     {
-        directory = Path.GetDirectoryName(File);
-
+        directory = Path.GetDirectoryName(File)!;
         fileName = Path.GetFileNameWithoutExtension(File);
         fileExtension = Path.GetExtension(File);
 
-        var searchPattern = fileName + ".*" + fileExtension;
+        var searchPattern = $"{fileName}.*{fileExtension}";
 
         return
             from file in Directory.GetFiles(directory, searchPattern)

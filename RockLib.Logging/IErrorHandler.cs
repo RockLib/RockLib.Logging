@@ -11,5 +11,7 @@ public interface IErrorHandler
     /// attempt to send the log entry again.
     /// </summary>
     /// <param name="error">An error that has occurred.</param>
+#pragma warning disable CA1716 // Identifiers should not match keywords
     void HandleError(Error error);
+#pragma warning restore CA1716 // Identifiers should not match keywords
 }

@@ -107,7 +107,9 @@ public sealed class BackgroundLogProcessor : LogProcessor
 
                 continue;
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
                     "Error while waiting for log entry {0} to be sent by log provider {1}.",

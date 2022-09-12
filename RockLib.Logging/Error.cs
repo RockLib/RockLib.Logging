@@ -21,7 +21,7 @@ public sealed class Error
     /// <param name="failureCount">
     /// The number of times the log provider has failed to write the log entry.
     /// </param>
-    public Error(string message, Exception exception, ILogProvider logProvider, LogEntry logEntry, int failureCount)
+    public Error(string message, Exception? exception, ILogProvider logProvider, LogEntry logEntry, int failureCount)
     {
         if (failureCount < 0)
         {
@@ -43,7 +43,7 @@ public sealed class Error
     /// <summary>
     /// Gets the exception responsible for the error.
     /// </summary>
-    public Exception Exception { get; }
+    public Exception? Exception { get; }
 
     /// <summary>
     /// Gets the log provider that failed to write the log entry.

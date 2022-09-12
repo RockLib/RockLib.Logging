@@ -30,14 +30,16 @@ internal static class Cached
                 select a.Address.ToString();
             return string.Join("\n", ipAddresses);
         }
+#pragma warning disable CA1031 // Do not catch general exception types
         catch
+#pragma warning restore CA1031 // Do not catch general exception types
         {
             return null;
         }
     }
 
     private static bool IsValidNetworkInterface(NetworkInterface networkInterface) => networkInterface.OperationalStatus == OperationalStatus.Up
-            && (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet || networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211);
+        && (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet || networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211);
 
     private static bool IsDuplicateAddressDetectionStatePreferred(UnicastIPAddressInformation addressInfo) => 
         addressInfo.DuplicateAddressDetectionState == DuplicateAddressDetectionState.Preferred;

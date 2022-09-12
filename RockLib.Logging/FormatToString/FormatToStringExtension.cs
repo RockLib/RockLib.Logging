@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -17,8 +18,8 @@ internal static class FormatToStringExtension
 
     private static readonly string[] _skipProperties = { "InnerException", "InnerExceptions", "Message", "Data", "StackTrace", "TargetSite", "Source", "EntityValidationErrors" };
     private static readonly ConcurrentDictionary<Type, Func<Exception, string, string>> _formatExceptionFuncs = new();
-    private static readonly Type _dbEntityValidationExceptionType;
-    private static readonly Action<Exception, StringBuilder, string> _addValidationErrorMessages;
+    private static readonly Type? _dbEntityValidationExceptionType;
+    private static readonly Action<Exception, StringBuilder, string>? _addValidationErrorMessages;
 
     static FormatToStringExtension() => InitDbEntityValidationExceptionHandler(
         out _dbEntityValidationExceptionType, out _addValidationErrorMessages);
@@ -54,7 +55,11 @@ internal static class FormatToStringExtension
 
                     var message = ex.Message.Trim();
 
+#if NET48
                     if (message.Contains('\n'))
+#else
+                    if (message.Contains('\n', StringComparison.InvariantCulture))
+#endif
                     {
                         sb.AppendLine("Message:".BlockIndent(indention));
                         sb.AppendLine(message.BlockIndent(additionalIndention));
@@ -76,7 +81,7 @@ internal static class FormatToStringExtension
                         && _dbEntityValidationExceptionType.IsInstanceOfType(ex))
                     {
                         sb.AppendLine("EntityValidationErrors:".BlockIndent(additionalIndention));
-                        _addValidationErrorMessages(ex, sb, additionalIndention + _indent);
+                        _addValidationErrorMessages?.Invoke(ex, sb, additionalIndention + _indent);
                     }
 
                     if (ex.Source is not null)
@@ -136,7 +141,7 @@ internal static class FormatToStringExtension
         if (property.Name == "HResult")
         {
             var localGetPropertyValue = getPropertyValue;
-            getPropertyValue = exception => string.Format("0x{0:X8}", localGetPropertyValue(exception));
+            getPropertyValue = exception => string.Format(CultureInfo.InvariantCulture, "0x{0:X8}", localGetPropertyValue(exception));
         }
 
         return
@@ -155,15 +160,21 @@ internal static class FormatToStringExtension
 
                     value =
                         propertyValue is not null
-                            ? propertyValue.ToString()
+                            ? propertyValue.ToString()!
                             : "[null]";
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
                 {
                     value = ex.Message.Trim();
                 }
 
+#if NET48
                 if (value.Contains('\n'))
+#else
+                if (value.Contains('\n', StringComparison.InvariantCulture))
+#endif
                 {
                     sb.AppendLine((property.Name + ":").BlockIndent(indention));
                     sb.AppendLine(value.BlockIndent(indention + _indent));
@@ -178,8 +189,8 @@ internal static class FormatToStringExtension
     }
 
     private static void InitDbEntityValidationExceptionHandler(
-        out Type dbEntityValidationExceptionType,
-        out Action<Exception, StringBuilder, string> addValidationErrorMessages)
+        out Type? dbEntityValidationExceptionType,
+        out Action<Exception, StringBuilder, string>? addValidationErrorMessages)
     {
         dbEntityValidationExceptionType = null;
         addValidationErrorMessages = null;
@@ -330,13 +341,15 @@ internal static class FormatToStringExtension
                             }
                         }
                     }
-                } // ReSharper disable once EmptyGeneralCatchClause
-                catch
-                {
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
+                catch { }
+#pragma warning restore CA1031 // Do not catch general exception types
             };
-        } // ReSharper disable once EmptyGeneralCatchClause
-        catch
+        }
+#pragma warning disable CA1031 // Do not catch general exception types
+        catch 
+#pragma warning restore CA1031 // Do not catch general exception types
         {
             // If anything goes wrong, no harm no foul - we just won't add validation
             // error messages to the formatted exception.
@@ -347,7 +360,7 @@ internal static class FormatToStringExtension
     private static Func<Type, Type> GetGetObjectTypeFunc(MethodInfo getObjectTypeMethod)
     {
         var invoker = new GetObjectTypeInvoker(getObjectTypeMethod);
-        ThreadPool.QueueUserWorkItem(state => ((GetObjectTypeInvoker)state).SetFunc(), invoker);
+        ThreadPool.QueueUserWorkItem(state => ((GetObjectTypeInvoker)state!).SetFunc(), invoker);
         return invoker.GetObjectType;
     }
 
@@ -358,7 +371,7 @@ internal static class FormatToStringExtension
         public GetObjectTypeInvoker(MethodInfo method)
         {
             Method = method;
-            Func = type => (Type)method.Invoke(null, new object[] { type });
+            Func = type => (Type)method.Invoke(null, new object[] { type })!;
         }
 
         public Type GetObjectType(Type type) => Func.Invoke(type);

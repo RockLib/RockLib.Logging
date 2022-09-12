@@ -41,7 +41,7 @@ internal class ReloadingLogger : ILogger
 
     public bool IsDisabled => _logger.IsDisabled;
 
-    public IErrorHandler ErrorHandler { get => _logger.ErrorHandler; set => _logger.ErrorHandler = value; }
+    public IErrorHandler? ErrorHandler { get => _logger.ErrorHandler; set => _logger.ErrorHandler = value; }
 
     public string Name { get; }
 

@@ -1,6 +1,7 @@
 ﻿using RockLib.Diagnostics;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace RockLib.Logging.LogProcessing;
 
@@ -46,13 +47,18 @@ public abstract class LogProcessor : ILogProcessor
     /// <param name="logEntry">The log entry to process.</param>
     public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry)
     {
+        if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+        if (logEntry is null) { throw new ArgumentNullException(nameof(logEntry)); }
+
         foreach (var contextProvider in logger.ContextProviders)
         {
             try
             {
                 contextProvider.AddContext(logEntry);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 TraceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
                     "[{0:s}] - Error while adding context to log entry {1} using context provider {2}.{3}{4}",
@@ -67,13 +73,17 @@ public abstract class LogProcessor : ILogProcessor
         foreach (var logProvider in logger.LogProviders)
         {
             if (logEntry.Level < logProvider.Level)
+            {
                 continue;
+            }
 
             try
             {
                 SendToLogProvider(logProvider, logEntry, errorHandler, 0);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 HandleError(ex, logProvider, logEntry, errorHandler, 1,
                     "Error while sending log entry {0} to log provider {1}.", logEntry.UniqueId, logProvider);
@@ -114,19 +124,23 @@ public abstract class LogProcessor : ILogProcessor
     /// </param>
     /// <param name="errorMessageFormat">A format string for the message that describes the error.</param>
     /// <param name="errorMessageArgs">An object array containing zero or more objects to format.</param>
-    protected virtual void HandleError(Exception exception, ILogProvider logProvider, LogEntry logEntry,
+    protected virtual void HandleError(Exception? exception, ILogProvider logProvider, LogEntry logEntry,
         IErrorHandler errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
     {
+        if (errorHandler is null) throw new ArgumentNullException(nameof(errorHandler));
+        if (errorMessageArgs is null) throw new ArgumentNullException(nameof(errorMessageArgs));
         TraceError(exception, errorMessageFormat, errorMessageArgs);
 
-        var error = new Error(string.Format(errorMessageFormat, errorMessageArgs),
+        var error = new Error(string.Format(CultureInfo.CurrentCulture, errorMessageFormat, errorMessageArgs),
             exception, logProvider, logEntry, failureCount);
 
         try
         {
             errorHandler.HandleError(error);
         }
+#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
         {
             TraceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
                 "[{0:s}] - Error in error handler.{1}{2}",
@@ -139,7 +153,9 @@ public abstract class LogProcessor : ILogProcessor
             {
                 SendToLogProvider(logProvider, logEntry, errorHandler, failureCount);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 HandleError(ex, logProvider, logEntry, errorHandler, failureCount + 1,
                     "Error while re-sending log entry {0} to log provider {1}.", logEntry.UniqueId, logProvider);
@@ -147,7 +163,7 @@ public abstract class LogProcessor : ILogProcessor
         }
     }
 
-    private static void TraceError(Exception exception, string messageFormat, object[] messageArgs)
+    private static void TraceError(Exception? exception, string messageFormat, object[] messageArgs)
     {
         string traceFormat;
         object[] traceArgs;
