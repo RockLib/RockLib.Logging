@@ -168,12 +168,14 @@ public static class ServiceCollectionExtensions
             case Logger.ProcessingMode.Background:
                 services.AddSingleton<ILogProcessor, BackgroundLogProcessor>();
                 break;
+#pragma warning disable CS0618 // Type or member is obsolete
             case Logger.ProcessingMode.Synchronous:
                 services.AddSingleton<ILogProcessor, SynchronousLogProcessor>();
                 break;
             case Logger.ProcessingMode.FireAndForget:
                 services.AddSingleton<ILogProcessor, FireAndForgetLogProcessor>();
                 break;
+#pragma warning restore CS0618 // Type or member is obsolete
             default:
                 throw new ArgumentOutOfRangeException(nameof(processingMode));
         }

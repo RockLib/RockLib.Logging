@@ -31,12 +31,14 @@ public sealed class Logger : ILogger
         /// <summary>
         /// The logger should process logs on the same thread as the caller.
         /// </summary>
+        [Obsolete("Please use Background instead.", false)]
         Synchronous,
 
         /// <summary>
         /// The logger should process logs asynchronously, but without any
         /// task tracking.
         /// </summary>
+        [Obsolete("Please use Background instead.", false)]
         FireAndForget
     }
 
@@ -191,8 +193,10 @@ public sealed class Logger : ILogger
         processingMode switch
         {
             ProcessingMode.Background => _backgroundLogProcessor.Value,
+#pragma warning disable CS0618 // Type or member is obsolete
             ProcessingMode.Synchronous => new SynchronousLogProcessor(),
             ProcessingMode.FireAndForget => new FireAndForgetLogProcessor(),
+#pragma warning restore CS0618 // Type or member is obsolete
             _ => throw new ArgumentException($"Processing mode is not defined: {processingMode}.", nameof(processingMode)),
         };
 

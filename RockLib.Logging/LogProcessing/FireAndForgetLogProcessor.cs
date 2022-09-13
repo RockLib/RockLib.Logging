@@ -8,6 +8,7 @@ namespace RockLib.Logging.LogProcessing;
 /// A log processor that processes logs asynchronously, but without any
 /// task tracking.
 /// </summary>
+[Obsolete("Please use the FireAndForgetProcessor instead.", false)]
 public sealed class FireAndForgetLogProcessor : LogProcessor
 {
     /// <inheritdoc/>

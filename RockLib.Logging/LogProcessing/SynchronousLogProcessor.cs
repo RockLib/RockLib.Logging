@@ -7,6 +7,7 @@ namespace RockLib.Logging.LogProcessing;
 /// <summary>
 /// A log processor that processes logs on the same thread as the caller.
 /// </summary>
+[Obsolete("Please use the FireAndForgetProcessor instead.", false)]
 public sealed class SynchronousLogProcessor : LogProcessor
 {
     /// <inheritdoc/>
