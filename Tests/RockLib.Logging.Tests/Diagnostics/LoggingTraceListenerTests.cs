@@ -14,7 +14,7 @@ public class LoggingTraceListenerTests
     {
         var logger = new Mock<ILogger>().Object;
 
-        var listener = new LoggingTraceListener(logger, LogLevel.Info);
+        using var listener = new LoggingTraceListener(logger, LogLevel.Info);
 
         listener.Logger.Should().BeSameAs(logger);
         listener.LogLevel.Should().Be(LogLevel.Info);
@@ -25,7 +25,7 @@ public class LoggingTraceListenerTests
     {
         var logger = new MockLogger(LogLevel.Info).Object;
 
-        var listener = new LoggingTraceListener(logger);
+        using var listener = new LoggingTraceListener(logger);
 
         listener.Logger.Should().BeSameAs(logger);
         listener.LogLevel.Should().Be(LogLevel.Info);
@@ -55,7 +55,7 @@ public class LoggingTraceListenerTests
     {
         var mockLogger = new MockLogger();
 
-        var listener = new LoggingTraceListener(mockLogger.Object, LogLevel.Info);
+        using var listener = new LoggingTraceListener(mockLogger.Object, LogLevel.Info);
 
         listener.Write("Hello, world!");
 
@@ -67,7 +67,7 @@ public class LoggingTraceListenerTests
     {
         var mockLogger = new MockLogger(LogLevel.Warn);
 
-        var listener = new LoggingTraceListener(mockLogger.Object, LogLevel.Info);
+        using var listener = new LoggingTraceListener(mockLogger.Object, LogLevel.Info);
 
         listener.Write("Hello, world!");
 
@@ -79,7 +79,7 @@ public class LoggingTraceListenerTests
     {
         var mockLogger = new MockLogger();
 
-        var listener = new LoggingTraceListener(mockLogger.Object, LogLevel.Info);
+        using var listener = new LoggingTraceListener(mockLogger.Object, LogLevel.Info);
 
         listener.WriteLine("Hello, world!");
 
@@ -91,7 +91,7 @@ public class LoggingTraceListenerTests
     {
         var mockLogger = new MockLogger(LogLevel.Warn);
 
-        var listener = new LoggingTraceListener(mockLogger.Object, LogLevel.Info);
+        using var listener = new LoggingTraceListener(mockLogger.Object, LogLevel.Info);
 
         listener.WriteLine("Hello, world!");
 

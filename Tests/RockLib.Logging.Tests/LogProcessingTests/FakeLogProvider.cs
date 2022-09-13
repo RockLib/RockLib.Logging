@@ -11,6 +11,6 @@ public class FakeLogProvider : ILogProvider
     public LogLevel Level => LogLevel.NotSet;
 
 #pragma warning disable 1998
-    public async Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken) => throw new Exception("oh, no.");
+    public async Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken) => throw new NotSupportedException("oh, no.");
 #pragma warning restore 1998
 }

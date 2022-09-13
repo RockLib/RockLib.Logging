@@ -114,7 +114,7 @@ public class FileLogProviderTests
 
         var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
-        await fileLogProvider.WriteAsync(logEntry);
+        await fileLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
 
         try
         {

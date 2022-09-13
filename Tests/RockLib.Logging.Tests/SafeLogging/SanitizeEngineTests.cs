@@ -87,11 +87,11 @@ public class SanitizeEngineTests
                 .Subject;
 
         sanitizedDictionary.Should().ContainKey("Garply")
-            .WhichValue.Should().BeOfType<Dictionary<string, object>>()
+            .WhoseValue.Should().BeOfType<Dictionary<string, object>>()
             .Which.Should().BeEquivalentTo(new Dictionary<string, object> { { "Foo", "abc" } });
 
         sanitizedDictionary.Should().ContainKey("Grault")
-            .WhichValue.Should().BeOfType<Dictionary<string, object>>()
+            .WhoseValue.Should().BeOfType<Dictionary<string, object>>()
             .Which.Should().BeEquivalentTo(new Dictionary<string, object> { { "Bar", "xyz" } });
     }
 
@@ -111,11 +111,11 @@ public class SanitizeEngineTests
                 .Subject;
 
         sanitizedDictionary.Should().ContainKey("Garply")
-            .WhichValue.Should().BeOfType<Dictionary<string, object>>()
+            .WhoseValue.Should().BeOfType<Dictionary<string, object>>()
             .Which.Should().BeEquivalentTo(new Dictionary<string, object> { { "Foo", "abc" } });
 
         sanitizedDictionary.Should().ContainKey("Grault")
-            .WhichValue.Should().BeOfType<Dictionary<string, object>>()
+            .WhoseValue.Should().BeOfType<Dictionary<string, object>>()
             .Which.Should().BeEquivalentTo(new Dictionary<string, object> { { "Bar", "xyz" } });
     }
 

@@ -97,7 +97,7 @@ public class DebugLogProviderTests
 
         var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
-        await debugLogProvider.WriteAsync(logEntry);
+        await debugLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
 
         mockDebugLogProvider.Protected().As<IProtected>()
             .Verify(m => m.WriteToDebug("Info:Hello, world!"), Times.Once());

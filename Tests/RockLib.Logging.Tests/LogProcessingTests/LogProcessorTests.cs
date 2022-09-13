@@ -136,7 +136,7 @@ public class LogProcessorTests
 
         var invocation = logProcessor.HandleErrorInvocations[0];
 
-        invocation.Exception.Message.Should().Be("error.");
+        invocation.Exception!.Message.Should().Be("error.");
         invocation.LogProvider.Should().BeSameAs(mockLogProvider.Object);
         invocation.LogEntry.Should().BeSameAs(logEntry);
         invocation.ErrorHandler.Should().BeSameAs(NullErrorHandler.Instance);
@@ -227,7 +227,7 @@ public class LogProcessorTests
 
         // Resend HandleError call
         invocation2.Exception.Should().NotBeSameAs(exception);
-        invocation2.Exception.Message.Should().Be("error.");
+        invocation2.Exception!.Message.Should().Be("error.");
         invocation2.LogProvider.Should().BeSameAs(logProvider);
         invocation2.LogEntry.Should().BeSameAs(logEntry);
         invocation2.FailureCount.Should().Be(2);
@@ -240,8 +240,10 @@ public class LogProcessorTests
 
         public TestLogProcessor(bool sendToLogProviderShouldThrow = false) => _sendToLogProviderShouldThrow = sendToLogProviderShouldThrow;
 
-        public List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)> SendToLogProviderInvocations { get; } = new List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)>();
-        public List<(Exception Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)> HandleErrorInvocations { get; } = new List<(Exception Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)>();
+        public List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)> SendToLogProviderInvocations { get; } = 
+            new List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)>();
+        public List<(Exception? Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)> HandleErrorInvocations { get; } = 
+            new List<(Exception? Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)>();
 
         protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry, IErrorHandler errorHandler, int failureCount)
         {

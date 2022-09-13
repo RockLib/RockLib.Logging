@@ -8,12 +8,13 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 public class LoggerTests
 {
     [Fact]
     public void NameIsSetFromConstructor()
     {
-        var logger = new Logger("foo");
+        using var logger = new Logger("foo");
 
         logger.Name.Should().BeSameAs("foo");
     }
@@ -21,7 +22,7 @@ public class LoggerTests
     [Fact]
     public void LevelIsSetFromConstructor()
     {
-        var logger = new Logger(level: LogLevel.Error);
+        using var logger = new Logger(level: LogLevel.Error);
 
         logger.Level.Should().Be(LogLevel.Error);
     }
@@ -29,9 +30,9 @@ public class LoggerTests
     [Fact]
     public void ProvidersIsSetFromConstructor()
     {
-        var logProviders = new ILogProvider[0];
+        var logProviders = Array.Empty<ILogProvider>();
 
-        var logger = new Logger(logProviders: logProviders);
+        using var logger = new Logger(logProviders: logProviders);
 
         logger.LogProviders.Should().BeSameAs(logProviders);
     }
@@ -39,7 +40,7 @@ public class LoggerTests
     [Fact]
     public void IsDisabledIsSetFromConstructor()
     {
-        var logger = new Logger(isDisabled: true);
+        using var logger = new Logger(isDisabled: true);
 
         logger.IsDisabled.Should().Be(true);
     }
@@ -49,7 +50,7 @@ public class LoggerTests
     {
         var logProcessor = new Mock<ILogProcessor>().Object;
 
-        var logger = new Logger(logProcessor);
+        using var logger = new Logger(logProcessor);
 
         logger.LogProcessor.Should().BeSameAs(logProcessor);
     }
@@ -57,7 +58,7 @@ public class LoggerTests
     [Fact]
     public void LogProcessorUsesBackgroundLogProcessorWhenProcessingModeIsBackground()
     {
-        var logger = new Logger(processingMode: Logger.ProcessingMode.Background);
+        using var logger = new Logger(processingMode: Logger.ProcessingMode.Background);
 
         logger.LogProcessor.Should().BeOfType<BackgroundLogProcessor>();
     }
@@ -65,7 +66,7 @@ public class LoggerTests
     [Fact]
     public void LogProcessorUsesSynchronousLogProcessorWhenProcessingModeIsSynchronous()
     {
-        var logger = new Logger(processingMode: Logger.ProcessingMode.Synchronous);
+        using var logger = new Logger(processingMode: Logger.ProcessingMode.Synchronous);
 
         logger.LogProcessor.Should().BeOfType<SynchronousLogProcessor>();
     }
@@ -73,7 +74,7 @@ public class LoggerTests
     [Fact]
     public void LogProcessorUsesFireAndForgetLogProcessorWhenProcessingModeIsFireAndForget()
     {
-        var logger = new Logger(processingMode: Logger.ProcessingMode.FireAndForget);
+        using var logger = new Logger(processingMode: Logger.ProcessingMode.FireAndForget);
 
         logger.LogProcessor.Should().BeOfType<FireAndForgetLogProcessor>();
     }
@@ -81,7 +82,7 @@ public class LoggerTests
     [Fact]
     public void LogThrowsArgumentNullExceptionIfLogEntryIsNull()
     {
-        var logger = new Logger();
+        using var logger = new Logger();
 
         Assert.Throws<ArgumentNullException>(() => logger.Log(null!));
     }
@@ -92,7 +93,7 @@ public class LoggerTests
         var mockLogProcessor = new Mock<ILogProcessor>();
         mockLogProcessor.Setup(m => m.IsDisposed).Returns(true);
 
-        var logger = new Logger(mockLogProcessor.Object);
+        using var logger = new Logger(mockLogProcessor.Object);
 
         mockLogProcessor.Verify(m => m.ProcessLogEntry(It.IsAny<ILogger>(), It.IsAny<LogEntry>()),
             Times.Never);
@@ -103,7 +104,7 @@ public class LoggerTests
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
 
-        var logger = new Logger(mockLogProcessor.Object, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
+        using var logger = new Logger(mockLogProcessor.Object, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
 
         var logEntry = new LogEntry();
 
@@ -117,7 +118,7 @@ public class LoggerTests
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
 
-        var logger = new Logger(mockLogProcessor.Object, isDisabled: true, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
+        using var logger = new Logger(mockLogProcessor.Object, isDisabled: true, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
 
         var logEntry = new LogEntry();
 
@@ -132,7 +133,7 @@ public class LoggerTests
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
 
-        var logger = new Logger(mockLogProcessor.Object, logProviders: new ILogProvider[0]);
+        using var logger = new Logger(mockLogProcessor.Object, logProviders: Array.Empty<ILogProvider>());
 
         var logEntry = new LogEntry();
 
@@ -147,7 +148,7 @@ public class LoggerTests
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
 
-        var logger = new Logger(mockLogProcessor.Object, level: LogLevel.Error, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
+        using var logger = new Logger(mockLogProcessor.Object, level: LogLevel.Error, logProviders: new ILogProvider[] { new ConsoleLogProvider() });
 
         var logEntry = new LogEntry() { Level = LogLevel.Info };
 
@@ -165,7 +166,7 @@ public class LoggerTests
             new ConsoleLogProvider()
         };
 
-        var logger = new Logger(logProviders: logProviders, level: LogLevel.Info, processingMode: Logger.ProcessingMode.Synchronous);
+        using var logger = new Logger(logProviders: logProviders, level: LogLevel.Info, processingMode: Logger.ProcessingMode.Synchronous);
 
         var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
@@ -198,7 +199,7 @@ public class LoggerTests
         var logLevelResolver = new Mock<ILogLevelResolver>();
         logLevelResolver.Setup(i => i.GetLogLevel()).Returns(expected);
 
-        var logger = new Logger(level: LogLevel.Warn, logLevelResolver: logLevelResolver.Object);
+        using var logger = new Logger(level: LogLevel.Warn, logLevelResolver: logLevelResolver.Object);
 
         var actual = logger.Level;
 
@@ -212,3 +213,4 @@ public class LoggerTests
         }
     }
 }
+#pragma warning restore CS0618 // Type or member is obsolete

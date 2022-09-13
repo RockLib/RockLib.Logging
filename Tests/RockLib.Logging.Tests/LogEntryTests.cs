@@ -19,7 +19,7 @@ public class LogEntryTests
     [Fact]
     public void LevelIsSetFromConstructor2()
     {
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 
@@ -37,7 +37,7 @@ public class LogEntryTests
     [Fact]
     public void MessageIsSetFromConstructor2()
     {
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 
@@ -55,7 +55,7 @@ public class LogEntryTests
     [Fact]
     public void ExceptionIsSetFromConstructor2()
     {
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 
@@ -79,7 +79,7 @@ public class LogEntryTests
     {
         var foo = 123;
         var bar = "abc";
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error, new { foo, bar });
 
@@ -104,7 +104,7 @@ public class LogEntryTests
     {
         var foo = 123;
         var bar = "abc";
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error, new Dictionary<string, object> { { "foo", foo }, { "bar", bar } });
 
@@ -208,7 +208,7 @@ public class LogEntryTests
     [Fact]
     public void GetExceptionDataReturnsAValueWhenExceptionIsNotNull()
     {
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         var logEntry = new LogEntry("Hello, world!", exception, LogLevel.Error);
 

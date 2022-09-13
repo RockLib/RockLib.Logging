@@ -188,7 +188,7 @@ public class RollingFileLogProviderTests : IDisposable
 
         var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
-        await rollingFileLogProvider.WriteAsync(logEntry);
+        await rollingFileLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
 
         var output = File.ReadAllText(_logFilePath);
 
@@ -208,10 +208,10 @@ public class RollingFileLogProviderTests : IDisposable
 
         GetFileCount().Should().Be(0);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry());
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false);
         GetFileCount().Should().Be(1);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
         GetFileCount().Should().Be(2);
     }
 
@@ -229,19 +229,19 @@ public class RollingFileLogProviderTests : IDisposable
 
         GetFileCount().Should().Be(0);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry());
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false);
         GetFileCount().Should().Be(1);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
         GetFileCount().Should().Be(2);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
         GetFileCount().Should().Be(3);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
         GetFileCount().Should().Be(3);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
         GetFileCount().Should().Be(3);
     }
 
@@ -258,19 +258,19 @@ public class RollingFileLogProviderTests : IDisposable
 
         GetFileCount().Should().Be(0);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // New file, doesn't consume TimeSet
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // New file, doesn't consume TimeSet
         GetFileCount().Should().Be(1);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // A) Archive: Different date, different hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // A) Archive: Different date, different hour.
         GetFileCount().Should().Be(2);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // B) Archive: Different date, same hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // B) Archive: Different date, same hour.
         GetFileCount().Should().Be(3);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // C) Archive: Same date, different hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // C) Archive: Same date, different hour.
         GetFileCount().Should().Be(4);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // D) No Archive: Same date, same hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // D) No Archive: Same date, same hour.
         GetFileCount().Should().Be(4);
     }
 
@@ -287,19 +287,19 @@ public class RollingFileLogProviderTests : IDisposable
 
         GetFileCount().Should().Be(0);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // New file, doesn't consume TimeSet
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // New file, doesn't consume TimeSet
         GetFileCount().Should().Be(1);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // A) Archive: Different date, different hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // A) Archive: Different date, different hour.
         GetFileCount().Should().Be(2);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // B) Archive: Different date, same hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // B) Archive: Different date, same hour.
         GetFileCount().Should().Be(3);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // C) No Archive: Same date, different hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // C) No Archive: Same date, different hour.
         GetFileCount().Should().Be(3);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()); // D) No Archive: Same date, same hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // D) No Archive: Same date, same hour.
         GetFileCount().Should().Be(3);
     }
 
@@ -316,20 +316,20 @@ public class RollingFileLogProviderTests : IDisposable
         // Write to the log file until it has exceeded the max file size.
         while (IsTooSmallForRollOver(maxFileSizeKilobytes))
         {
-            await rollingFileLogProvider.WriteAsync(logEntry);
+            await rollingFileLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
         }
 
         // This log entry should cause the existing log file to be archived, and a new one created.
-        await rollingFileLogProvider.WriteAsync(logEntry);
+        await rollingFileLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
     }
 
     private static LogEntry GetLogEntry()
     {
         try
         {
-            throw new Exception("Oh noes!");
+            throw new NotSupportedException("Oh noes!");
         }
-        catch (Exception ex)
+        catch (NotSupportedException ex)
         {
             return new LogEntry("Hello, world!", ex, LogLevel.Info, new { Foo = "bar", Who = "there" });
         }

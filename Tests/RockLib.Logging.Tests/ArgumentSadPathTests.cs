@@ -9,10 +9,12 @@ public class ArgumentSadPathTests
     public class LogEntry_
     {
         [Fact]
-        public void InvokingConstructor1WithUndefinedLogLevelThrowsArgumentException() => Assert.Throws<ArgumentException>(() => new LogEntry("", (LogLevel)(int.MinValue)));
+        public void InvokingConstructor1WithUndefinedLogLevelThrowsArgumentException() => 
+            Assert.Throws<ArgumentException>(() => new LogEntry("", (LogLevel)(int.MinValue)));
 
         [Fact]
-        public void InvokingConstructor2WithUndefinedLogLevelThrowsArgumentException() => Assert.Throws<ArgumentException>(() => new LogEntry("", new Exception(), (LogLevel)(int.MinValue)));
+        public void InvokingConstructor2WithUndefinedLogLevelThrowsArgumentException() => 
+            Assert.Throws<ArgumentException>(() => new LogEntry("", new NotSupportedException(), (LogLevel)(int.MinValue)));
 
         [Fact]
         public void PassingUndefinedLogLevelToLevelPropertyThrowsArgumentException()
@@ -22,10 +24,12 @@ public class ArgumentSadPathTests
         }
 
         [Fact]
-        public void InvokingConstructor1WithLogLevelNotSetThrowsArgumentException() => Assert.Throws<ArgumentException>(() => new LogEntry("", LogLevel.NotSet));
+        public void InvokingConstructor1WithLogLevelNotSetThrowsArgumentException() => 
+            Assert.Throws<ArgumentException>(() => new LogEntry("", LogLevel.NotSet));
 
         [Fact]
-        public void InvokingConstructor2WithLogLevelNotSetThrowsArgumentException() => Assert.Throws<ArgumentException>(() => new LogEntry("", new Exception(), LogLevel.NotSet));
+        public void InvokingConstructor2WithLogLevelNotSetThrowsArgumentException() => 
+            Assert.Throws<ArgumentException>(() => new LogEntry("", new NotSupportedException(), LogLevel.NotSet));
 
         [Fact]
         public void PassingLogLevelNotSetToLevelPropertyThrowsArgumentException()

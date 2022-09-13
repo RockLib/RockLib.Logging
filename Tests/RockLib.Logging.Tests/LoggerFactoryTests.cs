@@ -27,7 +27,7 @@ public class LoggerFactoryTests
             .Build()
             .GetSection("rocklib.logging");
 
-        var logger = config.CreateLogger();
+        using var logger = config.CreateLogger();
 
         logger.Name.Should().Be(Logger.DefaultName);
         logger.LogProviders.Count.Should().Be(1);
@@ -51,13 +51,14 @@ public class LoggerFactoryTests
             .Build()
             .GetSection("rocklib.logging");
 
-        var logger = config.CreateLogger(name);
+        using var logger = config.CreateLogger(name);
 
         logger.Name.Should().Be(name);
         logger.LogProviders.Count.Should().Be(1);
         logger.LogProviders.First().Should().BeOfType(expectedLogProviderType);
 
-        config.CreateLogger(name).Should().NotBeSameAs(logger);
+        using var newLogger = config.CreateLogger(name);
+        newLogger.Should().NotBeSameAs(logger);
     }
 
     [Fact]
@@ -71,13 +72,14 @@ public class LoggerFactoryTests
             .Build()
             .GetSection("rocklib.logging");
 
-        var logger = config.CreateLogger();
+        using var logger = config.CreateLogger();
 
         logger.Name.Should().Be(Logger.DefaultName);
         logger.LogProviders.Count.Should().Be(1);
         logger.LogProviders.First().Should().BeOfType(typeof(FooLogProvider));
 
-        config.CreateLogger().Should().NotBeSameAs(logger);
+        using var newLogger = config.CreateLogger();
+        newLogger.Should().NotBeSameAs(logger);
     }
 
     [Fact]

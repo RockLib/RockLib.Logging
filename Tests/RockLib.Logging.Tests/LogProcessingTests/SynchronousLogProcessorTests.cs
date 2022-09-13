@@ -12,7 +12,9 @@ public class SynchronousLogProcessorTests
     [Fact]
     public void ProcessLogEntryCallsWriteAsyncOnTheLogProvider()
     {
-        var logProcessor = new SynchronousLogProcessor();
+#pragma warning disable CS0618 // Type or member is obsolete
+        using var logProcessor = new SynchronousLogProcessor();
+#pragma warning restore CS0618 // Type or member is obsolete
 
         var mockLogProvider = new Mock<ILogProvider>();
         var logEntry = new LogEntry();
