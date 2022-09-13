@@ -147,7 +147,7 @@ public static class LoggerFactoryExtensions
         
         foreach (var child in configuration.GetChildren())
         {
-            if (child.Key != i++.ToString(CultureInfo.InvariantCulture))
+            if (child.Key != i++.ToString(CultureInfo.CurrentCulture))
             {
                 return false;
             }

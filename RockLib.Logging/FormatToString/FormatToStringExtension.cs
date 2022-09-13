@@ -149,7 +149,7 @@ internal static class FormatToStringExtension
         if (property.Name == "HResult")
         {
             var localGetPropertyValue = getPropertyValue;
-            getPropertyValue = exception => string.Format(CultureInfo.InvariantCulture, "0x{0:X8}", localGetPropertyValue(exception));
+            getPropertyValue = exception => string.Format(CultureInfo.CurrentCulture, "0x{0:X8}", localGetPropertyValue(exception));
         }
 
         return
