@@ -102,7 +102,7 @@ public static class LoggerFactoryExtensions
 
         defaultTypes ??= new DefaultTypes();
         
-        if (!defaultTypes.TryGet(typeof(ILogger), out var dummy))
+        if (!defaultTypes.TryGet(typeof(ILogger), out _))
         {
             defaultTypes.Add(typeof(ILogger), typeof(Logger));
         }

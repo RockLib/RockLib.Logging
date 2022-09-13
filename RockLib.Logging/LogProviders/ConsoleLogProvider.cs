@@ -75,17 +75,12 @@ public class ConsoleLogProvider : ILogProvider
         Level = level;
         Timeout = timeout ?? DefaultTimeout;
 
-        switch (output)
+        _consoleWriter = output switch
         {
-            case Output.StdOut:
-                _consoleWriter = Console.Out;
-                break;
-            case Output.StdErr:
-                _consoleWriter = Console.Error;
-                break;
-            default:
-                throw new ArgumentException($"Output stream is not defined: {output}.", nameof(output));
-        }
+            Output.StdOut => Console.Out,
+            Output.StdErr => Console.Error,
+            _ => throw new ArgumentException($"Output stream is not defined: {output}.", nameof(output)),
+        };
     }
 
     /// <summary>

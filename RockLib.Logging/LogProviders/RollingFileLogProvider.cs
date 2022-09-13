@@ -178,7 +178,7 @@ public class RollingFileLogProvider : FileLogProvider
     /// <param name="formattedLogEntry">The formatted log entry.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken"/> to observe.</param>
     /// <returns> A task that represents the asynchronous write operation.</returns>
-    protected sealed override Task SynchronizedWriteAsync(string formattedLogEntry, CancellationToken cancellationToken)
+    protected override sealed Task SynchronizedWriteAsync(string formattedLogEntry, CancellationToken cancellationToken)
     {
         if (NeedsArchiving())
         {

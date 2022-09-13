@@ -57,7 +57,7 @@ public sealed class Logger : ILogger
 
     private readonly ILogLevelResolver? _logLevelResolver;
     private readonly bool _canProcessLogs;
-    private LogLevel _level;
+    private readonly LogLevel _level;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Logger"/> class.

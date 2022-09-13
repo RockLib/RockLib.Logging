@@ -88,19 +88,23 @@ internal static class FormatToStringExtension
 
                     if (ex.Source is not null)
                     {
-                        builder.AppendLine(("Source: " + ex.Source).BlockIndent(indention));
+                        builder.AppendLine(($"Source: {ex.Source}").BlockIndent(indention));
                     }
 
                     if (ex.Data.Count > 0)
                     {
                         builder.AppendLine("Exception Data:".BlockIndent(indention));
 
+#if NETCOREAPP3_1
 #pragma warning disable CS8605 // Unboxing a possibly null value.
+#endif
                         foreach (DictionaryEntry data in ex.Data)
                         {
                             builder.AppendLine(string.Concat(data.Key, " - ", data.Value).BlockIndent(additionalIndention));
                         }
+#if NETCOREAPP3_1
 #pragma warning restore CS8605 // Unboxing a possibly null value.
+#endif
                     }
 
                     if (ex.StackTrace is not null)
@@ -121,7 +125,7 @@ internal static class FormatToStringExtension
                             {
                                 var formatInnerException = GetFormatExceptionFunc(innerException.GetType());
 
-                                builder.AppendLine(("InnerExceptions[" + i + "]:").BlockIndent(indention));
+                                builder.AppendLine(($"InnerExceptions[{i}]:").BlockIndent(indention));
                                 builder.AppendLine(formatInnerException(innerException, additionalIndention));
                             }
                         }

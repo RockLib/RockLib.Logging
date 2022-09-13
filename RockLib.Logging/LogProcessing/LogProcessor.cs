@@ -62,7 +62,7 @@ public abstract class LogProcessor : ILogProcessor
             {
                 TraceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
                     "[{0:s}] - Error while adding context to log entry {1} using context provider {2}.{3}{4}",
-                    DateTime.Now, logEntry.UniqueId, contextProvider, Environment.NewLine, ex);
+                    DateTime.UtcNow, logEntry.UniqueId, contextProvider, Environment.NewLine, ex);
 
                 continue;
             }
@@ -144,7 +144,7 @@ public abstract class LogProcessor : ILogProcessor
         {
             TraceSource.TraceEvent(TraceEventType.Warning, ex.HResult,
                 "[{0:s}] - Error in error handler.{1}{2}",
-                DateTime.Now, Environment.NewLine, ex);
+                DateTime.UtcNow, Environment.NewLine, ex);
         }
 
         if (error.ShouldRetry)
@@ -179,7 +179,7 @@ public abstract class LogProcessor : ILogProcessor
 
             traceArgs = new object[messageArgs.Length + 3];
             messageArgs.CopyTo(traceArgs, 0);
-            traceArgs[traceArgs.Length - 3] = DateTime.Now;
+            traceArgs[traceArgs.Length - 3] = DateTime.UtcNow;
             traceArgs[traceArgs.Length - 2] = Environment.NewLine;
             traceArgs[traceArgs.Length - 1] = exception;
 
@@ -193,7 +193,7 @@ public abstract class LogProcessor : ILogProcessor
 
             traceArgs = new object[messageArgs.Length + 1];
             messageArgs.CopyTo(traceArgs, 0);
-            traceArgs[traceArgs.Length - 3] = DateTime.Now;
+            traceArgs[traceArgs.Length - 3] = DateTime.UtcNow;
 
             traceId = 0;
         }

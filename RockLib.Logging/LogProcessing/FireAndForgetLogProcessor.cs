@@ -20,7 +20,7 @@ public sealed class FireAndForgetLogProcessor : LogProcessor
 
             TraceSource.TraceEvent(TraceEventType.Information, 0,
                 "[{0:s}] - [" + nameof(FireAndForgetLogProcessor) + "] - Successfully processed log entry {1} from log provider {2}.",
-                DateTime.Now, logEntry.UniqueId, logProvider);
+                DateTime.UtcNow, logEntry.UniqueId, logProvider);
         }
 #pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception ex)

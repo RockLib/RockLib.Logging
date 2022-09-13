@@ -68,7 +68,7 @@ public sealed class Error
     /// <summary>
     /// Gets the time that the error event occurred.
     /// </summary>
-    public DateTime Timestamp { get; } = DateTime.Now;
+    public DateTime Timestamp { get; } = DateTime.UtcNow;
 
     /// <summary>
     /// Gets or sets a value indicating whether the log provider should attempt to send

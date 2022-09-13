@@ -21,7 +21,7 @@ public sealed class SynchronousLogProcessor : LogProcessor
 
             TraceSource.TraceEvent(TraceEventType.Information, 0,
                 "[{0:s}] - [" + nameof(SynchronousLogProcessor) + "] - Successfully processed log entry {1} from log provider {2}.",
-                DateTime.Now, logEntry.UniqueId, logProvider);
+                DateTime.UtcNow, logEntry.UniqueId, logProvider);
         }
         finally
         {
