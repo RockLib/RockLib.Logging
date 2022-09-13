@@ -36,7 +36,7 @@ public class LoggingTraceListenerTests
     {
         var logger = new MockLogger(LogLevel.Info).Object;
 
-        var listener = new LoggingTraceListener(logger, null);
+        using var listener = new LoggingTraceListener(logger, null);
 
         listener.Logger.Should().BeSameAs(logger);
         listener.LogLevel.Should().Be(LogLevel.Info);
@@ -45,9 +45,7 @@ public class LoggingTraceListenerTests
     [Fact(DisplayName = "Constructor throws if logger is null")]
     public void Constructor1SadPath()
     {
-        ILogger logger = null;
-
-        Action act = () => new LoggingTraceListener(logger, LogLevel.Info);
+        var act = () => new LoggingTraceListener((null as ILogger)!, LogLevel.Info);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*logger*");
     }

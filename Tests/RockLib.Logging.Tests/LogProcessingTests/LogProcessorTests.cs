@@ -13,7 +13,7 @@ public class LogProcessorTests
     [Fact]
     public void IsDisposedIsFalseInitially()
     {
-        var logProcessor = new TestLogProcessor();
+        using var logProcessor = new TestLogProcessor();
 
         logProcessor.IsDisposed.Should().Be(false);
     }
@@ -31,7 +31,7 @@ public class LogProcessorTests
     [Fact]
     public void ProcessLogEntryCallsContextProvidersAddContextMethod()
     {
-        var logProcessor = new TestLogProcessor();
+        using var logProcessor = new TestLogProcessor();
 
         var mockContextProvider1 = new Mock<IContextProvider>();
         var mockContextProvider2 = new Mock<IContextProvider>();
@@ -52,7 +52,7 @@ public class LogProcessorTests
     [Fact]
     public void ProcessLogEntryCallsSendToLogProviderForEachLogProvider()
     {
-        var logProcessor = new TestLogProcessor();
+        using var logProcessor = new TestLogProcessor();
 
         var mockContextProvider = new Mock<IContextProvider>();
         var mockLogProvider1 = new Mock<ILogProvider>();
@@ -87,7 +87,7 @@ public class LogProcessorTests
     [Fact]
     public void ProcessLogEntryDoesNotCallSendToLogProviderForLogProvidersWithALevelGreaterThanTheLogEntry()
     {
-        var logProcessor = new TestLogProcessor();
+        using var logProcessor = new TestLogProcessor();
 
         var mockContextProvider = new Mock<IContextProvider>();
         var mockLogProvider1 = new Mock<ILogProvider>();
@@ -119,7 +119,7 @@ public class LogProcessorTests
     [Fact]
     public void IfSendToLogProviderThrowsHandleErrorIsCalled()
     {
-        var logProcessor = new TestLogProcessor(sendToLogProviderShouldThrow: true);
+        using var logProcessor = new TestLogProcessor(sendToLogProviderShouldThrow: true);
 
         var mockContextProvider = new Mock<IContextProvider>();
         var mockLogProvider = new Mock<ILogProvider>();
@@ -146,23 +146,23 @@ public class LogProcessorTests
     [Fact]
     public void HandleErrorInvokesErrorHandlerCallbackWhenProvided()
     {
-        Error capturedError = null;
+        Error? capturedError = null;
 
         var errorHandler = DelegateErrorHandler.New(error =>
         {
             capturedError = error;
         });
 
-        var logProcessor = new TestLogProcessor();
+        using var logProcessor = new TestLogProcessor();
 
-        var exception = new Exception();
+        var exception = new NotSupportedException();
         var logProvider = new Mock<ILogProvider>().Object;
         var logEntry = new LogEntry();
 
         logProcessor.Unlock().HandleError(exception, logProvider, logEntry, errorHandler, 321, "Oops: {0}", new object[] { 123 });
 
         capturedError.Should().NotBeNull();
-        capturedError.Exception.Should().BeSameAs(exception);
+        capturedError!.Exception.Should().BeSameAs(exception);
         capturedError.LogProvider.Should().BeSameAs(logProvider);
         capturedError.LogEntry.Should().BeSameAs(logEntry);
         capturedError.FailureCount.Should().Be(321);
@@ -178,9 +178,9 @@ public class LogProcessorTests
                 error.ShouldRetry = true;
         });
 
-        var logProcessor = new TestLogProcessor();
+        using var logProcessor = new TestLogProcessor();
 
-        var exception = new Exception();
+        var exception = new NotSupportedException();
         var logProvider = new Mock<ILogProvider>().Object;
         var logEntry = new LogEntry();
 
@@ -205,9 +205,9 @@ public class LogProcessorTests
                 error.ShouldRetry = true;
         });
 
-        var logProcessor = new TestLogProcessor(sendToLogProviderShouldThrow: true);
+        using var logProcessor = new TestLogProcessor(sendToLogProviderShouldThrow: true);
 
-        var exception = new Exception();
+        var exception = new NotSupportedException();
         var logProvider = new Mock<ILogProvider>().Object;
         var logEntry = new LogEntry();
 
@@ -238,10 +238,7 @@ public class LogProcessorTests
     {
         private readonly bool _sendToLogProviderShouldThrow;
 
-        public TestLogProcessor(bool sendToLogProviderShouldThrow = false)
-        {
-            _sendToLogProviderShouldThrow = sendToLogProviderShouldThrow;
-        }
+        public TestLogProcessor(bool sendToLogProviderShouldThrow = false) => _sendToLogProviderShouldThrow = sendToLogProviderShouldThrow;
 
         public List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)> SendToLogProviderInvocations { get; } = new List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)>();
         public List<(Exception Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)> HandleErrorInvocations { get; } = new List<(Exception Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)>();
@@ -250,10 +247,11 @@ public class LogProcessorTests
         {
             SendToLogProviderInvocations.Add((logProvider, logEntry, errorHandler, failureCount));
             if (_sendToLogProviderShouldThrow)
-                throw new Exception("error.");
+                throw new NotSupportedException("error.");
         }
 
-        protected override void HandleError(Exception exception, ILogProvider logProvider, LogEntry logEntry, IErrorHandler errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
+        protected override void HandleError(Exception? exception, ILogProvider logProvider, LogEntry logEntry, 
+            IErrorHandler errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
         {
             HandleErrorInvocations.Add((exception, logProvider, logEntry, errorHandler, failureCount, errorMessageFormat, errorMessageArgs));
             base.HandleError(exception, logProvider, logEntry, errorHandler, failureCount, errorMessageFormat, errorMessageArgs);

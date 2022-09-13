@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RockLib.Logging.LogProviders;
+﻿namespace RockLib.Logging.LogProviders;
 
 /// <summary>
 /// Used to resolve the <see cref="LogLevel"/> when logging with an <see cref="ILogger"/>

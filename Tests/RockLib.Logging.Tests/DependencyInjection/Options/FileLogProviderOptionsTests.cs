@@ -10,9 +10,7 @@ public class FileLogProviderOptionsTests
     [Fact(DisplayName = "File property throws when set to null")]
     public void FilePropertySetterSadPath()
     {
-        var options = new FileLogProviderOptions();
-
-        Action act = () => options.File = null;
+        Action act = () => new FileLogProviderOptions().File = null!;
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*value*");
     }

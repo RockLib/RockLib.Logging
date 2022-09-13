@@ -29,13 +29,15 @@ public class FireAndForgetLogProcessorTests
     [Fact]
     public void IfWriteAsyncThrowsWhileAwaitingHandleErrorIsCalled()
     {
-        var logProcessor = new FireAndForgetLogProcessor();
+#pragma warning disable CS0618 // Type or member is obsolete
+        using var logProcessor = new FireAndForgetLogProcessor();
+#pragma warning restore CS0618 // Type or member is obsolete
 
         var logProvider = new FakeLogProvider();
         var logEntry = new LogEntry();
 
-        Error capturedError = null;
-        var waitHandle = new AutoResetEvent(false);
+        Error? capturedError = null;
+        using var waitHandle = new AutoResetEvent(false);
 
         var errorHandler = DelegateErrorHandler.New(error =>
         {
@@ -48,7 +50,7 @@ public class FireAndForgetLogProcessorTests
         waitHandle.WaitOne(10000).Should().BeTrue();
 
         capturedError.Should().NotBeNull();
-        capturedError.Exception.Message.Should().Be("oh, no.");
+        capturedError!.Exception!.Message.Should().Be("oh, no.");
         capturedError.LogProvider.Should().BeSameAs(logProvider);
         capturedError.LogEntry.Should().BeSameAs(logEntry);
         capturedError.FailureCount.Should().Be(2);

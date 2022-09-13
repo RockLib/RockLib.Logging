@@ -44,9 +44,7 @@ public class LoggerBuilderExtensionsTests
     [Fact(DisplayName = "AddLogProvider method throws when builder parameter is null")]
     public void AddLogProviderMethodSadPath()
     {
-        ILoggerBuilder builder = null;
-
-        Action act = () => builder.AddLogProvider<TestLogProvider>();
+        Action act = () => (null as ILoggerBuilder)!.AddLogProvider<TestLogProvider>();
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*builder*");
     }
@@ -81,9 +79,7 @@ public class LoggerBuilderExtensionsTests
     [Fact(DisplayName = "AddContextProvider method throws when builder parameter is null")]
     public void AddContextProviderMethodSadPath()
     {
-        ILoggerBuilder builder = null;
-
-        Action act = () => builder.AddContextProvider<TestContextProvider>();
+        Action act = () => (null as ILoggerBuilder)!.AddContextProvider<TestContextProvider>();
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*builder*");
     }
@@ -119,7 +115,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddConsoleLogProvider((string)null, LogLevel.Info);
+        Action act = () => builder.AddConsoleLogProvider((string)null!, LogLevel.Info);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*template*");
     }
@@ -152,7 +148,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddConsoleLogProvider((ILogFormatter)null, LogLevel.Info);
+        Action act = () => builder.AddConsoleLogProvider((ILogFormatter)null!, LogLevel.Info);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatter*");
     }
@@ -220,7 +216,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddConsoleLogProvider((Func<IServiceProvider, ILogFormatter>)null, LogLevel.Info);
+        Action act = () => builder.AddConsoleLogProvider((Func<IServiceProvider, ILogFormatter>)null!, LogLevel.Info);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatterRegistration*");
     }
@@ -254,9 +250,7 @@ public class LoggerBuilderExtensionsTests
     [Fact(DisplayName = "AddConsoleLogProvider method 5 throws when builder parameter is null")]
     public void AddConsoleLogProviderMethod5SadPath()
     {
-        ILoggerBuilder builder = null;
-
-        Action act = () => builder.AddConsoleLogProvider();
+        Action act = () => (null as ILoggerBuilder)!.AddConsoleLogProvider();
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*builder*");
     }
@@ -296,7 +290,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddFileLogProvider((string)null, "c:\\foobar", LogLevel.Info);
+        Action act = () => builder.AddFileLogProvider((string)null!, "c:\\foobar", LogLevel.Info);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*template*");
     }
@@ -331,7 +325,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddFileLogProvider((ILogFormatter)null, "c:\\foobar", LogLevel.Info);
+        Action act = () => builder.AddFileLogProvider((ILogFormatter)null!, "c:\\foobar", LogLevel.Info);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatter*");
     }
@@ -403,7 +397,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddFileLogProvider((Func<IServiceProvider, ILogFormatter>)null, "c:\\foobar", LogLevel.Info);
+        Action act = () => builder.AddFileLogProvider((Func<IServiceProvider, ILogFormatter>)null!, "c:\\foobar", LogLevel.Info);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatterRegistration*");
     }
@@ -443,9 +437,7 @@ public class LoggerBuilderExtensionsTests
     [Fact(DisplayName = "AddFileLogProvider method 5 throws when builder parameter is null")]
     public void AddFileLogProviderMethod5SadPath()
     {
-        ILoggerBuilder builder = null;
-
-        Action act = () => builder.AddFileLogProvider();
+        var act = () => (null as ILoggerBuilder)!.AddFileLogProvider();
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*builder*");
     }
@@ -489,7 +481,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddRollingFileLogProvider((string)null, "c:\\foobar", LogLevel.Info,
+        Action act = () => builder.AddRollingFileLogProvider((string)null!, "c:\\foobar", LogLevel.Info,
             maxFileSizeKilobytes: 123, maxArchiveCount: 456, rolloverPeriod: RolloverPeriod.Hourly);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*template*");
@@ -529,7 +521,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddRollingFileLogProvider((ILogFormatter)null, "c:\\foobar", LogLevel.Info,
+        Action act = () => builder.AddRollingFileLogProvider((ILogFormatter)null!, "c:\\foobar", LogLevel.Info,
             maxFileSizeKilobytes: 123, maxArchiveCount: 456, rolloverPeriod: RolloverPeriod.Hourly);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatter*");
@@ -611,7 +603,7 @@ public class LoggerBuilderExtensionsTests
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
-        Action act = () => builder.AddRollingFileLogProvider((Func<IServiceProvider, ILogFormatter>)null, "c:\\foobar", LogLevel.Info,
+        Action act = () => builder.AddRollingFileLogProvider((Func<IServiceProvider, ILogFormatter>)null!, "c:\\foobar", LogLevel.Info,
             maxFileSizeKilobytes: 123, maxArchiveCount: 456, rolloverPeriod: RolloverPeriod.Hourly);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatterRegistration*");
@@ -658,9 +650,7 @@ public class LoggerBuilderExtensionsTests
     [Fact(DisplayName = "AddRollingFileLogProvider method 5 throws when builder parameter is null")]
     public void AddRollingFileLogProviderMethod5SadPath()
     {
-        ILoggerBuilder builder = null;
-
-        Action act = () => builder.AddRollingFileLogProvider();
+        var act = () => (null as ILoggerBuilder)!.AddRollingFileLogProvider();
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*builder*");
     }

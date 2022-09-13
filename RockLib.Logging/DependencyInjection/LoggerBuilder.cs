@@ -27,7 +27,7 @@ public class LoggerBuilder : ILoggerBuilder
     /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
     /// logger.
     /// </param>
-    public LoggerBuilder(IServiceCollection services, string loggerName, Action<ILoggerOptions>? configureOptions)
+    public LoggerBuilder(IServiceCollection services, string? loggerName, Action<ILoggerOptions>? configureOptions)
     {
         Services = services ?? throw new ArgumentNullException(nameof(services));
         LoggerName = loggerName ?? Logger.DefaultName;

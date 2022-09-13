@@ -5,6 +5,7 @@ using RockLib.Configuration.ObjectFactory;
 using RockLib.Immutable;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -244,7 +245,7 @@ public class LoggerFactoryTests
     {
         var configurationField = GetSemimutableConfigurationField();
 
-        var existingConfig = configurationField.Value;
+        var existingConfig = configurationField.Value!;
         configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
 
         var config = new ConfigurationBuilder().Build();
@@ -267,7 +268,7 @@ public class LoggerFactoryTests
     {
         var configurationField = GetSemimutableConfigurationField();
 
-        var existingConfig = configurationField.Value;
+        var existingConfig = configurationField.Value!;
         configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
 
         var config = new InterceptingConfigurationSection(new ConfigurationBuilder()
@@ -304,7 +305,7 @@ public class LoggerFactoryTests
     {
         var configurationField = GetSemimutableConfigurationField();
 
-        var existingConfig = configurationField.Value;
+        var existingConfig = configurationField.Value!;
         configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
 
         var config = new InterceptingConfigurationSection(new ConfigurationBuilder()
@@ -352,7 +353,7 @@ public class LoggerFactoryTests
 
         var section = config.GetSection("RockLib.Logging");
 
-        var logger = section.CreateLogger("foo", defaultTypes: defaultTypes, reloadOnConfigChange: false);
+        using var logger = section.CreateLogger("foo", defaultTypes: defaultTypes, reloadOnConfigChange: false);
 
         logger.Should().BeOfType<TestLogger>();
     }
@@ -363,7 +364,7 @@ public class LoggerFactoryTests
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
             {
-                { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName },
+                { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName! },
                 { "RockLib.Logging:Value:Name", "foo" },
                 { "RockLib.Logging:Value:Location", "2,3" }
             }).Build();
@@ -371,7 +372,7 @@ public class LoggerFactoryTests
         Point ParsePoint(string value)
         {
             var split = value.Split(',');
-            return new Point(int.Parse(split[0]), int.Parse(split[1]));
+            return new Point(int.Parse(split[0], CultureInfo.CurrentCulture), int.Parse(split[1], CultureInfo.CurrentCulture));
         }
 
         var valueConverters = new ValueConverters
@@ -393,7 +394,7 @@ public class LoggerFactoryTests
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
             {
-                { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName },
+                { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName! },
                 { "RockLib.Logging:Value:Name", "foo" }
             }).Build();
 
@@ -402,7 +403,7 @@ public class LoggerFactoryTests
 
         var section = config.GetSection("RockLib.Logging");
 
-        var logger = (TestLogger)section.CreateLogger("foo", resolver: resolver, reloadOnConfigChange: false);
+        using var logger = (TestLogger)section.CreateLogger("foo", resolver: resolver, reloadOnConfigChange: false);
 
         logger.Dependency.Should().BeSameAs(dependency);
     }
@@ -413,13 +414,13 @@ public class LoggerFactoryTests
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
             {
-                { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName },
+                { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName! },
                 { "RockLib.Logging:Value:Name", "foo" }
             }).Build();
 
         var section = config.GetSection("RockLib.Logging");
 
-        var logger = section.CreateLogger("foo", reloadOnConfigChange: true);
+        using var logger = section.CreateLogger("foo", reloadOnConfigChange: true);
 
         logger.Should().BeAssignableTo<ConfigReloadingProxy<ILogger>>();
     }
@@ -430,13 +431,13 @@ public class LoggerFactoryTests
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
             {
-                { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName },
+                { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName! },
                 { "RockLib.Logging:Value:Name", "foo" }
             }).Build();
 
         var messagingSection = config.GetSection("RockLib.Logging");
 
-        var sender = messagingSection.CreateLogger("foo", reloadOnConfigChange: false);
+        using var sender = messagingSection.CreateLogger("foo", reloadOnConfigChange: false);
 
         sender.Should().BeOfType<TestLogger>();
     }
@@ -445,10 +446,7 @@ public class LoggerFactoryTests
     {
         private readonly IConfigurationSection _configuration;
 
-        public InterceptingConfigurationSection(IConfigurationSection configuration)
-        {
-            _configuration = configuration;
-        }
+        public InterceptingConfigurationSection(IConfigurationSection configuration) => _configuration = configuration;
 
         public int Usages { get; private set; }
 
@@ -492,13 +490,13 @@ public class LoggerFactoryTests
 
     private static Semimutable<IConfiguration> GetSemimutableConfigurationField()
     {
-        var field = typeof(LoggerFactory).GetField("_configuration", BindingFlags.NonPublic | BindingFlags.Static);
-        return (Semimutable<IConfiguration>)field.GetValue(null);
+        var field = typeof(LoggerFactory).GetField("_configuration", BindingFlags.NonPublic | BindingFlags.Static)!;
+        return (Semimutable<IConfiguration>)field.GetValue(null)!;
     }
 
     private class TestLogger : ILogger
     {
-        public TestLogger(Point location = default(Point), ITestDependency dependency = null)
+        public TestLogger(Point location = default, ITestDependency? dependency = null)
         {
             Name = nameof(TestLogger);
             Location = location;
@@ -506,16 +504,16 @@ public class LoggerFactoryTests
         }
 
         public Point Location { get; }
-        public ITestDependency Dependency { get; }
+        public ITestDependency? Dependency { get; }
 
         public string Name { get; }
         public bool IsDisabled { get; }
         public LogLevel Level { get; }
-        public IReadOnlyCollection<ILogProvider> LogProviders { get; }
-        public IReadOnlyCollection<IContextProvider> ContextProviders { get; }
-        public IErrorHandler ErrorHandler { get; set; }
+        public IReadOnlyCollection<ILogProvider> LogProviders { get; } = new List<ILogProvider>();
+        public IReadOnlyCollection<IContextProvider> ContextProviders { get; } = new List<IContextProvider>();
+        public IErrorHandler? ErrorHandler { get; set; }
 
-        public void Log(LogEntry logEntry, string callerMemberName = null, string callerFilePath = null, int callerLineNumber = 0) => throw new NotImplementedException();
+        public void Log(LogEntry logEntry, string? callerMemberName = null, string? callerFilePath = null, int callerLineNumber = 0) => throw new NotImplementedException();
 
         public void Dispose() { }
     }

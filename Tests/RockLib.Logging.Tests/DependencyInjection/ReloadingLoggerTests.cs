@@ -16,7 +16,7 @@ namespace RockLib.Logging.Tests.DependencyInjection;
 public class ReloadingLoggerTests
 {
     public static readonly Type ReloadingLogger =
-        Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogger, RockLib.Logging", true);
+        Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogger, RockLib.Logging", true)!;
 
     [Fact(DisplayName = "Constructor sets fields and properties")]
     public void ConstructorHappyPath()
@@ -85,9 +85,8 @@ public class ReloadingLoggerTests
         var contextProviders = new[] { new Mock<IContextProvider>().Object };
         var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<LoggerOptions>>();
         var options = optionsMonitor.Get("MyLogger");
-        Action<LoggerOptions> configureOptions = null;
 
-        var reloadingLogger = ReloadingLogger.New(serviceProvider, logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
+        var reloadingLogger = ReloadingLogger.New(serviceProvider, logProcessor, name, logProviders, contextProviders, optionsMonitor, options, null!);
 
         var errorHandler = new Mock<IErrorHandler>().Object;
         reloadingLogger.ErrorHandler = errorHandler;
@@ -133,9 +132,8 @@ public class ReloadingLoggerTests
         var contextProviders = new[] { new Mock<IContextProvider>().Object };
         var optionsMonitor = serviceProvider.GetRequiredService<IOptionsMonitor<LoggerOptions>>();
         var options = optionsMonitor.Get("MyLogger");
-        Action<LoggerOptions> configureOptions = null;
 
-        var reloadingLogger = ReloadingLogger.New(serviceProvider, logProcessor, name, logProviders, contextProviders, optionsMonitor, options, configureOptions);
+        var reloadingLogger = ReloadingLogger.New(serviceProvider, logProcessor, name, logProviders, contextProviders, optionsMonitor, options, null!);
 
         var errorHandler = new Mock<IErrorHandler>().Object;
         reloadingLogger.ErrorHandler = errorHandler;

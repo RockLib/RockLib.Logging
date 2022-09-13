@@ -18,7 +18,7 @@ public class FormattableLogProviderOptionsTests
 
         options.SetTemplate("foo");
 
-        var formatter = options.FormatterRegistration.Invoke(_emptyServiceProvider);
+        var formatter = options.FormatterRegistration!.Invoke(_emptyServiceProvider);
 
         formatter.Should().BeOfType<TemplateLogFormatter>()
             .Which.Template.Should().Be("foo");
@@ -29,7 +29,7 @@ public class FormattableLogProviderOptionsTests
     {
         var options = new TestFormattableLogProviderOptions();
 
-        Action act = () => options.SetTemplate(null);
+        Action act = () => options.SetTemplate(null!);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*template*");
     }
@@ -43,7 +43,7 @@ public class FormattableLogProviderOptionsTests
 
         options.SetFormatter(formatter);
 
-        var actualFormatter = options.FormatterRegistration.Invoke(_emptyServiceProvider);
+        var actualFormatter = options.FormatterRegistration!.Invoke(_emptyServiceProvider);
 
         actualFormatter.Should().BeSameAs(formatter);
     }
@@ -53,7 +53,7 @@ public class FormattableLogProviderOptionsTests
     {
         var options = new TestFormattableLogProviderOptions();
 
-        Action act = () => options.SetFormatter(null);
+        Action act = () => options.SetFormatter(null!);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*formatter*");
     }
@@ -65,7 +65,7 @@ public class FormattableLogProviderOptionsTests
 
         options.SetFormatter<TestLogFormatter>(123);
 
-        var formatter = options.FormatterRegistration.Invoke(_emptyServiceProvider);
+        var formatter = options.FormatterRegistration!.Invoke(_emptyServiceProvider);
 
         formatter.Should().BeOfType<TestLogFormatter>()
             .Which.Foo.Should().Be(123);
@@ -77,10 +77,7 @@ public class FormattableLogProviderOptionsTests
 
     private class TestLogFormatter : ILogFormatter
     {
-        public TestLogFormatter(int foo)
-        {
-            Foo = foo;
-        }
+        public TestLogFormatter(int foo) => Foo = foo;
 
         public int Foo { get; }
 

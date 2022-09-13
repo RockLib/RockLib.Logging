@@ -48,7 +48,7 @@ public class SanitizeEngineTests
     public void SanitizeMethodTest4()
     {
         SafeToLogAttribute.Decorate<ExampleNotSafeToLog2>();
-        NotSafeToLogAttribute.Decorate<ExampleNotSafeToLog2>(x => x.Bar);
+        NotSafeToLogAttribute.Decorate<ExampleNotSafeToLog2>(x => x.Bar!);
 
         var value = new ExampleNotSafeToLog2 { Foo = "abc", Bar = "xyz" };
 
@@ -61,7 +61,7 @@ public class SanitizeEngineTests
     [Fact(DisplayName = "Sanitize method transforms type with safe-to-log properties (defined at run-time) into string dictionary")]
     public void SanitizeMethodTest5()
     {
-        SafeToLogAttribute.Decorate<ExampleNotSafeToLog3>(x => x.Foo);
+        SafeToLogAttribute.Decorate<ExampleNotSafeToLog3>(x => x.Foo!);
 
         var value = new ExampleNotSafeToLog3 { Foo = "abc", Bar = "xyz" };
 
@@ -214,46 +214,46 @@ public class SanitizeEngineTests
 
     public class ExampleNotSafeToLog1
     {
-        public string Foo { get; set; }
+        public string? Foo { get; set; }
 
-        public string Bar { get; set; }
+        public string? Bar { get; set; }
     }
 
     public class ExampleNotSafeToLog2
     {
-        public string Foo { get; set; }
+        public string? Foo { get; set; }
 
-        public string Bar { get; set; }
+        public string? Bar { get; set; }
     }
 
     public class ExampleNotSafeToLog3
     {
-        public string Foo { get; set; }
+        public string? Foo { get; set; }
 
-        public string Bar { get; set; }
+        public string? Bar { get; set; }
     }
 
     public class ExampleNotSafeToLog4
     {
-        public string Foo { get; set; }
+        public string? Foo { get; set; }
 
-        public string Bar { get; set; }
+        public string? Bar { get; set; }
     }
 
     [SafeToLog]
     public class ExampleSafeToLogType
     {
-        public string Foo { get; set; }
+        public string? Foo { get; set; }
 
         [NotSafeToLog]
-        public string Bar { get; set; }
+        public string? Bar { get; set; }
     }
 
     public class ExampleSafeToLogProperty
     {
-        public string Foo { get; set; }
+        public string? Foo { get; set; }
 
         [SafeToLog]
-        public string Bar { get; set; }
+        public string? Bar { get; set; }
     }
 }

@@ -63,7 +63,7 @@ public class BackgroundLogProcessorTests
     [Fact]
     public void IfWriteAsyncTimesOutHandleErrorIsCalled()
     {
-        var logProcessor = new BackgroundLogProcessor();
+        using var logProcessor = new BackgroundLogProcessor();
 
         var mockLogProvider = new Mock<ILogProvider>();
         var logEntry = new LogEntry();
@@ -71,8 +71,8 @@ public class BackgroundLogProcessorTests
         mockLogProvider.Setup(m => m.WriteAsync(It.IsAny<LogEntry>(), It.IsAny<CancellationToken>())).Returns(() => Task.Delay(200));
         mockLogProvider.Setup(m => m.Timeout).Returns(TimeSpan.FromMilliseconds(10));
 
-        Error capturedError = null;
-        var waitHandle = new AutoResetEvent(false);
+        Error? capturedError = null;
+        using var waitHandle = new AutoResetEvent(false);
 
         var errorHandler = DelegateErrorHandler.New(error =>
         {
@@ -85,7 +85,7 @@ public class BackgroundLogProcessorTests
         waitHandle.WaitOne(10000).Should().BeTrue();
 
         capturedError.Should().NotBeNull();
-        capturedError.IsTimeout.Should().BeTrue();
+        capturedError!.IsTimeout.Should().BeTrue();
         capturedError.LogProvider.Should().BeSameAs(mockLogProvider.Object);
         capturedError.LogEntry.Should().BeSameAs(logEntry);
         capturedError.FailureCount.Should().Be(2);
@@ -99,7 +99,7 @@ public class BackgroundLogProcessorTests
         var logProvider = new FakeLogProvider();
         var logEntry = new LogEntry();
 
-        Error capturedError = null;
+        Error? capturedError = null;
 
         var errorHandler = DelegateErrorHandler.New(error =>
         {
@@ -111,7 +111,7 @@ public class BackgroundLogProcessorTests
         logProcessor.Dispose();
 
         capturedError.Should().NotBeNull();
-        capturedError.Exception.Message.Should().Be("oh, no.");
+        capturedError!.Exception!.Message.Should().Be("oh, no.");
         capturedError.LogProvider.Should().BeSameAs(logProvider);
         capturedError.LogEntry.Should().BeSameAs(logEntry);
         capturedError.FailureCount.Should().Be(2);

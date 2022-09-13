@@ -83,7 +83,7 @@ public class LoggerTests
     {
         var logger = new Logger();
 
-        Assert.Throws<ArgumentNullException>(() => logger.Log(null));
+        Assert.Throws<ArgumentNullException>(() => logger.Log(null!));
     }
 
     [Fact]
@@ -178,12 +178,18 @@ public class LoggerTests
     {
         get
         {
+#if NETCOREAPP3_1
+#pragma warning disable CS8605 // Unboxing a possibly null value.
+#endif
             foreach (LogLevel level in Enum.GetValues(typeof(LogLevel)))
             {
                 yield return new object[] { level };
             }
+#if NETCOREAPP3_1
+#pragma warning restore CS8605 // Unboxing a possibly null value.
+#endif
 
-            yield return new object[] { null };
+            yield return new object[] { null! };
         }
     }
     [Theory, MemberData(nameof(LogLevelResolverProvider_TestsCases))]

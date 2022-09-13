@@ -8,5 +8,5 @@ internal static class NullErrorHandler
     private const string _nullErrorHandlerTypeName = "RockLib.Logging.LogProcessing.LogProcessor+NullErrorHandler, RockLib.Logging";
 
     public static readonly IErrorHandler Instance =
-        UniversalMemberAccessor.GetStatic(Type.GetType(_nullErrorHandlerTypeName, true)).Instance;
+        UniversalMemberAccessor.GetStatic(Type.GetType(_nullErrorHandlerTypeName, true)!).Instance;
 }

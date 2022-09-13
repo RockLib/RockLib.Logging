@@ -13,7 +13,7 @@ namespace RockLib.Logging.Tests.DependencyInjection;
 public class ReloadingLogProviderTests
 {
     public static readonly Type ReloadingLogProviderOfTestOptions =
-        Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogProvider`1, RockLib.Logging", true)
+        Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogProvider`1, RockLib.Logging", true)!
             .MakeGenericType(typeof(TestOptions));
 
     [Fact(DisplayName = "Constructor sets fields")]
@@ -74,9 +74,8 @@ public class ReloadingLogProviderTests
         Func<TestOptions, ILogProvider> createLogProvider = o =>
             new TestLogProvider { Foo = o.Foo, Bar = o.Bar };
         var name = "MyLogger";
-        Action<TestOptions> configureOptions = null;
 
-        var reloadingLogProvider = ReloadingLogProviderOfTestOptions.New(optionsMonitor, options, createLogProvider, name, configureOptions);
+        var reloadingLogProvider = ReloadingLogProviderOfTestOptions.New(optionsMonitor, options, createLogProvider, name, null!);
 
         TestLogProvider logProvider1 = reloadingLogProvider._logProvider;
         logProvider1.Foo.Should().Be(123);
@@ -96,7 +95,7 @@ public class ReloadingLogProviderTests
     {
         public int Foo { get; set; }
 
-        public string Bar { get; set; }
+        public string? Bar { get; set; }
 
         public TimeSpan Timeout => TimeSpan.FromSeconds(1);
 
@@ -109,6 +108,6 @@ public class ReloadingLogProviderTests
     {
         public int Foo { get; set; }
 
-        public string Bar { get; set; }
+        public string? Bar { get; set; }
     }
 }

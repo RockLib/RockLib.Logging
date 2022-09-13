@@ -30,7 +30,7 @@ public class ServiceCollectionExtensionsTests
 
         services[1].ServiceType.Should().Be<ILogger>();
         services[1].Lifetime.Should().Be(ServiceLifetime.Scoped);
-        services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
+        services[1].ImplementationFactory!.Target.Should().BeSameAs(builder);
 
         services[2].ServiceType.Should().Be<LoggerLookup>();
         services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
@@ -40,10 +40,9 @@ public class ServiceCollectionExtensionsTests
     [Fact(DisplayName = "AddLogger method 1 throws when services parameter is null")]
     public void AddLoggerMethod1SadPath1()
     {
-        IServiceCollection services = null;
         var logProcessor = new Mock<ILogProcessor>().Object;
 
-        Action act = () => services.AddLogger(logProcessor);
+        var act = () => (null as IServiceCollection)!.AddLogger(logProcessor);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
     }
@@ -52,9 +51,8 @@ public class ServiceCollectionExtensionsTests
     public void AddLoggerMethod1SadPath2()
     {
         var services = new ServiceCollection();
-        ILogProcessor logProcessor = null;
 
-        Action act = () => services.AddLogger(logProcessor);
+        var act = () => services.AddLogger((null as ILogProcessor)!);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*logProcessor*");
     }
@@ -74,11 +72,11 @@ public class ServiceCollectionExtensionsTests
 
         services[0].ServiceType.Should().Be<ILogProcessor>();
         services[0].Lifetime.Should().Be(ServiceLifetime.Singleton);
-        services[0].ImplementationFactory.Invoke(_emptyServiceProvider).Should().BeSameAs(logProcessor);
+        services[0].ImplementationFactory!.Invoke(_emptyServiceProvider).Should().BeSameAs(logProcessor);
 
         services[1].ServiceType.Should().Be<ILogger>();
         services[1].Lifetime.Should().Be(ServiceLifetime.Scoped);
-        services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
+        services[1].ImplementationFactory!.Target.Should().BeSameAs(builder);
 
         services[2].ServiceType.Should().Be<LoggerLookup>();
         services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
@@ -88,11 +86,10 @@ public class ServiceCollectionExtensionsTests
     [Fact(DisplayName = "AddLogger method 2 throws when services parameter is null")]
     public void AddLoggerMethod2SadPath1()
     {
-        IServiceCollection services = null;
         var logProcessor = new Mock<ILogProcessor>().Object;
         ILogProcessor LogProcessorRegistration(IServiceProvider serviceProvider) => logProcessor;
 
-        Action act = () => services.AddLogger(LogProcessorRegistration);
+        var act = () => (null as IServiceCollection)!.AddLogger(LogProcessorRegistration);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
     }
@@ -101,9 +98,8 @@ public class ServiceCollectionExtensionsTests
     public void AddLoggerMethod2SadPath2()
     {
         var services = new ServiceCollection();
-        Func<IServiceProvider, ILogProcessor> logProcessorRegistration = null;
 
-        Action act = () => services.AddLogger(logProcessorRegistration);
+        var act = () => services.AddLogger((null as Func<IServiceProvider, ILogProcessor>)!);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*logProcessorRegistration*");
     }
@@ -125,7 +121,7 @@ public class ServiceCollectionExtensionsTests
 
         services[1].ServiceType.Should().Be<ILogger>();
         services[1].Lifetime.Should().Be(ServiceLifetime.Scoped);
-        services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
+        services[1].ImplementationFactory!.Target.Should().BeSameAs(builder);
 
         services[2].ServiceType.Should().Be<LoggerLookup>();
         services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
@@ -137,19 +133,23 @@ public class ServiceCollectionExtensionsTests
     {
         var services = new ServiceCollection();
 
+#pragma warning disable CS0618 // Type or member is obsolete
         var builder = services.AddLogger(configureOptions: options => options.Level = LogLevel.Info,
             processingMode: Logger.ProcessingMode.FireAndForget,
             lifetime: ServiceLifetime.Scoped);
+#pragma warning restore CS0618 // Type or member is obsolete
 
         services.Should().HaveCount(3);
 
         services[0].ServiceType.Should().Be<ILogProcessor>();
         services[0].Lifetime.Should().Be(ServiceLifetime.Singleton);
+#pragma warning disable CS0618 // Type or member is obsolete
         services[0].ImplementationType.Should().Be<FireAndForgetLogProcessor>();
+#pragma warning restore CS0618 // Type or member is obsolete
 
         services[1].ServiceType.Should().Be<ILogger>();
         services[1].Lifetime.Should().Be(ServiceLifetime.Scoped);
-        services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
+        services[1].ImplementationFactory!.Target.Should().BeSameAs(builder);
 
         services[2].ServiceType.Should().Be<LoggerLookup>();
         services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
@@ -161,19 +161,23 @@ public class ServiceCollectionExtensionsTests
     {
         var services = new ServiceCollection();
 
+#pragma warning disable CS0618 // Type or member is obsolete
         var builder = services.AddLogger(configureOptions: options => options.Level = LogLevel.Info,
             processingMode: Logger.ProcessingMode.Synchronous,
             lifetime: ServiceLifetime.Scoped);
+#pragma warning restore CS0618 // Type or member is obsolete
 
         services.Should().HaveCount(3);
 
         services[0].ServiceType.Should().Be<ILogProcessor>();
         services[0].Lifetime.Should().Be(ServiceLifetime.Singleton);
+#pragma warning disable CS0618 // Type or member is obsolete
         services[0].ImplementationType.Should().Be<SynchronousLogProcessor>();
+#pragma warning restore CS0618 // Type or member is obsolete
 
         services[1].ServiceType.Should().Be<ILogger>();
         services[1].Lifetime.Should().Be(ServiceLifetime.Scoped);
-        services[1].ImplementationFactory.Target.Should().BeSameAs(builder);
+        services[1].ImplementationFactory!.Target.Should().BeSameAs(builder);
 
         services[2].ServiceType.Should().Be<LoggerLookup>();
         services[2].Lifetime.Should().Be(ServiceLifetime.Scoped);
@@ -183,10 +187,9 @@ public class ServiceCollectionExtensionsTests
     [Fact(DisplayName = "AddLogger method 3 throws when services parameter is null")]
     public void AddLoggerMethod3SadPath1()
     {
-        IServiceCollection services = null;
         var processingMode = Logger.ProcessingMode.Background;
 
-        Action act = () => services.AddLogger(processingMode: processingMode);
+        var act = () => (null as IServiceCollection)!.AddLogger(processingMode: processingMode);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
     }
@@ -197,7 +200,7 @@ public class ServiceCollectionExtensionsTests
         var services = new ServiceCollection();
         var processingMode = (Logger.ProcessingMode)123;
      
-        Action act = () => services.AddLogger(processingMode: processingMode);
+        var act = () => services.AddLogger(processingMode: processingMode);
 
         act.Should().ThrowExactly<ArgumentOutOfRangeException>().WithMessage("*processingMode*");
     }

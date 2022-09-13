@@ -32,10 +32,9 @@ public class LoggerBuilderTests
     public void ConstructorHappyPath2()
     {
         var services = new ServiceCollection();
-        string name = null;
         Action<ILoggerOptions> configureOptions = o => o.Level = LogLevel.Info;
 
-        var builder = new LoggerBuilder(services, name, configureOptions);
+        var builder = new LoggerBuilder(services, null, configureOptions);
 
         builder.Services.Should().BeSameAs(services);
         builder.LoggerName.Should().BeSameAs(Logger.DefaultName);
@@ -45,11 +44,10 @@ public class LoggerBuilderTests
     [Fact(DisplayName = "Constructor throws if services parameter is null")]
     public void ConstructorSadPath()
     {
-        IServiceCollection services = null;
         var name = "foo";
         Action<ILoggerOptions> configureOptions = o => o.Level = LogLevel.Info;
 
-        Action act = () => new LoggerBuilder(services, name, configureOptions);
+        var act = () => new LoggerBuilder(null!, name, configureOptions);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
     }
@@ -80,9 +78,7 @@ public class LoggerBuilderTests
     {
         var builder = new LoggerBuilder(new ServiceCollection(), Logger.DefaultName, null);
 
-        Func<IServiceProvider, ILogProvider> logProviderRegistration = null;
-
-        Action act = () => builder.AddLogProvider(logProviderRegistration);
+        Action act = () => builder.AddLogProvider(null!);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*logProviderRegistration*");
     }
@@ -113,9 +109,7 @@ public class LoggerBuilderTests
     {
         var builder = new LoggerBuilder(new ServiceCollection(), Logger.DefaultName, null);
 
-        Func<IServiceProvider, IContextProvider> contextProviderRegistration = null;
-
-        Action act = () => builder.AddContextProvider(contextProviderRegistration);
+        Action act = () => builder.AddContextProvider(null!);
 
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*contextProviderRegistration*");
     }
