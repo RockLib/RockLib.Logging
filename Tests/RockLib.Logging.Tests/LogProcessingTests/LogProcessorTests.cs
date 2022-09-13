@@ -37,7 +37,7 @@ public class LogProcessorTests
         var mockContextProvider2 = new Mock<IContextProvider>();
         var mockLogProvider = new Mock<ILogProvider>();
 
-        var logger = new Logger(logProcessor,
+        using var logger = new Logger(logProcessor,
             logProviders: new[] { mockLogProvider.Object },
             contextProviders: new[] { mockContextProvider1.Object, mockContextProvider2.Object });
 
@@ -58,7 +58,7 @@ public class LogProcessorTests
         var mockLogProvider1 = new Mock<ILogProvider>();
         var mockLogProvider2 = new Mock<ILogProvider>();
 
-        var logger = new Logger(logProcessor,
+        using var logger = new Logger(logProcessor,
             logProviders: new[] { mockLogProvider1.Object, mockLogProvider2.Object },
             contextProviders: new[] { mockContextProvider.Object });
 
@@ -96,7 +96,7 @@ public class LogProcessorTests
         mockLogProvider1.Setup(m => m.Level).Returns(LogLevel.Error);
         mockLogProvider2.Setup(m => m.Level).Returns(LogLevel.Info);
 
-        var logger = new Logger(logProcessor,
+        using var logger = new Logger(logProcessor,
             logProviders: new[] { mockLogProvider1.Object, mockLogProvider2.Object },
             contextProviders: new[] { mockContextProvider.Object });
 
@@ -124,7 +124,7 @@ public class LogProcessorTests
         var mockContextProvider = new Mock<IContextProvider>();
         var mockLogProvider = new Mock<ILogProvider>();
 
-        var logger = new Logger(logProcessor,
+        using var logger = new Logger(logProcessor,
             logProviders: new[] { mockLogProvider.Object },
             contextProviders: new[] { mockContextProvider.Object });
 

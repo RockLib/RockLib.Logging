@@ -33,7 +33,8 @@ public class LoggerFactoryTests
         logger.LogProviders.Count.Should().Be(1);
         logger.LogProviders.First().Should().BeOfType(typeof(FooLogProvider));
 
-        config.CreateLogger().Should().NotBeSameAs(logger);
+        using var newLogger = config.CreateLogger();
+        newLogger.Should().NotBeSameAs(logger);
     }
 
     [Theory]
@@ -94,13 +95,14 @@ public class LoggerFactoryTests
             .Build()
             .GetSection("rocklib.logging");
 
-        var logger = config.CreateLogger("bar");
+        using var logger = config.CreateLogger("bar");
 
         logger.Name.Should().Be("bar");
         logger.LogProviders.Count.Should().Be(1);
         logger.LogProviders.First().Should().BeOfType(typeof(BarLogProvider));
 
-        config.CreateLogger("bar").Should().NotBeSameAs(logger);
+        using var newLogger = config.CreateLogger("bar");
+        newLogger.Should().NotBeSameAs(logger);
     }
 
     [Fact]
@@ -285,7 +287,7 @@ public class LoggerFactoryTests
 
         try
         {
-            var logger = LoggerFactory.Create();
+            using var logger = LoggerFactory.Create();
 
             config.Usages.Should().BeGreaterThan(0);
 
@@ -293,7 +295,8 @@ public class LoggerFactoryTests
             logger.LogProviders.Count.Should().Be(1);
             logger.LogProviders.First().Should().BeOfType(typeof(FooLogProvider));
 
-            LoggerFactory.Create().Should().NotBeSameAs(logger);
+            using var newLogger = LoggerFactory.Create();
+            newLogger.Should().NotBeSameAs(logger);
         }
         finally
         {
@@ -384,7 +387,7 @@ public class LoggerFactoryTests
 
         var section = config.GetSection("RockLib.Logging");
 
-        var logger = (TestLogger)section.CreateLogger("foo", valueConverters: valueConverters, reloadOnConfigChange: false);
+        using var logger = (TestLogger)section.CreateLogger("foo", valueConverters: valueConverters, reloadOnConfigChange: false);
 
         logger.Location.X.Should().Be(2);
         logger.Location.Y.Should().Be(3);

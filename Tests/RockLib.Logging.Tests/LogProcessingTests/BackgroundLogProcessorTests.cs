@@ -19,7 +19,7 @@ public class BackgroundLogProcessorTests
         var mockContextProvider = new Mock<IContextProvider>();
         var mockLogProvider = new Mock<ILogProvider>();
 
-        var logger = new Logger(logProcessor,
+        using var logger = new Logger(logProcessor,
             logProviders: new[] { mockLogProvider.Object },
             contextProviders: new[] { mockContextProvider.Object });
 
@@ -46,7 +46,7 @@ public class BackgroundLogProcessorTests
         var mockContextProvider = new Mock<IContextProvider>();
         var mockLogProvider = new Mock<ILogProvider>();
 
-        var logger = new Logger(logProcessor,
+        using var logger = new Logger(logProcessor,
             logProviders: new[] { mockLogProvider.Object },
             contextProviders: new[] { mockContextProvider.Object });
 

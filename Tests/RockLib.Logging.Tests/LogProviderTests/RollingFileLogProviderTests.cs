@@ -8,7 +8,7 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
-public class RollingFileLogProviderTests : IDisposable
+public sealed class RollingFileLogProviderTests : IDisposable
 {
     private static readonly string _logFileDirectory = Path.Combine(Path.GetTempPath(), "RockLib.Logging.Tests");
     private static readonly string _logFilePath = Path.Combine(_logFileDirectory, "log.txt");
