@@ -129,8 +129,8 @@ public static class LoggerBuilderExtensions
         TimeSpan? timeout = null,
         params object[] logFormatterParameters)
         where TLogFormatter : ILogFormatter => builder.AddConsoleLogProvider(serviceProvider =>
-                                                        ActivatorUtilities.CreateInstance<TLogFormatter>(serviceProvider, logFormatterParameters),
-            level, output, timeout);
+            ActivatorUtilities.CreateInstance<TLogFormatter>(serviceProvider, logFormatterParameters),
+                level, output, timeout);
 
     /// <summary>
     /// Adds a <see cref="ConsoleLogProvider"/>, formatted with the <see cref="ILogFormatter"/>
@@ -158,9 +158,9 @@ public static class LoggerBuilderExtensions
         return builder.AddConsoleLogProvider(options =>
         {
             options.FormatterRegistration = formatterRegistration;
-            if (level is not null) options.Level = level.Value;
-            if (output is not null) options.Output = output.Value;
-            if (timeout is not null) options.Timeout = timeout;
+            if (level is not null) { options.Level = level.Value; }
+            if (output is not null) { options.Output = output.Value; }
+            if (timeout is not null) { options.Timeout = timeout; }
         });
     }
 
@@ -308,8 +308,8 @@ public static class LoggerBuilderExtensions
         return builder.AddDebugLogProvider(options =>
         {
             options.FormatterRegistration = formatterRegistration;
-            if (level is not null) options.Level = level.Value;
-            if (timeout is not null) options.Timeout = timeout;
+            if (level is not null) { options.Level = level.Value; }
+            if (timeout is not null) { options.Timeout = timeout; }
         });
     }
 
@@ -465,9 +465,9 @@ public static class LoggerBuilderExtensions
         return builder.AddFileLogProvider(options =>
         {
             options.FormatterRegistration = formatterRegistration;
-            if (file is not null) options.File = file;
-            if (level is not null) options.Level = level.Value;
-            if (timeout is not null) options.Timeout = timeout;
+            if (file is not null) { options.File = file; }
+            if (level is not null) { options.Level = level.Value; }
+            if (timeout is not null) { options.Timeout = timeout; }
         });
     }
 
@@ -681,12 +681,12 @@ public static class LoggerBuilderExtensions
         return builder.AddRollingFileLogProvider(options =>
         {
             options.FormatterRegistration = formatterRegistration;
-            if (file is not null) options.File = file;
-            if (level is not null) options.Level = level.Value;
-            if (timeout is not null) options.Timeout = timeout;
-            if (maxFileSizeKilobytes is not null) options.MaxFileSizeKilobytes = maxFileSizeKilobytes.Value;
-            if (maxArchiveCount is not null) options.MaxArchiveCount = maxArchiveCount.Value;
-            if (rolloverPeriod is not null) options.RolloverPeriod = rolloverPeriod.Value;
+            if (file is not null) { options.File = file; }
+            if (level is not null) { options.Level = level.Value; }
+            if (timeout is not null) { options.Timeout = timeout; }
+            if (maxFileSizeKilobytes is not null) { options.MaxFileSizeKilobytes = maxFileSizeKilobytes.Value; }
+            if (maxArchiveCount is not null) { options.MaxArchiveCount = maxArchiveCount.Value; }
+            if (rolloverPeriod is not null) { options.RolloverPeriod = rolloverPeriod.Value; }
         });
     }
 

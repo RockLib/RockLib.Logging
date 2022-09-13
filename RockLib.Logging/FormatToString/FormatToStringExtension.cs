@@ -35,7 +35,8 @@ internal static class FormatToStringExtension
         return formatException(exception, "");
     }
 
-    private static Func<Exception, string, string> GetFormatExceptionFunc(Type exceptionType) => _formatExceptionFuncs.GetOrAdd(
+    private static Func<Exception, string, string> GetFormatExceptionFunc(Type exceptionType) => 
+        _formatExceptionFuncs.GetOrAdd(
             exceptionType,
             type =>
             {
@@ -364,39 +365,16 @@ internal static class FormatToStringExtension
         }
     }
 
-    // TODO: remove this method and the following class when method invocation is available from RockLib.Reflection.Optimized.
     private static Func<Type, Type> GetGetObjectTypeFunc(MethodInfo getObjectTypeMethod)
     {
-        var invoker = new GetObjectTypeInvoker(getObjectTypeMethod);
-        ThreadPool.QueueUserWorkItem(state => ((GetObjectTypeInvoker)state!).SetFunc(), invoker);
-        return invoker.GetObjectType;
-    }
+        var typeParameter = Expression.Parameter(typeof(Type), "type");
+        var body = Expression.Call(getObjectTypeMethod, typeParameter);
+        var lambda =
+            Expression.Lambda<Func<Type, Type>>(
+                body,
+                "GetObjectType",
+                new[] { typeParameter });
 
-    private class GetObjectTypeInvoker
-    {
-        public readonly MethodInfo Method;
-        public Func<Type, Type> Func;
-        public GetObjectTypeInvoker(MethodInfo method)
-        {
-            Method = method;
-            Func = type => (Type)method.Invoke(null, new object[] { type })!;
-        }
-
-        public Type GetObjectType(Type type) => Func.Invoke(type);
-
-        public void SetFunc()
-        {
-            var typeParameter = Expression.Parameter(typeof(Type), "type");
-
-            var body = Expression.Call(Method, typeParameter);
-
-            var lambda =
-                    Expression.Lambda<Func<Type, Type>>(
-                        body,
-                        "GetObjectType",
-                        new[] { typeParameter });
-
-            Func = lambda.Compile();
-        }
+        return lambda.Compile();
     }
 }

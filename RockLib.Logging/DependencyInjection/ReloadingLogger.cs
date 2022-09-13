@@ -35,7 +35,6 @@ internal class ReloadingLogger : ILogger
         _contextProviders = contextProviders;
         _configureOptions = configureOptions;
         _logger = CreateLogger(_serviceProvider, options);
-
         _changeListener = optionsMonitor.OnChange(OptionsMonitorChanged);
     }
 

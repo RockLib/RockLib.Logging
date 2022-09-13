@@ -424,7 +424,9 @@ public static class LoggingExtensions
         int callerLineNumber)
     {
         if (logger.IsDisabled || level < logger.Level)
+        {
             return;
+        }
 
         var logEntry = new LogEntry(message, exception, level, extendedProperties)
         {
