@@ -193,7 +193,7 @@ public sealed class LogEntry
         {
             foreach (var item in (IEnumerable)extendedProperties)
             {
-                ExtendedProperties[getKey(item)] = getValue(item);
+                ExtendedProperties[getKey(item!)] = getValue(item!);
             }
         }
         else if (extendedProperties is IDictionary dictionary)
@@ -240,7 +240,7 @@ public sealed class LogEntry
         {
             foreach (var item in (IEnumerable)extendedProperties)
             {
-                ExtendedProperties[getKey(item)] = SanitizeEngine.Sanitize(getValue(item));
+                ExtendedProperties[getKey(item!)] = SanitizeEngine.Sanitize(getValue(item!));
             }
         }
         else if (extendedProperties is IDictionary dictionary)
@@ -307,7 +307,7 @@ public sealed class LogEntry
     }
 
     private static bool TryGetStringDictionaryItemAccessors(object extendedProperties, 
-        [NotNullWhen(true)] out Func<object, string>? getKey, [NotNullWhen(true)]  out Func<object, object>? getValue)
+        [NotNullWhen(true)] out Func<object, string>? getKey, [NotNullWhen(true)] out Func<object, object>? getValue)
     {
         (getKey, getValue) = _stringDictionaryItemAccessors.GetOrAdd(extendedProperties.GetType(), CreateStringDictionaryItemAccessors);
         return getKey is not null && getValue is not null;

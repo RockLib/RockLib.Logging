@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -102,7 +103,7 @@ public static class SanitizeEngine
     private static bool IsCollection(Type runtimeType) =>
         typeof(IEnumerable).IsAssignableFrom(runtimeType);
 
-    private static bool IsKeyValuePair(Type runtimeType, out Type? keyType, out Type? valueType)
+    private static bool IsKeyValuePair(Type runtimeType, [NotNullWhen(true)] out Type? keyType, [NotNullWhen(true)] out Type? valueType)
     {
         if (runtimeType.IsValueType
             && runtimeType.IsGenericType
@@ -164,12 +165,12 @@ public static class SanitizeEngine
             .Cast<KeyValuePair<string, object>>()
             .ToDictionary(item => item.Key, item => item.Value);
 
-    private static Func<object, object> GetSanitizeKeyValuePairFunction(Type? keyType, Type? valueType)
+    private static Func<object, object> GetSanitizeKeyValuePairFunction(Type keyType, Type valueType)
     {
         var sanitizeKeyValuePairMethod = typeof(SanitizeEngine)
-            .GetMethod(nameof(GetSanitizeKeyValuePairFunction), BindingFlags.NonPublic | BindingFlags.Static, null, Type.EmptyTypes, null)
+            .GetMethod(nameof(GetSanitizeKeyValuePairFunction), BindingFlags.NonPublic | BindingFlags.Static, null, Type.EmptyTypes, null)!
             .MakeGenericMethod(keyType, valueType);
-        return (Func<object, object>)sanitizeKeyValuePairMethod.Invoke(null, null);
+        return (Func<object, object>)sanitizeKeyValuePairMethod.Invoke(null, null)!;
     }
 
     private static Func<object, object> GetSanitizeKeyValuePairFunction<TKey, TValue>() =>

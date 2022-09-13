@@ -85,7 +85,7 @@ public class TemplateLogFormatter : ILogFormatter
     /// </summary>
     /// <param name="key">The key of the token.</param>
     /// <param name="extendedProperty">The extended property to retrieve.</param>
-    public static void AddExtendedPropertyTokenHandler(string key, string? extendedProperty) => 
+    public static void AddExtendedPropertyTokenHandler(string key, string extendedProperty) => 
         AddSimpleTokenHandler(key, logEntry => FormatSpecificExtendedProperty(logEntry, extendedProperty));
 
     /// <summary>
@@ -97,7 +97,7 @@ public class TemplateLogFormatter : ILogFormatter
 
     private static void AddDateTimeTokenHandler(string key, Func<LogEntry, DateTime> getDateTime) => _dateTimeTokenHandlers[key] = getDateTime;
 
-    private static string FormatSpecificExtendedProperty(LogEntry logEntry, string? extendedProperty) => 
+    private static string FormatSpecificExtendedProperty(LogEntry logEntry, string extendedProperty) => 
         logEntry.ExtendedProperties.ContainsKey(extendedProperty)
             ? ConvertToString(logEntry.ExtendedProperties[extendedProperty])
             : "N/A";
@@ -116,7 +116,7 @@ public class TemplateLogFormatter : ILogFormatter
                 return
                     HtmlEncodeIfNecessary(
                         _simpleTokenHandlers.TryGetValue(match.Groups["token"].Value, out var getValue)
-                            ? getValue(logEntry)
+                            ? getValue(logEntry)!
                             : match.Value);
             });
 

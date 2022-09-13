@@ -49,9 +49,9 @@ internal static class FormatToStringExtension
                 {
                     var additionalIndention = indention + _indent;
 
-                    var sb = new StringBuilder();
+                    var builder = new StringBuilder();
 
-                    sb.AppendLine(("Type: " + ex.GetType()).BlockIndent(indention));
+                    builder.AppendLine(("Type: " + ex.GetType()).BlockIndent(indention));
 
                     var message = ex.Message.Trim();
 
@@ -61,48 +61,52 @@ internal static class FormatToStringExtension
                     if (message.Contains('\n', StringComparison.InvariantCulture))
 #endif
                     {
-                        sb.AppendLine("Message:".BlockIndent(indention));
-                        sb.AppendLine(message.BlockIndent(additionalIndention));
+                        builder.AppendLine("Message:".BlockIndent(indention));
+                        builder.AppendLine(message.BlockIndent(additionalIndention));
                     }
                     else
                     {
-                        sb.AppendLine(("Message: " + message).BlockIndent(indention));
+                        builder.AppendLine(("Message: " + message).BlockIndent(indention));
                     }
 
-                    sb.AppendLine("Properties:".BlockIndent(indention));
+                    builder.AppendLine("Properties:".BlockIndent(indention));
 
+#pragma warning disable CA1806 // Do not ignore method results
                     appendPropertyValueFuncs
                         .Aggregate(
-                            sb,
+                            builder,
                             (stringBuilder, appendPropertyValue) =>
                                 appendPropertyValue(stringBuilder, ex, additionalIndention));
+#pragma warning restore CA1806 // Do not ignore method results
 
                     if (_dbEntityValidationExceptionType is not null
                         && _dbEntityValidationExceptionType.IsInstanceOfType(ex))
                     {
-                        sb.AppendLine("EntityValidationErrors:".BlockIndent(additionalIndention));
-                        _addValidationErrorMessages?.Invoke(ex, sb, additionalIndention + _indent);
+                        builder.AppendLine("EntityValidationErrors:".BlockIndent(additionalIndention));
+                        _addValidationErrorMessages?.Invoke(ex, builder, additionalIndention + _indent);
                     }
 
                     if (ex.Source is not null)
                     {
-                        sb.AppendLine(("Source: " + ex.Source).BlockIndent(indention));
+                        builder.AppendLine(("Source: " + ex.Source).BlockIndent(indention));
                     }
 
                     if (ex.Data.Count > 0)
                     {
-                        sb.AppendLine("Exception Data:".BlockIndent(indention));
+                        builder.AppendLine("Exception Data:".BlockIndent(indention));
 
+#pragma warning disable CS8605 // Unboxing a possibly null value.
                         foreach (DictionaryEntry data in ex.Data)
                         {
-                            sb.AppendLine(string.Concat(data.Key, " - ", data.Value).BlockIndent(additionalIndention));
+                            builder.AppendLine(string.Concat(data.Key, " - ", data.Value).BlockIndent(additionalIndention));
                         }
+#pragma warning restore CS8605 // Unboxing a possibly null value.
                     }
 
                     if (ex.StackTrace is not null)
                     {
-                        sb.AppendLine("Stack Trace:".BlockIndent(indention));
-                        sb.AppendLine(ex.StackTrace.BlockIndent(indention));
+                        builder.AppendLine("Stack Trace:".BlockIndent(indention));
+                        builder.AppendLine(ex.StackTrace.BlockIndent(indention));
                     }
 
                     var aggregateException = ex as AggregateException;
@@ -117,8 +121,8 @@ internal static class FormatToStringExtension
                             {
                                 var formatInnerException = GetFormatExceptionFunc(innerException.GetType());
 
-                                sb.AppendLine(("InnerExceptions[" + i + "]:").BlockIndent(indention));
-                                sb.AppendLine(formatInnerException(innerException, additionalIndention));
+                                builder.AppendLine(("InnerExceptions[" + i + "]:").BlockIndent(indention));
+                                builder.AppendLine(formatInnerException(innerException, additionalIndention));
                             }
                         }
                     }
@@ -126,11 +130,11 @@ internal static class FormatToStringExtension
                     {
                         var formatInnerException = GetFormatExceptionFunc(ex.InnerException.GetType());
 
-                        sb.AppendLine("InnerException:".BlockIndent(indention));
-                        sb.AppendLine(formatInnerException(ex.InnerException, additionalIndention));
+                        builder.AppendLine("InnerException:".BlockIndent(indention));
+                        builder.AppendLine(formatInnerException(ex.InnerException, additionalIndention));
                     }
 
-                    return sb.ToString().TrimEnd();
+                    return builder.ToString().TrimEnd();
                 };
             });
 
@@ -317,7 +321,7 @@ internal static class FormatToStringExtension
 
                     while (entityValidationErrorsEnumerator.MoveNext())
                     {
-                        var entityValidationError = entityValidationErrorsEnumerator.Current;
+                        var entityValidationError = entityValidationErrorsEnumerator.Current!;
 
                         if (!isValid(entityValidationError))
                         {
@@ -332,7 +336,7 @@ internal static class FormatToStringExtension
 
                             while (validationErrorsEnumerator.MoveNext())
                             {
-                                var validationError = validationErrorsEnumerator.Current;
+                                var validationError = validationErrorsEnumerator.Current!;
 
                                 var propertyName = getPropertyName(validationError);
                                 var errorMessage = getErrorMessage(validationError);
