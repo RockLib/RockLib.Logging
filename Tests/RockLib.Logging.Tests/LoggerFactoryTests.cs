@@ -499,6 +499,7 @@ public class LoggerFactoryTests
         return (Semimutable<IConfiguration>)field.GetValue(null)!;
     }
 
+#pragma warning disable CA1812
     private class TestLogger : ILogger
     {
         public TestLogger(Point location = default, ITestDependency? dependency = null)
@@ -522,6 +523,7 @@ public class LoggerFactoryTests
 
         public void Dispose() { }
     }
+#pragma warning restore CA1812
 
     private struct Point
     {
@@ -545,6 +547,7 @@ public class LoggerFactoryTests
     }
 }
 
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
 public class FooLogProvider : ILogProvider
 {
     public TimeSpan Timeout => throw new NotImplementedException();
@@ -558,3 +561,4 @@ public class BarLogProvider : ILogProvider
     public LogLevel Level => throw new NotImplementedException();
     public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken) => throw new NotImplementedException();
 }
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations

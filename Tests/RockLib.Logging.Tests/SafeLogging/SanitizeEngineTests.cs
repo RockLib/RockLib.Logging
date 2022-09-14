@@ -9,6 +9,7 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.SafeLogging;
 
+#pragma warning disable CA1034 // Nested types should not be visible
 public class SanitizeEngineTests
 {
     [Fact(DisplayName = "Sanitize method transforms safe-to-log type (defined at compile-time) into string dictionary")]
@@ -134,7 +135,7 @@ public class SanitizeEngineTests
             sanitizedValue.Should().BeOfType<ArrayList>()
                 .Subject;
 
-        sanitizedCollection.Should().HaveCount(2);
+        sanitizedCollection.Count.Should().Be(2);
         var garply = sanitizedCollection.Cast<DictionaryEntry>().First(x => x.Key is string key && key == "Garply");
         var grault = sanitizedCollection.Cast<DictionaryEntry>().First(x => x.Key is string key && key == "Grault");
 
@@ -157,7 +158,7 @@ public class SanitizeEngineTests
             sanitizedValue.Should().BeOfType<ArrayList>()
                 .Subject;
 
-        sanitizedCollection.Should().HaveCount(2);
+        sanitizedCollection.Count.Should().Be(2);
         
         sanitizedCollection[0].Should().BeOfType<Dictionary<string, object>>()
             .Which.Should().BeEquivalentTo(new Dictionary<string, object> { { "Foo", "abc" } });
@@ -257,3 +258,4 @@ public class SanitizeEngineTests
         public string? Bar { get; set; }
     }
 }
+#pragma warning restore CA1034 // Nested types should not be visible

@@ -678,6 +678,7 @@ public class LoggerBuilderExtensionsTests
         }
     }
 
+#pragma warning disable CA1812
     private class TestLogProvider : ILogProvider
     {
         public TestLogProvider(IDependency dependency, int setting) => (Dependency, Setting) = (dependency, setting);
@@ -703,6 +704,7 @@ public class LoggerBuilderExtensionsTests
         public int Setting { get; }
         public string Format(LogEntry logEntry) => throw new NotImplementedException();
     }
+#pragma warning restore CA1812
 
     private interface IDependency
     {

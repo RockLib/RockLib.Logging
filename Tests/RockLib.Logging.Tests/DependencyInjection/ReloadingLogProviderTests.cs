@@ -104,10 +104,12 @@ public class ReloadingLogProviderTests
         public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken) => throw new NotImplementedException();
     }
 
+#pragma warning disable CA1812
     private class TestOptions
     {
         public int Foo { get; set; }
 
         public string? Bar { get; set; }
     }
+#pragma warning restore CA1812
 }

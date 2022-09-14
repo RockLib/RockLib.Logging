@@ -75,6 +75,7 @@ public class FormattableLogProviderOptionsTests
     {
     }
 
+#pragma warning disable CA1812
     private class TestLogFormatter : ILogFormatter
     {
         public TestLogFormatter(int foo) => Foo = foo;
@@ -83,4 +84,5 @@ public class FormattableLogProviderOptionsTests
 
         public string Format(LogEntry logEntry) => throw new NotImplementedException();
     }
+#pragma warning restore CA1812
 }

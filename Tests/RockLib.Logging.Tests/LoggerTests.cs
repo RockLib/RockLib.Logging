@@ -175,7 +175,7 @@ public class LoggerTests
         logEntry.CallerInfo.Should().NotBeNullOrWhiteSpace();
     }
 
-    public static IEnumerable<object[]> LogLevelResolverProvider_TestsCases
+    public static IEnumerable<object[]> LogLevelResolverProviderTestsCases
     {
         get
         {
@@ -193,7 +193,7 @@ public class LoggerTests
             yield return new object[] { null! };
         }
     }
-    [Theory, MemberData(nameof(LogLevelResolverProvider_TestsCases))]
+    [Theory, MemberData(nameof(LogLevelResolverProviderTestsCases))]
     public void LogLevelResolverProvider(LogLevel? expected)
     {
         var logLevelResolver = new Mock<ILogLevelResolver>();
