@@ -4,7 +4,7 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
-public static class ArgumentSadPathTests
+public static class LogEntryExceptionTests
 {
     private static readonly string _file = Path.GetRandomFileName();
 
