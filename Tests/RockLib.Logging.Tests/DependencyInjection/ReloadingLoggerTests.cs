@@ -19,7 +19,7 @@ public static class ReloadingLoggerTests
         Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogger, RockLib.Logging", true)!;
 
     [Fact(DisplayName = "Constructor sets fields and properties")]
-    public static void ConstructorHappyPath()
+    public static void Create()
     {
         var source = new TestConfigurationSource();
         source.Provider.Set("CustomLogger:Level", "Fatal");
@@ -65,7 +65,7 @@ public static class ReloadingLoggerTests
     }
 
     [Fact(DisplayName = "_logger field is reinstantiated when options monitor changes")]
-    public static void ReloadHappyPath()
+    public static void Reload()
     {
         var configSource = new TestConfigurationSource();
         configSource.Provider.Set("CustomLogger:Level", "Warn");

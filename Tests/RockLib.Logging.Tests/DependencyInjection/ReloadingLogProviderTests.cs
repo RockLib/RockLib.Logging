@@ -17,7 +17,7 @@ public static class ReloadingLogProviderTests
             .MakeGenericType(typeof(TestOptions));
 
     [Fact(DisplayName = "Constructor sets fields")]
-    public static void ConstructorHappyPath()
+    public static void Create()
     {
         var source = new TestConfigurationSource();
         source.Provider.Set("CustomLogProvider:Foo", "123");
@@ -54,7 +54,7 @@ public static class ReloadingLogProviderTests
     }
 
     [Fact(DisplayName = "_logProvider field is reinstantiated when options monitor changes")]
-    public static void ReloadHappyPath()
+    public static void Reload()
     {
         var source = new TestConfigurationSource();
         source.Provider.Set("CustomLogProvider:Foo", "123");

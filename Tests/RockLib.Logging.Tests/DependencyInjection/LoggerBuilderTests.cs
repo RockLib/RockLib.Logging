@@ -15,7 +15,7 @@ namespace RockLib.Logging.Tests.DependencyInjection;
 public static class LoggerBuilderTests
 {
     [Fact(DisplayName = "Constructor sets properties")]
-    public static void ConstructorHappyPath1()
+    public static void Create()
     {
         var services = new ServiceCollection();
         var name = "foo";
@@ -29,7 +29,7 @@ public static class LoggerBuilderTests
     }
 
     [Fact(DisplayName = "Constructor sets LoggerName to Logger.DefaultName if name parameter is null")]
-    public static void ConstructorHappyPath2()
+    public static void CreateWithNullName()
     {
         var services = new ServiceCollection();
         Action<ILoggerOptions> configureOptions = o => o.Level = LogLevel.Info;
@@ -42,7 +42,7 @@ public static class LoggerBuilderTests
     }
 
     [Fact(DisplayName = "Constructor throws if services parameter is null")]
-    public static void ConstructorSadPath()
+    public static void CreateWhenServicesIsNull()
     {
         var name = "foo";
         Action<ILoggerOptions> configureOptions = o => o.Level = LogLevel.Info;
@@ -53,7 +53,7 @@ public static class LoggerBuilderTests
     }
 
     [Fact(DisplayName = "AddLogProvider method adds logProviderRegistration parameter to configured LoggerOptions")]
-    public static void AddLogProviderMethodHappyPath()
+    public static void AddLogProviderMethod()
     {
         var services = new ServiceCollection();
         var builder = new LoggerBuilder(services, Logger.DefaultName, null);
@@ -74,7 +74,7 @@ public static class LoggerBuilderTests
     }
 
     [Fact(DisplayName = "AddLogProvider method throws if logProviderRegistration parameter is null")]
-    public static void AddLogProviderMethodSadPath()
+    public static void AddLogProviderMethodWhenRegistrationIsNull()
     {
         var builder = new LoggerBuilder(new ServiceCollection(), Logger.DefaultName, null);
 
@@ -84,7 +84,7 @@ public static class LoggerBuilderTests
     }
 
     [Fact(DisplayName = "AddContextProvider method adds contextProviderRegistration parameter to configured LoggerOptions")]
-    public static void AddContextProviderMethodHappyPath()
+    public static void AddContextProviderMethod()
     {
         var services = new ServiceCollection();
         var builder = new LoggerBuilder(services, Logger.DefaultName, null);
@@ -105,7 +105,7 @@ public static class LoggerBuilderTests
     }
 
     [Fact(DisplayName = "AddContextProvider method throws if contextProviderRegistration parameter is null")]
-    public static void AddContextProviderMethodSadPath()
+    public static void AddContextProviderMethodWhenRegistrationIsNull()
     {
         var builder = new LoggerBuilder(new ServiceCollection(), Logger.DefaultName, null);
 
@@ -116,7 +116,7 @@ public static class LoggerBuilderTests
 
     [Theory(DisplayName = "Build method returns Logger instance given non-empty options")]
     [InlineData(true, LogLevel.Error), InlineData(false, LogLevel.Info)]
-    public static void BuildMethodHappyPath1(bool customLogLevelResolver, LogLevel expectedLogLevel)
+    public static void BuildMethod(bool customLogLevelResolver, LogLevel expectedLogLevel)
     {
         var services = new ServiceCollection();
 
@@ -153,7 +153,7 @@ public static class LoggerBuilderTests
 
     [Theory(DisplayName = "Build method returns ReloadingLogger instance given non-empty options where ReloadOnChange is true")]
     [InlineData(true, LogLevel.Error), InlineData(false, LogLevel.Info)]
-    public static void BuildMethodHappyPath2(bool customLogLevelResolver, LogLevel expectedLogLevel)
+    public static void BuildMethodWithReloadOnChange(bool customLogLevelResolver, LogLevel expectedLogLevel)
     {
         var services = new ServiceCollection();
 
@@ -193,7 +193,7 @@ public static class LoggerBuilderTests
 
     [Theory(DisplayName = "Build method returns logger created from configuration given empty options")]
     [InlineData(true, LogLevel.Error), InlineData(false, LogLevel.Warn)]
-    public static void BuildMethodHappyPath3(bool customLogLevelResolver, LogLevel expectedLogLevel)
+    public static void BuildMethodWithNullOptions(bool customLogLevelResolver, LogLevel expectedLogLevel)
     {
         var services = new ServiceCollection();
 

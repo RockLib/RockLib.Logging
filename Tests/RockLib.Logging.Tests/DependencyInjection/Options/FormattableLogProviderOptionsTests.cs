@@ -12,7 +12,7 @@ public static class FormattableLogProviderOptionsTests
     private static readonly IServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
 
     [Fact(DisplayName = "SetTemplate method sets FormatterRegistration property to TemplateLogFormatter with specified template")]
-    public static void SetTemplateMethodHappyPath()
+    public static void SetTemplateMethod()
     {
         var options = new TestFormattableLogProviderOptions();
 
@@ -25,7 +25,7 @@ public static class FormattableLogProviderOptionsTests
     }
 
     [Fact(DisplayName = "SetTemplate method throws when template parameter is null")]
-    public static void SetTemplateMethodSadPath()
+    public static void SetTemplateMethodWhenTemplateParameterIsNull()
     {
         var options = new TestFormattableLogProviderOptions();
 
@@ -35,7 +35,7 @@ public static class FormattableLogProviderOptionsTests
     }
 
     [Fact(DisplayName = "SetFormatter method 1 sets FormatterRegistration property to formatter")]
-    public static void SetFormatterMethod1HappyPath()
+    public static void SetFormatterMethod()
     {
         var formatter = new Mock<ILogFormatter>().Object;
 
@@ -49,7 +49,7 @@ public static class FormattableLogProviderOptionsTests
     }
 
     [Fact(DisplayName = "SetFormatter method 1 throws when formatter parameter is null")]
-    public static void SetFormatterMethod1SadPath()
+    public static void SetFormatterMethodWhenFormatterIsNull()
     {
         var options = new TestFormattableLogProviderOptions();
 
@@ -59,7 +59,7 @@ public static class FormattableLogProviderOptionsTests
     }
 
     [Fact(DisplayName = "SetFormatter method 2 sets FormatterRegistration property to specified formatter")]
-    public static void SetFormatterMethod2HappyPath()
+    public static void SetFormatterMethodToSpecificFormatter()
     {
         var options = new TestFormattableLogProviderOptions();
 

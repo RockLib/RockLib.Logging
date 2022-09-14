@@ -8,7 +8,7 @@ namespace RockLib.Logging.Tests.DependencyInjection;
 public static class FileLogProviderOptionsTests
 {
     [Fact(DisplayName = "File property throws when set to null")]
-    public static void FilePropertySetterSadPath()
+    public static void FilePropertySetToNull()
     {
         Action act = () => new FileLogProviderOptions().File = null!;
 
