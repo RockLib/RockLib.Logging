@@ -10,12 +10,12 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.DependencyInjection;
 
-public class LoggerBuilderExtensionsTests
+public static class LoggerBuilderExtensionsTests
 {
     private static readonly IServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
 
     [Fact(DisplayName = "AddLogProvider method adds log provider of specified type")]
-    public void AddLogProviderMethodHappyPath()
+    public static void AddLogProviderMethodHappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -42,7 +42,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogProvider method throws when builder parameter is null")]
-    public void AddLogProviderMethodSadPath()
+    public static void AddLogProviderMethodSadPath()
     {
         Action act = () => (null as ILoggerBuilder)!.AddLogProvider<TestLogProvider>();
 
@@ -50,7 +50,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddContextProvider method adds context provider of specified type")]
-    public void AddContextProviderMethodHappyPath()
+    public static void AddContextProviderMethodHappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -77,7 +77,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddContextProvider method throws when builder parameter is null")]
-    public void AddContextProviderMethodSadPath()
+    public static void AddContextProviderMethodSadPath()
     {
         Action act = () => (null as ILoggerBuilder)!.AddContextProvider<TestContextProvider>();
 
@@ -87,7 +87,7 @@ public class LoggerBuilderExtensionsTests
     #region AddConsoleLogProvider
 
     [Fact(DisplayName = "AddConsoleLogProvider method 1 adds console log provider with specified template")]
-    public void AddConsoleLogProviderMethod1HappyPath()
+    public static void AddConsoleLogProviderMethod1HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -111,7 +111,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddConsoleLogProvider method 1 throws when template parameter is null")]
-    public void AddConsoleLogProviderMethod1SadPath()
+    public static void AddConsoleLogProviderMethod1SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -121,7 +121,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddConsoleLogProvider method 2 adds console log provider with specified formatter")]
-    public void AddConsoleLogProviderMethod2HappyPath()
+    public static void AddConsoleLogProviderMethod2HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -144,7 +144,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddConsoleLogProvider method 2 throws when formatter parameter is null")]
-    public void AddConsoleLogProviderMethod2SadPath()
+    public static void AddConsoleLogProviderMethod2SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -154,7 +154,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddConsoleLogProvider method 3 adds console log provider with specified formatter")]
-    public void AddConsoleLogProviderMethod3HappyPath()
+    public static void AddConsoleLogProviderMethod3HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -188,7 +188,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddConsoleLogProvider method 4 adds console log provider with specified formatter registration")]
-    public void AddConsoleLogProviderMethod4HappyPath()
+    public static void AddConsoleLogProviderMethod4HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -212,7 +212,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddConsoleLogProvider method 4 throws when formatterRegistration parameter is null")]
-    public void AddConsoleLogProviderMethod4SadPath()
+    public static void AddConsoleLogProviderMethod4SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -222,7 +222,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddConsoleLogProvider method 5 adds console log provider configured with configureOptions parameter")]
-    public void AddConsoleLogProviderMethod5HappyPath()
+    public static void AddConsoleLogProviderMethod5HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -248,7 +248,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddConsoleLogProvider method 5 throws when builder parameter is null")]
-    public void AddConsoleLogProviderMethod5SadPath()
+    public static void AddConsoleLogProviderMethod5SadPath()
     {
         Action act = () => (null as ILoggerBuilder)!.AddConsoleLogProvider();
 
@@ -260,7 +260,7 @@ public class LoggerBuilderExtensionsTests
     #region AddFileLogProvider
 
     [Fact(DisplayName = "AddFileLogProvider method 1 adds file log provider with specified template")]
-    public void AddFileLogProviderMethod1HappyPath()
+    public static void AddFileLogProviderMethod1HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -286,7 +286,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddFileLogProvider method 1 throws when template parameter is null")]
-    public void AddFileLogProviderMethod1SadPath()
+    public static void AddFileLogProviderMethod1SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -296,7 +296,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddFileLogProvider method 2 adds file log provider with specified formatter")]
-    public void AddFileLogProviderMethod2HappyPath()
+    public static void AddFileLogProviderMethod2HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -321,7 +321,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddFileLogProvider method 2 throws when formatter parameter is null")]
-    public void AddFileLogProviderMethod2SadPath()
+    public static void AddFileLogProviderMethod2SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -331,7 +331,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddFileLogProvider method 3 adds file log provider with specified formatter")]
-    public void AddFileLogProviderMethod3HappyPath()
+    public static void AddFileLogProviderMethod3HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -367,7 +367,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddFileLogProvider method 4 adds file log provider with specified formatter registration")]
-    public void AddFileLogProviderMethod4HappyPath()
+    public static void AddFileLogProviderMethod4HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -393,7 +393,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddFileLogProvider method 4 throws when formatterRegistration parameter is null")]
-    public void AddFileLogProviderMethod4SadPath()
+    public static void AddFileLogProviderMethod4SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -403,7 +403,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddFileLogProvider method 5 adds file log provider configured with configureOptions parameter")]
-    public void AddFileLogProviderMethod5HappyPath()
+    public static void AddFileLogProviderMethod5HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -435,7 +435,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddFileLogProvider method 5 throws when builder parameter is null")]
-    public void AddFileLogProviderMethod5SadPath()
+    public static void AddFileLogProviderMethod5SadPath()
     {
         var act = () => (null as ILoggerBuilder)!.AddFileLogProvider();
 
@@ -447,7 +447,7 @@ public class LoggerBuilderExtensionsTests
     #region AddRollingFileLogProvider
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 1 adds rolling file log provider with specified template")]
-    public void AddRollingRollingFileLogProviderMethod1HappyPath()
+    public static void AddRollingRollingFileLogProviderMethod1HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -477,7 +477,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 1 throws when template parameter is null")]
-    public void AddRollingFileLogProviderMethod1SadPath()
+    public static void AddRollingFileLogProviderMethod1SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -488,7 +488,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 2 adds rolling file log provider with specified formatter")]
-    public void AddRollingFileLogProviderMethod2HappyPath()
+    public static void AddRollingFileLogProviderMethod2HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -517,7 +517,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 2 throws when formatter parameter is null")]
-    public void AddRollingFileLogProviderMethod2SadPath()
+    public static void AddRollingFileLogProviderMethod2SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -528,7 +528,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 3 adds rolling file log provider with specified formatter")]
-    public void AddRollingFileLogProviderMethod3HappyPath()
+    public static void AddRollingFileLogProviderMethod3HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -569,7 +569,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 4 adds rolling file log provider with specified formatter registration")]
-    public void AddRollingFileLogProviderMethod4HappyPath()
+    public static void AddRollingFileLogProviderMethod4HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -599,7 +599,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 4 throws when formatterRegistration parameter is null")]
-    public void AddRollingFileLogProviderMethod4SadPath()
+    public static void AddRollingFileLogProviderMethod4SadPath()
     {
         var builder = new Mock<ILoggerBuilder>().Object;
 
@@ -610,7 +610,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 5 adds rolling file log provider configured with configureOptions parameter")]
-    public void AddRollingFileLogProviderMethod5HappyPath()
+    public static void AddRollingFileLogProviderMethod5HappyPath()
     {
         var builder = new TestLoggerBuilder();
 
@@ -648,7 +648,7 @@ public class LoggerBuilderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRollingFileLogProvider method 5 throws when builder parameter is null")]
-    public void AddRollingFileLogProviderMethod5SadPath()
+    public static void AddRollingFileLogProviderMethod5SadPath()
     {
         var act = () => (null as ILoggerBuilder)!.AddRollingFileLogProvider();
 

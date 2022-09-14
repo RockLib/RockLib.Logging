@@ -10,14 +10,14 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.DependencyInjection;
 
-public class ReloadingLogProviderTests
+public static class ReloadingLogProviderTests
 {
     public static readonly Type ReloadingLogProviderOfTestOptions =
         Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogProvider`1, RockLib.Logging", true)!
             .MakeGenericType(typeof(TestOptions));
 
     [Fact(DisplayName = "Constructor sets fields")]
-    public void ConstructorHappyPath()
+    public static void ConstructorHappyPath()
     {
         var source = new TestConfigurationSource();
         source.Provider.Set("CustomLogProvider:Foo", "123");
@@ -54,7 +54,7 @@ public class ReloadingLogProviderTests
     }
 
     [Fact(DisplayName = "_logProvider field is reinstantiated when options monitor changes")]
-    public void ReloadHappyPath()
+    public static void ReloadHappyPath()
     {
         var source = new TestConfigurationSource();
         source.Provider.Set("CustomLogProvider:Foo", "123");

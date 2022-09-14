@@ -9,10 +9,10 @@ using Xunit;
 namespace RockLib.Logging.Tests;
 
 #pragma warning disable CS0618 // Type or member is obsolete
-public class LoggerTests
+public static class LoggerTests
 {
     [Fact]
-    public void NameIsSetFromConstructor()
+    public static void NameIsSetFromConstructor()
     {
         using var logger = new Logger("foo");
 
@@ -20,7 +20,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LevelIsSetFromConstructor()
+    public static void LevelIsSetFromConstructor()
     {
         using var logger = new Logger(level: LogLevel.Error);
 
@@ -28,7 +28,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void ProvidersIsSetFromConstructor()
+    public static void ProvidersIsSetFromConstructor()
     {
         var logProviders = Array.Empty<ILogProvider>();
 
@@ -38,7 +38,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void IsDisabledIsSetFromConstructor()
+    public static void IsDisabledIsSetFromConstructor()
     {
         using var logger = new Logger(isDisabled: true);
 
@@ -46,7 +46,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogProcessorIsSetFromConstructor()
+    public static void LogProcessorIsSetFromConstructor()
     {
         var logProcessor = new Mock<ILogProcessor>().Object;
 
@@ -56,7 +56,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogProcessorUsesBackgroundLogProcessorWhenProcessingModeIsBackground()
+    public static void LogProcessorUsesBackgroundLogProcessorWhenProcessingModeIsBackground()
     {
         using var logger = new Logger(processingMode: Logger.ProcessingMode.Background);
 
@@ -64,7 +64,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogProcessorUsesSynchronousLogProcessorWhenProcessingModeIsSynchronous()
+    public static void LogProcessorUsesSynchronousLogProcessorWhenProcessingModeIsSynchronous()
     {
         using var logger = new Logger(processingMode: Logger.ProcessingMode.Synchronous);
 
@@ -72,7 +72,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogProcessorUsesFireAndForgetLogProcessorWhenProcessingModeIsFireAndForget()
+    public static void LogProcessorUsesFireAndForgetLogProcessorWhenProcessingModeIsFireAndForget()
     {
         using var logger = new Logger(processingMode: Logger.ProcessingMode.FireAndForget);
 
@@ -80,7 +80,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogThrowsArgumentNullExceptionIfLogEntryIsNull()
+    public static void LogThrowsArgumentNullExceptionIfLogEntryIsNull()
     {
         using var logger = new Logger();
 
@@ -88,7 +88,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogDoesNotCallLogProcessorWhenItHasBeenDisposed()
+    public static void LogDoesNotCallLogProcessorWhenItHasBeenDisposed()
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
         mockLogProcessor.Setup(m => m.IsDisposed).Returns(true);
@@ -100,7 +100,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogCallsProcessLogEntryOnItsLogProcessor()
+    public static void LogCallsProcessLogEntryOnItsLogProcessor()
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
 
@@ -114,7 +114,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogDoesNotCallLogProcessorWhenIsDisabledIsTrue()
+    public static void LogDoesNotCallLogProcessorWhenIsDisabledIsTrue()
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
 
@@ -129,7 +129,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogDoesNotCallLogProcessorWhenThereAreNoLogProviders()
+    public static void LogDoesNotCallLogProcessorWhenThereAreNoLogProviders()
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
 
@@ -144,7 +144,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogDoesNotCallLogProcessorWhenLevelIsHigherThanTheLogEntryLevel()
+    public static void LogDoesNotCallLogProcessorWhenLevelIsHigherThanTheLogEntryLevel()
     {
         var mockLogProcessor = new Mock<ILogProcessor>();
 
@@ -159,7 +159,7 @@ public class LoggerTests
     }
 
     [Fact]
-    public void LogAddsCallerInfoToLogEntry()
+    public static void LogAddsCallerInfoToLogEntry()
     {
         var logProviders = new[]
         {
@@ -194,7 +194,7 @@ public class LoggerTests
         }
     }
     [Theory, MemberData(nameof(LogLevelResolverProviderTestsCases))]
-    public void LogLevelResolverProvider(LogLevel? expected)
+    public static void LogLevelResolverProvider(LogLevel? expected)
     {
         var logLevelResolver = new Mock<ILogLevelResolver>();
         logLevelResolver.Setup(i => i.GetLogLevel()).Returns(expected);

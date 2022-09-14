@@ -13,13 +13,13 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.DependencyInjection;
 
-public class ReloadingLoggerTests
+public static class ReloadingLoggerTests
 {
     public static readonly Type ReloadingLogger =
         Type.GetType("RockLib.Logging.DependencyInjection.ReloadingLogger, RockLib.Logging", true)!;
 
     [Fact(DisplayName = "Constructor sets fields and properties")]
-    public void ConstructorHappyPath()
+    public static void ConstructorHappyPath()
     {
         var source = new TestConfigurationSource();
         source.Provider.Set("CustomLogger:Level", "Fatal");
@@ -65,7 +65,7 @@ public class ReloadingLoggerTests
     }
 
     [Fact(DisplayName = "_logger field is reinstantiated when options monitor changes")]
-    public void ReloadHappyPath()
+    public static void ReloadHappyPath()
     {
         var configSource = new TestConfigurationSource();
         configSource.Provider.Set("CustomLogger:Level", "Warn");
@@ -108,7 +108,7 @@ public class ReloadingLoggerTests
     }
 
     [Fact(DisplayName = "_logger field uses the correct ILogLevelResolver")]
-    public void CustomLogLevelResolver()
+    public static void CustomLogLevelResolver()
     {
         var configSource = new TestConfigurationSource();
         configSource.Provider.Set("CustomLogger:Level", "Warn");

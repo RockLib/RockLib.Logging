@@ -10,10 +10,10 @@ using Xunit;
 namespace RockLib.Logging.Tests.SafeLogging;
 
 #pragma warning disable CA1034 // Nested types should not be visible
-public class SanitizeEngineTests
+public static class SanitizeEngineTests
 {
     [Fact(DisplayName = "Sanitize method transforms safe-to-log type (defined at compile-time) into string dictionary")]
-    public void SanitizeMethodTest1()
+    public static void SanitizeMethodTest1()
     {
         var value = new ExampleSafeToLogType { Foo = "abc", Bar = "xyz" };
 
@@ -24,7 +24,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method transforms type with safe-to-log properties (defined at compile-time) into string dictionary")]
-    public void SanitizeMethodTest2()
+    public static void SanitizeMethodTest2()
     {
         var value = new ExampleSafeToLogProperty { Foo = "abc", Bar = "xyz" };
 
@@ -35,7 +35,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method transforms not-safe-to-log object into \"everything sanitized\" message")]
-    public void SanitizeMethodTest3()
+    public static void SanitizeMethodTest3()
     {
         var value = new ExampleNotSafeToLog1 { Foo = "abc", Bar = "xyz" };
 
@@ -46,7 +46,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method transforms safe-to-log type (defined at run-time) into string dictionary")]
-    public void SanitizeMethodTest4()
+    public static void SanitizeMethodTest4()
     {
         SafeToLogAttribute.Decorate<ExampleNotSafeToLog2>();
         NotSafeToLogAttribute.Decorate<ExampleNotSafeToLog2>(x => x.Bar!);
@@ -60,7 +60,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method transforms type with safe-to-log properties (defined at run-time) into string dictionary")]
-    public void SanitizeMethodTest5()
+    public static void SanitizeMethodTest5()
     {
         SafeToLogAttribute.Decorate<ExampleNotSafeToLog3>(x => x.Foo!);
 
@@ -73,7 +73,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method sanitizes the values of a string dictionary")]
-    public void SanitizeMethodTest6()
+    public static void SanitizeMethodTest6()
     {
         var value = new Dictionary<string, object>
         {
@@ -97,7 +97,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method sanitizes the values of a non-string generic dictionary")]
-    public void SanitizeMethodTest7()
+    public static void SanitizeMethodTest7()
     {
         var value = new Dictionary<string, object>
         {
@@ -121,7 +121,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method sanitizes the values of a non-generic dictionary")]
-    public void SanitizeMethodTest8()
+    public static void SanitizeMethodTest8()
     {
         var value = new Hashtable
         {
@@ -144,7 +144,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method sanitizes the values of a collection")]
-    public void SanitizeMethodTest9()
+    public static void SanitizeMethodTest9()
     {
         var value = new List<object>
         {
@@ -168,7 +168,7 @@ public class SanitizeEngineTests
     }
 
     [Fact(DisplayName = "Sanitize method does not change types whitelisted by IsTypeSafeToLog")]
-    public void SanitizeMethodTest10()
+    public static void SanitizeMethodTest10()
     {
         SanitizeEngine.IsTypeSafeToLog = type => type == typeof(ExampleNotSafeToLog4);
 
@@ -188,7 +188,7 @@ public class SanitizeEngineTests
 
     [Theory(DisplayName = "Sanitize method does not change \"value\" types")]
     [MemberData(nameof(SanitizeMethodTest1TestData))]
-    public void SanitizeMethodTest11(object value)
+    public static void SanitizeMethodTest11(object value)
     {
         var sanitizedValue = SanitizeEngine.Sanitize(value);
 

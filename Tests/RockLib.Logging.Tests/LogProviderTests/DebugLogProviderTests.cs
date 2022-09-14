@@ -7,10 +7,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
-public class DebugLogProviderTests
+public static class DebugLogProviderTests
 {
     [Fact]
-    public void Constructor1SetsFormatterToTemplateLogFormatter()
+    public static void Constructor1SetsFormatterToTemplateLogFormatter()
     {
         var debugLogProvider = new DebugLogProvider("foo");
 
@@ -20,7 +20,7 @@ public class DebugLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsLevel()
+    public static void Constructor1SetsLevel()
     {
         var debugLogProvider = new DebugLogProvider(level: LogLevel.Warn);
 
@@ -28,7 +28,7 @@ public class DebugLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsTimeout()
+    public static void Constructor1SetsTimeout()
     {
         var timeout = TimeSpan.FromMilliseconds(1234);
         var debugLogProvider = new DebugLogProvider(timeout: timeout);
@@ -37,7 +37,7 @@ public class DebugLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
+    public static void Constructor1SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
     {
         var timeout = TimeSpan.FromMilliseconds(1234);
         var debugLogProvider = new DebugLogProvider(timeout: null);
@@ -46,7 +46,7 @@ public class DebugLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsFormatter()
+    public static void Constructor2SetsFormatter()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -56,7 +56,7 @@ public class DebugLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsLevel()
+    public static void Constructor2SetsLevel()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -66,7 +66,7 @@ public class DebugLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsTimeout()
+    public static void Constructor2SetsTimeout()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
         var timeout = TimeSpan.FromMilliseconds(1234);
@@ -77,7 +77,7 @@ public class DebugLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
+    public static void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -87,7 +87,7 @@ public class DebugLogProviderTests
     }
 
     [Fact]
-    public async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToDebug()
+    public static async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToDebug()
     {
         var mockDebugLogProvider = new Mock<DebugLogProvider>("{level}:{message}", LogLevel.NotSet, null);
         mockDebugLogProvider.Protected().As<IProtected>()

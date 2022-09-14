@@ -6,10 +6,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
-public class LogEntryTests
+public static class LogEntryTests
 {
     [Fact]
-    public void LevelIsSetFromConstructor1()
+    public static void LevelIsSetFromConstructor1()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -17,7 +17,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void LevelIsSetFromConstructor2()
+    public static void LevelIsSetFromConstructor2()
     {
         var exception = new NotSupportedException();
 
@@ -27,7 +27,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void MessageIsSetFromConstructor1()
+    public static void MessageIsSetFromConstructor1()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -35,7 +35,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void MessageIsSetFromConstructor2()
+    public static void MessageIsSetFromConstructor2()
     {
         var exception = new NotSupportedException();
 
@@ -45,7 +45,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void ExceptionIsNotSetFromConstructor1()
+    public static void ExceptionIsNotSetFromConstructor1()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -53,7 +53,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void ExceptionIsSetFromConstructor2()
+    public static void ExceptionIsSetFromConstructor2()
     {
         var exception = new NotSupportedException();
 
@@ -63,7 +63,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void ExtendedPropertiesAreSetFromConstructor1()
+    public static void ExtendedPropertiesAreSetFromConstructor1()
     {
         var foo = 123;
         var bar = "abc";
@@ -75,7 +75,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void ExtendedPropertiesAreSetFromConstructor2()
+    public static void ExtendedPropertiesAreSetFromConstructor2()
     {
         var foo = 123;
         var bar = "abc";
@@ -88,7 +88,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void ExtendedPropertiesOfTypeDictionaryAreSetFromConstructor1()
+    public static void ExtendedPropertiesOfTypeDictionaryAreSetFromConstructor1()
     {
         var foo = 123;
         var bar = "abc";
@@ -100,7 +100,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void ExtendedPropertiesOfTypeDictionaryAreSetFromConstructor2()
+    public static void ExtendedPropertiesOfTypeDictionaryAreSetFromConstructor2()
     {
         var foo = 123;
         var bar = "abc";
@@ -113,7 +113,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void SetExtendedPropertiesMapsObjectPropertiesToExtendedProperties()
+    public static void SetExtendedPropertiesMapsObjectPropertiesToExtendedProperties()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -127,7 +127,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void SetExtendedPropertiesMapsStringObjectDictionaryItemsToExtendedProperties()
+    public static void SetExtendedPropertiesMapsStringObjectDictionaryItemsToExtendedProperties()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -141,7 +141,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void SetExtendedPropertiesMapsStringStringDictionaryItemsToExtendedProperties()
+    public static void SetExtendedPropertiesMapsStringStringDictionaryItemsToExtendedProperties()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -155,7 +155,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void SetExtendedPropertiesMapsStringIntDictionaryItemsToExtendedProperties()
+    public static void SetExtendedPropertiesMapsStringIntDictionaryItemsToExtendedProperties()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -169,7 +169,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void SetExtendedPropertiesMapsStringOtherDictionaryItemsToExtendedProperties()
+    public static void SetExtendedPropertiesMapsStringOtherDictionaryItemsToExtendedProperties()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -183,7 +183,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void SetExtendedPropertiesMapsHashtableItemsWithStringKeysToExtendedProperties()
+    public static void SetExtendedPropertiesMapsHashtableItemsWithStringKeysToExtendedProperties()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -198,7 +198,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void GetExceptionDataReturnsNullWhenExceptionIsNull()
+    public static void GetExceptionDataReturnsNullWhenExceptionIsNull()
     {
         var logEntry = new LogEntry("Hello, world!", LogLevel.Error);
 
@@ -206,7 +206,7 @@ public class LogEntryTests
     }
 
     [Fact]
-    public void GetExceptionDataReturnsAValueWhenExceptionIsNotNull()
+    public static void GetExceptionDataReturnsAValueWhenExceptionIsNotNull()
     {
         var exception = new NotSupportedException();
 

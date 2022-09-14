@@ -8,12 +8,12 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.DependencyInjection;
 
-public class ServiceCollectionExtensionsTests
+public static class ServiceCollectionExtensionsTests
 {
-    private readonly IServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
+    private static readonly IServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
 
     [Fact(DisplayName = "AddLogger method 1 adds the correct service descriptors")]
-    public void AddLoggerMethod1HappyPath()
+    public static void AddLoggerMethod1HappyPath()
     {
         var services = new ServiceCollection();
         var logProcessor = new Mock<ILogProcessor>().Object;
@@ -38,7 +38,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 1 throws when services parameter is null")]
-    public void AddLoggerMethod1SadPath1()
+    public static void AddLoggerMethod1SadPath1()
     {
         var logProcessor = new Mock<ILogProcessor>().Object;
 
@@ -48,7 +48,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 1 throws when logProcessor parameter is null")]
-    public void AddLoggerMethod1SadPath2()
+    public static void AddLoggerMethod1SadPath2()
     {
         var services = new ServiceCollection();
 
@@ -58,7 +58,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 2 adds the correct service descriptors")]
-    public void AddLoggerMethod2HappyPath()
+    public static void AddLoggerMethod2HappyPath()
     {
         var services = new ServiceCollection();
         var logProcessor = new Mock<ILogProcessor>().Object;
@@ -84,7 +84,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 2 throws when services parameter is null")]
-    public void AddLoggerMethod2SadPath1()
+    public static void AddLoggerMethod2SadPath1()
     {
         var logProcessor = new Mock<ILogProcessor>().Object;
         ILogProcessor LogProcessorRegistration(IServiceProvider serviceProvider) => logProcessor;
@@ -95,7 +95,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 2 throws when logProcessorRegistration parameter is null")]
-    public void AddLoggerMethod2SadPath2()
+    public static void AddLoggerMethod2SadPath2()
     {
         var services = new ServiceCollection();
 
@@ -105,7 +105,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 3 adds the correct service descriptors for ProcessingMode.Background")]
-    public void AddLoggerMethod3HappyPath1()
+    public static void AddLoggerMethod3HappyPath1()
     {
         var services = new ServiceCollection();
 
@@ -129,7 +129,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 3 adds the correct service descriptors for ProcessingMode.FireAndForget")]
-    public void AddLoggerMethod3HappyPath2()
+    public static void AddLoggerMethod3HappyPath2()
     {
         var services = new ServiceCollection();
 
@@ -157,7 +157,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 3 adds the correct service descriptors for ProcessingMode.Synchronous")]
-    public void AddLoggerMethod3HappyPath3()
+    public static void AddLoggerMethod3HappyPath3()
     {
         var services = new ServiceCollection();
 
@@ -185,7 +185,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 3 throws when services parameter is null")]
-    public void AddLoggerMethod3SadPath1()
+    public static void AddLoggerMethod3SadPath1()
     {
         var processingMode = Logger.ProcessingMode.Background;
 
@@ -195,7 +195,7 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact(DisplayName = "AddLogger method 3 throws when processingMode parameter is out of range")]
-    public void AddLoggerMethod3SadPath2()
+    public static void AddLoggerMethod3SadPath2()
     {
         var services = new ServiceCollection();
         var processingMode = (Logger.ProcessingMode)123;

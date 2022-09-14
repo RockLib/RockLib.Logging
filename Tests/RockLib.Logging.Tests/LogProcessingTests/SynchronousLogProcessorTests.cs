@@ -7,10 +7,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.LogProcessingTests;
 
-public class SynchronousLogProcessorTests
+public static class SynchronousLogProcessorTests
 {
     [Fact]
-    public void ProcessLogEntryCallsWriteAsyncOnTheLogProvider()
+    public static void ProcessLogEntryCallsWriteAsyncOnTheLogProvider()
     {
 #pragma warning disable CS0618 // Type or member is obsolete
         using var logProcessor = new SynchronousLogProcessor();

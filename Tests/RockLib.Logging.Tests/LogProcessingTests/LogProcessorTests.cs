@@ -8,10 +8,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.LogProcessingTests;
 
-public class LogProcessorTests
+public static class LogProcessorTests
 {
     [Fact]
-    public void IsDisposedIsFalseInitially()
+    public static void IsDisposedIsFalseInitially()
     {
         using var logProcessor = new TestLogProcessor();
 
@@ -19,7 +19,7 @@ public class LogProcessorTests
     }
 
     [Fact]
-    public void DisposeSetsIsDisposedToTrue()
+    public static void DisposeSetsIsDisposedToTrue()
     {
         var logProcessor = new TestLogProcessor();
 
@@ -29,7 +29,7 @@ public class LogProcessorTests
     }
 
     [Fact]
-    public void ProcessLogEntryCallsContextProvidersAddContextMethod()
+    public static void ProcessLogEntryCallsContextProvidersAddContextMethod()
     {
         using var logProcessor = new TestLogProcessor();
 
@@ -50,7 +50,7 @@ public class LogProcessorTests
     }
 
     [Fact]
-    public void ProcessLogEntryCallsSendToLogProviderForEachLogProvider()
+    public static void ProcessLogEntryCallsSendToLogProviderForEachLogProvider()
     {
         using var logProcessor = new TestLogProcessor();
 
@@ -85,7 +85,7 @@ public class LogProcessorTests
     }
 
     [Fact]
-    public void ProcessLogEntryDoesNotCallSendToLogProviderForLogProvidersWithALevelGreaterThanTheLogEntry()
+    public static void ProcessLogEntryDoesNotCallSendToLogProviderForLogProvidersWithALevelGreaterThanTheLogEntry()
     {
         using var logProcessor = new TestLogProcessor();
 
@@ -117,7 +117,7 @@ public class LogProcessorTests
     }
 
     [Fact]
-    public void IfSendToLogProviderThrowsHandleErrorIsCalled()
+    public static void IfSendToLogProviderThrowsHandleErrorIsCalled()
     {
         using var logProcessor = new TestLogProcessor(sendToLogProviderShouldThrow: true);
 
@@ -144,7 +144,7 @@ public class LogProcessorTests
     }
 
     [Fact]
-    public void HandleErrorInvokesErrorHandlerCallbackWhenProvided()
+    public static void HandleErrorInvokesErrorHandlerCallbackWhenProvided()
     {
         Error? capturedError = null;
 
@@ -170,7 +170,7 @@ public class LogProcessorTests
     }
 
     [Fact]
-    public void IfErrorHandlerSetsShouldRetryToTrueSendToLogProviderIsCalled()
+    public static void IfErrorHandlerSetsShouldRetryToTrueSendToLogProviderIsCalled()
     {
         var errorHandler = DelegateErrorHandler.New(error =>
         {
@@ -197,7 +197,7 @@ public class LogProcessorTests
     }
 
     [Fact]
-    public void IfRetriedSendToLogProviderThrowsHandleErrorIsCalled()
+    public static void IfRetriedSendToLogProviderThrowsHandleErrorIsCalled()
     {
         var errorHandler = DelegateErrorHandler.New(error =>
         {

@@ -14,10 +14,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
-public class LoggerFactoryTests
+public static class LoggerFactoryTests
 {
     [Fact]
-    public void LegacyConfigurationFormatIsSupported()
+    public static void LegacyConfigurationFormatIsSupported()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -40,7 +40,7 @@ public class LoggerFactoryTests
     [Theory]
     [InlineData(Logger.DefaultName, typeof(FooLogProvider))]
     [InlineData("bar", typeof(BarLogProvider))]
-    public void CreateLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
+    public static void CreateLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -63,7 +63,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void CreateLoggerWorksWithSingleUnnamedLogger()
+    public static void CreateLoggerWorksWithSingleUnnamedLogger()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -84,7 +84,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void CreateLoggerWorksWithSingleNamedLogger()
+    public static void CreateLoggerWorksWithSingleNamedLogger()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -106,7 +106,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void CreateLoggerThrowsWhenNotFoundInListOfLoggers()
+    public static void CreateLoggerThrowsWhenNotFoundInListOfLoggers()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -125,7 +125,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void CreateLoggerThrowsWhenNotFoundInSingleLogger()
+    public static void CreateLoggerThrowsWhenNotFoundInSingleLogger()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -145,7 +145,7 @@ public class LoggerFactoryTests
     [Theory]
     [InlineData(Logger.DefaultName, typeof(FooLogProvider))]
     [InlineData("bar", typeof(BarLogProvider))]
-    public void GetCachedLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
+    public static void GetCachedLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -167,7 +167,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void GetCachedLoggerWorksWithSingleUnnamedLogger()
+    public static void GetCachedLoggerWorksWithSingleUnnamedLogger()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -187,7 +187,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void GetCachedLoggerWorksWithSingleNamedLogger()
+    public static void GetCachedLoggerWorksWithSingleNamedLogger()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -208,7 +208,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void GetCachedLoggerThrowsWhenNotFoundInListOfLoggers()
+    public static void GetCachedLoggerThrowsWhenNotFoundInListOfLoggers()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -227,7 +227,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void GetCachedLoggerThrowsWhenNotFoundInSingleLogger()
+    public static void GetCachedLoggerThrowsWhenNotFoundInSingleLogger()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>()
@@ -245,7 +245,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void SetConfigurationSetsTheConfigurationProperty()
+    public static void SetConfigurationSetsTheConfigurationProperty()
     {
         var configurationField = GetSemimutableConfigurationField();
 
@@ -268,7 +268,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void CreateCallsCreateLoggerWithConfigurationProperty()
+    public static void CreateCallsCreateLoggerWithConfigurationProperty()
     {
         var configurationField = GetSemimutableConfigurationField();
 
@@ -306,7 +306,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void GetCachedCallsGetCachedLoggerWithConfigurationProperty()
+    public static void GetCachedCallsGetCachedLoggerWithConfigurationProperty()
     {
         var configurationField = GetSemimutableConfigurationField();
 
@@ -343,7 +343,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void DefaultTypesFunctionsProperly()
+    public static void DefaultTypesFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
@@ -364,7 +364,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void ValueConvertersFunctionsProperly()
+    public static void ValueConvertersFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
@@ -394,7 +394,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void ResolverFunctionsProperly()
+    public static void ResolverFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
@@ -414,7 +414,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void ReloadOnConfigChangeTrueFunctionsProperly()
+    public static void ReloadOnConfigChangeTrueFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>
@@ -431,7 +431,7 @@ public class LoggerFactoryTests
     }
 
     [Fact]
-    public void ReloadOnConfigChangeFalseFunctionsProperly()
+    public static void ReloadOnConfigChangeFalseFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
             .AddInMemoryCollection(new Dictionary<string, string>

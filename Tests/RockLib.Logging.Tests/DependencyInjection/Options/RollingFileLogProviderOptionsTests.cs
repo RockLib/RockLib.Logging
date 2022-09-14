@@ -4,10 +4,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.DependencyInjection;
 
-public class RollingFileLogProviderOptionsTests
+public static class RollingFileLogProviderOptionsTests
 {
     [Fact(DisplayName = "RollingFileLogProviderOptions has the correct default property values")]
-    public void DefaultValues()
+    public static void DefaultValues()
     {
         var options = new RollingFileLogProviderOptions();
 

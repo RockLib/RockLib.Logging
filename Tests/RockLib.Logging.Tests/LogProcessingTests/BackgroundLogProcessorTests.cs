@@ -9,10 +9,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.LogProcessingTests;
 
-public class BackgroundLogProcessorTests
+public static class BackgroundLogProcessorTests
 {
     [Fact]
-    public void ProcessLogEntryCallsWriteAsyncOnTheLogProvider()
+    public static void ProcessLogEntryCallsWriteAsyncOnTheLogProvider()
     {
         var logProcessor = new BackgroundLogProcessor();
 
@@ -39,7 +39,7 @@ public class BackgroundLogProcessorTests
     }
 
     [Fact]
-    public void ProcessLogEntryDoesNothingWhenIsDisposedIsTrue()
+    public static void ProcessLogEntryDoesNothingWhenIsDisposedIsTrue()
     {
         var logProcessor = new BackgroundLogProcessor();
 
@@ -61,7 +61,7 @@ public class BackgroundLogProcessorTests
     }
 
     [Fact]
-    public void IfWriteAsyncTimesOutHandleErrorIsCalled()
+    public static void IfWriteAsyncTimesOutHandleErrorIsCalled()
     {
         using var logProcessor = new BackgroundLogProcessor();
 
@@ -92,7 +92,7 @@ public class BackgroundLogProcessorTests
     }
 
     [Fact]
-    public void IfWriteAsyncThrowsWhileAwaitingHandleErrorIsCalled()
+    public static void IfWriteAsyncThrowsWhileAwaitingHandleErrorIsCalled()
     {
         var logProcessor = new BackgroundLogProcessor();
 

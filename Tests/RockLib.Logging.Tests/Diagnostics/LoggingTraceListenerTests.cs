@@ -7,10 +7,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.Diagnostics;
 
-public class LoggingTraceListenerTests
+public static class LoggingTraceListenerTests
 {
     [Fact(DisplayName = "Constructor sets properties")]
-    public void Constructor1HappyPath1()
+    public static void Constructor1HappyPath1()
     {
         var logger = new Mock<ILogger>().Object;
 
@@ -21,7 +21,7 @@ public class LoggingTraceListenerTests
     }
 
     [Fact(DisplayName = "Constructor sets LogLevel to logger's level if not provided")]
-    public void Constructor1HappyPath2()
+    public static void Constructor1HappyPath2()
     {
         var logger = new MockLogger(LogLevel.Info).Object;
 
@@ -32,7 +32,7 @@ public class LoggingTraceListenerTests
     }
 
     [Fact(DisplayName = "Constructor sets LogLevel to logger's level if null")]
-    public void Constructor1HappyPath3()
+    public static void Constructor1HappyPath3()
     {
         var logger = new MockLogger(LogLevel.Info).Object;
 
@@ -43,7 +43,7 @@ public class LoggingTraceListenerTests
     }
 
     [Fact(DisplayName = "Constructor throws if logger is null")]
-    public void Constructor1SadPath()
+    public static void Constructor1SadPath()
     {
         var act = () => new LoggingTraceListener((null as ILogger)!, LogLevel.Info);
 
@@ -51,7 +51,7 @@ public class LoggingTraceListenerTests
     }
 
     [Fact(DisplayName = "Write logs at the correct level")]
-    public void WriteHappyPath1()
+    public static void WriteHappyPath1()
     {
         var mockLogger = new MockLogger();
 
@@ -63,7 +63,7 @@ public class LoggingTraceListenerTests
     }
 
     [Fact(DisplayName = "Write does not log if the level is not high enough for the logger")]
-    public void WriteHappyPath2()
+    public static void WriteHappyPath2()
     {
         var mockLogger = new MockLogger(LogLevel.Warn);
 
@@ -75,7 +75,7 @@ public class LoggingTraceListenerTests
     }
 
     [Fact(DisplayName = "WriteLine logs at the correct level")]
-    public void WriteLineHappyPath1()
+    public static void WriteLineHappyPath1()
     {
         var mockLogger = new MockLogger();
 
@@ -87,7 +87,7 @@ public class LoggingTraceListenerTests
     }
 
     [Fact(DisplayName = "WriteLine does not log if the level is not high enough for the logger")]
-    public void WriteLineHappyPath2()
+    public static void WriteLineHappyPath2()
     {
         var mockLogger = new MockLogger(LogLevel.Warn);
 

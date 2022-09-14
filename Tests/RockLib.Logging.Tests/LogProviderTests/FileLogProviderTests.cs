@@ -7,12 +7,12 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
-public class FileLogProviderTests
+public static class FileLogProviderTests
 {
-    private readonly string _file = Path.GetRandomFileName();
+    private static readonly string _file = Path.GetRandomFileName();
 
     [Fact]
-    public void Constructor1SetsFile()
+    public static void Constructor1SetsFile()
     {
         var fileLogProvider = new FileLogProvider(_file, level: LogLevel.Warn);
 
@@ -20,7 +20,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsFormatterToTemplateLogFormatter()
+    public static void Constructor1SetsFormatterToTemplateLogFormatter()
     {
         var fileLogProvider = new FileLogProvider(_file, "foo");
 
@@ -30,7 +30,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsLevel()
+    public static void Constructor1SetsLevel()
     {
         var fileLogProvider = new FileLogProvider(_file, level: LogLevel.Warn);
 
@@ -38,7 +38,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsTimeout()
+    public static void Constructor1SetsTimeout()
     {
         var timeout = TimeSpan.FromMilliseconds(1234);
         var fileLogProvider = new FileLogProvider(_file, timeout: timeout);
@@ -47,7 +47,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
+    public static void Constructor1SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
     {
         var timeout = TimeSpan.FromMilliseconds(1234);
         var fileLogProvider = new FileLogProvider(_file, timeout: null);
@@ -56,7 +56,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsFile()
+    public static void Constructor2SetsFile()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -66,7 +66,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsFormatter()
+    public static void Constructor2SetsFormatter()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -76,7 +76,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsLevel()
+    public static void Constructor2SetsLevel()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -86,7 +86,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsTimeout()
+    public static void Constructor2SetsTimeout()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
         var timeout = TimeSpan.FromMilliseconds(1234);
@@ -97,7 +97,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
+    public static void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
         var timeout = TimeSpan.FromMilliseconds(1234);
@@ -108,7 +108,7 @@ public class FileLogProviderTests
     }
 
     [Fact]
-    public async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToDisk()
+    public static async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToDisk()
     {
         var fileLogProvider = new FileLogProvider(_file, "{level}:{message}");
 

@@ -8,10 +8,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
-public class ConsoleLogProviderTests
+public static class ConsoleLogProviderTests
 {
     [Fact]
-    public void Constructor1SetsFormatterToTemplateLogFormatter()
+    public static void Constructor1SetsFormatterToTemplateLogFormatter()
     {
         var consoleLogProvider = new ConsoleLogProvider("foo");
 
@@ -21,7 +21,7 @@ public class ConsoleLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsLevel()
+    public static void Constructor1SetsLevel()
     {
         var consoleLogProvider = new ConsoleLogProvider(level: LogLevel.Warn);
 
@@ -29,7 +29,7 @@ public class ConsoleLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsTimeout()
+    public static void Constructor1SetsTimeout()
     {
         var timeout = TimeSpan.FromMilliseconds(1234);
         var consoleLogProvider = new ConsoleLogProvider(timeout: timeout);
@@ -38,7 +38,7 @@ public class ConsoleLogProviderTests
     }
 
     [Fact]
-    public void Constructor1SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
+    public static void Constructor1SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
     {
         var timeout = TimeSpan.FromMilliseconds(1234);
         var consoleLogProvider = new ConsoleLogProvider(timeout: null);
@@ -47,7 +47,7 @@ public class ConsoleLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsFormatter()
+    public static void Constructor2SetsFormatter()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -57,7 +57,7 @@ public class ConsoleLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsLevel()
+    public static void Constructor2SetsLevel()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -67,7 +67,7 @@ public class ConsoleLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsTimeout()
+    public static void Constructor2SetsTimeout()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
         var timeout = TimeSpan.FromMilliseconds(1234);
@@ -78,7 +78,7 @@ public class ConsoleLogProviderTests
     }
 
     [Fact]
-    public void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
+    public static void Constructor2SetsTimeoutToDefaultTimeoutWhenParameterIsNull()
     {
         var logFormatter = new Mock<ILogFormatter>().Object;
 
@@ -90,7 +90,7 @@ public class ConsoleLogProviderTests
     [Theory]
     [InlineData(ConsoleLogProvider.Output.StdOut)]
     [InlineData(ConsoleLogProvider.Output.StdErr)]
-    public async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToConsole(ConsoleLogProvider.Output output)
+    public static async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToConsole(ConsoleLogProvider.Output output)
     {
         var sb = new StringBuilder();
         using (var writer = new StringWriter(sb))

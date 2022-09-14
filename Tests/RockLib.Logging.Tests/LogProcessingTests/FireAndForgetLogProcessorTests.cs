@@ -2,17 +2,16 @@
 using Moq;
 using RockLib.Dynamic;
 using RockLib.Logging.LogProcessing;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace RockLib.Logging.Tests.LogProcessingTests;
 
-public class FireAndForgetLogProcessorTests
+public static class FireAndForgetLogProcessorTests
 {
     [Fact]
-    public void ProcessLogEntryCallsWriteAsyncOnTheLogProvider()
+    public static void ProcessLogEntryCallsWriteAsyncOnTheLogProvider()
     {
 #pragma warning disable CS0618 // Type or member is obsolete
         using var logProcessor = new FireAndForgetLogProcessor();
@@ -29,7 +28,7 @@ public class FireAndForgetLogProcessorTests
     }
 
     [Fact]
-    public void IfWriteAsyncThrowsWhileAwaitingHandleErrorIsCalled()
+    public static void IfWriteAsyncThrowsWhileAwaitingHandleErrorIsCalled()
     {
 #pragma warning disable CS0618 // Type or member is obsolete
         using var logProcessor = new FireAndForgetLogProcessor();

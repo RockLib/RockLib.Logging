@@ -5,10 +5,10 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.DependencyInjection;
 
-public class FileLogProviderOptionsTests
+public static class FileLogProviderOptionsTests
 {
     [Fact(DisplayName = "File property throws when set to null")]
-    public void FilePropertySetterSadPath()
+    public static void FilePropertySetterSadPath()
     {
         Action act = () => new FileLogProviderOptions().File = null!;
 

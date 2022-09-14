@@ -7,12 +7,12 @@ using Xunit;
 
 namespace RockLib.Logging.Tests.DependencyInjection;
 
-public class FormattableLogProviderOptionsTests
+public static class FormattableLogProviderOptionsTests
 {
-    private readonly IServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
+    private static readonly IServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
 
     [Fact(DisplayName = "SetTemplate method sets FormatterRegistration property to TemplateLogFormatter with specified template")]
-    public void SetTemplateMethodHappyPath()
+    public static void SetTemplateMethodHappyPath()
     {
         var options = new TestFormattableLogProviderOptions();
 
@@ -25,7 +25,7 @@ public class FormattableLogProviderOptionsTests
     }
 
     [Fact(DisplayName = "SetTemplate method throws when template parameter is null")]
-    public void SetTemplateMethodSadPath()
+    public static void SetTemplateMethodSadPath()
     {
         var options = new TestFormattableLogProviderOptions();
 
@@ -35,7 +35,7 @@ public class FormattableLogProviderOptionsTests
     }
 
     [Fact(DisplayName = "SetFormatter method 1 sets FormatterRegistration property to formatter")]
-    public void SetFormatterMethod1HappyPath()
+    public static void SetFormatterMethod1HappyPath()
     {
         var formatter = new Mock<ILogFormatter>().Object;
 
@@ -49,7 +49,7 @@ public class FormattableLogProviderOptionsTests
     }
 
     [Fact(DisplayName = "SetFormatter method 1 throws when formatter parameter is null")]
-    public void SetFormatterMethod1SadPath()
+    public static void SetFormatterMethod1SadPath()
     {
         var options = new TestFormattableLogProviderOptions();
 
@@ -59,7 +59,7 @@ public class FormattableLogProviderOptionsTests
     }
 
     [Fact(DisplayName = "SetFormatter method 2 sets FormatterRegistration property to specified formatter")]
-    public void SetFormatterMethod2HappyPath()
+    public static void SetFormatterMethod2HappyPath()
     {
         var options = new TestFormattableLogProviderOptions();
 
