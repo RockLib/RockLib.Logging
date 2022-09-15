@@ -13,7 +13,7 @@ namespace RockLib.Logging.Microsoft.Extensions.Tests;
 public static class RockLibLoggerTests
 {
     [Fact(DisplayName = "Constructor sets expected properties")]
-    public static void ConstructorHappyPath1()
+    public static void Create()
     {
         var logger = new MockLogger().Object;
         var scopeProvider = new Mock<IExternalScopeProvider>().Object;
@@ -26,7 +26,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "Constructor sets handles null scopeProvider parameter")]
-    public static void ConstructorHappyPath2()
+    public static void CreateWithNullProvider()
     {
         var logger = new MockLogger().Object;
 
@@ -38,7 +38,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "Constructor throws when logger parameter is null")]
-    public static void ConstructorSadPath1()
+    public static void CreateWithNullLogger()
     {
         var act = () => new RockLibLogger(null!, "MyCategory", null!);
 
@@ -46,7 +46,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "Constructor throws when categoryName parameter is null")]
-    public static void ConstructorSadPath2()
+    public static void CreateWithNullName()
     {
         var logger = new MockLogger().Object;
 
@@ -63,7 +63,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "Log method passes mapped log entry to logger")]
-    public static void LogMethodHappyPath1()
+    public static void Log()
     {
         var mockLogger = new MockLogger(LogLevel.Warn);
         var scopeProvider = new TestScopeProvider { State = "MyState" };
@@ -100,7 +100,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "Log method does nothing when logLevel is not enabled for logger")]
-    public static void LogMethodHappyPath2()
+    public static void LogWhenLevelIsNotEnabled()
     {
         var mockLogger = new MockLogger(LogLevel.Fatal);
         var scopeProvider = new TestScopeProvider { State = "MyState" };
@@ -129,7 +129,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "Log method throws when formatter parameter is null")]
-    public static void LogMethodSadPath()
+    public static void LogWhenFormatterIsNull()
     {
         var logger = new MockLogger().Object;
 
@@ -141,7 +141,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "IsEnabled method returns false given LogLevel.None")]
-    public static void IsEnabledMethodHappyPath1()
+    public static void IsEnabled()
     {
         var logger = new MockLogger().Object;
 
@@ -195,7 +195,7 @@ public static class RockLibLoggerTests
     [InlineData(LogLevel.Audit, Warning, false)]
     [InlineData(LogLevel.Audit, MicrosoftLogLevel.Error, false)]
     [InlineData(LogLevel.Audit, Critical, false)]
-    public static void IsEnabledInfodHappyPath2(LogLevel loggerLogLevel, MicrosoftLogLevel inputLogLevel, bool expectedValue)
+    public static void IsEnabledInfo(LogLevel loggerLogLevel, MicrosoftLogLevel inputLogLevel, bool expectedValue)
     {
         var logger = new MockLogger(loggerLogLevel).Object;
 
@@ -205,7 +205,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "BeginScope method pushes state onto scope provider")]
-    public static void BeginScopeMethodHappyPath1()
+    public static void BeginScope()
     {
         var expectedToken = new Mock<IDisposable>().Object;
         var mockScopeProvider = new Mock<IExternalScopeProvider>();
@@ -221,7 +221,7 @@ public static class RockLibLoggerTests
     }
 
     [Fact(DisplayName = "BeginScope method does nothing when scope provider is null")]
-    public static void BeginScopeMethodHappyPath2()
+    public static void BeginScopeWhenProviderIsNull()
     {
         var logger = new MockLogger().Object;
         

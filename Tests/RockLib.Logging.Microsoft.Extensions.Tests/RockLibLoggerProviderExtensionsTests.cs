@@ -13,7 +13,7 @@ namespace RockLib.Logging.Microsoft.Extensions.Tests;
 public static class RockLibLoggerProviderExtensionsTests
 {
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 1 adds a singleton RockLibLoggerProvider factory")]
-    public static void AddRockLibLoggerProviderExtensionMethod1HappyPath1()
+    public static void AddRockLibLoggerProviderExtensionMethodOnBuilder()
     {
         var services = new ServiceCollection();
         var mockLoggerBuilder = new Mock<ILoggingBuilder>();
@@ -46,7 +46,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 1 configures the configureOptions parameter")]
-    public static void AddRockLibLoggerProviderExtensionMethod1HappyPath2()
+    public static void AddRockLibLoggerProviderExtensionMethodOnBuilderWithOptions()
     {
         RockLibLoggerOptions? capturedOptions = null;
 
@@ -77,7 +77,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 1 returns the loggingBuilder parameter")]
-    public static void AddRockLibLoggerProviderExtensionMethod1HappyPath3()
+    public static void AddRockLibLoggerProviderExtensionMethodOnBuilderReturnsBuilder()
     {
         var services = new ServiceCollection();
         var mockLoggerBuilder = new Mock<ILoggingBuilder>();
@@ -89,7 +89,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 1 throws when loggingBuilder parameter is null")]
-    public static void AddRockLibLoggerProviderExtensionMethod1SadPath()
+    public static void AddRockLibLoggerProviderExtensionMethodOnBuilderWithBuilderAsNull()
     {
         var act = () => (null as ILoggingBuilder)!.AddRockLibLoggerProvider(options => { });
 
@@ -97,7 +97,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 2 adds a singleton RockLibLoggerProvider factory")]
-    public static void AddRockLibLoggerProviderExtensionMethod2HappyPath1()
+    public static void AddRockLibLoggerProviderExtensionMethodOnBuilderAddsSingletonProvider()
     {
         var services = new ServiceCollection();
         var mockLoggerBuilder = new Mock<ILoggingBuilder>();
@@ -131,7 +131,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 2 configures the configureOptions parameter")]
-    public static void AddRockLibLoggerProviderExtensionMethod2HappyPath2()
+    public static void AddRockLibLoggerProviderExtensionMethodOnBuilderAddsSingletonProviderWithOptions()
     {
         RockLibLoggerOptions? capturedOptions = null;
 
@@ -162,7 +162,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 2 returns the loggingBuilder parameter")]
-    public static void AddRockLibLoggerProviderExtensionMethod2HappyPath3()
+    public static void AddRockLibLoggerProviderExtensionMethodOnBuilderAddsSingletonProviderReturnsBuilder()
     {
         var services = new ServiceCollection();
         var mockLoggerBuilder = new Mock<ILoggingBuilder>();
@@ -174,7 +174,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 2 throws when loggingBuilder parameter is null")]
-    public static void AddRockLibLoggerProviderExtensionMethod2SadPath()
+    public static void AddRockLibLoggerProviderExtensionMethodOnBuilderAddsSingletonProviderWithBuilderAsNull()
     {
         var act = () => (null as ILoggingBuilder)!.AddRockLibLoggerProvider("MyLogger");
 
@@ -182,7 +182,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 3 adds a singleton RockLibLoggerProvider factory")]
-    public static void AddRockLibLoggerProviderExtensionMethod3HappyPath1()
+    public static void AddRockLibLoggerProviderExtensionMethodOnServices()
     {
         var services = new ServiceCollection();
 
@@ -213,7 +213,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 3 configures the configureOptions parameter")]
-    public static void AddRockLibLoggerProviderExtensionMethod3HappyPath2()
+    public static void AddRockLibLoggerProviderExtensionMethodOnServicesWithOptions()
     {
         RockLibLoggerOptions? capturedOptions = null;
 
@@ -242,7 +242,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 3 returns the services parameter")]
-    public static void AddRockLibLoggerProviderExtensionMethod3HappyPath3()
+    public static void AddRockLibLoggerProviderExtensionMethodOnServicesWithBlankOptions()
     {
         var services = new ServiceCollection();
 
@@ -252,7 +252,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 3 throws when services parameter is null")]
-    public static void AddRockLibLoggerProviderExtensionMethod3SadPath()
+    public static void AddRockLibLoggerProviderExtensionMethodOnServicesOnNullServices()
     {
         var act = () => (null as IServiceCollection)!.AddRockLibLoggerProvider(options => { });
 
@@ -260,7 +260,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 4 adds a singleton RockLibLoggerProvider factory")]
-    public static void AddRockLibLoggerProviderExtensionMethod4HappyPath1()
+    public static void AddRockLibLoggerProviderExtensionMethodOnServicesWithName()
     {
         var services = new ServiceCollection();
 
@@ -292,7 +292,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 4 configures the configureOptions parameter")]
-    public static void AddRockLibLoggerProviderExtensionMethod4HappyPath2()
+    public static void AddRockLibLoggerProviderExtensionMethodOnServicesWithNameAndOptions()
     {
         RockLibLoggerOptions? capturedOptions = null;
 
@@ -321,7 +321,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 4 returns the services parameter")]
-    public static void AddRockLibLoggerProviderExtensionMethod4HappyPath3()
+    public static void AddRockLibLoggerProviderExtensionMethodOnServicesWithNameCheckReturn()
     {
         var services = new ServiceCollection();
 
@@ -331,7 +331,7 @@ public static class RockLibLoggerProviderExtensionsTests
     }
 
     [Fact(DisplayName = "AddRockLibLoggerProvider extension method 4 throws when services parameter is null")]
-    public static void AddRockLibLoggerProviderExtensionMethod4SadPath()
+    public static void AddRockLibLoggerProviderExtensionMethodOnServicesWithNameWithNullServices()
     {
         var act = () => (null as IServiceCollection)!.AddRockLibLoggerProvider("MyLogger");
 

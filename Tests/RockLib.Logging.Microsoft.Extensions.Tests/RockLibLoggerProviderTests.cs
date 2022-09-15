@@ -21,7 +21,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "Constructor sets Logger property")]
-    public static void ConstructorHappyPath1()
+    public static void Create()
     {
         var logger = new MockLogger().Object;
 
@@ -32,7 +32,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "Constructor sets IncludeScopes from options")]
-    public static void ConstructorHappyPath2()
+    public static void CreateWithOptions()
     {
         Action<RockLibLoggerOptions, string>? capturedCallback = null;
 
@@ -60,7 +60,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "IncludeScopes setter updates ScopeProvider of previously created loggers")]
-    public static void IncludeScopesSetterHappyPath()
+    public static void IncludeScopesSetter()
     {
         var scopeProvider = new Mock<IExternalScopeProvider>().Object;
         
@@ -82,7 +82,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "ScopeProvider getter only returns the scope provider when IncludeScopes is true")]
-    public static void ScopeProviderGetterHappyPath1()
+    public static void ScopeProviderGetterWhenIncludeScopesIsTrue()
     {
         using var loggerProvider = new RockLibLoggerProvider(new MockLogger().Object);
 
@@ -98,7 +98,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "ScopeProvider getter returns a LoggerExternalScopeProvider if not set explicitly")]
-    public static void ScopeProviderGetterHappyPath2()
+    public static void ScopeProviderGetterWhenProviderIsNotSet()
     {
         using var loggerProvider = new RockLibLoggerProvider(new MockLogger().Object);
 
@@ -108,7 +108,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "ScopeProvider setter updates the ScopeProvider of previously created loggers")]
-    public static void ScopeProviderSetterHappyPath()
+    public static void ScopeProviderSetterUpdatesProvider()
     {
         var scopeProvider = new Mock<IExternalScopeProvider>().Object;
 
@@ -126,7 +126,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "ScopeProvider setter throws if value is null")]
-    public static void ScopeProviderSetterSadPath()
+    public static void ScopeProviderSetterToNull()
     {
         using var loggerProvider = new RockLibLoggerProvider(new MockLogger().Object);
 
@@ -136,7 +136,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "GetLogger method returns a RockLibLogger with the correct properties")]
-    public static void GetLoggerMethodHappyPath1()
+    public static void GetLoggerMethod()
     {
         var logger = new MockLogger().Object;
         var scopeProvider = new Mock<IExternalScopeProvider>().Object;
@@ -154,7 +154,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "GetLogger method returns the same RockLibLogger given the same categoryName")]
-    public static void GetLoggerMethodHappyPath2()
+    public static void GetLoggerMethodWithSameName()
     {
         using var provider = new RockLibLoggerProvider(new MockLogger().Object);
 
@@ -165,7 +165,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "GetLogger method throws when categoryName is null")]
-    public static void GetLoggerMethodSadPath()
+    public static void GetLoggerMethodWhenNameIsNull()
     {
         using var provider = new RockLibLoggerProvider(new MockLogger().Object);
 
@@ -174,7 +174,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "Dispose method disposes _changeReloadToken if options were provided to constructor")]
-    public static void DisposeMethodHappyPath1()
+    public static void Dispose()
     {
         var options = new RockLibLoggerOptions();
 
@@ -193,7 +193,7 @@ public static class RockLibLoggerProviderTests
     }
 
     [Fact(DisplayName = "Dispose method does nothing if options were not provided to constructor")]
-    public static void DisposeMethodHappyPath2()
+    public static void DisposeWithNoConstructorOptions()
     {
         var options = new RockLibLoggerOptions();
 
