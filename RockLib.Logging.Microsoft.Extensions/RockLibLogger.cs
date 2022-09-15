@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace RockLib.Logging;
@@ -44,10 +45,7 @@ public class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     /// <inheritdoc/>
     public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception, string> formatter)
     {
-        if (formatter is null)
-        {
-            throw new ArgumentNullException(nameof(formatter));
-        }
+        if (formatter is null) { throw new ArgumentNullException(nameof(formatter)); }
 
         var convertedLogLevel = ConvertLogLevel(logLevel);
 
@@ -89,8 +87,10 @@ public class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     }
 
     /// <inheritdoc/>
+#pragma warning disable CS8603 // Possible null reference return.
     public IDisposable BeginScope<TState>(TState state) =>
-        ScopeProvider.Push(state);
+        ScopeProvider?.Push(state) ?? null;
+#pragma warning restore CS8603 // Possible null reference return.
 
     private static object GetStateObject(object state)
     {

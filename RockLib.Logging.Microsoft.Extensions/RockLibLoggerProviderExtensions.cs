@@ -36,10 +36,9 @@ public static class RockLibLoggerProviderExtensions
     /// </param>
     /// <returns>The same <see cref="ILoggingBuilder"/>.</returns>
     public static ILoggingBuilder AddRockLibLoggerProvider(this ILoggingBuilder builder,
-        string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions> configureOptions = null)
+        string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions>? configureOptions = null)
     {
-        if (builder is null)
-            throw new ArgumentNullException(nameof(builder));
+        if (builder is null) { throw new ArgumentNullException(nameof(builder)); }
 
         builder.Services.AddRockLibLoggerProvider(rockLibLoggerName, configureOptions);
 
@@ -74,10 +73,9 @@ public static class RockLibLoggerProviderExtensions
     /// </param>
     /// <returns>The same <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddRockLibLoggerProvider(this IServiceCollection services,
-        string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions> configureOptions = null)
+        string rockLibLoggerName = Logger.DefaultName, Action<RockLibLoggerOptions>? configureOptions = null)
     {
-        if (services is null)
-            throw new ArgumentNullException(nameof(services));
+        if (services is null) { throw new ArgumentNullException(nameof(services)); }
 
         services.Add(ServiceDescriptor.Singleton<ILoggerProvider>(serviceProvider =>
         {
@@ -87,7 +85,9 @@ public static class RockLibLoggerProviderExtensions
         }));
 
         if (configureOptions is not null)
+        {
             services.Configure(configureOptions);
+        }
 
         return services;
     }

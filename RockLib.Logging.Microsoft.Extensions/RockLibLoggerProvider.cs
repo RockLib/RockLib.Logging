@@ -42,7 +42,9 @@ public class RockLibLoggerProvider : ILoggerProvider
     /// <summary>
     /// Gets the <see cref="ILogger"/> that ultimately records logs for the logger provider.
     /// </summary>
+#pragma warning disable CA1721 // Property names should not match get methods
     public ILogger Logger { get; }
+#pragma warning restore CA1721 // Property names should not match get methods
 
     /// <summary>
     /// Gets or sets a value indicating whether to include scopes when logging.
@@ -55,7 +57,9 @@ public class RockLibLoggerProvider : ILoggerProvider
             _includeScopes = value;
             var scopeProvider = ScopeProvider;
             foreach (var logger in _loggers.Values)
+            {
                 logger.ScopeProvider = scopeProvider;
+            }
         }
     }
 
@@ -93,12 +97,34 @@ public class RockLibLoggerProvider : ILoggerProvider
     public RockLibLogger GetLogger(string categoryName) =>
         _loggers.GetOrAdd(categoryName ?? throw new ArgumentNullException(nameof(categoryName)), CreateLoggerInstance);
 
+#pragma warning disable CA1033 // Interface methods should be callable by child types
     Microsoft.Extensions.Logging.ILogger ILoggerProvider.CreateLogger(string categoryName) =>
         GetLogger(categoryName);
+#pragma warning restore CA1033 // Interface methods should be callable by child types
 
     /// <inheritdoc/>
-    public void Dispose() =>
-        _optionsReloadToken?.Dispose();
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Disposes reload token
+    /// </summary>
+    /// <param name="isDisposing">Set to <c>true</c> if invoked from <see cref="Dispose()"/>.</param>
+    protected virtual void Dispose(bool isDisposing)
+    {
+        if(isDisposing)
+        {
+            _optionsReloadToken?.Dispose();
+        }
+    }
+
+    /// <summary>
+    /// Disposes any unmanaged resources.
+    /// </summary>
+    ~RockLibLoggerProvider() => Dispose(false);
 
     private void ReloadLoggerOptions(RockLibLoggerOptions options, string optionsName)
     {
@@ -112,8 +138,9 @@ public class RockLibLoggerProvider : ILoggerProvider
     }
 
     private RockLibLogger CreateLoggerInstance(string categoryName) =>
-        new RockLibLogger(Logger, categoryName, ScopeProvider);
+        new(Logger, categoryName, ScopeProvider);
 
+#pragma warning disable CA1820 // Test for empty strings using string length
     private bool OptionsNameMatchesLoggerName(string optionsName) =>
         string.Equals(optionsName, Logger.Name, StringComparison.OrdinalIgnoreCase)
             || (string.Equals(optionsName, Options.DefaultName, StringComparison.OrdinalIgnoreCase)
@@ -123,4 +150,5 @@ public class RockLibLoggerProvider : ILoggerProvider
         string.Equals(logger.Name, DefaultName, StringComparison.OrdinalIgnoreCase)
             ? Options.DefaultName
             : logger.Name;
+#pragma warning restore CA1820 // Test for empty strings using string length
 }
