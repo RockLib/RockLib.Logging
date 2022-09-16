@@ -242,10 +242,8 @@ public static class LogProcessorTests
 
         public TestLogProcessor(bool sendToLogProviderShouldThrow = false) => _sendToLogProviderShouldThrow = sendToLogProviderShouldThrow;
 
-        public List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)> SendToLogProviderInvocations { get; } = 
-            new List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)>();
-        public List<(Exception? Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)> HandleErrorInvocations { get; } = 
-            new List<(Exception? Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)>();
+        public List<(ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount)> SendToLogProviderInvocations { get; } =  new();
+        public List<(Exception? Exception, ILogProvider LogProvider, LogEntry LogEntry, IErrorHandler ErrorHandler, int FailureCount, string ErrorMessageFormat, object[] ErrorMessageArgs)> HandleErrorInvocations { get; } = new();
 
         protected override void SendToLogProvider(ILogProvider logProvider, LogEntry logEntry, IErrorHandler errorHandler, int failureCount)
         {
