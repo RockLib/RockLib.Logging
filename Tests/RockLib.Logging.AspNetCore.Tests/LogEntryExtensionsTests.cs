@@ -72,18 +72,16 @@ public class LogEntryExtensionsTests
     [Fact(DisplayName = "Extensions throws when LogEntry is null")]
     public void SadPaths()
     {
-        LogEntry entry = null;
-
-        Action action = () => entry.SetHttpContext(new Mock<HttpContext>().Object);
-        Action action2 = () => entry.SetPath("");
-        Action action3 = () => entry.SetRequestMethod("");
-        Action action4 = () => entry.SetUserAgent("");
-        Action action5 = () => entry.SetReferrer("");
-        Action action6 = () => entry.SetReferrer("");
-        Action action8 = () => entry.SetRemoteIpAddress("");
-        Action action9 = () => entry.SetRemoteIpAddress("");
-        Action action10 = () => entry.SetForwardedFor("");
-        Action action11 = () => entry.SetForwardedFor("");
+        Action action = () => (null as LogEntry)!.SetHttpContext(new Mock<HttpContext>().Object);
+        Action action2 = () => (null as LogEntry)!.SetPath("");
+        Action action3 = () => (null as LogEntry)!.SetRequestMethod("");
+        Action action4 = () => (null as LogEntry)!.SetUserAgent("");
+        Action action5 = () => (null as LogEntry)!.SetReferrer("");
+        Action action6 = () => (null as LogEntry)!.SetReferrer("");
+        Action action8 = () => (null as LogEntry)!.SetRemoteIpAddress("");
+        Action action9 = () => (null as LogEntry)!.SetRemoteIpAddress("");
+        Action action10 = () => (null as LogEntry)!.SetForwardedFor("");
+        Action action11 = () => (null as LogEntry)!.SetForwardedFor("");
         
         action.Should().Throw<ArgumentNullException>();
         action2.Should().Throw<ArgumentNullException>();
@@ -176,7 +174,7 @@ public class LogEntryExtensionsTests
     {
         var logEntry = new LogEntry();
 
-        logEntry.SetReferrer((string)null);
+        logEntry.SetReferrer((string)null!);
 
         logEntry.ExtendedProperties.Should().NotContainKey("Referrer");
     }
@@ -197,7 +195,7 @@ public class LogEntryExtensionsTests
     {
         var logEntry = new LogEntry();
 
-        logEntry.SetReferrer((Uri)null);
+        logEntry.SetReferrer((Uri)null!);
 
         logEntry.ExtendedProperties.Should().NotContainKey("Referrer");
     }
@@ -218,7 +216,7 @@ public class LogEntryExtensionsTests
     {
         var logEntry = new LogEntry();
 
-        logEntry.SetRemoteIpAddress((string)null);
+        logEntry.SetRemoteIpAddress((string)null!);
 
         logEntry.ExtendedProperties.Should().NotContainKey("RemoteIpAddress");
     }
@@ -239,7 +237,7 @@ public class LogEntryExtensionsTests
     {
         var logEntry = new LogEntry();
 
-        logEntry.SetRemoteIpAddress((IPAddress)null);
+        logEntry.SetRemoteIpAddress((IPAddress)null!);
 
         logEntry.ExtendedProperties.Should().NotContainKey("RemoteIpAddress");
     }
@@ -271,7 +269,7 @@ public class LogEntryExtensionsTests
     {
         var logEntry = new LogEntry();
 
-        logEntry.SetForwardedFor((string[])null);
+        logEntry.SetForwardedFor((string[])null!);
 
         logEntry.ExtendedProperties.Should().NotContainKey("X-Forwarded-For");
     }

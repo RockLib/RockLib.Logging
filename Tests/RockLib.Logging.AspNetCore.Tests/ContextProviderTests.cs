@@ -42,7 +42,7 @@ public class ContextProviderTests
         accessorMock.Setup(am => am.HttpContext).Returns(contextMock.Object);
 
         var contextProvider = new CorrelationIdContextProvider(accessorMock.Object);
-        contextProvider.Accessor.CorrelationId.Should().Be(correlationId);
+        contextProvider.Accessor!.CorrelationId.Should().Be(correlationId);
     }
 
     [Fact(DisplayName = "CorrelationIdContextProvider uses ICorrelationIdAccessor correctly")]
@@ -53,7 +53,7 @@ public class ContextProviderTests
         idAccessorMock.Setup(am => am.CorrelationId).Returns(correlationId);
 
         var contextProvider = new CorrelationIdContextProvider(idAccessorMock.Object);
-        contextProvider.Accessor.CorrelationId.Should().Be(correlationId);
+        contextProvider.Accessor!.CorrelationId.Should().Be(correlationId);
     }
 
     [Fact(DisplayName = "CorrelationIdContextProvider.AddContext adds correlation id to a LogEntry")]
@@ -161,8 +161,10 @@ public class ContextProviderTests
     {
         var referrer = new Uri("http://SomeReferrerValue1");
 
-        var headers = new RequestHeaders(new HeaderDictionary());
-        headers.Referer = referrer;
+        var headers = new RequestHeaders(new HeaderDictionary())
+        {
+            Referer = referrer
+        };
 
         var requestMock = new Mock<HttpRequest>();
         requestMock.Setup(rm => rm.Headers).Returns(headers.Headers);
@@ -190,7 +192,7 @@ public class ContextProviderTests
     {
         var referrer = "http://SomeReferrerValue2/";
         var contextProvider = new ReferrerContextProvider(referrer);
-        contextProvider.Referrer.AbsoluteUri.Should().BeEquivalentTo(referrer);
+        contextProvider.Referrer!.AbsoluteUri.Should().BeEquivalentTo(referrer);
     }
 
     [Fact(DisplayName = "ReferrerContextProvider.SetContext sets referrer correctly on a log entry")]
@@ -221,7 +223,7 @@ public class ContextProviderTests
         accessorMock.Setup(am => am.HttpContext).Returns(contextMock.Object);
 
         var contextProvider = new RemoteIpAddressContextProvider(accessorMock.Object);
-        contextProvider.RemoteIpAddress.ToString().Should().Be(remoteIpAddress);
+        contextProvider.RemoteIpAddress!.ToString().Should().Be(remoteIpAddress);
     }
 
     [Fact(DisplayName = "RemoteIpAddressContextProvider sets Uri remoteIpAddress correctly")]
@@ -229,7 +231,7 @@ public class ContextProviderTests
     {
         var remoteIpAddress = "10.0.0.1";
         var contextProvider = new RemoteIpAddressContextProvider(remoteIpAddress);
-        contextProvider.RemoteIpAddress.ToString().Should().BeEquivalentTo(remoteIpAddress);
+        contextProvider.RemoteIpAddress!.ToString().Should().BeEquivalentTo(remoteIpAddress);
     }
 
     [Fact(DisplayName = "RemoteIpAddressContextProvider sets string remoteIpAddress correctly")]
@@ -268,7 +270,7 @@ public class ContextProviderTests
         accessorMock.Setup(am => am.HttpContext).Returns(contextMock.Object);
 
         var contextProvider = new RequestMethodContextProvider(accessorMock.Object);
-        contextProvider.RequestMethod.ToString().Should().Be(requestMethod);
+        contextProvider.RequestMethod!.ToString().Should().Be(requestMethod);
     }
 
     [Fact(DisplayName = "RequestMethodContextProvider sets requestMethod correctly")]
@@ -276,7 +278,7 @@ public class ContextProviderTests
     {
         var requestMethod = "SomeRequestMethodValue2";
         var contextProvider = new RequestMethodContextProvider(requestMethod);
-        contextProvider.RequestMethod.ToString().Should().BeEquivalentTo(requestMethod);
+        contextProvider.RequestMethod!.ToString().Should().BeEquivalentTo(requestMethod);
     }
 
     [Fact(DisplayName = "RequestMethodContextProvider.SetContext sets requestMethod correctly on a log entry")]
@@ -310,7 +312,7 @@ public class ContextProviderTests
         accessorMock.Setup(am => am.HttpContext).Returns(contextMock.Object);
 
         var contextProvider = new UserAgentContextProvider(accessorMock.Object);
-        contextProvider.UserAgent.ToString().Should().Be(userAgent);
+        contextProvider.UserAgent!.ToString().Should().Be(userAgent);
     }
 
     [Fact(DisplayName = "UserAgentContextProvider sets userAgent correctly")]
@@ -318,7 +320,7 @@ public class ContextProviderTests
     {
         var userAgent = "SomeUserAgentValue2";
         var contextProvider = new UserAgentContextProvider(userAgent);
-        contextProvider.UserAgent.ToString().Should().Be(userAgent);
+        contextProvider.UserAgent!.ToString().Should().Be(userAgent);
     }
 
     [Fact(DisplayName = "UserAgentContextProvider.SetContext sets userAgent correctly on a log entry")]
@@ -350,7 +352,7 @@ public class ContextProviderTests
         var contextProvider = new HttpContextProvider(accessorMock.Object);
 
         contextProvider.ContextProviders.First(p => p is CorrelationIdContextProvider)
-            .As<CorrelationIdContextProvider>().Accessor.CorrelationId.Should().Be(correlationId);
+            .As<CorrelationIdContextProvider>().Accessor!.CorrelationId.Should().Be(correlationId);
         contextProvider.ContextProviders.First(p => p is ForwardedForContextProvider)
             .As<ForwardedForContextProvider>().ForwardedFor.Should().BeEquivalentTo(forwardedFor);
         contextProvider.ContextProviders.First(p => p is PathContextProvider)
@@ -358,7 +360,7 @@ public class ContextProviderTests
         contextProvider.ContextProviders.First(p => p is ReferrerContextProvider)
             .As<ReferrerContextProvider>().Referrer.Should().Be(referrer);
         contextProvider.ContextProviders.First(p => p is RemoteIpAddressContextProvider)
-            .As<RemoteIpAddressContextProvider>().RemoteIpAddress.ToString().Should().Be(remoteIpAddress);
+            .As<RemoteIpAddressContextProvider>().RemoteIpAddress!.ToString().Should().Be(remoteIpAddress);
         contextProvider.ContextProviders.First(p => p is RequestMethodContextProvider)
             .As<RequestMethodContextProvider>().RequestMethod.Should().Be(requestMethod);
         contextProvider.ContextProviders.First(p => p is UserAgentContextProvider)

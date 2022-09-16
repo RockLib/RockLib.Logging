@@ -39,11 +39,11 @@ public class RouteNotFoundMiddlewareExtensionsTests
         var applicationBuilder = new ApplicationBuilder(services.BuildServiceProvider());
 
         applicationBuilder.UseRouteNotFoundLogging();
-        applicationBuilder.Use(async (c, f) => { });
+        applicationBuilder.Use((c, f) => Task.CompletedTask);
 
         var pipeline = applicationBuilder.Build();
 
-        await pipeline(httpContextMock.Object);
+        await pipeline(httpContextMock.Object).ConfigureAwait(false);
 
         mockLogger.Invocations.Count.Should().Be(1);
 

@@ -10,6 +10,7 @@ using RockLib.Logging.DependencyInjection;
 using RockLib.Logging.Moq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -66,9 +67,9 @@ public class LoggingActionFilterAttributeTests
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-        await loggingActionFilter.OnActionExecutionAsync(context, next);
+        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(false);
 
-        mockLogger.VerifyInfo(string.Format(messageFormat, actionName),
+        mockLogger.VerifyInfo(string.Format(CultureInfo.CurrentCulture, messageFormat, actionName),
             new { foo = 123, ResultType = nameof(AcceptedResult), ResponseStatusCode = 202 }, Times.Once());
     }
 
@@ -97,13 +98,13 @@ public class LoggingActionFilterAttributeTests
         context.ActionArguments.Add(actionArgumentName, actionArgument);
 
         var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
-        var exception = actionExecutedContext.Exception = new Exception();
+        var exception = actionExecutedContext.Exception = new NotSupportedException();
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-        await loggingActionFilter.OnActionExecutionAsync(context, next);
+        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(false);
 
-        mockLogger.VerifyFatal(string.Format(exceptionMessageFormat, actionName), exception,
+        mockLogger.VerifyFatal(string.Format(CultureInfo.CurrentCulture, exceptionMessageFormat, actionName), exception,
             new { foo = 123, ResponseStatusCode = 500 }, Times.Once());
     }
 
@@ -131,9 +132,9 @@ public class LoggingActionFilterAttributeTests
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-        await loggingActionFilter.OnActionExecutionAsync(context, next);
+        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(false);
 
-        mockLogger.VerifyInfo(string.Format(messageFormat, actionName),
+        mockLogger.VerifyInfo(string.Format(CultureInfo.CurrentCulture, messageFormat, actionName),
             new { foo = 123, ResultType = nameof(ObjectResult), ResultObject = resultObject, ResponseStatusCode = 200 }, Times.Once());
     }
 
@@ -155,14 +156,16 @@ public class LoggingActionFilterAttributeTests
         var context = new ActionExecutingContext(actionContext, Array.Empty<IFilterMetadata>(), new Dictionary<string, object>(), null);
         context.ActionArguments.Add(actionArgumentName, actionArgument);
 
-        var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
-        actionExecutedContext.Result = new ObjectResult(null);
+        var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null)
+        {
+            Result = new ObjectResult(null)
+        };
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-        await loggingActionFilter.OnActionExecutionAsync(context, next);
+        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(false);
 
-        mockLogger.VerifyInfo(string.Format(messageFormat, actionName),
+        mockLogger.VerifyInfo(string.Format(CultureInfo.CurrentCulture, messageFormat, actionName),
             new { foo = 123, ResultType = nameof(ObjectResult), ResultObject = "[null]" }, Times.Once());
     }
 

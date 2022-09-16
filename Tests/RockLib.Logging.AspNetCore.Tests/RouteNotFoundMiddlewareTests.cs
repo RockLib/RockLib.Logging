@@ -1,14 +1,10 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Moq;
-using RockLib.Logging.DependencyInjection;
 using RockLib.Logging.Moq;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -19,7 +15,7 @@ public class RouteNotFoundMiddlewareTests
     [Fact(DisplayName = "Constructor sets correct defaults when options are not present")]
     public void ConstructorHappyPath1()
     {
-        var next = new RequestDelegate(async innerContext => { });
+        var next = new RequestDelegate(innerContext => Task.CompletedTask);
 
         var middleware = new RouteNotFoundMiddleware(next, null);
 
@@ -31,7 +27,7 @@ public class RouteNotFoundMiddlewareTests
     [Fact(DisplayName = "Constructor sets properties when options are present")]
     public void ConstructorHappyPath2()
     {
-        var next = new RequestDelegate(async innerContext => { });
+        var next = new RequestDelegate(innerContext => Task.CompletedTask);
 
         var options = new RouteNotFoundMiddlewareOptions() { LoggerName = "NotDefault", LogLevel = LogLevel.Fatal, LogMessage = "DifferentLogMessage" };
 
@@ -48,7 +44,7 @@ public class RouteNotFoundMiddlewareTests
     [Fact(DisplayName = "Constructor throws when the request delegate is null")]
     public void ConstructorSadPath()
     {
-        Action action = () => new RouteNotFoundMiddleware(null);
+        var action = () => new RouteNotFoundMiddleware(null!);
 
         action.Should().Throw<ArgumentNullException>().WithMessage("*next*");
     }
@@ -65,11 +61,11 @@ public class RouteNotFoundMiddlewareTests
             return Task.CompletedTask;
         });
 
-        var next = new RequestDelegate(async innerContext => { });
+        var next = new RequestDelegate(innerContext => Task.CompletedTask);
 
         var middleware = new RouteNotFoundMiddleware(next);
 
-        await middleware.InvokeAsync(httpContext, loggerName => mockLogger.Object);
+        await middleware.InvokeAsync(httpContext, loggerName => mockLogger.Object).ConfigureAwait(false);
 
         mockLogger.Invocations.Count.Should().Be(0);
     }
@@ -90,11 +86,11 @@ public class RouteNotFoundMiddlewareTests
         httpContextMock.Setup(hcm => hcm.Response).Returns(httpResponseMock.Object);
         httpContextMock.Setup(hcm => hcm.Request).Returns(httpRequestMock.Object);
 
-        var next = new RequestDelegate(async innerContext => { });
+        var next = new RequestDelegate(innerContext => Task.CompletedTask);
 
         var middleware = new RouteNotFoundMiddleware(next);
 
-        await middleware.InvokeAsync(httpContextMock.Object, loggerName => mockLogger.Object);
+        await middleware.InvokeAsync(httpContextMock.Object, loggerName => mockLogger.Object).ConfigureAwait(false);
 
         mockLogger.Invocations.Count.Should().Be(1);
 
