@@ -3,18 +3,15 @@ using RockLib.Logging.DependencyInjection;
 using System;
 using Xunit;
 
-namespace RockLib.Logging.Tests.DependencyInjection
+namespace RockLib.Logging.Tests.DependencyInjection;
+
+public static class FileLogProviderOptionsTests
 {
-    public class FileLogProviderOptionsTests
+    [Fact(DisplayName = "File property throws when set to null")]
+    public static void FilePropertySetToNull()
     {
-        [Fact(DisplayName = "File property throws when set to null")]
-        public void FilePropertySetterSadPath()
-        {
-            var options = new FileLogProviderOptions();
+        Action act = () => new FileLogProviderOptions().File = null!;
 
-            Action act = () => options.File = null;
-
-            act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*value*");
-        }
+        act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*value*");
     }
 }
