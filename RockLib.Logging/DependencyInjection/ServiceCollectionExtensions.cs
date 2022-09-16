@@ -1,219 +1,248 @@
-﻿#if !NET451
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using RockLib.Logging.LogProcessing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RockLib.Logging.DependencyInjection
+namespace RockLib.Logging.DependencyInjection;
+
+/// <summary>
+/// Defines extension methods for <see cref="IServiceCollection"/> that add loggers to a
+/// service collection.
+/// </summary>
+public static class ServiceCollectionExtensions
 {
     /// <summary>
-    /// Defines extension methods for <see cref="IServiceCollection"/> that add loggers to a
-    /// service collection.
+    /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
+    /// <see cref="IServiceCollection"/>.
     /// </summary>
-    public static class ServiceCollectionExtensions
+    /// <param name="services">
+    /// The <see cref="IServiceCollection"/> to add the logger to.
+    /// </param>
+    /// <param name="logProcessor">The object that will process log entries on behalf of the logger.</param>
+    /// <param name="loggerName">The name of the logger to build.</param>
+    /// <param name="configureOptions">
+    /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
+    /// logger.
+    /// </param>
+    /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
+    /// <returns>
+    /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
+    /// </returns>
+    /// <remarks>
+    /// Note that if this method or any of its overloads are called more than once, then the
+    /// last call defines the log processor for all.
+    /// </remarks>
+    public static ILoggerBuilder AddLogger(this IServiceCollection services,
+        ILogProcessor logProcessor,
+        string loggerName = Logger.DefaultName,
+        Action<ILoggerOptions>? configureOptions = null,
+        ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
-        /// <summary>
-        /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
-        /// <see cref="IServiceCollection"/>.
-        /// </summary>
-        /// <param name="services">
-        /// The <see cref="IServiceCollection"/> to add the logger to.
-        /// </param>
-        /// <param name="logProcessor">The object that will process log entries on behalf of the logger.</param>
-        /// <param name="loggerName">The name of the logger to build.</param>
-        /// <param name="configureOptions">
-        /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
-        /// logger.
-        /// </param>
-        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
-        /// <returns>
-        /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
-        /// </returns>
-        /// <remarks>
-        /// Note that if this method or any of its overloads are called more than once, then the
-        /// last call defines the log processor for all.
-        /// </remarks>
-        public static ILoggerBuilder AddLogger(this IServiceCollection services,
-            ILogProcessor logProcessor,
-            string loggerName = Logger.DefaultName,
-            Action<ILoggerOptions> configureOptions = null,
-            ServiceLifetime lifetime = ServiceLifetime.Transient)
+        if (services is null)
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
-            if (logProcessor is null)
-                throw new ArgumentNullException(nameof(logProcessor));
-
-            var builder = new LoggerBuilder(services, loggerName, configureOptions);
-
-            services.SetLogProcessor(logProcessor);
-            services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
-            services.SetLoggerLookupDescriptor(lifetime);
-
-            return builder;
+            throw new ArgumentNullException(nameof(services));
         }
 
-        /// <summary>
-        /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
-        /// <see cref="IServiceCollection"/>.
-        /// </summary>
-        /// <param name="services">
-        /// The <see cref="IServiceCollection"/> to add the logger to.
-        /// </param>
-        /// <param name="logProcessorRegistration">
-        /// The method used to create the <see cref="ILogProcessor"/> that will process log entries
-        /// on behalf of the logger.
-        /// </param>
-        /// <param name="loggerName">The name of the logger to build.</param>
-        /// <param name="configureOptions">
-        /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
-        /// logger.
-        /// </param>
-        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
-        /// <returns>
-        /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
-        /// </returns>
-        /// <remarks>
-        /// Note that if this method or any of its overloads are called more than once, then the
-        /// last call defines the log processor for all.
-        /// </remarks>
-        public static ILoggerBuilder AddLogger(this IServiceCollection services,
-            Func<IServiceProvider, ILogProcessor> logProcessorRegistration,
-            string loggerName = Logger.DefaultName,
-            Action<ILoggerOptions> configureOptions = null,
-            ServiceLifetime lifetime = ServiceLifetime.Transient)
+        if (logProcessor is null)
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
-            if (logProcessorRegistration is null)
-                throw new ArgumentNullException(nameof(logProcessorRegistration));
-
-            var builder = new LoggerBuilder(services, loggerName, configureOptions);
-
-            services.SetLogProcessor(logProcessorRegistration);
-            services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
-            services.SetLoggerLookupDescriptor(lifetime);
-
-            return builder;
+            throw new ArgumentNullException(nameof(logProcessor));
         }
 
-        /// <summary>
-        /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
-        /// <see cref="IServiceCollection"/>.
-        /// </summary>
-        /// <param name="services">
-        /// The <see cref="IServiceCollection"/> to add the logger to.
-        /// </param>
-        /// <param name="loggerName">The name of the logger to build.</param>
-        /// <param name="configureOptions">
-        /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
-        /// logger.
-        /// </param>
-        /// <param name="processingMode">A value that indicates how the logger will process logs.</param>
-        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
-        /// <returns>
-        /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
-        /// </returns>
-        /// <remarks>
-        /// Note that if this method or any of its overloads are called more than once, then the
-        /// last call defines the log processor for all.
-        /// </remarks>
-        public static ILoggerBuilder AddLogger(this IServiceCollection services,
-            string loggerName = Logger.DefaultName,
-            Action<ILoggerOptions> configureOptions = null,
-            Logger.ProcessingMode processingMode = Logger.ProcessingMode.Background,
-            ServiceLifetime lifetime = ServiceLifetime.Transient)
+        var builder = new LoggerBuilder(services, loggerName, configureOptions);
+
+        services.SetLogProcessor(logProcessor);
+        services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
+        services.SetLoggerLookupDescriptor(lifetime);
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
+    /// <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="services">
+    /// The <see cref="IServiceCollection"/> to add the logger to.
+    /// </param>
+    /// <param name="logProcessorRegistration">
+    /// The method used to create the <see cref="ILogProcessor"/> that will process log entries
+    /// on behalf of the logger.
+    /// </param>
+    /// <param name="loggerName">The name of the logger to build.</param>
+    /// <param name="configureOptions">
+    /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
+    /// logger.
+    /// </param>
+    /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
+    /// <returns>
+    /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
+    /// </returns>
+    /// <remarks>
+    /// Note that if this method or any of its overloads are called more than once, then the
+    /// last call defines the log processor for all.
+    /// </remarks>
+    public static ILoggerBuilder AddLogger(this IServiceCollection services,
+        Func<IServiceProvider, ILogProcessor> logProcessorRegistration,
+        string loggerName = Logger.DefaultName,
+        Action<ILoggerOptions>? configureOptions = null,
+        ServiceLifetime lifetime = ServiceLifetime.Transient)
+    {
+        if (services is null)
         {
-            if (services is null)
-                throw new ArgumentNullException(nameof(services));
-
-            var builder = new LoggerBuilder(services, loggerName, configureOptions);
-
-            services.SetLogProcessor(processingMode);
-            services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
-            services.SetLoggerLookupDescriptor(lifetime);
-
-            return builder;
+            throw new ArgumentNullException(nameof(services));
         }
 
-        private static void SetLogProcessor(this IServiceCollection services, ILogProcessor logProcessor)
+        if (logProcessorRegistration is null)
         {
-            services.ClearLogProcessor();
-            services.AddSingleton(logProcessor);
+            throw new ArgumentNullException(nameof(logProcessorRegistration));
         }
 
-        private static void SetLogProcessor(this IServiceCollection services, Func<IServiceProvider, ILogProcessor> logProcessorRegistration)
+        var builder = new LoggerBuilder(services, loggerName, configureOptions);
+
+        services.SetLogProcessor(logProcessorRegistration);
+        services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
+        services.SetLoggerLookupDescriptor(lifetime);
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds an <see cref="ILogger"/>, along with its associated services, to the specified
+    /// <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <param name="services">
+    /// The <see cref="IServiceCollection"/> to add the logger to.
+    /// </param>
+    /// <param name="loggerName">The name of the logger to build.</param>
+    /// <param name="configureOptions">
+    /// A delegate to configure the <see cref="ILoggerOptions"/> object that is used to configure the
+    /// logger.
+    /// </param>
+    /// <param name="processingMode">A value that indicates how the logger will process logs.</param>
+    /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service.</param>
+    /// <returns>
+    /// An <see cref="ILoggerBuilder"/> object for adding log providers and context providers.
+    /// </returns>
+    /// <remarks>
+    /// Note that if this method or any of its overloads are called more than once, then the
+    /// last call defines the log processor for all.
+    /// </remarks>
+    public static ILoggerBuilder AddLogger(this IServiceCollection services,
+        string loggerName = Logger.DefaultName,
+        Action<ILoggerOptions>? configureOptions = null,
+        Logger.ProcessingMode processingMode = Logger.ProcessingMode.Background,
+        ServiceLifetime lifetime = ServiceLifetime.Transient)
+    {
+        if (services is null)
         {
-            services.ClearLogProcessor();
-            services.AddSingleton(logProcessorRegistration);
+            throw new ArgumentNullException(nameof(services));
         }
 
-        private static void SetLogProcessor(this IServiceCollection services, Logger.ProcessingMode processingMode)
+        var builder = new LoggerBuilder(services, loggerName, configureOptions);
+
+        services.SetLogProcessor(processingMode);
+        services.Add(new ServiceDescriptor(typeof(ILogger), builder.Build, lifetime));
+        services.SetLoggerLookupDescriptor(lifetime);
+
+        return builder;
+    }
+
+    private static void SetLogProcessor(this IServiceCollection services, ILogProcessor logProcessor)
+    {
+        services.ClearLogProcessor();
+        services.AddSingleton(logProcessor);
+    }
+
+    private static void SetLogProcessor(this IServiceCollection services, Func<IServiceProvider, ILogProcessor> logProcessorRegistration)
+    {
+        services.ClearLogProcessor();
+        services.AddSingleton(logProcessorRegistration);
+    }
+
+    private static void SetLogProcessor(this IServiceCollection services, Logger.ProcessingMode processingMode)
+    {
+        ClearLogProcessor(services);
+        switch (processingMode)
         {
-            ClearLogProcessor(services);
-            switch (processingMode)
+            case Logger.ProcessingMode.Background:
+                services.AddSingleton<ILogProcessor, BackgroundLogProcessor>();
+                break;
+#pragma warning disable CS0618 // Type or member is obsolete
+            case Logger.ProcessingMode.Synchronous:
+                services.AddSingleton<ILogProcessor, SynchronousLogProcessor>();
+                break;
+            case Logger.ProcessingMode.FireAndForget:
+                services.AddSingleton<ILogProcessor, FireAndForgetLogProcessor>();
+                break;
+#pragma warning restore CS0618 // Type or member is obsolete
+            default:
+                throw new ArgumentOutOfRangeException(nameof(processingMode));
+        }
+    }
+
+    private static void ClearLogProcessor(this IServiceCollection services)
+    {
+        for (var i = 0; i < services.Count; i++)
+        {
+            if (services[i].ServiceType == typeof(ILogProcessor))
             {
-                case Logger.ProcessingMode.Background:
-                    services.AddSingleton<ILogProcessor, BackgroundLogProcessor>();
-                    break;
-                case Logger.ProcessingMode.Synchronous:
-                    services.AddSingleton<ILogProcessor, SynchronousLogProcessor>();
-                    break;
-                case Logger.ProcessingMode.FireAndForget:
-                    services.AddSingleton<ILogProcessor, FireAndForgetLogProcessor>();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(processingMode));
+                services.RemoveAt(i--);
+            }
+        }
+    }
+
+    private static void SetLoggerLookupDescriptor(this IServiceCollection services, ServiceLifetime lifetime)
+    {
+        // Clear the existing LoggerLookup descriptor, if it exists.
+        for (var i = 0; i < services.Count; i++)
+        {
+            if (services[i].ServiceType == typeof(LoggerLookup))
+            {
+                services.RemoveAt(i--);
             }
         }
 
-        private static void ClearLogProcessor(this IServiceCollection services)
+        // Capture which loggers are singleton according to index.
+        var isSingletonLoggers = services.Where(service => service.ServiceType == typeof(ILogger))
+            .Select(service => service.Lifetime == ServiceLifetime.Singleton)
+            .ToArray();
+
+        LoggerLookup LoggerLookupRegistration(IServiceProvider serviceProvider) => name =>
         {
-            for (int i = 0; i < services.Count; i++)
-                if (services[i].ServiceType == typeof(ILogProcessor))
-                    services.RemoveAt(i--);
-        }
+            // Select the first logger that has a matching name.
+            var loggers = serviceProvider.GetServices<ILogger>().ToArray();
+            var selectedLogger = loggers.First(logger => NamesEqual(logger.Name, name));
 
-        private static void SetLoggerLookupDescriptor(this IServiceCollection services, ServiceLifetime lifetime)
-        {
-            // Clear the existing LoggerLookup descriptor, if it exists.
-            for (int i = 0; i < services.Count; i++)
-                if (services[i].ServiceType == typeof(LoggerLookup))
-                    services.RemoveAt(i--);
-
-            // Capture which loggers are singleton according to index.
-            IReadOnlyList<bool> isSingletonLogger = services.Where(service => service.ServiceType == typeof(ILogger))
-                .Select(service => service.Lifetime == ServiceLifetime.Singleton)
-                .ToArray();
-
-            LoggerLookup LoggerLookupRegistration(IServiceProvider serviceProvider) => name =>
+            // Immediately dispose any non-singleton loggers that weren't selected.
+            for (var i = 0; i < loggers.Length; i++)
             {
-                // Select the first logger that has a matching name.
-                var loggers = serviceProvider.GetServices<ILogger>().ToArray();
-                var selectedLogger = loggers.FirstOrDefault(logger => NamesEqual(logger.Name, name));
+                if (!isSingletonLoggers[i] && !ReferenceEquals(loggers[i], selectedLogger))
+                {
+                    loggers[i].Dispose();
+                }
+            }
 
-                // Immediately dispose any non-singleton loggers that weren't selected.
-                for (int i = 0; i < loggers.Length; i++)
-                    if (!isSingletonLogger[i] && !ReferenceEquals(loggers[i], selectedLogger))
-                        loggers[i].Dispose();
+            return selectedLogger;
+        };
 
-                return selectedLogger;
-            };
+        services.Add(new ServiceDescriptor(typeof(LoggerLookup), LoggerLookupRegistration, lifetime));
+    }
 
-            services.Add(new ServiceDescriptor(typeof(LoggerLookup), LoggerLookupRegistration, lifetime));
-        }
-
-        internal static bool NamesEqual(string loggerName, string lookupName)
+    internal static bool NamesEqual(string loggerName, string lookupName)
+    {
+        if (string.Equals(loggerName, lookupName, StringComparison.OrdinalIgnoreCase))
         {
-            if (string.Equals(loggerName, lookupName, StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            if (lookupName is null)
-                return string.Equals(loggerName, Logger.DefaultName, StringComparison.OrdinalIgnoreCase);
-
-            return false;
+            return true;
         }
+
+        if (lookupName is null)
+        {
+#pragma warning disable CA1820 // Test for empty strings using string length
+            return string.Equals(loggerName, Logger.DefaultName, StringComparison.OrdinalIgnoreCase);
+#pragma warning restore CA1820 // Test for empty strings using string length
+        }
+
+        return false;
     }
 }
-#endif
