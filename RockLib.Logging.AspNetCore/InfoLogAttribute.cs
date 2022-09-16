@@ -13,7 +13,7 @@ public sealed class InfoLogAttribute : LoggingActionFilterAttribute
     /// formatting the message.
     /// </param>
     /// <param name="loggerName">The name of the logger.</param>
-    public InfoLogAttribute(string messageFormat = DefaultMessageFormat, string loggerName = Logger.DefaultName)
+    public InfoLogAttribute(string? messageFormat = DefaultMessageFormat, string? loggerName = Logger.DefaultName)
         : base(messageFormat, loggerName, LogLevel.Info)
     {
     }
