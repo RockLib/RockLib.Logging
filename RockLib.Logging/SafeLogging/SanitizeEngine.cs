@@ -130,7 +130,9 @@ public static class SanitizeEngine
         {
             var genericTypeDefinition = interfaceType.GetGenericTypeDefinition();
             if (genericTypeDefinition == typeof(IDictionary<,>) || genericTypeDefinition == typeof(IReadOnlyDictionary<,>))
+            {
                 return interfaceType.GetGenericArguments()[0] == typeof(string);
+            }
         }
         return false;
     }

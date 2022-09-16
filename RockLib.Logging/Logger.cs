@@ -107,7 +107,9 @@ public sealed class Logger : ILogger
         IReadOnlyCollection<IContextProvider>? contextProviders = null)
     {
         if (!Enum.IsDefined(typeof(LogLevel), level))
+        {
             throw new ArgumentException($"Log level is not defined: {level}.", nameof(level));
+        }
 
         Name = name ?? DefaultName;
         LogProviders = logProviders ?? _emptyLogProviders;

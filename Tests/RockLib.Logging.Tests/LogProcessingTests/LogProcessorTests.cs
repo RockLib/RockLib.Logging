@@ -175,7 +175,9 @@ public static class LogProcessorTests
         var errorHandler = DelegateErrorHandler.New(error =>
         {
             if (error.FailureCount < 2)
+            {
                 error.ShouldRetry = true;
+            }
         });
 
         using var logProcessor = new TestLogProcessor();
@@ -249,7 +251,9 @@ public static class LogProcessorTests
         {
             SendToLogProviderInvocations.Add((logProvider, logEntry, errorHandler, failureCount));
             if (_sendToLogProviderShouldThrow)
+            {
                 throw new NotSupportedException("error.");
+            }
         }
 
         protected override void HandleError(Exception? exception, ILogProvider logProvider, LogEntry logEntry, 

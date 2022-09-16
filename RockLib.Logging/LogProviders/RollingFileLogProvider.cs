@@ -203,14 +203,18 @@ public class RollingFileLogProvider : FileLogProvider
     private bool NeedsNewRolloverPeriod(FileInfo fileInfo)
     {
         if (RolloverPeriod == RolloverPeriod.Never)
+        {
             return false;
+        }
 
         var currentTime = _getCurrentTime();
         var fileCreationTime = _getFileCreationTime(fileInfo);
 
         // Both Daily and Hourly roll over on a date change.
         if (currentTime.Date != fileCreationTime.Date)
+        {
             return true;
+        }
 
         // Hourly rolls over when the date is the same, but the hour is different.
         return
