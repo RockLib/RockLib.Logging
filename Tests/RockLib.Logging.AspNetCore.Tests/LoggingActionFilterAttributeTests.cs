@@ -62,8 +62,10 @@ public class LoggingActionFilterAttributeTests
         var context = new ActionExecutingContext(actionContext, Array.Empty<IFilterMetadata>(), new Dictionary<string, object>(), null);
         context.ActionArguments.Add(actionArgumentName, actionArgument);
 
-        var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
-        actionExecutedContext.Result = new AcceptedResult();
+        var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null)
+        {
+            Result = new AcceptedResult()
+        };
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
@@ -127,8 +129,10 @@ public class LoggingActionFilterAttributeTests
         var context = new ActionExecutingContext(actionContext, Array.Empty<IFilterMetadata>(), new Dictionary<string, object>(), null);
         context.ActionArguments.Add(actionArgumentName, actionArgument);
 
-        var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null);
-        actionExecutedContext.Result = new ObjectResult(resultObject);
+        var actionExecutedContext = new ActionExecutedContext(actionContext, Array.Empty<IFilterMetadata>(), null)
+        {
+            Result = new ObjectResult(resultObject)
+        };
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
