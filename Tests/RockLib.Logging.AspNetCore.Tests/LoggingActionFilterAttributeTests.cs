@@ -15,10 +15,10 @@ using Xunit;
 
 namespace RockLib.Logging.AspNetCore.Tests
 {
-    using static LoggingActionFilter;
+    using static LoggingActionFilterAttribute;
     using static Logger;
 
-    public class LoggingActionFilterTests
+    public class LoggingActionFilterAttributeTests
     {
         [Fact(DisplayName = "Constructor sets properties from non-null parameters")]
         public void ConstructorHappyPath1()
@@ -27,7 +27,7 @@ namespace RockLib.Logging.AspNetCore.Tests
             const string loggerName = "MyLogger";
             const LogLevel logLevel = LogLevel.Warn;
 
-            var loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, loggerName, logLevel).Object;
+            var loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, loggerName, logLevel).Object;
 
             loggingActionFilter.MessageFormat.Should().Be(messageFormat);
             loggingActionFilter.LoggerName.Should().Be(loggerName);
@@ -37,7 +37,7 @@ namespace RockLib.Logging.AspNetCore.Tests
         [Fact(DisplayName = "Constructor sets properties from null parameters")]
         public void ConstructorHappyPath2()
         {
-            var loggingActionFilter = new Mock<LoggingActionFilter>(null, null, LogLevel.Error).Object;
+            var loggingActionFilter = new Mock<LoggingActionFilterAttribute>(null, null, LogLevel.Error).Object;
 
             loggingActionFilter.MessageFormat.Should().Be(DefaultMessageFormat);
             loggingActionFilter.LoggerName.Should().Be(DefaultName);
@@ -52,7 +52,7 @@ namespace RockLib.Logging.AspNetCore.Tests
             const string actionArgumentName = "foo";
             const int actionArgument = 123;
 
-            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
+            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null, logLevel).Object;
 
             var mockLogger = new MockLogger();
 
@@ -83,7 +83,7 @@ namespace RockLib.Logging.AspNetCore.Tests
             const string actionArgumentName = "foo";
             const int actionArgument = 123;
 
-            var mockActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel);
+            var mockActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null, logLevel);
             mockActionFilter.Object.ExceptionMessageFormat = exceptionMessageFormat;
             mockActionFilter.Object.ExceptionLogLevel = exceptionLogLevel;
 
@@ -117,7 +117,7 @@ namespace RockLib.Logging.AspNetCore.Tests
             const int actionArgument = 123;
             const int resultObject = 123;
 
-            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
+            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null, logLevel).Object;
 
             var mockLogger = new MockLogger();
 
@@ -146,7 +146,7 @@ namespace RockLib.Logging.AspNetCore.Tests
             const string actionArgumentName = "foo";
             const int actionArgument = 123;
 
-            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilter>(messageFormat, null, logLevel).Object;
+            IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null, logLevel).Object;
 
             var mockLogger = new MockLogger();
 

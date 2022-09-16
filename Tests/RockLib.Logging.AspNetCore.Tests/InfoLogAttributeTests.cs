@@ -3,7 +3,7 @@ using Xunit;
 
 namespace RockLib.Logging.AspNetCore.Tests
 {
-    using static LoggingActionFilter;
+    using static LoggingActionFilterAttribute;
     using static Logger;
 
     public class InfoLogAttributeTests
