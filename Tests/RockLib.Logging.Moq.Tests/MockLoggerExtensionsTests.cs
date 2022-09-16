@@ -191,7 +191,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod5HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -204,7 +204,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod5SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -217,8 +217,8 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod5SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -231,7 +231,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod6HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -244,7 +244,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod6SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -257,7 +257,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod6SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Good-bye, cruel world!", exception);
 
@@ -270,8 +270,8 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod6SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello world!", exception);
 
@@ -284,7 +284,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod7HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -297,7 +297,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod7SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123 });
 
@@ -310,7 +310,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod7SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123 });
 
@@ -323,7 +323,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod7SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -336,8 +336,8 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod7SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -350,7 +350,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod8HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -363,7 +363,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod8SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123 });
 
@@ -376,7 +376,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod8SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -389,7 +389,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod8SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -402,7 +402,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod8SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -415,8 +415,8 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod8SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -429,7 +429,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod9HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -442,7 +442,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod9SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -455,8 +455,8 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod9SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -469,7 +469,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod10HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -482,7 +482,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod10SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception);
 
@@ -495,7 +495,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod10SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Good-bye, cruel world!", exception);
 
@@ -508,8 +508,8 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod10SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello world!", exception);
 
@@ -522,7 +522,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod11HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -535,7 +535,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod11SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123 });
 
@@ -548,7 +548,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod11SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123 });
 
@@ -561,7 +561,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod11SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -574,8 +574,8 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod11SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -588,7 +588,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod12HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -601,7 +601,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod12SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123 });
 
@@ -614,7 +614,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod12SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -627,7 +627,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod12SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -640,7 +640,7 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod12SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -653,8 +653,8 @@ public class MockLoggerExtensionsTests
     public void VerifyDebugMethod12SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Debug("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -835,7 +835,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod5HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -848,7 +848,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod5SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -861,8 +861,8 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod5SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -875,7 +875,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod6HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -888,7 +888,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod6SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -901,7 +901,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod6SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Good-bye, cruel world!", exception);
 
@@ -914,8 +914,8 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod6SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello world!", exception);
 
@@ -928,7 +928,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod7HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -941,7 +941,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod7SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -954,7 +954,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod7SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -967,7 +967,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod7SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -980,8 +980,8 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod7SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -994,7 +994,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod8HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -1007,7 +1007,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod8SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -1020,7 +1020,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod8SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -1033,7 +1033,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod8SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -1046,7 +1046,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod8SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -1059,8 +1059,8 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod8SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -1073,7 +1073,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod9HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -1086,7 +1086,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod9SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -1099,8 +1099,8 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod9SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -1113,7 +1113,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod10HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -1126,7 +1126,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod10SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -1139,7 +1139,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod10SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Good-bye, cruel world!", exception);
 
@@ -1152,8 +1152,8 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod10SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello world!", exception);
 
@@ -1166,7 +1166,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod11HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -1179,7 +1179,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod11SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -1192,7 +1192,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod11SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -1205,7 +1205,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod11SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -1218,8 +1218,8 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod11SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -1232,7 +1232,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod12HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -1245,7 +1245,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod12SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -1258,7 +1258,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod12SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -1271,7 +1271,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod12SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -1284,7 +1284,7 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod12SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -1297,8 +1297,8 @@ public class MockLoggerExtensionsTests
     public void VerifyInfoMethod12SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -1479,7 +1479,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod5HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1492,7 +1492,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod5SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1505,8 +1505,8 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod5SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1519,7 +1519,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod6HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1532,7 +1532,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod6SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1545,7 +1545,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod6SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Good-bye, cruel world!", exception);
 
@@ -1558,8 +1558,8 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod6SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello world!", exception);
 
@@ -1572,7 +1572,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod7HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -1585,7 +1585,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod7SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123 });
 
@@ -1598,7 +1598,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod7SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123 });
 
@@ -1611,7 +1611,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod7SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -1624,8 +1624,8 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod7SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -1638,7 +1638,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod8HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -1651,7 +1651,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod8SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123 });
 
@@ -1664,7 +1664,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod8SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -1677,7 +1677,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod8SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -1690,7 +1690,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod8SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -1703,8 +1703,8 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod8SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -1717,7 +1717,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod9HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1730,7 +1730,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod9SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1743,8 +1743,8 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod9SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1757,7 +1757,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod10HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1770,7 +1770,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod10SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception);
 
@@ -1783,7 +1783,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod10SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Good-bye, cruel world!", exception);
 
@@ -1796,8 +1796,8 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod10SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello world!", exception);
 
@@ -1810,7 +1810,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod11HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -1823,7 +1823,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod11SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123 });
 
@@ -1836,7 +1836,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod11SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123 });
 
@@ -1849,7 +1849,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod11SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -1862,8 +1862,8 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod11SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -1876,7 +1876,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod12HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -1889,7 +1889,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod12SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123 });
 
@@ -1902,7 +1902,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod12SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -1915,7 +1915,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod12SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -1928,7 +1928,7 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod12SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -1941,8 +1941,8 @@ public class MockLoggerExtensionsTests
     public void VerifyWarnMethod12SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Warn("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -2123,7 +2123,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod5HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2136,7 +2136,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod5SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2149,8 +2149,8 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod5SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2163,7 +2163,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod6HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2176,7 +2176,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod6SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2189,7 +2189,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod6SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Good-bye, cruel world!", exception);
 
@@ -2202,8 +2202,8 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod6SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Error("Hello world!", exception);
 
@@ -2216,7 +2216,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod7HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -2229,7 +2229,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod7SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123 });
 
@@ -2242,7 +2242,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod7SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123 });
 
@@ -2255,7 +2255,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod7SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -2268,8 +2268,8 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod7SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -2282,7 +2282,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod8HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -2295,7 +2295,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod8SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123 });
 
@@ -2308,7 +2308,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod8SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -2321,7 +2321,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod8SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -2334,7 +2334,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod8SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -2347,8 +2347,8 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod8SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -2361,7 +2361,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod9HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2374,7 +2374,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod9SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2387,8 +2387,8 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod9SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2401,7 +2401,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod10HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2414,7 +2414,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod10SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception);
 
@@ -2427,7 +2427,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod10SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Good-bye, cruel world!", exception);
 
@@ -2440,8 +2440,8 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod10SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Error("Hello world!", exception);
 
@@ -2454,7 +2454,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod11HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -2467,7 +2467,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod11SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123 });
 
@@ -2480,7 +2480,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod11SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123 });
 
@@ -2493,7 +2493,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod11SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -2506,8 +2506,8 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod11SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -2520,7 +2520,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod12HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -2533,7 +2533,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod12SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123 });
 
@@ -2546,7 +2546,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod12SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -2559,7 +2559,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod12SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -2572,7 +2572,7 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod12SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -2585,8 +2585,8 @@ public class MockLoggerExtensionsTests
     public void VerifyErrorMethod12SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Error("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -2767,7 +2767,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod5HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -2780,7 +2780,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod5SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -2793,8 +2793,8 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod5SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -2807,7 +2807,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod6HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -2820,7 +2820,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod6SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -2833,7 +2833,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod6SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Good-bye, cruel world!", exception);
 
@@ -2846,8 +2846,8 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod6SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello world!", exception);
 
@@ -2860,7 +2860,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod7HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -2873,7 +2873,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod7SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123 });
 
@@ -2886,7 +2886,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod7SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123 });
 
@@ -2899,7 +2899,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod7SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -2912,8 +2912,8 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod7SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -2926,7 +2926,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod8HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -2939,7 +2939,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod8SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123 });
 
@@ -2952,7 +2952,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod8SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -2965,7 +2965,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod8SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -2978,7 +2978,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod8SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -2991,8 +2991,8 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod8SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -3005,7 +3005,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod9HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -3018,7 +3018,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod9SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -3031,8 +3031,8 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod9SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -3045,7 +3045,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod10HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -3058,7 +3058,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod10SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception);
 
@@ -3071,7 +3071,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod10SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Good-bye, cruel world!", exception);
 
@@ -3084,8 +3084,8 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod10SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello world!", exception);
 
@@ -3098,7 +3098,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod11HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -3111,7 +3111,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod11SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123 });
 
@@ -3124,7 +3124,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod11SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123 });
 
@@ -3137,7 +3137,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod11SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -3150,8 +3150,8 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod11SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -3164,7 +3164,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod12HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -3177,7 +3177,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod12SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123 });
 
@@ -3190,7 +3190,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod12SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -3203,7 +3203,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod12SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -3216,7 +3216,7 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod12SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -3229,8 +3229,8 @@ public class MockLoggerExtensionsTests
     public void VerifyFatalMethod12SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Fatal("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -3411,7 +3411,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod5HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3424,7 +3424,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod5SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3437,8 +3437,8 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod5SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3451,7 +3451,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod6HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3464,7 +3464,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod6SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3477,7 +3477,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod6SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Good-bye, cruel world!", exception);
 
@@ -3490,8 +3490,8 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod6SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello world!", exception);
 
@@ -3504,7 +3504,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod7HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -3517,7 +3517,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod7SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123 });
 
@@ -3530,7 +3530,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod7SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123 });
 
@@ -3543,7 +3543,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod7SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -3556,8 +3556,8 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod7SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -3570,7 +3570,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod8HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -3583,7 +3583,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod8SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123 });
 
@@ -3596,7 +3596,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod8SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -3609,7 +3609,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod8SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -3622,7 +3622,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod8SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -3635,8 +3635,8 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod8SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -3649,7 +3649,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod9HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3662,7 +3662,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod9SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3675,8 +3675,8 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod9SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3689,7 +3689,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod10HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3702,7 +3702,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod10SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception);
 
@@ -3715,7 +3715,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod10SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Good-bye, cruel world!", exception);
 
@@ -3728,8 +3728,8 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod10SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello world!", exception);
 
@@ -3742,7 +3742,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod11HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -3755,7 +3755,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod11SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123 });
 
@@ -3768,7 +3768,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod11SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123 });
 
@@ -3781,7 +3781,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod11SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -3794,8 +3794,8 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod11SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -3808,7 +3808,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod12HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = new object[] { 456 } });
 
@@ -3821,7 +3821,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod12SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123 });
 
@@ -3834,7 +3834,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod12SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -3847,7 +3847,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod12SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -3860,7 +3860,7 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod12SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -3873,8 +3873,8 @@ public class MockLoggerExtensionsTests
     public void VerifyAuditMethod12SadPath5()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Audit("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -4055,7 +4055,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod5HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4068,7 +4068,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod5SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4081,8 +4081,8 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod5SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4095,7 +4095,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod6HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4108,7 +4108,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod6SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4121,7 +4121,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod6SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Good-bye, cruel world!", exception);
 
@@ -4134,8 +4134,8 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod6SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4148,7 +4148,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod7HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4161,7 +4161,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod7SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4174,7 +4174,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod7SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4187,7 +4187,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod7SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -4200,7 +4200,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod8HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4213,7 +4213,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod8SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4226,7 +4226,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod8SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -4239,7 +4239,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod8SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -4252,7 +4252,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod8SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
@@ -4269,7 +4269,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod9HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4282,7 +4282,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod9SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4295,8 +4295,8 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod9SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4309,7 +4309,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod10HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4322,7 +4322,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod10SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4335,7 +4335,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod10SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Good-bye, cruel world!", exception);
 
@@ -4348,8 +4348,8 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod10SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
-        var wrongException = new Exception();
+        var exception = new NotSupportedException();
+        var wrongException = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception);
 
@@ -4362,7 +4362,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod11HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4375,7 +4375,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod11SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4388,7 +4388,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod11SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4401,7 +4401,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod11SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = "foobar" });
 
@@ -4414,7 +4414,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod12HappyPath()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4427,7 +4427,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod12SadPath1()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123 });
 
@@ -4440,7 +4440,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod12SadPath2()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Good-bye, cruel world!", exception, new { Foo = 123, Bar = "abc" });
 
@@ -4453,7 +4453,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod12SadPath3()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 456, Bar = "abc" });
 
@@ -4466,7 +4466,7 @@ public class MockLoggerExtensionsTests
     public void VerifyLogMethod12SadPath4()
     {
         var mockLogger = new MockLogger();
-        var exception = new Exception();
+        var exception = new NotSupportedException();
 
         mockLogger.Object.Info("Hello, world!", exception, new { Foo = 123, Bar = "abcdefg" });
 
