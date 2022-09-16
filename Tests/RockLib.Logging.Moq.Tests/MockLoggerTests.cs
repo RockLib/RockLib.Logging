@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Moq;
-using System;
 using Xunit;
 
 namespace RockLib.Logging.Moq.Tests;

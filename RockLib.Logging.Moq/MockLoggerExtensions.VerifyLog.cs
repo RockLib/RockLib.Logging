@@ -14,10 +14,7 @@ public partial class MockLoggerExtensions
         Expression<Func<Exception, bool>>? hasMatchingException, object? extendedProperties,
         LogLevel? logLevel, Times? times, string? failMessage)
     {
-        if (mockLogger is null)
-        {
-            throw new ArgumentNullException(nameof(mockLogger));
-        }
+        if (mockLogger is null) { throw new ArgumentNullException(nameof(mockLogger)); }
 
         Expression<Func<LogEntry, bool>>? matchingMessage = null, matchingExtendedProperties = null, matchingLogLevel = null;
 
@@ -69,6 +66,7 @@ public partial class MockLoggerExtensions
         Expression<Func<LogEntry, bool>>? hasMatchingExtendedProperties = null;
 
         var properties = GetExtendedPropertiesDictionary(extendedProperties);
+
         foreach (var property in properties.Reverse())
         {
             var logEntryParameter = Expression.Parameter(typeof(LogEntry), "logEntry");
@@ -123,8 +121,7 @@ public partial class MockLoggerExtensions
             matchingLogEntry = hasMatchingMessage.And(matchingLogEntry);
         }
 
-        if (matchingLogEntry is null)
-            matchingLogEntry = logEntry => true;
+        matchingLogEntry ??= logEntry => true;
 
         return matchingLogEntry;
     }
