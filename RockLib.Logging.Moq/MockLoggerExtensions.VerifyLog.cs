@@ -189,7 +189,7 @@ public partial class MockLoggerExtensions
     {
         var logEntry = new LogEntry();
         logEntry.SetExtendedProperties(extendedProperties);
-        return logEntry.ExtendedProperties;
+        return logEntry.ExtendedProperties!;
     }
 
     // Pretend to be compiler generated so that Moq thinks it's dealing with closure
@@ -201,7 +201,7 @@ public partial class MockLoggerExtensions
         public readonly Func<LogEntry, string, object, bool> HasMatchingExtendedProperty = (logEntry, extendedPropertyName, expectedValue) =>
         {
             if (!logEntry.ExtendedProperties.TryGetValue(extendedPropertyName, out var value)
-                || !value.GetType().IsAssignableFrom(expectedValue.GetType()))
+                || !value!.GetType().IsAssignableFrom(expectedValue.GetType()))
             {
                 return false;
             }
