@@ -7,47 +7,46 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace RockLib.Logging.AspNetCore.Tests
+namespace RockLib.Logging.AspNetCore.Tests;
+
+public class LogBuilderExtensionTests
 {
-    public class LogBuilderExtensionTests
+    [Fact(DisplayName = "AddHttpContextProvider adds HttpContextProvider")]
+    public void AddHttpContextProviderExtension()
     {
-        [Fact(DisplayName = "AddHttpContextProvider adds HttpContextProvider")]
-        public void AddHttpContextProviderExtension()
+        var contextMock = new Mock<IHttpContextAccessor>();
+        var loggerBuilder = new TestLoggerBuilder();
+
+        var serviceProvider = new ServiceCollection()
+            .AddSingleton(contextMock.Object)
+            .BuildServiceProvider();
+
+        loggerBuilder.AddHttpContextProvider();
+
+        var registration = loggerBuilder.ContextProviderRegistrations.Should().ContainSingle().Subject;
+
+        var contextProvider = registration.Invoke(serviceProvider);
+        contextProvider.Should().BeOfType<HttpContextProvider>();
+    }
+
+    private class TestLoggerBuilder : ILoggerBuilder
+    {
+        public string LoggerName => Logger.DefaultName;
+
+        public IList<Func<IServiceProvider, ILogProvider>> LogProviderRegistrations { get; } = new List<Func<IServiceProvider, ILogProvider>>();
+
+        public IList<Func<IServiceProvider, IContextProvider>> ContextProviderRegistrations { get; } = new List<Func<IServiceProvider, IContextProvider>>();
+
+        public ILoggerBuilder AddLogProvider(Func<IServiceProvider, ILogProvider> logProviderRegistration)
         {
-            var contextMock = new Mock<IHttpContextAccessor>();
-            var loggerBuilder = new TestLoggerBuilder();
-
-            var serviceProvider = new ServiceCollection()
-                .AddSingleton(contextMock.Object)
-                .BuildServiceProvider();
-
-            loggerBuilder.AddHttpContextProvider();
-
-            var registration = loggerBuilder.ContextProviderRegistrations.Should().ContainSingle().Subject;
-
-            var contextProvider = registration.Invoke(serviceProvider);
-            contextProvider.Should().BeOfType<HttpContextProvider>();
+            LogProviderRegistrations.Add(logProviderRegistration);
+            return this;
         }
 
-        private class TestLoggerBuilder : ILoggerBuilder
+        public ILoggerBuilder AddContextProvider(Func<IServiceProvider, IContextProvider> contextProviderRegistration)
         {
-            public string LoggerName => Logger.DefaultName;
-
-            public IList<Func<IServiceProvider, ILogProvider>> LogProviderRegistrations { get; } = new List<Func<IServiceProvider, ILogProvider>>();
-
-            public IList<Func<IServiceProvider, IContextProvider>> ContextProviderRegistrations { get; } = new List<Func<IServiceProvider, IContextProvider>>();
-
-            public ILoggerBuilder AddLogProvider(Func<IServiceProvider, ILogProvider> logProviderRegistration)
-            {
-                LogProviderRegistrations.Add(logProviderRegistration);
-                return this;
-            }
-
-            public ILoggerBuilder AddContextProvider(Func<IServiceProvider, IContextProvider> contextProviderRegistration)
-            {
-                ContextProviderRegistrations.Add(contextProviderRegistration);
-                return this;
-            }
+            ContextProviderRegistrations.Add(contextProviderRegistration);
+            return this;
         }
     }
 }
