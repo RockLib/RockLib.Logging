@@ -91,7 +91,7 @@ public static class RockLibLoggerTests
         capturedState.Should().Be("Hello, world!");
         capturedException.Should().BeSameAs(ex);
 
-        string Format(string state, Exception exception)
+        string Format(string state, Exception? exception)
         {
             capturedState = state;
             capturedException = exception;
@@ -120,7 +120,7 @@ public static class RockLibLoggerTests
         capturedState.Should().BeNull();
         capturedException.Should().BeNull();
 
-        string Format(string state, Exception exception)
+        string Format(string state, Exception? exception)
         {
             capturedState = state;
             capturedException = exception;

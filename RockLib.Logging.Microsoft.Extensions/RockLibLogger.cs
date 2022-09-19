@@ -43,7 +43,7 @@ public class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     public IExternalScopeProvider ScopeProvider { get; internal set; }
 
     /// <inheritdoc/>
-    public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception, string> formatter)
+    public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
         if (formatter is null) { throw new ArgumentNullException(nameof(formatter)); }
 
@@ -54,8 +54,7 @@ public class RockLibLogger : Microsoft.Extensions.Logging.ILogger
             return;
         }
 
-        // TODO: With RockLib.Logging 4.0.0, exception should be nullable.
-        var logEntry = new LogEntry(formatter(state, exception!), exception, convertedLogLevel);
+        var logEntry = new LogEntry(formatter(state, exception), exception, convertedLogLevel);
 
         logEntry.ExtendedProperties["Microsoft.Extensions.Logging.EventId"] = eventId;
 
