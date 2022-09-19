@@ -338,4 +338,3 @@ public static class RockLibLoggerProviderExtensionsTests
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*services*");
     }
 }
-#pragma warning restore IDE0039 // Use local function
