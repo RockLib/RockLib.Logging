@@ -118,7 +118,8 @@ logger.Info("Received Foo request.", correlationId: correlationId, businessProce
 
 ---
 
-### Use the _Log_ method directory, instantiate a _LogEntry_ object and pass it in:
+### Use the _Log_ method directory
+Instantiate a _LogEntry_ object and pass it in:
 
 ```c#
 LogEntry logEntry = new LogEntry("Foo method starting...", LogLevel.Debug, new { bar = "abc" });
