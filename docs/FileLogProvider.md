@@ -1,32 +1,38 @@
-# How to use and configure `FileLogProvider`
+# How to use and configure _FileLogProvider_
 
 The `FileLogProvider` can be instantiated in one of two ways.
 
-With a template:
-- file
+## With a template:
+**file**
   - Type: string
   - Description: The path to a writable file.
-- template
+
+**template**
   - Type: string
   - Description: The template used to format log entries. See [TemplateLogFormatter](Formatting.md#template) for more information.
-- level
+
+**level**
   - Type: LogLevel enum (NotSet, Debug, Info, Warn, Error, Fatal, Audit)
   - Description: The level of the log provider. If `NotSet`, the level of the containing `Logger` is used.
-- timeout
+
+**timeout**
   - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
 
-Or with a formatter:
-- file
+## With a formatter:
+**file**
   - Type: string
   - Description: The path to a writable file.
-- formatter
+
+**formatter**
   - Type: ILogFormatter
   - Description: An object that formats log entries prior to writing to standard out. See [ILogFormatter](Formatting.md#ilogformatter) for more information.
-- level
+
+**level**
   - Type: LogLevel enum (NotSet, Debug, Info, Warn, Error, Fatal, Audit)
   - Description: The level of the log provider. If `NotSet`, the level of the containing `Logger` is used.
-- timeout
+
+**timeout**
   - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
 
@@ -35,9 +41,10 @@ Or with a formatter:
 To add a `FileLogProvider` to a logger, call one of the five `AddFileLogProvider` extension method overloads. Four of the overloads are very similar, differing only by how the `ILogFormatter` is specified.
 
 ---
-Specifying a custom template:
 
-```c#
+### Specifying a custom template:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -49,9 +56,9 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter`:
+### Specifying a custom _ILogFormatter_:
 
-```c#
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     IDependency dependency = new MyDependency();
@@ -68,9 +75,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter` generically including custom constructor parameters:
 
-```c#
+### Specifying a custom _ILogFormatter_ generically including custom constructor parameters:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddTransient<IDependency, MyDependency>();
@@ -84,9 +92,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter` with a callback function:
 
-```c#
+### Specifying a custom _ILogFormatter_ with a callback function:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -98,9 +107,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Completely customizing the file log provider with a callback function:
 
-```c#
+### Fully customizing the file log provider with a callback function:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -116,9 +126,9 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-## Configuration for `FileLogProvider`
+## Configuration for _FileLogProvider_
 
-Specifying a template:
+### Specifying a template:
 
 ```json
 {
@@ -138,7 +148,7 @@ Specifying a template:
 }
 ```
 
-Specifying an `ILogFormatter`:
+### Specifying an _ILogFormatter_:
 
 ```json
 {

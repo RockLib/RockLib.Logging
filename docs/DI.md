@@ -6,6 +6,8 @@ There are three overloads of this extension method. The difference between them 
 
 ---
 
+## Parameters
+
 | Parameter        | Required | Default     | Type                     | Description                                                                               |
 |:-----------------|:---------|:------------|:-------------------------|:------------------------------------------------------------------------------------------|
 | logProcessor     | Yes      | N/A         | `ILogProcessor`          | The object that will process log entries on behalf of the logger.                         |
@@ -35,7 +37,7 @@ There are three overloads of this extension method. The difference between them 
 
 This is the definition of the `ILoggerBuilder` interface:
 
-```c#
+```csharp
 public interface ILoggerBuilder
 {
     string LoggerName { get; }
@@ -46,17 +48,17 @@ public interface ILoggerBuilder
 }
 ```
 
-#### LoggerName property
+### LoggerName property
 The name of the logger to build.
 
-#### AddLogProvider method
+### AddLogProvider method
 Adds an `ILogProvider` to the logger. The `ILogProvider` is instantiated with the `logProviderRegistration` callback.
 
 | Parameter               | Required | Type   | Description                               |
 |:------------------------|:---------|:-------|:------------------------------------------|
 | logProviderRegistration | Yes      | `Func` | A method that creates the `ILogProvider`. |
 
-#### AddContextProvider method
+### AddContextProvider method
 Adds an `IContextProvider` to the logger. The `IContextProvider` is instantiated with the `contextProviderRegistration` callback.
 
 | Parameter                   | Required | Type                                       | Description                                   |
@@ -67,7 +69,7 @@ Adds an `IContextProvider` to the logger. The `IContextProvider` is instantiated
 
 The following generic extension methods for `ILoggerBuilder` are defined:
 
-```c#
+```csharp
 ILoggerBuilder AddLogProvider<TLogProvider>(this ILoggerBuilder builder, params object[] parameters)
     where TLogProvider : ILogProvider;
 
@@ -75,14 +77,14 @@ ILoggerBuilder AddContextProvider<TContextProvider>(this ILoggerBuilder builder,
     where TContextProvider : IContextProvider;
 ```
 
-#### AddLogProvider\<TLogProvider\> extension method
+### AddLogProvider\<TLogProvider\> extension method
 Adds an `ILogProvider` of type `TLogProvider` to the logger. The `TLogProvider` is instantiated with constructor arguments directly and/or from an `IServiceProvider`.
 
 | Parameter  | Type              | Description                                                                                    |
 |:-----------|:------------------|:-----------------------------------------------------------------------------------------------|
 | parameters | `params object[]` | Constructor arguments for type `TLogProvider` that are not provided by the `IServiceProvider`. |
 
-#### AddContextProvider extension method
+### AddContextProvider extension method
 Adds an `IContextProvider` of type `TContextProvider` to the logger. The `TContextProvider` is instantiated with constructor arguments directlry and/or from an `IServiceProvider`.
 
 | Parameter  | Type              | Description                                                                                        |
