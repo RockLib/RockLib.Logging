@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Getting Started
 
 In this tutorial, we will be building a console application with a hosted service that writes logs when started and stopped (the service doesn't actually do anything).
