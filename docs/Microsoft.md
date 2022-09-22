@@ -89,6 +89,6 @@ public interface ILoggerBuilder
 
 The `IncludeScopes` property determines wether or not a `ScopeProvider` will be used for creating scopes in the logger. Below is an example of setting this property:
 
-```c#
+```csharp
 logging.AddRockLibLoggerProvider(options => options.IncludeScopes = true);
 ```
