@@ -126,5 +126,3 @@ LogEntry logEntry = new LogEntry("Foo method starting...", LogLevel.Debug, new {
 
 logger.Log(logEntry);
 ```
-
----

@@ -4,7 +4,7 @@ It is possible for an implementation of `ILogProvider` to throw an exception in 
 
 In addition, if the `TraceSource` is defined and is tracing is at `Information`, a trace event is sent for each successful log processing.
 
-In order to set such a `TraceSource`, add this to your configuration:
+## To set a _TraceSource_, add this to your configuration:
 
 ```json
 "RockLib.Diagnostics": {
@@ -22,9 +22,9 @@ In order to set such a `TraceSource`, add this to your configuration:
 }
 ```
 
-Or set the `TraceSource` programmatically:
+## To set the _TraceSource_ programmatically:
 
-```c#
+```csharp
 Tracing.Settings = new DiagnosticsSettings(
     sources: new System.Diagnostics.TraceSource[]
     {

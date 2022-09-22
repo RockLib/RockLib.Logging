@@ -2,11 +2,11 @@
 
 The `ILogLevelResolver` interface defines a custom method in which any given `ILogger` can use to retrieve it's `LogLevel` on-demand.
 
-**Note:** `ILogLevelResolver` does not affect the logging level for other default loggers (such as `Microsoft.Extensions.Logging.ILogger`). It will only affect logs routed through `RockLib.Logging.ILogger`.
+> **Note:** `ILogLevelResolver` does not affect the logging level for other default loggers (such as `Microsoft.Extensions.Logging.ILogger`). It will only affect logs routed through `RockLib.Logging.ILogger`.
 
 ## Creating Your Own Resolver
 
-New log level resolvers can be created by implementing the `ILogLevelResolver` interface, and registering the implementation to the DI container. If no DI container is used, you may pass `ILogLevelResolver` directly into the constructor of a `Logger`. 
+New log level resolvers can be created by implementing the `ILogLevelResolver` interface, and registering the implementation to the DI container. If no DI container is used, you may pass `ILogLevelResolver` directly into the constructor of a `Logger`.
 
 Only one `ILogLevelResolver` may be used per application when DI is used.
 

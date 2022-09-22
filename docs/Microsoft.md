@@ -6,11 +6,11 @@ There are four overloads of this extension method, two for `ILoggingBuilder` and
 
 ---
 
-## `ILoggingBuilder` Method
+## _ILoggingBuilder_ Method
 
 The most common way to set this up is to use the `ConfigureLogging` method on a default host builder.
 
-```c#
+```csharp
 Host.CreateDefaultBuilder(args)
     .ConfigureWebHostDefaults(webBuilder =>
     {
@@ -24,11 +24,11 @@ Host.CreateDefaultBuilder(args)
 
 ---
 
-## `IServiceCollection` Method
+## _IServiceCollection_ Method
 
 An alternate way to set this up is to use the `ConfigureServices` start up method.
 
-```c#
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddRockLibLoggerProvider();
@@ -37,7 +37,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ## Extension Definitions
 
-#### ILoggingBuilder Extension 1
+### ILoggingBuilder Extension 1
 
 | Parameter         | Required | Default | Type                              | Description                                                  |
 |:------------------|:---------|:--------|:----------------------------------|:-------------------------------------------------------------|
@@ -45,7 +45,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ---
 
-#### ILoggingBuilder Extension 2
+### ILoggingBuilder Extension 2
 
 | Parameter         | Required | Default      | Type                              | Description                                                  |
 |:------------------|:---------|:-------------|:----------------------------------|:-------------------------------------------------------------|
@@ -54,7 +54,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ---
 
-#### IServiceCollection Extension 1
+### IServiceCollection Extension 1
 
 | Parameter         | Required | Default | Type                              | Description                                                  |
 |:------------------|:---------|:--------|:----------------------------------|:-------------------------------------------------------------|
@@ -62,7 +62,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ---
 
-#### IServiceCollection Extension 2
+### IServiceCollection Extension 2
 
 | Parameter         | Required | Default      | Type                              | Description                                                  |
 |:------------------|:---------|:-------------|:----------------------------------|:-------------------------------------------------------------|
@@ -72,11 +72,11 @@ public void ConfigureServices(IServiceCollection services)
 ---
 
 
-## `RockLibLoggerOptions` class
+## _RockLibLoggerOptions_ class
 
 This is the definition of the `RockLibLoggerOptions` class:
 
-```c#
+```csharp
 public interface ILoggerBuilder
 {
     public bool IncludeScopes { get; set; }

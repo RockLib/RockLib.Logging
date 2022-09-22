@@ -6,7 +6,7 @@ The RockLib.Logging.Moq package makes it easy for applications to verify that lo
 
 Note that all extension methods target the `Mock<ILogger>` type.
 
-### `SetupLogger` extension method
+### SetupLogger extension method
 
 The `SetupLogger` extension methods sets up the provided `Mock<ILogger>` so that it will properly function whenever any logging or safe-logging extension methods are called.
 
@@ -17,14 +17,14 @@ The `SetupLogger` extension methods sets up the provided `Mock<ILogger>` so that
 
 Example:
 
-```c#
+```csharp
 private void Example(Mock<ILogger> mockLogger)
 {
     mockLogger.SetupLogger(LogLevel.Warn, "TestLogger");
 }
 ```
 
-### `VerifyLog` extension methods
+### VerifyLog extension methods
 
 There are numerous extension methods for verifying that a log was recorded, each of which begins with "Verify". The difference between each extension method is the expected level of the log.
 
@@ -36,7 +36,7 @@ There are numerous extension methods for verifying that a log was recorded, each
 - `VerifyAudit` - Verifies that an `Audit` log was recorded.
 - `VerifyLog` - Verifies that a log was recorded, regardless of level.
 
-#### `VerifyLog` extension method parameters
+### VerifyLog extension method parameters
 
 There are many overloads of each log verification extension method. The difference between them is the additional parameters that are provided. Each parameter defines an additional restriction to be placed on the verification. All overloads include two parameters: `times` and `failMessage`.
 
@@ -53,13 +53,13 @@ There are many overloads of each log verification extension method. The differen
 
 The `MockLogger` class, which inherits from `Mock<ILogger>`, exists to further simplify the initialization of mock loggers. All it does is have its constructor call the `SetupLogger` extension method with the parameters passed to it. So instead of this:
 
-```c#
+```csharp
 Mock<ILogger> mockLogger = new Mock<ILogger>();
 mockLogger.SetupLogger(LogLevel.Info, "MyLogger");
 ```
 
 ...you can do this:
 
-```c#
+```csharp
 Mock<ILogger> mockLogger = new MockLogger(LogLevel.Info, "MyLogger");
 ```
