@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 4.0.0 - Not yet released
-	
+## 4.0.0 - 2022-09-16
+
 #### Added
 - Added `.editorconfig` and `Directory.Build.props` files to ensure consistency.
 
@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Adds the ability to define an `ILogLevelResolver` used to retrieve log levels at runtime.
 - Fixes a small memory leak in `RockLib.Logging.LogProcessing.BackgroundLogLevelProcessor1`
- 
+
 ## 3.0.8 - 2021-08-11
 
 #### Changed
