@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Adds the ability to define an `ILogLevelResolver` used to retrieve log levels at runtime.
 - Fixes a small memory leak in `RockLib.Logging.LogProcessing.BackgroundLogLevelProcessor1`
- 
+
 ## 3.0.8 - 2021-08-11
 
 #### Changed
