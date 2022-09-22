@@ -1,3 +1,8 @@
+---
+sidebar_position: 10
+sidebar_label: 'How to use and configure FileLogProvider'
+---
+
 # How to use and configure _FileLogProvider_
 
 The `FileLogProvider` can be instantiated in one of two ways.

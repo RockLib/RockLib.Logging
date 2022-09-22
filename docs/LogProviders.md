@@ -1,3 +1,7 @@
+---
+sidebar_position: 8
+---
+
 # Log Providers
 
 The `ILogProvider` interface defines exactly how logs are written; a logger can have zero to many log providers. `RockLib.Logging` comes with three implementations of the `ILogProvider`.

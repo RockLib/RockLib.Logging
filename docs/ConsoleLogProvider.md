@@ -1,3 +1,8 @@
+---
+sidebar_position: 9
+sidebar_label: 'How to use and configure ConsoleLogProvider'
+---
+
 # How to use and configure _ConsoleLogProvider_
 
 The `ConsoleLogProvider` can be instantiated in one of two ways.

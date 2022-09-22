@@ -1,3 +1,7 @@
+---
+sidebar_position: 16
+---
+
 # Formatting Logs
 
 By implementing the `RockLib.Logging.ILogFormatter` interface, defining the `Format` method, and providing it to a log provider (such as a `FileLogProvider`, a `ConsoleLogProvider` or a `RollingFileLogProvider`), you are able to transform a `LogEntry` object into a `string` emitted by the log provider.

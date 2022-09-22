@@ -1,3 +1,7 @@
+---
+sidebar_position: 15
+---
+
 # Log Level Resolvers
 
 The `ILogLevelResolver` interface defines a custom method in which any given `ILogger` can use to retrieve it's `LogLevel` on-demand.

@@ -1,3 +1,7 @@
+---
+sidebar_position: 13
+---
+
 # Context Providers
 
 By implementing the `RockLib.Logging.IContextProvider` interface, defining the `AddContext` method, and providing it to a `Logger`, you are able to automatically modify a `LogEntry` whenever it is written to its destination.

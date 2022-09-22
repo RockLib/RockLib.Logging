@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # How to add RockLib logging to the Microsoft logging system
 
 To add an `ILogger` to the Microsoft.Extensions.Logging system, call the `.AddRockLibLoggerProvider()` extension method on either an instance of `ILoggingBuilder` or `IServiceCollection`. The methods will return the same extended object, to allow for chaining.

@@ -1,3 +1,7 @@
+---
+sidebar_position: 6
+---
+
 # How to add RockLib logging to the Microsoft dependency injection system
 
 To add an `ILogger` to the Microsoft.Extensions.DependencyInjection system, call the `.AddLogger()` extension method on an instance of `IServiceCollection`. This extension method return an [`ILoggerBuilder`](#iloggerbuilder-interface) object, which is used to add log providers and context providers to the logger.

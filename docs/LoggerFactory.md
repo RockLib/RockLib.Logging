@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # How to configure and use LoggerFactory
 
 Logger instances can be created and retrieved using the static `LoggerFactory` class. This class uses a `Microsoft.Extensions.Configuration.IConfiguration` that defines the loggers it can create. It has methods for creating logger instances, where a new logger is returned each time. It also has methods for getting a cached logger, where the same logger is returned each time. Loggers can be created/retrieved by name. If the name is not specified, the "default" (unnamed) logger is created/retrieved.

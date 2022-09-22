@@ -1,3 +1,7 @@
+---
+sidebar_position: 14
+---
+
 # Log Processors
 
 `LogProcessors` provide different ways of sending logs to `LogProviders`.

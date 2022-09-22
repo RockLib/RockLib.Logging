@@ -1,4 +1,5 @@
 ---
+sidebar_position: 11
 sidebar_label: 'How to use and configure RollingFileLogProvider'
 ---
 

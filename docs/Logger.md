@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # How to instantiate and configure a logger
 
 The `Logger` class can be directly instantiated and has two public constructors. The only difference between the constructors is how its log processor is initialized (whether by enum or directly). It also has one read/write property.

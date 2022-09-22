@@ -1,3 +1,7 @@
+---
+sidebar_position: 21
+---
+
 # How to test logging in an application using RockLib.Logging.Moq
 
 The RockLib.Logging.Moq package makes it easy for applications to verify that logging has taken place. It provides a set of extension methods for setting up and verifying instances of `Mock<ILogger>`. It also provides a custom implementation of `Mock<ILogger>` - `MockLogger` - that automatically sets itself up.

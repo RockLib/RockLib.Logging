@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # How to perform basic logging operations
 
 Logging operations start with an instance of the `ILogger` interface (to obtain one, see the [Logger](Logger.md) and [LoggerFactory](LoggerFactory.md) docs) and use either its `Log` method or one of the various logging extension methods.

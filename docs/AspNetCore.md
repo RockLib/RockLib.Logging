@@ -1,3 +1,7 @@
+---
+sidebar_position: 19
+---
+
 # RockLib.Logging.AspNetCore package
 
 This package contains context providers and action filters for use by AspNetCore applications.

@@ -1,3 +1,7 @@
+---
+sidebar_position: 17
+---
+
 # Enable Tracing For Troubleshooting
 
 It is possible for an implementation of `ILogProvider` to throw an exception in its `WriteAsync` method (in fact implementations should throw any exception instead of catching and handling it). If an exception is thrown, it will caught by the log processor, passed to the logger's `ErrorHandler`, and if a `TraceSource` exists with the name "rocklib.logging", a trace event is sent to it.

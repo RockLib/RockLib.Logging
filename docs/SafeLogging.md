@@ -1,4 +1,5 @@
 ---
+sidebar_position: 4
 sidebar_label: 'How to add log extended properties "safely"'
 ---
 

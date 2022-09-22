@@ -1,3 +1,7 @@
+---
+sidebar_position: 20
+---
+
 # Changing a logger's settings "on the fly"
 
 It is generally a bad idea to run an application in production while logging at the `Debug` (or arguably the `Info`) level. Especially when the logging comes at a price per log. Millions or billions of debug or info logs could be quite expensive. On the other hand, production issues can and do arise, and having those `Debug` or `Info` logs available for diagnostics is incredibly valuable. A solution to this problem is to normally log at `Warn`, but have the ability to change the level to `Info` or `Debug` on-the-fly, should the need arise.
