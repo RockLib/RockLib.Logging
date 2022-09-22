@@ -1,5 +1,6 @@
 ---
 sidebar_position: 21
+sidebar_label: 'Test logging in an application using RockLib.Logging.Moq'
 ---
 
 # How to test logging in an application using RockLib.Logging.Moq

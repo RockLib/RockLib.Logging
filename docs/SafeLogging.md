@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-sidebar_label: 'How to add log extended properties "safely"'
+sidebar_label: 'Add log extended properties "safely"'
 ---
 
 # How to add log extended properties "safely" (i.e. automatically remove PII)

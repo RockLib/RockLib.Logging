@@ -1,5 +1,6 @@
 ---
 sidebar_position: 2
+sidebar_label: 'Perform basic logging operations'
 ---
 
 # How to perform basic logging operations

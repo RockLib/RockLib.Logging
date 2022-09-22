@@ -1,5 +1,6 @@
 ---
 sidebar_position: 5
+sidebar_label: 'Configure and use LoggerFactory'
 ---
 
 # How to configure and use LoggerFactory

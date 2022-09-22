@@ -2,7 +2,7 @@
 sidebar_position: 18
 ---
 
-# Using LoggingTraceListener to log trace messages
+# Use LoggingTraceListener to log trace messages
 
 The `RockLib.Logging.Diagnostics.LoggingTraceListener` is an inheritor of `System.Diagnostics.TraceListener` that sends trace messages to a `RockLib.Logging.ILogger`. It is for troubleshooting *other* libraries that output trace messages - such trace messages will be logged with the `Ilogger` that the application chooses.
 

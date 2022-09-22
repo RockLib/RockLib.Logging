@@ -1,5 +1,6 @@
 ---
 sidebar_position: 7
+sidebar_label: 'Add RockLib logging to the Microsoft logging system'
 ---
 
 # How to add RockLib logging to the Microsoft logging system

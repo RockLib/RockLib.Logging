@@ -1,5 +1,6 @@
 ---
 sidebar_position: 6
+sidebar_label: 'Add RockLib logging to the Microsoft dependency injection system'
 ---
 
 # How to add RockLib logging to the Microsoft dependency injection system

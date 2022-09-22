@@ -1,5 +1,6 @@
 ---
 sidebar_position: 8
+sidebar_label: 'Use log providers'
 ---
 
 # Log Providers

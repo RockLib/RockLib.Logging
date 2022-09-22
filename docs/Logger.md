@@ -1,5 +1,6 @@
 ---
 sidebar_position: 3
+sidebar_label: 'Instantiate and configure a logger'
 ---
 
 # How to instantiate and configure a logger
