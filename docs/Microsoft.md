@@ -1,3 +1,8 @@
+---
+sidebar_position: 7
+sidebar_label: 'Add RockLib logging to the Microsoft logging system'
+---
+
 # How to add RockLib logging to the Microsoft logging system
 
 To add an `ILogger` to the Microsoft.Extensions.Logging system, call the `.AddRockLibLoggerProvider()` extension method on either an instance of `ILoggingBuilder` or `IServiceCollection`. The methods will return the same extended object, to allow for chaining.
@@ -6,11 +11,11 @@ There are four overloads of this extension method, two for `ILoggingBuilder` and
 
 ---
 
-## `ILoggingBuilder` Method
+## _ILoggingBuilder_ Method
 
 The most common way to set this up is to use the `ConfigureLogging` method on a default host builder.
 
-```c#
+```csharp
 Host.CreateDefaultBuilder(args)
     .ConfigureWebHostDefaults(webBuilder =>
     {
@@ -24,11 +29,11 @@ Host.CreateDefaultBuilder(args)
 
 ---
 
-## `IServiceCollection` Method
+## _IServiceCollection_ Method
 
 An alternate way to set this up is to use the `ConfigureServices` start up method.
 
-```c#
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddRockLibLoggerProvider();
@@ -37,7 +42,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ## Extension Definitions
 
-#### ILoggingBuilder Extension 1
+### ILoggingBuilder Extension 1
 
 | Parameter         | Required | Default | Type                              | Description                                                  |
 |:------------------|:---------|:--------|:----------------------------------|:-------------------------------------------------------------|
@@ -45,7 +50,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ---
 
-#### ILoggingBuilder Extension 2
+### ILoggingBuilder Extension 2
 
 | Parameter         | Required | Default      | Type                              | Description                                                  |
 |:------------------|:---------|:-------------|:----------------------------------|:-------------------------------------------------------------|
@@ -54,7 +59,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ---
 
-#### IServiceCollection Extension 1
+### IServiceCollection Extension 1
 
 | Parameter         | Required | Default | Type                              | Description                                                  |
 |:------------------|:---------|:--------|:----------------------------------|:-------------------------------------------------------------|
@@ -62,7 +67,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ---
 
-#### IServiceCollection Extension 2
+### IServiceCollection Extension 2
 
 | Parameter         | Required | Default      | Type                              | Description                                                  |
 |:------------------|:---------|:-------------|:----------------------------------|:-------------------------------------------------------------|
@@ -72,11 +77,11 @@ public void ConfigureServices(IServiceCollection services)
 ---
 
 
-## `RockLibLoggerOptions` class
+## _RockLibLoggerOptions_ class
 
 This is the definition of the `RockLibLoggerOptions` class:
 
-```c#
+```csharp
 public interface ILoggerBuilder
 {
     public bool IncludeScopes { get; set; }
@@ -85,6 +90,6 @@ public interface ILoggerBuilder
 
 The `IncludeScopes` property determines wether or not a `ScopeProvider` will be used for creating scopes in the logger. Below is an example of setting this property:
 
-```c#
+```csharp
 logging.AddRockLibLoggerProvider(options => options.IncludeScopes = true);
 ```

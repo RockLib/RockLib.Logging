@@ -1,61 +1,81 @@
-# How to use and configure `RollingFileLogProvider`
+---
+sidebar_position: 11
+sidebar_label: 'How to use and configure RollingFileLogProvider'
+---
+
+# How to use and configure _RollingFileLogProvider_
 
 The `RollingFileLogProvider` can be instantiated in one of two ways.
 
-With a template:
-- file
+## With a template:
+
+**file**
   - Type: string
   - Description: The path to a writable file.
-- template
+
+**template**
   - Type: string
   - Description: The template used to format log entries. See [TemplateLogFormatter](Formatting.md#template) for more information.
-- level
+
+**level**
   - Type: LogLevel enum (NotSet, Debug, Info, Warn, Error, Fatal, Audit)
   - Description: The level of the log provider. If `NotSet`, the level of the containing `Logger` is used.
-- timeout
+
+**timeout**
   - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
-- maxFileSizeKilobytes
+
+**maxFileSizeKilobytes**
   - Type: int
   - Description: The maximum file size, in bytes, of the file. If the file size is greater than this value, it is archived.
-- maxArchiveCount
+
+**maxArchiveCount**
   - Type: int
   - Description: The maximum number of archive files that will be kept. If the number of archive files is greater than this value, then they are deleted, oldest first.
-- rolloverPeriod
+
+**rolloverPeriod**
   - Type: RolloverPeriod enum (Never, Daily, Hourly)
   - Description: The rollover period, indicating if/how the file should archived on a periodic basis.
 
-Or with a formatter:
-- file
+## With a formatter:
+
+**file**
   - Type: string
   - Description: The path to a writable file.
-- formatter
+
+**formatter**
   - Type: ILogFormatter
   - Description: An object that formats log entries prior to writing to standard out. See [ILogFormatter](Formatting.md#ilogformatter) for more information.
-- level
+
+**level**
   - Type: LogLevel enum (NotSet, Debug, Info, Warn, Error, Fatal, Audit)
   - Description: The level of the log provider. If `NotSet`, the level of the containing `Logger` is used.
-- timeout
+
+**timeout**
   - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
-- maxFileSizeKilobytes
+
+**maxFileSizeKilobytes**
   - Type: int
   - Description: The maximum file size, in bytes, of the file. If the file size is greater than this value, it is archived.
-- maxArchiveCount
+
+**maxArchiveCount**
   - Type: int
   - Description: The maximum number of archive files that will be kept. If the number of archive files is greater than this value, then they are deleted, oldest first.
-- rolloverPeriod
+
+**rolloverPeriod**
   - Type: RolloverPeriod enum (Never, Daily, Hourly)
   - Description: The rollover period, indicating if/how the file should archived on a periodic basis.
 
 ## Adding to Dependency Injection
 
-To add a `RollingFileLogProvider` to a logger, call one of the five `AddRollingFileLogProvider` extension method overloads. Four of the overloads are very similar, differing only by how the `ILogFormatter` is specified.
+To add a `RollingFileLogProvider` to a logger, call one of the five `AddRollingFileLogProvider` extension method overloads. Four of the overloads are similar, differing by how the `ILogFormatter` is specified.
 
 ---
-Specifying a custom template:
 
-```c#
+### Specifying a custom template:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -70,9 +90,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter`:
 
-```c#
+### Specifying a custom _ILogFormatter_:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     IDependency dependency = new MyDependency();
@@ -92,9 +113,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter` generically including custom constructor parameters:
 
-```c#
+### Specifying a custom _ILogFormatter_ generically including custom constructor parameters:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddTransient<IDependency, MyDependency>();
@@ -111,9 +133,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter` with a callback function:
 
-```c#
+### Specifying a custom _ILogFormatter_ with a callback function:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -128,9 +151,9 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Completely customizing the rolling file log provider with a callback function:
+### Fully customizing the rolling file log provider with a callback function:
 
-```c#
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -149,9 +172,9 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-## Configuration for `RollingFileLogProvider`
+## Configuration for _RollingFileLogProvider_
 
-Specifying a template:
+### Specifying a template:
 
 ```json
 {
@@ -174,7 +197,7 @@ Specifying a template:
 }
 ```
 
-Specifying an `ILogFormatter`:
+### Specifying an _ILogFormatter_:
 
 ```json
 {

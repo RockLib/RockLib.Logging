@@ -1,10 +1,14 @@
+---
+sidebar_position: 17
+---
+
 # Enable Tracing For Troubleshooting
 
 It is possible for an implementation of `ILogProvider` to throw an exception in its `WriteAsync` method (in fact implementations should throw any exception instead of catching and handling it). If an exception is thrown, it will caught by the log processor, passed to the logger's `ErrorHandler`, and if a `TraceSource` exists with the name "rocklib.logging", a trace event is sent to it.
 
 In addition, if the `TraceSource` is defined and is tracing is at `Information`, a trace event is sent for each successful log processing.
 
-In order to set such a `TraceSource`, add this to your configuration:
+## To set a _TraceSource_, add this to your configuration:
 
 ```json
 "RockLib.Diagnostics": {
@@ -22,9 +26,9 @@ In order to set such a `TraceSource`, add this to your configuration:
 }
 ```
 
-Or set the `TraceSource` programmatically:
+## To set the _TraceSource_ programmatically:
 
-```c#
+```csharp
 Tracing.Settings = new DiagnosticsSettings(
     sources: new System.Diagnostics.TraceSource[]
     {

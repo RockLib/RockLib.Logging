@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Getting Started
 
 In this tutorial, we will be building a console application with a hosted service that writes logs when started and stopped (the service doesn't actually do anything).
@@ -12,9 +16,9 @@ Add nuget references for "RockLib.Logging", "Microsoft.Extensions.DependencyInje
 
 ---
 
-Add a new class named 'ExampleService' to the project:
+## Add a new class named 'ExampleService' to the project:
 
-```c#
+```csharp
 using Microsoft.Extensions.Hosting;
 using RockLib.Logging;
 using System.Threading;
@@ -48,9 +52,9 @@ namespace LoggingTutorial
 
 ---
 
-Edit the `Program.cs` file as follows:
+## Edit the _Program.cs_ file as follows:
 
-```c#
+```csharp
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RockLib.Logging.DependencyInjection;
@@ -82,13 +86,17 @@ namespace LoggingTutorial
 
 ---
 
-Start the app. It should output something similar to the following to console:
+## Start the app
+
+It should output something similar to the following to console:
 
 ```
 [2020-07-17T15:33:58.9262051Z] Info Log: Starting service...
 ```
 
 ---
+
+## Stop the app
 
 After hitting `<ctrl> + c`, it should output this, then exit:
 

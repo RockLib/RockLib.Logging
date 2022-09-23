@@ -1,14 +1,18 @@
+---
+sidebar_position: 19
+---
+
 # RockLib.Logging.AspNetCore package
 
 This package contains context providers and action filters for use by AspNetCore applications.
 
-### Context providers
+## Context providers
 
 To automatically capture information from the current HttpContext for each log sent, call the `AddHttpContextProvider` extension method when adding the logger to a service collection.
 
 *Note: A logger must have `Transient` lifetime (which is the default) in order for any of the context providers mentioned in this document to function properly.*
 
-```c#
+```csharp
 using RockLib.Logging.AspNetCore;
 using RockLib.Logging.DependencyInjection;
 
@@ -37,7 +41,7 @@ Logs sent by this logger will also have their `CorrelationId` property set using
 
 To customize the name of the correlation id header, configure its options:
 
-```c#
+```csharp
 services.Configure<CorrelationIdContextProviderOptions>(options =>
     options.CorrelationIdHeader = "MyCorrelationIdHeader");
 ```
@@ -46,7 +50,7 @@ services.Configure<CorrelationIdContextProviderOptions>(options =>
 
 There are also individual context providers available (configuring the correlation id header is the same as above):
 
-```c#
+```csharp
 services.AddLogger()
     .AddConsoleLogProvider()
     .AddContextProvider<RequestMethodContextProvider>()
@@ -58,11 +62,11 @@ services.AddLogger()
     .AddContextProvider<CorrelationIdContextProvider>();
 ```
 
-### Logging action filters
+## Logging action filters
 
 To automatically record an info log for a controller action, decorate it with the [InfoLog] attribute. Doing so will result in an info log with a message in the format "Request handled by {actionName}.". The log will also include, when applicable: the exception thrown by the action, and the "ResponseStatusCode", "ResultType", and "ResultObject" extended properties.
 
-```c#
+```csharp
 // GET math/triple/4
 [InfoLog]
 [HttpGet("triple/{num}")]
@@ -86,7 +90,7 @@ Using the route "Math/Triple/4" will result in a log entry with the following va
 
 Instead of decorating the action method, a controller can be decorated with [InfoLog]. In this case, all action methods in the controller will be logged.
 
-```c#
+```csharp
 namespace MyAspNetCoreApp.Controllers
 {
     [InfoLog]
@@ -100,14 +104,14 @@ namespace MyAspNetCoreApp.Controllers
 
 The [InfoLog] action filter can also be registered globally, in `Startup.ConfigureServices` (or wherever you configure your services), as an option in the call to the `AddControllers` extension method:
 
-```c#
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddControllers(options => options.Filters.Add(typeof(InfoLogAttribute)));
 }
 ```
 
-##### Optional parameters
+### Optional parameters
 
 The [InfoLog] action filter has two optional parameters.
 
@@ -120,7 +124,7 @@ The [InfoLog] action filter has two optional parameters.
 
 To automatically record a log whenever a non-existant endpoint is hit, use the RouteNotFoundMiddleware class. This can easily be done by using the `UseRouteNotFoundLogging` extension.
 
-```c#
+```csharp
 public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 {
     app.UseRouteNotFoundLogging();
@@ -129,7 +133,7 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 
 By default, a logger with the default name (which is empty string) will be used to send a `Warn` level log with the message 'There was an attempt to access a non-existant endpoint.' These defaults can be overridden by configuring a `RouteNotFoundMiddlewareOptions`.
 
-```c#
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.Configure<RouteNotFoundMiddlewareOptions>(options => {

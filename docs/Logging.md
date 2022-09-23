@@ -1,5 +1,10 @@
+---
+sidebar_position: 2
+sidebar_label: 'Perform basic logging operations'
+---
+
 # How to perform basic logging operations
- 
+
 Logging operations start with an instance of the `ILogger` interface (to obtain one, see the [Logger](Logger.md) and [LoggerFactory](LoggerFactory.md) docs) and use either its `Log` method or one of the various logging extension methods.
 
 ## Extension methods
@@ -18,8 +23,7 @@ callerMemberName   | No**     | The method or property name of the caller.
 callerFilePath     | No**     | The path of the source file that contains the caller.
 callerLineNumber   | No**     | The line number in the source file at which this method is called.
 
-**Only one version of the extension methods includes an `exception` parameter.*  
-***Values should **never** be provided for these parameters (the compiler provides these values).*
+> Only one version of the extension methods includes an `exception` parameter. Values should **never** be provided for these parameters (the compiler provides these values).*
 
 These extension methods correspond to the six log levels, which indicate the type or severity of a log. The log levels are (from low to high):
 
@@ -34,7 +38,7 @@ These extension methods correspond to the six log levels, which indicate the typ
 
 In order to save resources, any logging operation (especially at lower log levels) that involves string formatting/concatenation or extended properties should ensure that logging is enabled for the specified log level first. These extension methods are:
 
-```c#
+```csharp
 logger.IsDebugEnabled()
 logger.IsInfoEnabled()
 logger.IsWarnEnabled()
@@ -47,9 +51,9 @@ logger.IsAuditEnabled()
 
 ---
 
-Simple informational logging with just a message:
+### Simple informational logging with just a message:
 
-```c#
+```csharp
 logger.Debug("Entered Foo method.");
 
 logger.Info("Bar request was successful.");
@@ -59,9 +63,9 @@ logger.Audit($"User '{username}' is viewing Baz.");
 
 ---
 
-Error logs with a message and an exception:
+### Error logs with a message and an exception:
 
-```c#
+```csharp
 // Assuming that the 'ex' variable is a caught Exception...
 
 logger.Fatal("Unable to start application.", ex);
@@ -73,9 +77,9 @@ logger.Error("Request failed using backup url. Operation aborted.", ex);
 
 ---
 
-Logs can add additional information with an anonymous extended properties object:
+### Logs can add additional information with an anonymous extended properties object:
 
-```c#
+```csharp
 if (logger.IsDebugEnabled())
     logger.Debug("Entered Foo method.", new { bar = barParameter });
 
@@ -85,9 +89,9 @@ logger.Error("Request failed, operation aborted.", ex, new { ContentType = conte
 
 ---
 
-If extended properties need to be built up, use a dictionary:
+### If extended properties need to be built up, use a dictionary:
 
-```c#
+```csharp
 if (logger.IsDebugEnabled())
 {
     Dictionary<string, object> extendedProperties = new Dictionary<string, object>();
@@ -107,9 +111,9 @@ logger.Error("Request failed, operation aborted.", ex, extendedProperties);
 
 ---
 
-If your application needs to include a correlation ID, business process ID, business activity ID, they can be included:
+### Include a correlation ID, business process ID, business activity ID:
 
-```c#
+```csharp
 string correlationId = ...;
 string businessProcessId = ...;
 string businessActivityId = ...;
@@ -119,12 +123,11 @@ logger.Info("Received Foo request.", correlationId: correlationId, businessProce
 
 ---
 
-To use the `Log` method directory, instantiate a `LogEntry` object and pass it in:
+### Use the _Log_ method directory
+Instantiate a _LogEntry_ object and pass it in:
 
-```c#
+```csharp
 LogEntry logEntry = new LogEntry("Foo method starting...", LogLevel.Debug, new { bar = "abc" });
 
 logger.Log(logEntry);
 ```
-
----

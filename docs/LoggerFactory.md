@@ -1,3 +1,8 @@
+---
+sidebar_position: 5
+sidebar_label: 'Configure and use LoggerFactory'
+---
+
 # How to configure and use LoggerFactory
 
 Logger instances can be created and retrieved using the static `LoggerFactory` class. This class uses a `Microsoft.Extensions.Configuration.IConfiguration` that defines the loggers it can create. It has methods for creating logger instances, where a new logger is returned each time. It also has methods for getting a cached logger, where the same logger is returned each time. Loggers can be created/retrieved by name. If the name is not specified, the "default" (unnamed) logger is created/retrieved.
@@ -84,13 +89,13 @@ This is a configuration that has a logger with all settings specified:
   }
 }
 ```
-*This configuration assumes there is an assembly loaded named "MyProject" that has a `MyProject.MyContextProvider` class that implements `RockLib.Logging.IContextProvider` and a `MyProject.MyErrorHandler` class that implements `RockLib.Logging.IErrorHandler`.*
+> This configuration assumes there is an assembly loaded named "MyProject" that has a `MyProject.MyContextProvider` class that implements `RockLib.Logging.IContextProvider` and a `MyProject.MyErrorHandler` class that implements `RockLib.Logging.IErrorHandler`.
 
 ## Create method
 
 The `Create` method creates a new logger every time it is called, regardless of the `name` parameter. If the `name` parameter is provided, then `LoggerFactory` creates a logger from the first one defined in its configuration with a matching name. Otherwise, a "default" logger is created, defined by the first logger in configuration without a `name` (or with a `name` of `"default"`).
 
-```c#
+```csharp
 ILogger defaultLogger = LoggerFactory.Create(); // Creates a default logger.
 ILogger fooLogger = LoggerFactory.Create("foo"); // Creates a logger named "foo".
 ```
@@ -99,7 +104,7 @@ ILogger fooLogger = LoggerFactory.Create("foo"); // Creates a logger named "foo"
 
 The `GetCached` method returns a cached logger. Each call with the same name (or each call without a name) returns the *same* logger instance. Note that this is done lazily - `LoggerFactory` doesn't create the logger until it is requested for the first time.
 
-```c#
+```csharp
 ILogger defaultLogger = LoggerFactory.GetCached(); // Gets or creates the cached default logger.
 ILogger fooLogger = LoggerFactory.GetCached("foo"); // Gets or creates the cached logger named "foo".
 ```

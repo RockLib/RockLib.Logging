@@ -1,32 +1,45 @@
-# How to use and configure `ConsoleLogProvider`
+---
+sidebar_position: 9
+sidebar_label: 'How to use and configure ConsoleLogProvider'
+---
+
+# How to use and configure _ConsoleLogProvider_
 
 The `ConsoleLogProvider` can be instantiated in one of two ways.
 
-With a template:
-- template
+## Instantiate with a template:
+
+**template**
   - Type: string
   - Description: The template used to format log entries. See [TemplateLogFormatter](Formatting.md#template) for more information.
-- level
+
+**level**
   - Type: LogLevel enum (NotSet, Debug, Info, Warn, Error, Fatal, Audit)
   - Description: The level of the log provider. If `NotSet`, the level of the containing `Logger` is used.
-- output
+
+**output**
   - Type: Output enum (StdOut, StdErr)
   - Description: The type of output stream to use.
-- timeout
+
+**timeout**
   - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
 
-Or with a formatter:
-- formatter
+## Instantiate with a formatter:
+
+**formatter**
   - Type: ILogFormatter
   - Description: An object that formats log entries prior to writing to standard out. See [ILogFormatter](Formatting.md#ilogformatter) for more information.
-- level
+
+**level**
   - Type: LogLevel enum (NotSet, Debug, Info, Warn, Error, Fatal, Audit)
   - Description: The level of the log provider. If `NotSet`, the level of the containing `Logger` is used.
-- output
+
+**output**
   - Type: Output enum (StdOut, StdErr)
   - Description: The type of output stream to use.
-- timeout
+
+**timeout**
   - Type: Nullable\<TimeSpan\>
   - Description: The timeout of the log provider.
 
@@ -35,9 +48,12 @@ Or with a formatter:
 To add a `ConsoleLogProvider` to a logger, call one of the five `AddConsoleLogProvider` extension method overloads. Four of the overloads are very similar, differing only by how the `ILogFormatter` is specified.
 
 ---
-Specifying a custom template:
 
-```c#
+## Examples
+
+### Specifying a custom template:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -49,9 +65,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter`:
 
-```c#
+### Specifying a custom _ILogFormatter_:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     IDependency dependency = new MyDependency();
@@ -68,9 +85,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter` generically including custom constructor parameters:
 
-```c#
+### Specifying a custom _ILogFormatter_ generically including custom constructor parameters:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddTransient<IDependency, MyDependency>();
@@ -84,9 +102,10 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Specifying a custom `ILogFormatter` with a callback function:
 
-```c#
+### Specifying a custom `ILogFormatter` with a callback function:
+
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -98,8 +117,9 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 ---
-Completely customizing the console log provider with a callback function:
-```c#
+
+### Fully customizing the console log provider with a callback function:
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     services.AddLogger()
@@ -115,9 +135,9 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-## Configuration for `ConsoleLogProvider`
+## Configuration for _ConsoleLogProvider_
 
-Specifying a template:
+### Specifying a template:
 
 ```json
 {
@@ -137,7 +157,7 @@ Specifying a template:
 }
 ```
 
-Specifying an `ILogFormatter`:
+### Specifying an _ILogFormatter_:
 
 ```json
 {

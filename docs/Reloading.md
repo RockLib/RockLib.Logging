@@ -1,3 +1,7 @@
+---
+sidebar_position: 20
+---
+
 # Changing a logger's settings "on the fly"
 
 It is generally a bad idea to run an application in production while logging at the `Debug` (or arguably the `Info`) level. Especially when the logging comes at a price per log. Millions or billions of debug or info logs could be quite expensive. On the other hand, production issues can and do arise, and having those `Debug` or `Info` logs available for diagnostics is incredibly valuable. A solution to this problem is to normally log at `Warn`, but have the ability to change the level to `Info` or `Debug` on-the-fly, should the need arise.
@@ -8,7 +12,7 @@ To accomplish this, RockLib.Logging binds to configuration. Microsoft.Extensions
 
 When registering and defining a logger with DI extension methods, in order to have up-to-date loggers, bind the logger's `LoggerOptions` to a configuration section:
 
-```c#
+```csharp
 services.AddLogger().AddConsoleLogProvider();
 services.Configure<LoggerOptions>(Configuration.GetSection("MyLogger"));
 ```
@@ -25,7 +29,7 @@ services.Configure<LoggerOptions>(Configuration.GetSection("MyLogger"));
 
 It is also possible to register a logger with DI, but define it in configuration using a standard `LoggerFactory` configuration section. In this case, it is not necessary to bind options.
 
-```c#
+```csharp
 // An empty logger builder will create the logger defined in configuration using COF.
 services.AddLogger();
 ```
@@ -47,7 +51,7 @@ For applications with short-lived, transient or scopped loggers (like ASP.NET Co
 
 When registering and defining a logger with DI, in order to have reloading loggers, make sure the `ReloadOnChange` setting of the options is true:
 
-```c#
+```csharp
 services.AddLogger().AddConsoleLogProvider();
 services.Configure<LoggerOptions>(Configuration.GetSection("MyLogger"));
 ```
@@ -81,6 +85,6 @@ When registering with DI and defining in configuration with a `LoggerFactory` se
 
 When using LoggerFactory or the extension methods defined by the LoggerFactoryExtensions class, there is a parameter, `reloadOnConfigChange`, which is true by default. Set the parameter to false to *disable* reloading.
 
-```c#
+```csharp
 ILogger logger = LoggerFactory.CreateLogger(reloadOnConfigChange: false);
 ```
