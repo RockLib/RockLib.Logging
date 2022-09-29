@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 
 namespace RockLib.Logging
 {
@@ -177,6 +178,8 @@ namespace RockLib.Logging
         /// </param>
         public void SetExtendedProperties(object extendedProperties)
         {
+            ExtendedProperties["ThreadID"] = Thread.CurrentThread.ManagedThreadId;
+
             if (extendedProperties == null)
                 return;
             if (extendedProperties is IEnumerable<KeyValuePair<string, object>> stringDictionary)
