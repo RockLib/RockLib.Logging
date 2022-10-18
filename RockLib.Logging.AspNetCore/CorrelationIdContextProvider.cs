@@ -46,8 +46,8 @@ public class CorrelationIdContextProvider : IContextProvider
         {
             logEntry.CorrelationId ??= Accessor.CorrelationId;
             // Otel alignment for aligning logs w/metrics & traces
-            logEntry.ExtendedProperties.Add("TraceId", Accessor.GetTraceId());
-            logEntry.ExtendedProperties.Add("SpanId", Accessor.GetSpanId());
+            logEntry.ExtendedProperties.Add("TraceId", Accessor.TraceId);
+            logEntry.ExtendedProperties.Add("SpanId", Accessor.SpanId);
         }
     }
 }
