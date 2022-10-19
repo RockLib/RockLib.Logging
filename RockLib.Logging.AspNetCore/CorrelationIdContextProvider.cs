@@ -41,6 +41,13 @@ public class CorrelationIdContextProvider : IContextProvider
     public void AddContext(LogEntry logEntry)
     {
         if (logEntry is null) { throw new ArgumentNullException(nameof(logEntry)); }
-        logEntry.CorrelationId ??= Accessor?.CorrelationId;
+
+        if (Accessor is not null)
+        {
+            logEntry.CorrelationId ??= Accessor.CorrelationId;
+            // Otel alignment for aligning logs w/metrics & traces
+            logEntry.ExtendedProperties.Add("TraceId", Accessor.TraceId);
+            logEntry.ExtendedProperties.Add("SpanId", Accessor.SpanId);
+        }
     }
 }
