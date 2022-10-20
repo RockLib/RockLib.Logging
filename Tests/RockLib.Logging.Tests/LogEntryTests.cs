@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using RockLib.Configuration.ObjectFactory.ReferenceModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,8 +7,38 @@ using Xunit;
 
 namespace RockLib.Logging.Tests;
 
+public sealed class ClassWithIndexer
+{
+    public int Id { get; set; }
+    public string this[int id] { get => string.Empty; }
+}
+
 public static class LogEntryTests
 {
+    [Fact]
+    public static void SetExtendedPropertiesWhenTargetHasIndexers()
+    {
+        var logEntry = new LogEntry();
+        var properties = new ClassWithIndexer() { Id = 3 };
+
+        logEntry.SetExtendedProperties(properties);
+
+        logEntry.ExtendedProperties.Count.Should().Be(1);
+        logEntry.ExtendedProperties[nameof(ClassWithIndexer.Id)].Should().Be(3);
+    }
+
+    [Fact]
+    public static void SetSanitizedExtendedPropertiesWhenTargetHasIndexers()
+    {
+        var logEntry = new LogEntry();
+        var properties = new ClassWithIndexer() { Id = 3 };
+
+        logEntry.SetSanitizedExtendedProperties(properties);
+
+        logEntry.ExtendedProperties.Count.Should().Be(1);
+        logEntry.ExtendedProperties[nameof(ClassWithIndexer.Id)].Should().Be(3);
+    }
+
     [Fact]
     public static void LevelIsSetFromConstructor1()
     {

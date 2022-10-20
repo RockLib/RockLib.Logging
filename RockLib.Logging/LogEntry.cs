@@ -339,7 +339,9 @@ public sealed class LogEntry
 
     private static IReadOnlyCollection<Action<LogEntry, object>> GetSetExtendedPropertyActions(Type type) =>
         _setExtendedPropertyActionsCache.GetOrAdd(type, t =>
-            t.GetProperties(PublicInstance).Select(GetSetExtendedPropertyAction).ToArray());
+            t.GetProperties(PublicInstance)
+            .Where(_ => _.GetIndexParameters().Length == 0)
+            .Select(GetSetExtendedPropertyAction).ToArray());
 
     private static Action<LogEntry, object> GetSetExtendedPropertyAction(PropertyInfo property)
     {
@@ -350,7 +352,9 @@ public sealed class LogEntry
 
     private static IReadOnlyCollection<Action<LogEntry, object>> GetSetSafeExtendedPropertyActions(Type type) =>
         _setSafeExtendedPropertyActionsCache.GetOrAdd(type, t =>
-            t.GetProperties(PublicInstance).Select(GetSetSafeExtendedPropertyAction).ToArray());
+            t.GetProperties(PublicInstance)
+            .Where(_ => _.GetIndexParameters().Length == 0)
+            .Select(GetSetSafeExtendedPropertyAction).ToArray());
 
     private static Action<LogEntry, object> GetSetSafeExtendedPropertyAction(PropertyInfo property)
     {
