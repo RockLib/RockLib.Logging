@@ -20,7 +20,7 @@ Extensions for verifying logging operations with Moq.
 
 - [Getting started](docs/GettingStarted.md)
 - How to:
-  - [Perform basic logging operations](docs/Logging.md)
+  - [Perform basic logging operations](docs/LoggingStart.md)
   - [Instantiate and configure a logger](docs/Logger.md)
   - [Add log extended properties "safely" (i.e. automatically remove PII)](docs/SafeLogging.md)
   - [Configure and use LoggerFactory](docs/LoggerFactory.md)
