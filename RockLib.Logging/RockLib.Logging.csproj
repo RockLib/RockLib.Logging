@@ -24,7 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 		<PackageReference Include="RockLib.Diagnostics" Version="2.0.0" />
 		<PackageReference Include="RockLib.Reflection.Optimized" Version="2.0.0" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
