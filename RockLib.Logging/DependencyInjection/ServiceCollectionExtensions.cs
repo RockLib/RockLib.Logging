@@ -204,8 +204,9 @@ public static class ServiceCollectionExtensions
         }
 
         // Capture which loggers are singleton according to index.
-        var isSingletonLoggers = services.Where(service => service.ServiceType == typeof(ILogger))
-            .Select(service => service.Lifetime == ServiceLifetime.Singleton)
+        var singletonLoggers = services.Where(service => service.ServiceType == typeof(ILogger)
+                                            && service.Lifetime == ServiceLifetime.Singleton)
+            .Select(service => service.ImplementationInstance as ILogger)
             .ToArray();
 
         LoggerLookup LoggerLookupRegistration(IServiceProvider serviceProvider) => name =>
@@ -217,7 +218,7 @@ public static class ServiceCollectionExtensions
             // Immediately dispose any non-singleton loggers that weren't selected.
             for (var i = 0; i < loggers.Length; i++)
             {
-                if (!isSingletonLoggers[i] && !ReferenceEquals(loggers[i], selectedLogger))
+                if (!singletonLoggers.Any(s => ReferenceEquals(s, loggers[i])) && !ReferenceEquals(loggers[i], selectedLogger))
                 {
                     loggers[i].Dispose();
                 }
