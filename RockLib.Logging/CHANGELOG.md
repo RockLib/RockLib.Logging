@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Addressed an issue with `ServiceCollectionExtensions.SetLoggerLookupDescriptor()` when there are multiple instances of ILogger registered.
 
 #### Changed
-- Updates RockLib.Diagnostics to latest version, [2.0.2](https://github.com/RockLib/RockLib.Diagnostics/blob/main/RockLib.Diagnostics/CHANGELOG.md#201---2023-02-02).
+- Updates RockLib.Diagnostics to latest version, [2.0.1](https://github.com/RockLib/RockLib.Diagnostics/blob/main/RockLib.Diagnostics/CHANGELOG.md#201---2023-02-02).
 
 ## 4.0.1 - 2022-10-20
 
