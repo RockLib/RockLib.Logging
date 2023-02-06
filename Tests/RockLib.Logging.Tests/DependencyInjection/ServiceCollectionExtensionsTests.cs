@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using RockLib.Logging.DependencyInjection;
@@ -203,5 +204,43 @@ public static class ServiceCollectionExtensionsTests
         var act = () => services.AddLogger(processingMode: processingMode);
 
         act.Should().ThrowExactly<ArgumentOutOfRangeException>().WithMessage("*processingMode*");
+    }
+
+    [Fact(DisplayName = "LoggerLookupRegistration does not throw when multiple instances of ILogger are registered - AddLogger first")]
+    public static void LoggerLookupRegistrationMultipleILoggerInstancesAddLoggerFirst()
+    {
+        var mockLogger = new Mock<ILogger>();
+        mockLogger.SetupGet(_ => _.Name).Returns("My name");
+
+        var services = new ServiceCollection();
+        services.AddLogger();
+        services.AddSingleton<IConfiguration>(new ConfigurationBuilder().Build());
+        services.AddSingleton(mockLogger.Object);
+
+        var provider = services.BuildServiceProvider();
+
+        var lookup = provider.GetService<LoggerLookup>()!;
+        var logger = () => lookup("My name");
+
+        logger.Should().NotThrow<IndexOutOfRangeException>();
+    }
+
+    [Fact(DisplayName = "LoggerLookupRegistration does not throw when multiple instances of ILogger are registered - AddLogger second")]
+    public static void LoggerLookupRegistrationMultipleILoggerInstancesAddLoggerSecond()
+    {
+        var mockLogger = new Mock<ILogger>();
+        mockLogger.SetupGet(_ => _.Name).Returns("My name");
+
+        var services = new ServiceCollection();
+        services.AddSingleton<IConfiguration>(new ConfigurationBuilder().Build());
+        services.AddSingleton(mockLogger.Object);
+        services.AddLogger();
+
+        var provider = services.BuildServiceProvider();
+
+        var lookup = provider.GetService<LoggerLookup>()!;
+        var logger = () => lookup("My name");
+
+        logger.Should().NotThrow<IndexOutOfRangeException>();
     }
 }
