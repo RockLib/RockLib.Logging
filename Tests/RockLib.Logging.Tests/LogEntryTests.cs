@@ -2,6 +2,7 @@
 using RockLib.Configuration.ObjectFactory.ReferenceModel;
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Xunit;
 
@@ -226,6 +227,35 @@ public static class LogEntryTests
         logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
         logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
         logEntry.ExtendedProperties.Count.Should().Be(2);
+    }
+
+    [Fact]
+    public static void SetExtendedPropertiesWithTraceData()
+    {
+#if NET5_0_OR_GREATER || NETCOREAPP2_0_OR_GREATER
+        var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+
+#pragma warning disable CA2000 // Dispose objects before losing scope
+        var a = new Activity("foo");
+#pragma warning restore CA2000 // Dispose objects before losing scope
+        a.Start();
+
+        logEntry.SetExtendedProperties(null);
+
+        logEntry.ExtendedProperties["TraceId"].Should().Be(Activity.Current?.TraceId.ToString());
+        logEntry.ExtendedProperties["SpanId"].Should().Be(Activity.Current?.SpanId.ToString());
+#endif
+    }
+
+    [Fact]
+    public static void SetExtendedPropertiesWithoutTraceData()
+    {
+        var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+
+        logEntry.SetExtendedProperties(null);
+
+        logEntry.ExtendedProperties.Should().NotContainKey("SpanId");
+        logEntry.ExtendedProperties.Should().NotContainKey("TraceId");
     }
 
     [Fact]

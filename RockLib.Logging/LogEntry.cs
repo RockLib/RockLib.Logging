@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -178,6 +179,13 @@ public sealed class LogEntry
     /// </param>
     public void SetExtendedProperties(object? extendedProperties)
     {
+#if NETCOREAPP2_0_OR_GREATER || NET5_0_OR_GREATER
+        if (Activity.Current != null)
+        {
+            ExtendedProperties["SpanId"] = Activity.Current.SpanId.ToHexString();
+            ExtendedProperties["TraceId"] = Activity.Current.TraceId.ToHexString();
+        }
+#endif
         if (extendedProperties is null)
         {
             return;
