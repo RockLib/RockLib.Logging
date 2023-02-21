@@ -24,7 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 		<PackageReference Include="RockLib.DistributedTracing.AspNetCore" Version="2.1.0" />
-		<PackageReference Include="RockLib.Logging" Version="4.0.0" />
+		<PackageReference Include="RockLib.Logging" Version="4.0.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
 	</ItemGroup>
