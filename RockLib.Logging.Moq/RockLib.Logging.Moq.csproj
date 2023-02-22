@@ -10,10 +10,10 @@
 		<PackageReleaseNotes>A changelog is available at https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging.Moq/CHANGELOG.md.</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>RockLib Logging Logger Extensions Moq</PackageTags>
-		<PackageVersion>2.0.0</PackageVersion>
+		<PackageVersion>2.0.1</PackageVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<PublishRepositoryUrl>True</PublishRepositoryUrl>
-		<Version>2.0.0</Version>
+		<Version>2.0.1</Version>
 	</PropertyGroup>
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
