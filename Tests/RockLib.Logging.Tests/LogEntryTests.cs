@@ -229,21 +229,34 @@ public static class LogEntryTests
     }
 
     [Fact]
-    public static void SetExtendedPropertiesWithTraceData()
+    public static void SetDistrubtedTracingPropertiesWithTraceDataWhenCurrentActivityNotNull()
     {
 #if NET5_0_OR_GREATER || NETCOREAPP2_0_OR_GREATER
         var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
-#pragma warning disable CA2000 // Dispose objects before losing scope
+#pragma warning disable CA2000 // Dispose objects before losing scope. Cannot use a using statement here because some .NET versions of this class are NOT disposable.
         var a = new Activity("foo");
 #pragma warning restore CA2000 // Dispose objects before losing scope
         a.Start();
 
-        logEntry.SetExtendedProperties(null);
+        logEntry.SetDistributedTracingProperties();
 
-        logEntry.ExtendedProperties["TraceId"].Should().Be(Activity.Current?.TraceId.ToString());
-        logEntry.ExtendedProperties["SpanId"].Should().Be(Activity.Current?.SpanId.ToString());
+        logEntry.TraceId.Should().Be(Activity.Current?.TraceId.ToString());
+        logEntry.SpanId.Should().Be(Activity.Current?.SpanId.ToString());
+        logEntry.ParentSpanId.Should().Be(Activity.Current?.ParentSpanId.ToString());
 #endif
+    }
+
+    [Fact]
+    public static void SetDistributedTracingPropertiesToNullWhenCurrentActivityIsNull()
+    {
+        var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+
+        logEntry.SetDistributedTracingProperties();
+
+        logEntry.TraceId.Should().BeNull();
+        logEntry.SpanId.Should().BeNull();
+        logEntry.ParentSpanId.Should().BeNull();
     }
 
     [Fact]

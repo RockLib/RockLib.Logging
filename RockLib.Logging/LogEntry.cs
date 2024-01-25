@@ -66,6 +66,7 @@ public sealed class LogEntry
         Message = message;
         Exception = exception;
         SetExtendedProperties(extendedProperties);
+        SetDistributedTracingProperties();
     }
 
     /// <summary>
@@ -155,6 +156,21 @@ public sealed class LogEntry
     public string UserName { get; set; } = Cached.UserName;
 
     /// <summary>
+    /// Active TraceId of the current activity
+    /// </summary>
+    public string? TraceId { get; set; }
+
+    /// <summary>
+    /// Active SpanId of the current activity
+    /// </summary>
+    public string? SpanId { get; set; }
+
+    /// <summary>
+    /// SpanId of the parent activity
+    /// </summary>
+    public string? ParentSpanId { get; set; }
+
+    /// <summary>
     /// Gets a string representation of the <see cref="Exception"/> property, or null
     /// if <see cref="Exception"/> is null.
     /// </summary>
@@ -169,6 +185,21 @@ public sealed class LogEntry
     public string? GetExceptionData() => Exception?.FormatToString();
 
     /// <summary>
+    /// Sets the SpanId and TraceId properties to the active SpanId and TraceId.
+    /// </summary>
+    public void SetDistributedTracingProperties()
+    {
+#if NETCOREAPP2_0_OR_GREATER || NET5_0_OR_GREATER
+        if(Activity.Current is not null)
+        {
+            TraceId = Activity.Current == null ? null : Activity.Current?.TraceId.ToHexString();
+            SpanId = Activity.Current == null ? null : Activity.Current?.SpanId.ToHexString();
+            ParentSpanId = Activity.Current == null ? null : Activity.Current.ParentSpanId.ToHexString();
+        }        
+#endif
+    }
+
+    /// <summary>
     /// Sets values of the <see cref="ExtendedProperties"/> property according to the
     /// <paramref name="extendedProperties"/> parameter.
     /// </summary>
@@ -179,13 +210,6 @@ public sealed class LogEntry
     /// </param>
     public void SetExtendedProperties(object? extendedProperties)
     {
-#if NETCOREAPP2_0_OR_GREATER || NET5_0_OR_GREATER
-        if (Activity.Current != null)
-        {
-            ExtendedProperties["SpanId"] = Activity.Current.SpanId.ToHexString();
-            ExtendedProperties["TraceId"] = Activity.Current.TraceId.ToHexString();
-        }
-#endif
         if (extendedProperties is null)
         {
             return;

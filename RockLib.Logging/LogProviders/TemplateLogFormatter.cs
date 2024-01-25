@@ -57,6 +57,9 @@ public class TemplateLogFormatter : ILogFormatter
         AddSimpleTokenHandler("correlationId", logEntry => logEntry.CorrelationId);
         AddSimpleTokenHandler("businessProcessId", logEntry => logEntry.BusinessProcessId);
         AddSimpleTokenHandler("businessActivityId", logEntry => logEntry.BusinessActivityId);
+        AddSimpleTokenHandler("traceId", logEntry => logEntry.TraceId);
+        AddSimpleTokenHandler("spanId", logEntry => logEntry.SpanId);
+        AddSimpleTokenHandler("parentSpanId", logEntry => logEntry.ParentSpanId);
 
         AddExtendedPropertyTokenHandler("callerInfo", "CallerInfo");
 
