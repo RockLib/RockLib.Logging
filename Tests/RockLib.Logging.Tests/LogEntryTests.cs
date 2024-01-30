@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Xunit;
 
@@ -225,6 +226,48 @@ public static class LogEntryTests
         logEntry.ExtendedProperties[nameof(foo)].Should().Be(foo);
         logEntry.ExtendedProperties[nameof(bar)].Should().BeSameAs(bar);
         logEntry.ExtendedProperties.Count.Should().Be(2);
+    }
+
+    [Fact]
+    public static void SetDistrubtedTracingPropertiesWithTraceDataWhenCurrentActivityNotNull()
+    {
+#if NET5_0_OR_GREATER || NETCOREAPP2_0_OR_GREATER
+        var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+
+#pragma warning disable CA2000 // Dispose objects before losing scope. Cannot use a using statement here because some .NET versions of this class are NOT disposable.
+        var a = new Activity("foo");
+#pragma warning restore CA2000 // Dispose objects before losing scope
+        a.Start();
+
+        logEntry.SetDistributedTracingProperties();
+
+        logEntry.TraceId.Should().Be(Activity.Current?.TraceId.ToString());
+        logEntry.SpanId.Should().Be(Activity.Current?.SpanId.ToString());
+        logEntry.ParentSpanId.Should().Be(Activity.Current?.ParentSpanId.ToString());
+#endif
+    }
+
+    [Fact]
+    public static void SetDistributedTracingPropertiesToNullWhenCurrentActivityIsNull()
+    {
+        var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+
+        logEntry.SetDistributedTracingProperties();
+
+        logEntry.TraceId.Should().BeNull();
+        logEntry.SpanId.Should().BeNull();
+        logEntry.ParentSpanId.Should().BeNull();
+    }
+
+    [Fact]
+    public static void SetExtendedPropertiesWithoutTraceData()
+    {
+        var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
+
+        logEntry.SetExtendedProperties(null);
+
+        logEntry.ExtendedProperties.Should().NotContainKey("SpanId");
+        logEntry.ExtendedProperties.Should().NotContainKey("TraceId");
     }
 
     [Fact]

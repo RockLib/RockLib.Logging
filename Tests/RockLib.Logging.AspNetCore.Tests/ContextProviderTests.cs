@@ -71,21 +71,6 @@ public class ContextProviderTests
         logEntry.CorrelationId.Should().Be(correlationId);
     }
 
-    [Fact(DisplayName = "CorrelationIdContextProvider.TraceId is empty and not added to the LogEntry")]
-    public void CorrelationIdContextProviderNoTraceId()
-    {
-        var idAccessorMock = new Mock<ICorrelationIdAccessor>();
-
-        var contextProvider = new CorrelationIdContextProvider(idAccessorMock.Object);
-        Assert.Null(contextProvider.Accessor?.TraceId);
-        Assert.Null(contextProvider.Accessor?.SpanId);
-        var logEntry = new LogEntry();
-
-        contextProvider.AddContext(logEntry);
-        logEntry.ExtendedProperties["TraceId"].Should().BeNull(); 
-        logEntry.ExtendedProperties["SpanId"].Should().BeNull();
-    }
-
     [Fact(DisplayName = "ForwardedForContextProvider uses IHttpContextAccessor correctly")]
     public void ForwardedForContextProviderConstructor1()
     {
