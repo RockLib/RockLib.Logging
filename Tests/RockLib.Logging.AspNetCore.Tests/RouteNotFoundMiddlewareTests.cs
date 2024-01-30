@@ -65,7 +65,7 @@ public class RouteNotFoundMiddlewareTests
 
         var middleware = new RouteNotFoundMiddleware(next);
 
-        await middleware.InvokeAsync(httpContext, loggerName => mockLogger.Object).ConfigureAwait(false);
+        await middleware.InvokeAsync(httpContext, loggerName => mockLogger.Object).ConfigureAwait(true);
 
         mockLogger.Invocations.Count.Should().Be(0);
     }
@@ -90,7 +90,7 @@ public class RouteNotFoundMiddlewareTests
 
         var middleware = new RouteNotFoundMiddleware(next);
 
-        await middleware.InvokeAsync(httpContextMock.Object, loggerName => mockLogger.Object).ConfigureAwait(false);
+        await middleware.InvokeAsync(httpContextMock.Object, loggerName => mockLogger.Object).ConfigureAwait(true);
 
         mockLogger.Invocations.Count.Should().Be(1);
 

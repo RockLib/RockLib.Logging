@@ -114,12 +114,12 @@ public static class FileLogProviderTests
 
         var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
-        await fileLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
+        await fileLogProvider.WriteAsync(logEntry).ConfigureAwait(true);
 
         try
         {
 #if NET6_0_OR_GREATER
-            var output = await File.ReadAllTextAsync(_file).ConfigureAwait(false);
+            var output = await File.ReadAllTextAsync(_file).ConfigureAwait(true);
 #else
             var output = File.ReadAllText(_file);
 #endif

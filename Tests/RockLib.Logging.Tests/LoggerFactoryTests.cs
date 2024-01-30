@@ -455,7 +455,7 @@ public static class LoggerFactoryTests
 
         public int Usages { get; private set; }
 
-        public string this[string key]
+        public string? this[string key]
         {
             get { Usages++;  return _configuration[key]; }
             set { Usages++; _configuration[key] = value; }
@@ -471,7 +471,7 @@ public static class LoggerFactoryTests
             get { Usages++; return _configuration.Path; }
         }
 
-        public string Value
+        public string? Value
         {
             get { Usages++; return _configuration.Value; }
             set { Usages++; _configuration.Value = value; }

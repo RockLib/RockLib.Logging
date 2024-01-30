@@ -42,7 +42,7 @@ public class RouteNotFoundMiddlewareExtensionsTests
 
         var pipeline = applicationBuilder.Build();
 
-        await pipeline(httpContextMock.Object).ConfigureAwait(false);
+        await pipeline(httpContextMock.Object).ConfigureAwait(true);
 
         mockLogger.Invocations.Count.Should().Be(1);
 

@@ -126,7 +126,7 @@ public class RockLibLoggerProvider : ILoggerProvider
     /// </summary>
     ~RockLibLoggerProvider() => Dispose(false);
 
-    private void ReloadLoggerOptions(RockLibLoggerOptions options, string optionsName)
+    private void ReloadLoggerOptions(RockLibLoggerOptions options, string? optionsName)
     {
         if (OptionsNameMatchesLoggerName(optionsName))
         {
@@ -141,7 +141,7 @@ public class RockLibLoggerProvider : ILoggerProvider
         new(Logger, categoryName, ScopeProvider);
 
 #pragma warning disable CA1820 // Test for empty strings using string length
-    private bool OptionsNameMatchesLoggerName(string optionsName) =>
+    private bool OptionsNameMatchesLoggerName(string? optionsName) =>
         string.Equals(optionsName, Logger.Name, StringComparison.OrdinalIgnoreCase)
             || (string.Equals(optionsName, Options.DefaultName, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(Logger.Name, DefaultName, StringComparison.OrdinalIgnoreCase));

@@ -89,10 +89,8 @@ public class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     }
 
     /// <inheritdoc/>
-#pragma warning disable CS8603 // Possible null reference return.
-    public IDisposable BeginScope<TState>(TState state) =>
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull =>
         ScopeProvider?.Push(state) ?? null;
-#pragma warning restore CS8603 // Possible null reference return.
 
     private static object GetStateObject(object state)
     {

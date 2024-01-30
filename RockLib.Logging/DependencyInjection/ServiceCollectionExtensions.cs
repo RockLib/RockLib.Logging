@@ -243,7 +243,7 @@ public static class ServiceCollectionExtensions
         services.Add(new ServiceDescriptor(typeof(LoggerLookup), LoggerLookupRegistration, lifetime));
     }
 
-    internal static bool NamesEqual(string loggerName, string lookupName)
+    internal static bool NamesEqual(string loggerName, string? lookupName)
     {
         if (string.Equals(loggerName, lookupName, StringComparison.OrdinalIgnoreCase))
         {

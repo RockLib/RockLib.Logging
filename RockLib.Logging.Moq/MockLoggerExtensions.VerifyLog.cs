@@ -40,7 +40,7 @@ public partial class MockLoggerExtensions
         var matchingLogEntry = GetMatchingLogEntryExpression(matchingMessage, matchingLogLevel, hasMatchingException, matchingExtendedProperties);
 
         mockLogger.Verify(mock => mock.Log(It.Is(matchingLogEntry), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()),
-            times ?? Times.Once(), failMessage);
+            times ?? Times.Once(), failMessage!);
     }
 
     private static Expression<Func<LogEntry, bool>> GetMatchingMessageExpression(string? message)

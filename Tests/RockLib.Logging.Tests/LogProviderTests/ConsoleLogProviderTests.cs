@@ -116,7 +116,7 @@ public static class ConsoleLogProviderTests
 
                 var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
-                await consoleLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
+                await consoleLogProvider.WriteAsync(logEntry).ConfigureAwait(true);
             }
             finally
             {

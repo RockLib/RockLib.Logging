@@ -188,10 +188,10 @@ public sealed class RollingFileLogProviderTests : IDisposable
 
         var logEntry = new LogEntry("Hello, world!", LogLevel.Info);
 
-        await rollingFileLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
+        await rollingFileLogProvider.WriteAsync(logEntry).ConfigureAwait(true);
 
 #if NET6_0_OR_GREATER
-        var output = await File.ReadAllTextAsync(_logFilePath).ConfigureAwait(false);
+        var output = await File.ReadAllTextAsync(_logFilePath).ConfigureAwait(true);
 #else
         var output = File.ReadAllText(_logFilePath);
 #endif
@@ -212,10 +212,10 @@ public sealed class RollingFileLogProviderTests : IDisposable
 
         GetFileCount().Should().Be(0);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false);
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true);
         GetFileCount().Should().Be(1);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(true);
         GetFileCount().Should().Be(2);
     }
 
@@ -233,19 +233,19 @@ public sealed class RollingFileLogProviderTests : IDisposable
 
         GetFileCount().Should().Be(0);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false);
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true);
         GetFileCount().Should().Be(1);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(true);
         GetFileCount().Should().Be(2);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(true);
         GetFileCount().Should().Be(3);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(true);
         GetFileCount().Should().Be(3);
 
-        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(false);
+        await MakeOneArchiveFile(maxFileSizeKilobytes, rollingFileLogProvider).ConfigureAwait(true);
         GetFileCount().Should().Be(3);
     }
 
@@ -262,19 +262,19 @@ public sealed class RollingFileLogProviderTests : IDisposable
 
         GetFileCount().Should().Be(0);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // New file, doesn't consume TimeSet
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // New file, doesn't consume TimeSet
         GetFileCount().Should().Be(1);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // A) Archive: Different date, different hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // A) Archive: Different date, different hour.
         GetFileCount().Should().Be(2);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // B) Archive: Different date, same hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // B) Archive: Different date, same hour.
         GetFileCount().Should().Be(3);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // C) Archive: Same date, different hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // C) Archive: Same date, different hour.
         GetFileCount().Should().Be(4);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // D) No Archive: Same date, same hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // D) No Archive: Same date, same hour.
         GetFileCount().Should().Be(4);
     }
 
@@ -291,19 +291,19 @@ public sealed class RollingFileLogProviderTests : IDisposable
 
         GetFileCount().Should().Be(0);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // New file, doesn't consume TimeSet
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // New file, doesn't consume TimeSet
         GetFileCount().Should().Be(1);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // A) Archive: Different date, different hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // A) Archive: Different date, different hour.
         GetFileCount().Should().Be(2);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // B) Archive: Different date, same hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // B) Archive: Different date, same hour.
         GetFileCount().Should().Be(3);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // C) No Archive: Same date, different hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // C) No Archive: Same date, different hour.
         GetFileCount().Should().Be(3);
 
-        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(false); // D) No Archive: Same date, same hour.
+        await rollingFileLogProvider.WriteAsync(GetLogEntry()).ConfigureAwait(true); // D) No Archive: Same date, same hour.
         GetFileCount().Should().Be(3);
     }
 

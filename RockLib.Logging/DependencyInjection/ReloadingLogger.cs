@@ -35,7 +35,7 @@ internal sealed class ReloadingLogger : ILogger
         _contextProviders = contextProviders;
         _configureOptions = configureOptions;
         _logger = CreateLogger(_serviceProvider, options);
-        _changeListener = optionsMonitor.OnChange(OptionsMonitorChanged);
+        _changeListener = optionsMonitor.OnChange(OptionsMonitorChanged)!;
     }
 
     public bool IsDisabled => _logger.IsDisabled;
@@ -59,7 +59,7 @@ internal sealed class ReloadingLogger : ILogger
     public void Log(LogEntry logEntry, [CallerMemberName] string? callerMemberName = null, [CallerFilePath] string? callerFilePath = null, [CallerLineNumber] int callerLineNumber = 0) => 
         _logger.Log(logEntry, callerMemberName, callerFilePath, callerLineNumber);
 
-    private void OptionsMonitorChanged(LoggerOptions options, string name)
+    private void OptionsMonitorChanged(LoggerOptions options, string? name)
     {
         if (NamesEqual(Name, name))
         {

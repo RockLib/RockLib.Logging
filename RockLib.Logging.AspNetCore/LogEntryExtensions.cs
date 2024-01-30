@@ -174,7 +174,7 @@ public static class LogEntryExtensions
     /// <param name="forwardedFor">The forwarded for value.</param>
     /// <returns>The same log entry.</returns>
     public static LogEntry SetForwardedFor(this LogEntry logEntry, StringValues forwardedFor) =>
-        logEntry.SetForwardedFor(forwardedFor.ToArray());
+        logEntry.SetForwardedFor(forwardedFor.ToArray()!);
 
     /// <summary>
     /// Sets the forwarded for value to a <see cref="LogEntry"/>.
