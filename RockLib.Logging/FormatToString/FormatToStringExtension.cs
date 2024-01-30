@@ -1,5 +1,4 @@
-﻿using RockLib.Reflection.Optimized;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -144,7 +143,7 @@ internal static class FormatToStringExtension
 
     private static Func<StringBuilder, Exception, string, StringBuilder> GetAppendPropertyValueFunc(PropertyInfo property)
     {
-        var getPropertyValue = property.CreateGetter();
+        var getPropertyValue = new Func<object, object>(value => property.GetValue(value)!);
 
         if (property.Name == "HResult")
         {
@@ -283,14 +282,14 @@ internal static class FormatToStringExtension
                 return;
             }
 
-            var getEntityValidationErrors = entityValidationErrorsProperty.CreateGetter<IEnumerable>();
-            var isValid = isValidProperty.CreateGetter<bool>();
-            var getEntry = entryProperty.CreateGetter();
-            var getEntity = entityProperty.CreateGetter();
+            var getEntityValidationErrors = new Func<object, IEnumerable>(value => (IEnumerable)entityValidationErrorsProperty.GetValue(value)!);
+            var isValid = new Func<object, bool>(value => (bool)isValidProperty.GetValue(value)!);
+            var getEntry = new Func<object, object>(value => entryProperty.GetValue(value)!);
+            var getEntity = new Func<object, object>(value => entityProperty.GetValue(value)!);
             var getObjectType = GetGetObjectTypeFunc(getObjectTypeMethod);
-            var getValidationErrors = validataionErrorsProperty.CreateGetter<IEnumerable>();
-            var getPropertyName = propertyNameProperty.CreateGetter<string>();
-            var getErrorMessage = errorMessageProperty.CreateGetter<string>();
+            var getValidationErrors = new Func<object, IEnumerable>(value => (IEnumerable)validataionErrorsProperty.GetValue(value)!);
+            var getPropertyName = new Func<object, string>(value => (string)propertyNameProperty.GetValue(value)!);
+            var getErrorMessage = new Func<object, string>(value => (string)errorMessageProperty.GetValue(value)!);
 
             dbEntityValidationExceptionType = localDbEntityValidationExceptionType;
             addValidationErrorMessages = (exception, sb, indention) =>

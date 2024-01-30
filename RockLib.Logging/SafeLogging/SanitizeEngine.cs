@@ -1,5 +1,4 @@
-﻿using RockLib.Reflection.Optimized;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -187,7 +186,7 @@ public static class SanitizeEngine
         }
 
         var safeProperties = GetSafeProperties(type, allProperties)
-            .Select(property => new { property.Name, GetValue = property.CreateGetter() })
+            .Select(property => new { property.Name, GetValue = new Func<object, object?>(value => property.GetValue(value))})
             .ToArray();
 
         if (safeProperties.Length == 0)
