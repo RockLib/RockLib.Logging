@@ -6,7 +6,7 @@ using static RockLib.Logging.DependencyInjection.ServiceCollectionExtensions;
 
 namespace RockLib.Logging.DependencyInjection;
 
-internal class ReloadingLogProvider<TOptions> : ILogProvider
+internal sealed class ReloadingLogProvider<TOptions> : ILogProvider
 {
     private readonly Func<TOptions, ILogProvider> _createLogProvider;
     private readonly string _name;

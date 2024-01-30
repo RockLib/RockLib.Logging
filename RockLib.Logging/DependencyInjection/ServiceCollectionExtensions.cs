@@ -39,6 +39,10 @@ public static class ServiceCollectionExtensions
         Action<ILoggerOptions>? configureOptions = null,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(logProcessor);
+#else
         if (services is null)
         {
             throw new ArgumentNullException(nameof(services));
@@ -48,6 +52,7 @@ public static class ServiceCollectionExtensions
         {
             throw new ArgumentNullException(nameof(logProcessor));
         }
+#endif
 
         var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
@@ -88,6 +93,10 @@ public static class ServiceCollectionExtensions
         Action<ILoggerOptions>? configureOptions = null,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(logProcessorRegistration);
+#else
         if (services is null)
         {
             throw new ArgumentNullException(nameof(services));
@@ -97,6 +106,7 @@ public static class ServiceCollectionExtensions
         {
             throw new ArgumentNullException(nameof(logProcessorRegistration));
         }
+#endif
 
         var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
@@ -134,10 +144,14 @@ public static class ServiceCollectionExtensions
         Logger.ProcessingMode processingMode = Logger.ProcessingMode.Background,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(services);
+#else
         if (services is null)
         {
             throw new ArgumentNullException(nameof(services));
         }
+#endif
 
         var builder = new LoggerBuilder(services, loggerName, configureOptions);
 

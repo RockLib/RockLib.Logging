@@ -447,7 +447,7 @@ public static class LoggerFactoryTests
         sender.Should().BeOfType<TestLogger>();
     }
 
-    private class InterceptingConfigurationSection : IConfigurationSection
+    private sealed class InterceptingConfigurationSection : IConfigurationSection
     {
         private readonly IConfigurationSection _configuration;
 
@@ -500,7 +500,7 @@ public static class LoggerFactoryTests
     }
 
 #pragma warning disable CA1812
-    private class TestLogger : ILogger
+    private sealed class TestLogger : ILogger
     {
         public TestLogger(Point location = default, ITestDependency? dependency = null)
         {
@@ -542,7 +542,7 @@ public static class LoggerFactoryTests
     {
     }
 
-    private class TestDependency : ITestDependency
+    private sealed class TestDependency : ITestDependency
     {
     }
 }

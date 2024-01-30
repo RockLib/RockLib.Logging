@@ -9,7 +9,7 @@ using RockLib.Logging.LogProviders;
 
 namespace RockLib.Logging.DependencyInjection;
 
-internal class ReloadingLogger : ILogger
+internal sealed class ReloadingLogger : ILogger
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogProcessor _logProcessor;

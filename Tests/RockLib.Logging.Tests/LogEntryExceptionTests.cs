@@ -166,7 +166,7 @@ public static class LogEntryExceptionTests
     public static void TemplateLogFormatterInvokingConstructorWithNullTemplateThrowsArgumentNullException() =>
         Assert.Throws<ArgumentNullException>(() => new TemplateLogFormatter(null!));
 
-    private class TestingRollingFileLogProvider : RollingFileLogProvider
+    private sealed class TestingRollingFileLogProvider : RollingFileLogProvider
     {
         public TestingRollingFileLogProvider(
             Func<DateTime> getCurrentTime,

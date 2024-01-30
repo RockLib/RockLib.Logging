@@ -36,7 +36,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Debug, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -70,7 +74,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Debug, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -103,7 +111,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Info, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -137,7 +149,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Info, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -170,7 +186,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Warn, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -204,7 +224,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Warn, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -237,7 +261,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Error, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -271,7 +299,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Error, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -304,7 +336,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Fatal, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -338,7 +374,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Fatal, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -371,7 +411,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Audit, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
@@ -405,7 +449,11 @@ public static class LoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         logger.Log(LogLevel.Audit, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);

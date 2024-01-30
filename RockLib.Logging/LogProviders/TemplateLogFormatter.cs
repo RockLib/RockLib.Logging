@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -72,7 +73,11 @@ public class TemplateLogFormatter : ILogFormatter
     /// <param name="template">The template to use when formatting logs.</param>
     public TemplateLogFormatter(string template)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(template);
+#else
         if (template is null) throw new ArgumentNullException(nameof(template));
+#endif
         Template = WebUtility.HtmlDecode(template);
 
         _isHtmlEncoded = _containsHtmlTagsRegex.IsMatch(template);
@@ -101,8 +106,8 @@ public class TemplateLogFormatter : ILogFormatter
     private static void AddDateTimeTokenHandler(string key, Func<LogEntry, DateTime> getDateTime) => _dateTimeTokenHandlers[key] = getDateTime;
 
     private static string FormatSpecificExtendedProperty(LogEntry logEntry, string extendedProperty) => 
-        logEntry.ExtendedProperties.ContainsKey(extendedProperty)
-            ? ConvertToString(logEntry.ExtendedProperties[extendedProperty])
+        logEntry.ExtendedProperties.TryGetValue(extendedProperty, out var value) 
+            ? ConvertToString(value)
             : "N/A";
 
     /// <summary>

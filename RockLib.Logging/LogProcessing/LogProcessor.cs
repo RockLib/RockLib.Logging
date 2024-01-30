@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq.Expressions;
 
 namespace RockLib.Logging.LogProcessing;
 
@@ -47,8 +48,13 @@ public abstract class LogProcessor : ILogProcessor
     /// <param name="logEntry">The log entry to process.</param>
     public virtual void ProcessLogEntry(ILogger logger, LogEntry logEntry)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(logEntry);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
         if (logEntry is null) { throw new ArgumentNullException(nameof(logEntry)); }
+#endif
 
         foreach (var contextProvider in logger.ContextProviders)
         {
@@ -127,8 +133,13 @@ public abstract class LogProcessor : ILogProcessor
     protected virtual void HandleError(Exception? exception, ILogProvider logProvider, LogEntry logEntry,
         IErrorHandler errorHandler, int failureCount, string errorMessageFormat, params object[] errorMessageArgs)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(errorHandler);
+        ArgumentNullException.ThrowIfNull(errorMessageArgs);
+#else
         if (errorHandler is null) throw new ArgumentNullException(nameof(errorHandler));
         if (errorMessageArgs is null) throw new ArgumentNullException(nameof(errorMessageArgs));
+#endif
         TraceError(exception, errorMessageFormat, errorMessageArgs);
 
         var error = new Error(string.Format(CultureInfo.CurrentCulture, errorMessageFormat, errorMessageArgs),
@@ -201,7 +212,7 @@ public abstract class LogProcessor : ILogProcessor
         TraceSource.TraceEvent(TraceEventType.Error, traceId, traceFormat, traceArgs);
     }
 
-    private class NullErrorHandler : IErrorHandler
+    private sealed class NullErrorHandler : IErrorHandler
     {
         public static readonly IErrorHandler Instance = new NullErrorHandler();
         void IErrorHandler.HandleError(Error error) { }

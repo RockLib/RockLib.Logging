@@ -174,7 +174,11 @@ public sealed class Logger : ILogger
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logEntry);
+#else
         if (logEntry is null) throw new ArgumentNullException(nameof(logEntry));
+#endif
 
         if (LogProcessor.IsDisposed || !_canProcessLogs || logEntry.Level < Level)
         {

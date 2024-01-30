@@ -58,10 +58,14 @@ public class LoggerBuilder : ILoggerBuilder
     /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
     public ILoggerBuilder AddLogProvider(Func<IServiceProvider, ILogProvider> logProviderRegistration)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logProviderRegistration);
+#else
         if (logProviderRegistration is null)
         {
             throw new ArgumentNullException(nameof(logProviderRegistration));
         }
+#endif
 
         Services.Configure<LoggerOptions>(LoggerName, options => options.LogProviderRegistrations.Add(logProviderRegistration));
         return this;
@@ -74,10 +78,14 @@ public class LoggerBuilder : ILoggerBuilder
     /// <returns>The same <see cref="ILoggerBuilder"/>.</returns>
     public ILoggerBuilder AddContextProvider(Func<IServiceProvider, IContextProvider> contextProviderRegistration)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(contextProviderRegistration);
+#else
         if (contextProviderRegistration is null)
         {
             throw new ArgumentNullException(nameof(contextProviderRegistration));
         }
+#endif
 
         Services.Configure<LoggerOptions>(LoggerName, options => options.ContextProviderRegistrations.Add(contextProviderRegistration));
         return this;
@@ -92,10 +100,14 @@ public class LoggerBuilder : ILoggerBuilder
     /// <returns>An instance of <see cref="ILogger"/>.</returns>
     public ILogger Build(IServiceProvider serviceProvider)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(serviceProvider);
+#else
         if (serviceProvider is null)
         {
             throw new ArgumentNullException(nameof(serviceProvider));
         }
+#endif
 
         var optionsMonitor = serviceProvider.GetService<IOptionsMonitor<LoggerOptions>>();
         var options = optionsMonitor?.Get(LoggerName) ?? new LoggerOptions();

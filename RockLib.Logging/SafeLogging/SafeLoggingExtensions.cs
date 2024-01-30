@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 namespace RockLib.Logging.SafeLogging;
@@ -37,7 +38,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Debug, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -71,7 +76,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Debug, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -104,7 +113,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Info, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -138,7 +151,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Info, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -171,7 +188,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Warn, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -205,7 +226,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Warn, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -238,7 +263,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Error, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -272,7 +301,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Error, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -305,7 +338,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Fatal, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -339,7 +376,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Fatal, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -372,7 +413,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Audit, message, null, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }
@@ -406,7 +451,11 @@ public static class SafeLoggingExtensions
         [CallerFilePath] string? callerFilePath = null,
         [CallerLineNumber] int callerLineNumber = 0)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
         logger.LogSanitized(LogLevel.Audit, message, exception, extendedProperties, correlationId, businessProcessId,
             businessActivityId, callerMemberName, callerFilePath, callerLineNumber);
     }

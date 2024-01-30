@@ -58,7 +58,11 @@ public static class EnabledExtensions
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="logger"/> is <c>null</c></exception>
     public static bool IsEnabled(this ILogger logger, LogLevel level)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if(logger is null) { throw new ArgumentNullException(nameof(logger)); }
+#endif
 
         return !logger.IsDisabled && level >= logger.Level;
     }

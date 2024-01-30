@@ -118,7 +118,11 @@ public static class FileLogProviderTests
 
         try
         {
+#if NET6_0_OR_GREATER
+            var output = await File.ReadAllTextAsync(_file).ConfigureAwait(false);
+#else
             var output = File.ReadAllText(_file);
+#endif
             output.Should().Be($"Info:Hello, world!{Environment.NewLine}");
         }
         finally

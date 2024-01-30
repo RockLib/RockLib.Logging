@@ -657,13 +657,13 @@ public static class LoggerBuilderExtensionsTests
 
     #endregion
 
-    private class TestLoggerBuilder : ILoggerBuilder
+    private sealed class TestLoggerBuilder : ILoggerBuilder
     {
         public string LoggerName => Logger.DefaultName;
 
-        public IList<Func<IServiceProvider, ILogProvider>> LogProviderRegistrations { get; } = new List<Func<IServiceProvider, ILogProvider>>();
+        public List<Func<IServiceProvider, ILogProvider>> LogProviderRegistrations { get; } = new List<Func<IServiceProvider, ILogProvider>>();
 
-        public IList<Func<IServiceProvider, IContextProvider>> ContextProviderRegistrations { get; } = new List<Func<IServiceProvider, IContextProvider>>();
+        public List<Func<IServiceProvider, IContextProvider>> ContextProviderRegistrations { get; } = new List<Func<IServiceProvider, IContextProvider>>();
 
         public ILoggerBuilder AddLogProvider(Func<IServiceProvider, ILogProvider> logProviderRegistration)
         {
@@ -679,7 +679,7 @@ public static class LoggerBuilderExtensionsTests
     }
 
 #pragma warning disable CA1812
-    private class TestLogProvider : ILogProvider
+    private sealed class TestLogProvider : ILogProvider
     {
         public TestLogProvider(IDependency dependency, int setting) => (Dependency, Setting) = (dependency, setting);
         public IDependency Dependency { get; }
@@ -689,7 +689,7 @@ public static class LoggerBuilderExtensionsTests
         public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken) => throw new NotImplementedException();
     }
 
-    private class TestContextProvider : IContextProvider
+    private sealed class TestContextProvider : IContextProvider
     {
         public TestContextProvider(IDependency dependency, int setting) => (Dependency, Setting) = (dependency, setting);
         public IDependency Dependency { get; }
@@ -697,7 +697,7 @@ public static class LoggerBuilderExtensionsTests
         public void AddContext(LogEntry logEntry) => throw new NotImplementedException();
     }
 
-    private class TestLogFormatter : ILogFormatter
+    private sealed class TestLogFormatter : ILogFormatter
     {
         public TestLogFormatter(IDependency dependency, int setting) => (Dependency, Setting) = (dependency, setting);
         public IDependency Dependency { get; }
@@ -710,7 +710,7 @@ public static class LoggerBuilderExtensionsTests
     {
     }
 
-    private class ConcreteDependency : IDependency
+    private sealed class ConcreteDependency : IDependency
     {
     }
 }

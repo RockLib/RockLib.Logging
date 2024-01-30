@@ -190,7 +190,11 @@ public sealed class RollingFileLogProviderTests : IDisposable
 
         await rollingFileLogProvider.WriteAsync(logEntry).ConfigureAwait(false);
 
+#if NET6_0_OR_GREATER
+        var output = await File.ReadAllTextAsync(_logFilePath).ConfigureAwait(false);
+#else
         var output = File.ReadAllText(_logFilePath);
+#endif
 
         output.Should().Be($"Info:Hello, world!{Environment.NewLine}");
     }
@@ -342,7 +346,7 @@ public sealed class RollingFileLogProviderTests : IDisposable
         return !fileInfo.Exists || (((double)fileInfo.Length) / 1024) < maxFileSizeMegabytes;
     }
 
-    private class TestingRollingFileLogProvider : RollingFileLogProvider
+    private sealed class TestingRollingFileLogProvider : RollingFileLogProvider
     {
         public TestingRollingFileLogProvider(
             string file,
@@ -377,7 +381,7 @@ public sealed class RollingFileLogProviderTests : IDisposable
         public DateTime CurrentTime { get; }
     }
 
-    private class JsonLogFormatter : ILogFormatter
+    private sealed class JsonLogFormatter : ILogFormatter
     {
         public string Format(LogEntry logEntry) => JsonConvert.SerializeObject(logEntry);
     }

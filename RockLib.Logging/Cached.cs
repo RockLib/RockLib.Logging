@@ -24,7 +24,7 @@ internal static class Cached
                 from i in NetworkInterface.GetAllNetworkInterfaces()
                 where IsValidNetworkInterface(i)
                 let p = i.GetIPProperties()
-                where p.GatewayAddresses.Any()
+                where p.GatewayAddresses.Count > 0
                 from a in p.UnicastAddresses
                 where IsDuplicateAddressDetectionStatePreferred(a) && IsDnsEligible(a)
                 select a.Address.ToString();
@@ -41,8 +41,10 @@ internal static class Cached
     private static bool IsValidNetworkInterface(NetworkInterface networkInterface) => networkInterface.OperationalStatus == OperationalStatus.Up
         && (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Ethernet || networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211);
 
+#pragma warning disable CA1416 // Validate platform compatibility
     private static bool IsDuplicateAddressDetectionStatePreferred(UnicastIPAddressInformation addressInfo) => 
         addressInfo.DuplicateAddressDetectionState == DuplicateAddressDetectionState.Preferred;
 
     private static bool IsDnsEligible(UnicastIPAddressInformation addressInfo) => addressInfo.IsDnsEligible;
+#pragma warning restore CA1416 // Validate platform compatibility
 }

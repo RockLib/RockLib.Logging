@@ -13,7 +13,7 @@
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>RockLib Logging Logger</PackageTags>
 		<PublishRepositoryUrl>True</PublishRepositoryUrl>
-		<Version>4.0.2</Version>
+		<Version>5.0.0-alpha.1</Version>
 	</PropertyGroup>
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>

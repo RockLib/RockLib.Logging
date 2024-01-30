@@ -71,12 +71,12 @@ public static class FormattableLogProviderOptionsTests
             .Which.Foo.Should().Be(123);
     }
 
-    private class TestFormattableLogProviderOptions : FormattableLogProviderOptions
+    private sealed class TestFormattableLogProviderOptions : FormattableLogProviderOptions
     {
     }
 
 #pragma warning disable CA1812
-    private class TestLogFormatter : ILogFormatter
+    private sealed class TestLogFormatter : ILogFormatter
     {
         public TestLogFormatter(int foo) => Foo = foo;
 
