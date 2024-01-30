@@ -40,7 +40,11 @@ public class CorrelationIdContextProvider : IContextProvider
     /// <param name="logEntry">The log entry to add custom context to.</param>
     public void AddContext(LogEntry logEntry)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logEntry);
+#else
         if (logEntry is null) { throw new ArgumentNullException(nameof(logEntry)); }
+#endif
         logEntry.CorrelationId ??= Accessor?.CorrelationId;
     }
 }

@@ -29,13 +29,13 @@ public class LogBuilderExtensionTests
         contextProvider.Should().BeOfType<HttpContextProvider>();
     }
 
-    private class TestLoggerBuilder : ILoggerBuilder
+    private sealed class TestLoggerBuilder : ILoggerBuilder
     {
         public string LoggerName => Logger.DefaultName;
 
-        public IList<Func<IServiceProvider, ILogProvider>> LogProviderRegistrations { get; } = new List<Func<IServiceProvider, ILogProvider>>();
+        public List<Func<IServiceProvider, ILogProvider>> LogProviderRegistrations { get; } = new List<Func<IServiceProvider, ILogProvider>>();
 
-        public IList<Func<IServiceProvider, IContextProvider>> ContextProviderRegistrations { get; } = new List<Func<IServiceProvider, IContextProvider>>();
+        public List<Func<IServiceProvider, IContextProvider>> ContextProviderRegistrations { get; } = new List<Func<IServiceProvider, IContextProvider>>();
 
         public ILoggerBuilder AddLogProvider(Func<IServiceProvider, ILogProvider> logProviderRegistration)
         {

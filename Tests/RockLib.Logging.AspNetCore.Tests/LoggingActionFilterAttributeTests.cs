@@ -173,7 +173,7 @@ public class LoggingActionFilterAttributeTests
             new { foo = 123, ResultType = nameof(ObjectResult), ResultObject = "[null]" }, Times.Once());
     }
 
-    private static IServiceProvider GetServiceProvider(ILogger logger)
+    private static ServiceProvider GetServiceProvider(ILogger logger)
     {
         var services = new ServiceCollection();
         services.AddSingleton(logger);

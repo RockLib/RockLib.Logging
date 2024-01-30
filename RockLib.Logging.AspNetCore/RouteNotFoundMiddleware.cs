@@ -73,7 +73,11 @@ public class RouteNotFoundMiddleware
     /// <param name="loggerLookup">The lookup used to retrieve the logger for this request.</param>
     public async Task InvokeAsync(HttpContext context, LoggerLookup loggerLookup)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(context);
+#else
         if (context is null) { throw new ArgumentNullException(nameof(context)); }
+#endif
 
         await _next(context).ConfigureAwait(false);
 
