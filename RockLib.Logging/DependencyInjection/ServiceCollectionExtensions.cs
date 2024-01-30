@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RockLib.Logging.LogProcessing;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace RockLib.Logging.DependencyInjection;

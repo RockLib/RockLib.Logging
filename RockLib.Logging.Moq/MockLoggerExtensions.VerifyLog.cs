@@ -14,7 +14,11 @@ public partial class MockLoggerExtensions
         Expression<Func<Exception, bool>>? hasMatchingException, object? extendedProperties,
         LogLevel? logLevel, Times? times, string? failMessage)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(mockLogger);
+#else
         if (mockLogger is null) { throw new ArgumentNullException(nameof(mockLogger)); }
+#endif
 
         Expression<Func<LogEntry, bool>>? matchingMessage = null, matchingExtendedProperties = null, matchingLogLevel = null;
 
@@ -46,7 +50,11 @@ public partial class MockLoggerExtensions
         var logEntryParameter = Expression.Parameter(typeof(LogEntry), "logEntry");
         Expression body;
 
+#if NET8_0_OR_GREATER
+        if (message.StartsWith('/') && message.EndsWith('/'))
+#else
         if (message.StartsWith("/", StringComparison.CurrentCulture) && message.EndsWith("/", StringComparison.CurrentCulture))
+#endif
         {
             var isMatchMethod = typeof(Regex).GetMethod(nameof(Regex.IsMatch), new Type[] { typeof(string), typeof(string) })!;
             body = Expression.Call(isMatchMethod,
@@ -164,7 +172,11 @@ public partial class MockLoggerExtensions
         switch (lhs)
         {
             case string pattern:
+#if NET8_0_OR_GREATER
+                if (pattern.StartsWith('/') && pattern.EndsWith('/'))
+#else
                 if (pattern.StartsWith("/", StringComparison.CurrentCultureIgnoreCase) && pattern.EndsWith("/", StringComparison.CurrentCultureIgnoreCase))
+#endif
                 {
                     return Regex.IsMatch((string)rhs, pattern.Substring(1, pattern.Length - 2));
                 }

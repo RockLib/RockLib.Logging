@@ -13,7 +13,7 @@
 		<PackageVersion>2.0.1</PackageVersion>
 		<PackageIcon>icon.png</PackageIcon>
 		<PublishRepositoryUrl>True</PublishRepositoryUrl>
-		<Version>2.0.1</Version>
+		<Version>3.0.0-alpha.1</Version>
 	</PropertyGroup>
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
