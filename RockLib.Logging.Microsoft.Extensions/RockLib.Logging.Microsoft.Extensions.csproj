@@ -14,7 +14,7 @@
 		<PackageVersion>2.0.1</PackageVersion>
 		<PublishRepositoryUrl>True</PublishRepositoryUrl>
 		<RootNamespace>RockLib.Logging</RootNamespace>
-		<Version>2.0.1</Version>
+		<Version>3.0.0-alpha.1</Version>
 	</PropertyGroup>
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>

@@ -45,7 +45,11 @@ public class RockLibLogger : Microsoft.Extensions.Logging.ILogger
     /// <inheritdoc/>
     public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatter);
+#else
         if (formatter is null) { throw new ArgumentNullException(nameof(formatter)); }
+#endif
 
         var convertedLogLevel = ConvertLogLevel(logLevel);
 

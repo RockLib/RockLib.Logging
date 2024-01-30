@@ -55,7 +55,7 @@ public static class RockLibLoggerTests
         act.Should().ThrowExactly<ArgumentNullException>().WithMessage("*categoryName*");
     }
 
-    private class TestScopeProvider : IExternalScopeProvider
+    private sealed class TestScopeProvider : IExternalScopeProvider
     {
         public object? State { get; set; }
         public void ForEachScope<TState>(Action<object, TState> callback, TState state) => callback(State!, state);
