@@ -91,7 +91,7 @@ public static class ReloadingLogProviderTests
         logProvider2.Bar.Should().Be("xyz");
     }
 
-    private class TestLogProvider : ILogProvider
+    private sealed class TestLogProvider : ILogProvider
     {
         public int Foo { get; set; }
 
@@ -105,7 +105,7 @@ public static class ReloadingLogProviderTests
     }
 
 #pragma warning disable CA1812
-    private class TestOptions
+    private sealed class TestOptions
     {
         public int Foo { get; set; }
 

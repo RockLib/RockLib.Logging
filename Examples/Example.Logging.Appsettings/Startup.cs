@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RockLib.Logging;
 using RockLib.Logging.DependencyInjection;
 
 namespace Example.Logging

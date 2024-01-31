@@ -288,7 +288,7 @@ public static class LogEntryTests
         logEntry.GetExceptionData().Should().NotBeNull();
     }
 
-    private class Qux
+    private sealed class Qux
     {
         public Qux(int garply) => Garply = garply;
         public int Garply { get; }

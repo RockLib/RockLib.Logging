@@ -40,7 +40,7 @@ public static class RockLibLoggerProviderTests
 
         var logger = new MockLogger().Object;
         var mockOptionsMonitor = new Mock<IOptionsMonitor<RockLibLoggerOptions>>();
-        mockOptionsMonitor.Setup(m => m.OnChange(It.IsAny<Action<RockLibLoggerOptions, string>>()))
+        mockOptionsMonitor.Setup(m => m.OnChange(It.IsAny<Action<RockLibLoggerOptions, string?>>()))
             .Returns(new Mock<IDisposable>().Object)
             .Callback(new Action<Action<RockLibLoggerOptions, string>>(OnChange));
         mockOptionsMonitor.Setup(m => m.Get("")).Returns(options);
@@ -181,7 +181,7 @@ public static class RockLibLoggerProviderTests
         var logger = new MockLogger().Object;
         var mockOptionsMonitor = new Mock<IOptionsMonitor<RockLibLoggerOptions>>();
         var mockChangeReloadToken = new Mock<IDisposable>();
-        mockOptionsMonitor.Setup(m => m.OnChange(It.IsAny<Action<RockLibLoggerOptions, string>>()))
+        mockOptionsMonitor.Setup(m => m.OnChange(It.IsAny<Action<RockLibLoggerOptions, string?>>()))
             .Returns(mockChangeReloadToken.Object);
         mockOptionsMonitor.Setup(m => m.Get("")).Returns(options);
 

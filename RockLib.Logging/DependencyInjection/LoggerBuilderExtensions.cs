@@ -23,10 +23,14 @@ public static class LoggerBuilderExtensions
     public static ILoggerBuilder AddLogProvider<TLogProvider>(this ILoggerBuilder builder, params object[] parameters)
         where TLogProvider : ILogProvider
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(builder);
+#else
         if (builder is null)
         {
             throw new ArgumentNullException(nameof(builder));
         }
+#endif
 
         return builder.AddLogProvider(serviceProvider => ActivatorUtilities.CreateInstance<TLogProvider>(serviceProvider, parameters));
     }
@@ -44,10 +48,14 @@ public static class LoggerBuilderExtensions
     public static ILoggerBuilder AddContextProvider<TContextProvider>(this ILoggerBuilder builder, params object[] parameters)
         where TContextProvider : IContextProvider
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(builder);
+#else
         if (builder is null)
         {
             throw new ArgumentNullException(nameof(builder));
         }
+#endif
 
         return builder.AddContextProvider(serviceProvider => ActivatorUtilities.CreateInstance<TContextProvider>(serviceProvider, parameters));
     }
@@ -73,10 +81,14 @@ public static class LoggerBuilderExtensions
         ConsoleLogProvider.Output? output = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(template);
+#else
         if (template is null)
         {
             throw new ArgumentNullException(nameof(template));
         }
+#endif
 
         return builder.AddConsoleLogProvider<TemplateLogFormatter>(level, output, timeout, template);
     }
@@ -99,10 +111,14 @@ public static class LoggerBuilderExtensions
         ConsoleLogProvider.Output? output = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatter);
+#else
         if (formatter is null)
         {
             throw new ArgumentNullException(nameof(formatter));
         }
+#endif
 
         return builder.AddConsoleLogProvider(serviceProvider => formatter, level, output, timeout);
     }
@@ -150,10 +166,14 @@ public static class LoggerBuilderExtensions
         ConsoleLogProvider.Output? output = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatterRegistration);
+#else
         if (formatterRegistration is null)
         {
             throw new ArgumentNullException(nameof(formatterRegistration));
         }
+#endif
 
         return builder.AddConsoleLogProvider(options =>
         {
@@ -176,10 +196,14 @@ public static class LoggerBuilderExtensions
     public static ILoggerBuilder AddConsoleLogProvider(this ILoggerBuilder builder,
         Action<ConsoleLogProviderOptions>? configureOptions = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(builder);
+#else
         if (builder is null)
         {
             throw new ArgumentNullException(nameof(builder));
         }
+#endif
 
         return builder.AddLogProvider(serviceProvider =>
         {
@@ -209,7 +233,7 @@ public static class LoggerBuilderExtensions
         });
     }
 
-    #endregion
+#endregion
     #region DebugLogProvider
 
     /// <summary>
@@ -229,10 +253,14 @@ public static class LoggerBuilderExtensions
         LogLevel? level = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(template);
+#else
         if (template is null)
         {
             throw new ArgumentNullException(nameof(template));
         }
+#endif
 
         return builder.AddDebugLogProvider<TemplateLogFormatter>(level, timeout, template);
     }
@@ -253,10 +281,14 @@ public static class LoggerBuilderExtensions
         LogLevel? level = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatter);
+#else
         if (formatter is null)
         {
             throw new ArgumentNullException(nameof(formatter));
         }
+#endif
 
         return builder.AddDebugLogProvider(serviceProvider => formatter, level, timeout);
     }
@@ -300,10 +332,14 @@ public static class LoggerBuilderExtensions
         LogLevel? level = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatterRegistration);
+#else
         if (formatterRegistration is null)
         {
             throw new ArgumentNullException(nameof(formatterRegistration));
         }
+#endif
 
         return builder.AddDebugLogProvider(options =>
         {
@@ -325,10 +361,14 @@ public static class LoggerBuilderExtensions
     public static ILoggerBuilder AddDebugLogProvider(this ILoggerBuilder builder,
         Action<DebugLogProviderOptions>? configureOptions = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(builder);
+#else
         if (builder is null)
         {
             throw new ArgumentNullException(nameof(builder));
         }
+#endif
 
         return builder.AddLogProvider(serviceProvider =>
         {
@@ -358,7 +398,7 @@ public static class LoggerBuilderExtensions
         });
     }
 
-    #endregion
+#endregion
     #region FileLogProvider
 
     /// <summary>
@@ -380,10 +420,14 @@ public static class LoggerBuilderExtensions
         LogLevel? level = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(template);
+#else
         if (template is null)
         {
             throw new ArgumentNullException(nameof(template));
         }
+#endif
 
         return builder.AddFileLogProvider<TemplateLogFormatter>(file, level, timeout, template);
     }
@@ -406,10 +450,14 @@ public static class LoggerBuilderExtensions
         LogLevel? level = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatter);
+#else
         if (formatter is null)
         {
             throw new ArgumentNullException(nameof(formatter));
         }
+#endif
 
         return builder.AddFileLogProvider(serviceProvider => formatter, file, level, timeout);
     }
@@ -457,10 +505,14 @@ public static class LoggerBuilderExtensions
         LogLevel? level = null,
         TimeSpan? timeout = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatterRegistration);
+#else
         if (formatterRegistration is null)
         {
             throw new ArgumentNullException(nameof(formatterRegistration));
         }
+#endif
 
         return builder.AddFileLogProvider(options =>
         {
@@ -483,10 +535,14 @@ public static class LoggerBuilderExtensions
     public static ILoggerBuilder AddFileLogProvider(this ILoggerBuilder builder,
         Action<FileLogProviderOptions>? configureOptions = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(builder);
+#else
         if (builder is null)
         {
             throw new ArgumentNullException(nameof(builder));
         }
+#endif
 
         return builder.AddLogProvider(serviceProvider =>
         {
@@ -516,7 +572,7 @@ public static class LoggerBuilderExtensions
         });
     }
 
-    #endregion
+#endregion
     #region RollingFileLogProvider
 
     /// <summary>
@@ -552,10 +608,14 @@ public static class LoggerBuilderExtensions
         int? maxArchiveCount = null,
         RolloverPeriod? rolloverPeriod = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(template);
+#else
         if (template is null)
         {
             throw new ArgumentNullException(nameof(template));
         }
+#endif
 
         return builder.AddRollingFileLogProvider<TemplateLogFormatter>(
             file, level, timeout, maxFileSizeKilobytes, maxArchiveCount, rolloverPeriod, template);
@@ -593,10 +653,14 @@ public static class LoggerBuilderExtensions
         int? maxArchiveCount = null,
         RolloverPeriod? rolloverPeriod = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatter);
+#else
         if (formatter is null)
         {
             throw new ArgumentNullException(nameof(formatter));
         }
+#endif
 
         return builder.AddRollingFileLogProvider(serviceProvider => formatter,
              file, level, timeout, maxFileSizeKilobytes, maxArchiveCount, rolloverPeriod);
@@ -673,10 +737,14 @@ public static class LoggerBuilderExtensions
         int? maxArchiveCount = null,
         RolloverPeriod? rolloverPeriod = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatterRegistration);
+#else
         if (formatterRegistration is null)
         {
             throw new ArgumentNullException(nameof(formatterRegistration));
         }
+#endif
 
         return builder.AddRollingFileLogProvider(options =>
         {
@@ -702,10 +770,14 @@ public static class LoggerBuilderExtensions
     public static ILoggerBuilder AddRollingFileLogProvider(this ILoggerBuilder builder,
         Action<RollingFileLogProviderOptions>? configureOptions = null)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(builder);
+#else
         if (builder is null)
         {
             throw new ArgumentNullException(nameof(builder));
         }
+#endif
 
         return builder.AddLogProvider(serviceProvider =>
         {
@@ -736,5 +808,5 @@ public static class LoggerBuilderExtensions
         });
     }
 
-    #endregion
+#endregion
 }

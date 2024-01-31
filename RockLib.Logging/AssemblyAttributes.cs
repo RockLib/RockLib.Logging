@@ -1,6 +1,5 @@
 ﻿using RockLib.Configuration.ObjectFactory;
 using RockLib.Logging;
-using System;
 using System.Collections.Generic;
 
 [assembly: ConfigSection("RockLib.Logging", typeof(List<Logger>))]

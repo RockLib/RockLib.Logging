@@ -23,12 +23,15 @@ public static class ErrorHandlerExtensions
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="logger"/> is <c>null</c></exception>
     public static void SetErrorHandler(this ILogger logger, Action<Error> errorHandler)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(logger);
+#else
         if (logger is null) { throw new ArgumentNullException(nameof(logger)); }
-
+#endif
         logger.ErrorHandler = new DelegateErrorHandler(errorHandler);
     }
 
-    private class DelegateErrorHandler : IErrorHandler
+    private sealed class DelegateErrorHandler : IErrorHandler
     {
         private readonly Action<Error> _handleError;
         public DelegateErrorHandler(Action<Error> handleError) => _handleError = handleError;

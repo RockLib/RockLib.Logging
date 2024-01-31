@@ -236,7 +236,7 @@ public static class LogProcessorTests
         invocation2.ErrorMessageFormat.Should().Be("Error while re-sending log entry {0} to log provider {1}.");
     }
 
-    private class TestLogProcessor : LogProcessor
+    private sealed class TestLogProcessor : LogProcessor
     {
         private readonly bool _sendToLogProviderShouldThrow;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Builder;
@@ -43,7 +42,7 @@ public class RouteNotFoundMiddlewareExtensionsTests
 
         var pipeline = applicationBuilder.Build();
 
-        await pipeline(httpContextMock.Object).ConfigureAwait(false);
+        await pipeline(httpContextMock.Object).ConfigureAwait(true);
 
         mockLogger.Invocations.Count.Should().Be(1);
 

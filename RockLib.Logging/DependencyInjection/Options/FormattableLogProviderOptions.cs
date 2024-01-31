@@ -21,10 +21,14 @@ public abstract class FormattableLogProviderOptions : LogProviderOptions
     /// <param name="template">The template to use when formatting logs.</param>
     public void SetTemplate(string template)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(template);
+#else
         if (template is null)
         {
             throw new ArgumentNullException(nameof(template));
         }
+#endif
 
         SetFormatter<TemplateLogFormatter>(template);
     }
@@ -36,10 +40,14 @@ public abstract class FormattableLogProviderOptions : LogProviderOptions
     /// <param name="formatter">The <see cref="ILogFormatter"/> to use for formatting logs.</param>
     public void SetFormatter(ILogFormatter formatter)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(formatter);
+#else
         if (formatter is null)
         {
             throw new ArgumentNullException(nameof(formatter));
         }
+#endif
 
         FormatterRegistration = serviceProvider => formatter;
     }

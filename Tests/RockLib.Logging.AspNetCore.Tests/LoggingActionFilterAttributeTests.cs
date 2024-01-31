@@ -69,7 +69,7 @@ public class LoggingActionFilterAttributeTests
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(false);
+        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(true);
 
         mockLogger.VerifyInfo(string.Format(CultureInfo.CurrentCulture, messageFormat, actionName),
             new { foo = 123, ResultType = nameof(AcceptedResult), ResponseStatusCode = 202 }, Times.Once());
@@ -104,7 +104,7 @@ public class LoggingActionFilterAttributeTests
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(false);
+        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(true);
 
         mockLogger.VerifyFatal(string.Format(CultureInfo.CurrentCulture, exceptionMessageFormat, actionName), exception,
             new { foo = 123, ResponseStatusCode = 500 }, Times.Once());
@@ -136,7 +136,7 @@ public class LoggingActionFilterAttributeTests
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(false);
+        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(true);
 
         mockLogger.VerifyInfo(string.Format(CultureInfo.CurrentCulture, messageFormat, actionName),
             new { foo = 123, ResultType = nameof(ObjectResult), ResultObject = resultObject, ResponseStatusCode = 200 }, Times.Once());
@@ -167,13 +167,13 @@ public class LoggingActionFilterAttributeTests
 
         ActionExecutionDelegate next = () => Task.FromResult(actionExecutedContext);
 
-        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(false);
+        await loggingActionFilter.OnActionExecutionAsync(context, next).ConfigureAwait(true);
 
         mockLogger.VerifyInfo(string.Format(CultureInfo.CurrentCulture, messageFormat, actionName),
             new { foo = 123, ResultType = nameof(ObjectResult), ResultObject = "[null]" }, Times.Once());
     }
 
-    private static IServiceProvider GetServiceProvider(ILogger logger)
+    private static ServiceProvider GetServiceProvider(ILogger logger)
     {
         var services = new ServiceCollection();
         services.AddSingleton(logger);

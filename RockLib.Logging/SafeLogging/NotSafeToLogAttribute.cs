@@ -17,10 +17,14 @@ public sealed class NotSafeToLogAttribute : Attribute
     /// <param name="property">The property to decorate.</param>
     public static void Decorate(PropertyInfo property)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(property);
+#else
         if (property is null)
         {
             throw new ArgumentNullException(nameof(property));
         }
+#endif
 
         SanitizeEngine.NotSafeProperties.Add(property);
     }
@@ -32,11 +36,14 @@ public sealed class NotSafeToLogAttribute : Attribute
     /// <param name="expression">An expression that defines the property to decorate.</param>
     public static void Decorate<T>(Expression<Func<T, object>> expression)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(expression);
+#else
         if (expression is null)
         {
             throw new ArgumentNullException(nameof(expression));
         }
-
+#endif
         if (expression.Body is MemberExpression memberExpression
             && memberExpression.Expression == expression.Parameters[0]
             && memberExpression.Member is PropertyInfo property)

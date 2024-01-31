@@ -6,7 +6,7 @@ using static RockLib.Logging.DependencyInjection.ServiceCollectionExtensions;
 
 namespace RockLib.Logging.DependencyInjection;
 
-internal class ReloadingLogProvider<TOptions> : ILogProvider
+internal sealed class ReloadingLogProvider<TOptions> : ILogProvider
 {
     private readonly Func<TOptions, ILogProvider> _createLogProvider;
     private readonly string _name;
@@ -22,7 +22,7 @@ internal class ReloadingLogProvider<TOptions> : ILogProvider
         _configureOptions = configureOptions;
         _logProvider = _createLogProvider(options);
 
-        _changeListener = optionsMonitor.OnChange(OptionsMonitorChanged);
+        _changeListener = optionsMonitor.OnChange(OptionsMonitorChanged)!;
     }
 
     public TimeSpan Timeout => _logProvider.Timeout;
@@ -32,7 +32,7 @@ internal class ReloadingLogProvider<TOptions> : ILogProvider
     public Task WriteAsync(LogEntry logEntry, CancellationToken cancellationToken) =>
         _logProvider.WriteAsync(logEntry, cancellationToken);
 
-    private void OptionsMonitorChanged(TOptions options, string name)
+    private void OptionsMonitorChanged(TOptions options, string? name)
     {
         if (NamesEqual(_name, name))
         {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RockLib.Logging.LogProcessing;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace RockLib.Logging.DependencyInjection;
@@ -39,6 +38,10 @@ public static class ServiceCollectionExtensions
         Action<ILoggerOptions>? configureOptions = null,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(logProcessor);
+#else
         if (services is null)
         {
             throw new ArgumentNullException(nameof(services));
@@ -48,6 +51,7 @@ public static class ServiceCollectionExtensions
         {
             throw new ArgumentNullException(nameof(logProcessor));
         }
+#endif
 
         var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
@@ -88,6 +92,10 @@ public static class ServiceCollectionExtensions
         Action<ILoggerOptions>? configureOptions = null,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentNullException.ThrowIfNull(logProcessorRegistration);
+#else
         if (services is null)
         {
             throw new ArgumentNullException(nameof(services));
@@ -97,6 +105,7 @@ public static class ServiceCollectionExtensions
         {
             throw new ArgumentNullException(nameof(logProcessorRegistration));
         }
+#endif
 
         var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
@@ -134,10 +143,14 @@ public static class ServiceCollectionExtensions
         Logger.ProcessingMode processingMode = Logger.ProcessingMode.Background,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(services);
+#else
         if (services is null)
         {
             throw new ArgumentNullException(nameof(services));
         }
+#endif
 
         var builder = new LoggerBuilder(services, loggerName, configureOptions);
 
@@ -230,7 +243,7 @@ public static class ServiceCollectionExtensions
         services.Add(new ServiceDescriptor(typeof(LoggerLookup), LoggerLookupRegistration, lifetime));
     }
 
-    internal static bool NamesEqual(string loggerName, string lookupName)
+    internal static bool NamesEqual(string loggerName, string? lookupName)
     {
         if (string.Equals(loggerName, lookupName, StringComparison.OrdinalIgnoreCase))
         {

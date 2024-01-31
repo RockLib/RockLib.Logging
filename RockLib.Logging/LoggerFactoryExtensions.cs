@@ -54,8 +54,13 @@ public static class LoggerFactoryExtensions
         DefaultTypes? defaultTypes = null, ValueConverters? valueConverters = null,
         IResolver? resolver = null, bool reloadOnConfigChange = true)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(name);
+#else
         if (configuration is null) throw new ArgumentNullException(nameof(configuration));
         if (name is null) throw new ArgumentNullException(nameof(name));
+#endif
 
         var configCache = _cache.GetValue(configuration, c => new ConcurrentDictionary<string, ILogger>());
         return configCache.GetOrAdd(name, n => configuration.CreateLogger(n, defaultTypes, valueConverters, resolver, reloadOnConfigChange));
@@ -97,8 +102,13 @@ public static class LoggerFactoryExtensions
         DefaultTypes? defaultTypes = null, ValueConverters? valueConverters = null,
         IResolver? resolver = null, bool reloadOnConfigChange = true)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(configuration);
+        ArgumentNullException.ThrowIfNull(name);
+#else
         if(configuration is null) throw new ArgumentNullException(nameof(configuration));
         if(name is null) throw new ArgumentNullException(nameof(name));
+#endif
 
         defaultTypes ??= new DefaultTypes();
         

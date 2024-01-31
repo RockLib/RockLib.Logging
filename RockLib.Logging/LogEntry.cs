@@ -1,5 +1,4 @@
 ﻿using RockLib.Logging.SafeLogging;
-using RockLib.Reflection.Optimized;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -363,10 +362,10 @@ public sealed class LogEntry
 
         var kvpType = typeof(KeyValuePair<,>).MakeGenericType(typeof(string), kvpValueTypes[0]);
 
-        var keyProperty = kvpType.GetProperty("Key");
-        var valueProperty = kvpType.GetProperty("Value");
+        var keyProperty = kvpType.GetProperty("Key")!;
+        var valueProperty = kvpType.GetProperty("Value")!;
 
-        return (keyProperty?.CreateGetter<string>(), valueProperty?.CreateGetter());
+        return (new Func<object, string>(value => (string)keyProperty.GetValue(value)!), new Func<object, object>(value => valueProperty.GetValue(value)!));
     }
 
     private static IReadOnlyCollection<Action<LogEntry, object>> GetSetExtendedPropertyActions(Type type) =>
@@ -375,12 +374,9 @@ public sealed class LogEntry
             .Where(_ => _.GetIndexParameters().Length == 0)
             .Select(GetSetExtendedPropertyAction).ToArray());
 
-    private static Action<LogEntry, object> GetSetExtendedPropertyAction(PropertyInfo property)
-    {
-        var getPropertyValue = property.CreateGetter();
-        return (logEntry, extendedPropertiesObject) =>
-            logEntry.ExtendedProperties[property.Name] = getPropertyValue(extendedPropertiesObject);
-    }
+    private static Action<LogEntry, object> GetSetExtendedPropertyAction(PropertyInfo property) => 
+        (logEntry, extendedPropertiesObject) =>
+            logEntry.ExtendedProperties[property.Name] = property.GetValue(extendedPropertiesObject)!;
 
     private static IReadOnlyCollection<Action<LogEntry, object>> GetSetSafeExtendedPropertyActions(Type type) =>
         _setSafeExtendedPropertyActionsCache.GetOrAdd(type, t =>
@@ -388,10 +384,7 @@ public sealed class LogEntry
             .Where(_ => _.GetIndexParameters().Length == 0)
             .Select(GetSetSafeExtendedPropertyAction).ToArray());
 
-    private static Action<LogEntry, object> GetSetSafeExtendedPropertyAction(PropertyInfo property)
-    {
-        var getPropertyValue = property.CreateGetter();
-        return (logEntry, extendedPropertiesObject) =>
-            logEntry.ExtendedProperties[property.Name] = SanitizeEngine.Sanitize(getPropertyValue(extendedPropertiesObject));
-    }
+    private static Action<LogEntry, object> GetSetSafeExtendedPropertyAction(PropertyInfo property) => 
+        (logEntry, extendedPropertiesObject) =>
+            logEntry.ExtendedProperties[property.Name] = SanitizeEngine.Sanitize(property.GetValue(extendedPropertiesObject));
 }

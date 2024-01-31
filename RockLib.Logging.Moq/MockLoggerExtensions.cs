@@ -25,7 +25,11 @@ public static partial class MockLoggerExtensions
     /// <returns>The same mock logger.</returns>
     public static Mock<ILogger> SetupLogger(this Mock<ILogger> mockLogger, LogLevel level = LogLevel.Debug, string name = Logger.DefaultName)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(mockLogger);
+#else
         if (mockLogger is null) { throw new ArgumentNullException(nameof(mockLogger)); }
+#endif
         mockLogger.Setup(m => m.Level).Returns(level);
         mockLogger.Setup(m => m.Name).Returns(name ?? Logger.DefaultName);
 
