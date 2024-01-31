@@ -24,7 +24,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="Moq" Version="4.20.70" />
-		<PackageReference Include="RockLib.Logging" Version="4.0.2" />
+		<PackageReference Include="RockLib.Logging" Version="5.0.0-alpha.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\LICENSE.md" Pack="true" PackagePath="" />
