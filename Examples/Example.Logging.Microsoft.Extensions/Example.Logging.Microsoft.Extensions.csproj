@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="RockLib.Logging.Microsoft.Extensions" Version="2.0.1" />
+		<PackageReference Include="RockLib.Logging.Microsoft.Extensions" Version="3.0.0-alpha.1" />
 	</ItemGroup>
 </Project>
