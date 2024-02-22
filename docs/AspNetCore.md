@@ -64,7 +64,7 @@ services.AddLogger()
 
 ## Logging action filters
 
-To automatically record an info log for a controller action, decorate it with the [InfoLog] attribute. Doing so will result in an info log with a message in the format "Request handled by {actionName}.". The log will also include, when applicable: the exception thrown by the action, and the "ResponseStatusCode", "ResultType", and "ResultObject" extended properties.
+To automatically record an info log for a controller action, decorate it with the [InfoLog] attribute. Doing so will result in an info log with a message in the format "Request handled by `{actionName}`.". The log will also include, when applicable: the exception thrown by the action, and the "ResponseStatusCode", "ResultType", and "ResultObject" extended properties.
 
 ```csharp
 // GET math/triple/4
