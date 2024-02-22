@@ -101,7 +101,7 @@ It is important to understand exactly what it means to sanitize an extended prop
   - We *could* attempt to sanitize a string value with regular expressions (looking for ssn or cc), but false positives are extremely likely.
 - If the object is a collection, then we return a new collection, where each item is sanitized.
 - If the object is a dictionary, then we return a new dictionary, where the value (but not the key) of each item is sanitized.
-- If the object type is "clean" according to the `SanitizeEngine.IsCleanTypeFunction` property ([see below](#sanitizeengine-istypesafetolog)), then it is not modified.
+- If the object type is "clean" according to the `SanitizeEngine.IsCleanTypeFunction` property ([see below](#sanitizeengineistypesafetolog)), then it is not modified.
 
 Note that sanitation is a recursive process. Any circular references will result in a stack overflow exception.
 
