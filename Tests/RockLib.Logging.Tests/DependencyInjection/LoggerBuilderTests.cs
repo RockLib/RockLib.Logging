@@ -208,8 +208,12 @@ public static class LoggerBuilderTests
         }
 
         var configuration = new ConfigurationBuilder()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
             .AddInMemoryCollection(new Dictionary<string, string>
-            {
+#endif
+        {
                 { "RockLib.Logging:Level", "Warn" },
                 { "RockLib.Logging:LogProviders:Type", "RockLib.Logging.ConsoleLogProvider, RockLib.Logging" },
                 { "RockLib.Logging:LogProviders:Value:Template", "foobar" }
