@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using RockLib.Configuration.ObjectFactory;
-using RockLib.Immutable;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,7 +19,11 @@ public static class LoggerFactoryTests
     public static void LegacyConfigurationFormatIsSupported()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:Providers:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
             })
@@ -43,7 +46,11 @@ public static class LoggerFactoryTests
     public static void CreateLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:0:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                 ["rocklib.logging:1:name"] = "bar",
@@ -66,7 +73,11 @@ public static class LoggerFactoryTests
     public static void CreateLoggerWorksWithSingleUnnamedLogger()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
             })
@@ -87,7 +98,11 @@ public static class LoggerFactoryTests
     public static void CreateLoggerWorksWithSingleNamedLogger()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:name"] = "bar",
                 ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
@@ -109,7 +124,11 @@ public static class LoggerFactoryTests
     public static void CreateLoggerThrowsWhenNotFoundInListOfLoggers()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:0:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                 ["rocklib.logging:1:name"] = "bar",
@@ -128,7 +147,11 @@ public static class LoggerFactoryTests
     public static void CreateLoggerThrowsWhenNotFoundInSingleLogger()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:name"] = "bar",
                 ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
@@ -148,7 +171,11 @@ public static class LoggerFactoryTests
     public static void GetCachedLoggerWorksWithListOfLoggers(string name, Type expectedLogProviderType)
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:0:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                 ["rocklib.logging:1:name"] = "bar",
@@ -170,7 +197,11 @@ public static class LoggerFactoryTests
     public static void GetCachedLoggerWorksWithSingleUnnamedLogger()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
             })
@@ -190,7 +221,11 @@ public static class LoggerFactoryTests
     public static void GetCachedLoggerWorksWithSingleNamedLogger()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:name"] = "bar",
                 ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
@@ -211,7 +246,11 @@ public static class LoggerFactoryTests
     public static void GetCachedLoggerThrowsWhenNotFoundInListOfLoggers()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:0:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
                 ["rocklib.logging:1:name"] = "bar",
@@ -230,7 +269,11 @@ public static class LoggerFactoryTests
     public static void GetCachedLoggerThrowsWhenNotFoundInSingleLogger()
     {
         var config = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:name"] = "bar",
                 ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.BarLogProvider, RockLib.Logging.Tests",
@@ -247,10 +290,10 @@ public static class LoggerFactoryTests
     [Fact]
     public static void SetConfigurationSetsTheConfigurationProperty()
     {
-        var configurationField = GetSemimutableConfigurationField();
+        var configurationSetField = GetConfigurationSetField();
 
-        var existingConfig = configurationField.Value!;
-        configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+        var existingConfig = LoggerFactory.Configuration;
+        configurationSetField.SetValue(null, false);
 
         var config = new ConfigurationBuilder().Build();
 
@@ -262,7 +305,7 @@ public static class LoggerFactoryTests
         }
         finally
         {
-            configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+            configurationSetField.SetValue(null, false);
             LoggerFactory.SetConfiguration(existingConfig);
         }
     }
@@ -270,13 +313,17 @@ public static class LoggerFactoryTests
     [Fact]
     public static void CreateCallsCreateLoggerWithConfigurationProperty()
     {
-        var configurationField = GetSemimutableConfigurationField();
+        var configurationSetField = GetConfigurationSetField();
 
-        var existingConfig = configurationField.Value!;
-        configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+        var existingConfig = LoggerFactory.Configuration;
+        configurationSetField.SetValue(null, false);
 
         var config = new InterceptingConfigurationSection(new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
             })
@@ -300,7 +347,7 @@ public static class LoggerFactoryTests
         }
         finally
         {
-            configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+            configurationSetField.SetValue(null, false);
             LoggerFactory.SetConfiguration(existingConfig);
         }
     }
@@ -308,13 +355,17 @@ public static class LoggerFactoryTests
     [Fact]
     public static void GetCachedCallsGetCachedLoggerWithConfigurationProperty()
     {
-        var configurationField = GetSemimutableConfigurationField();
+        var configurationSetField = GetConfigurationSetField();
 
-        var existingConfig = configurationField.Value!;
-        configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+        var existingConfig = LoggerFactory.Configuration;
+        configurationSetField.SetValue(null, false);
 
         var config = new InterceptingConfigurationSection(new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
+            .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 ["rocklib.logging:LogProviders:type"] = "RockLib.Logging.Tests.FooLogProvider, RockLib.Logging.Tests",
             })
@@ -337,7 +388,7 @@ public static class LoggerFactoryTests
         }
         finally
         {
-            configurationField.GetUnlockValueMethod().Invoke(configurationField, null);
+            configurationSetField.SetValue(null, false);
             LoggerFactory.SetConfiguration(existingConfig);
         }
     }
@@ -346,7 +397,11 @@ public static class LoggerFactoryTests
     public static void DefaultTypesFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
             .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 { "RockLib.Logging:Name", "foo" }
             }).Build();
@@ -367,7 +422,11 @@ public static class LoggerFactoryTests
     public static void ValueConvertersFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
             .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName! },
                 { "RockLib.Logging:Value:Name", "foo" },
@@ -397,7 +456,11 @@ public static class LoggerFactoryTests
     public static void ResolverFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
             .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName! },
                 { "RockLib.Logging:Value:Name", "foo" }
@@ -417,7 +480,11 @@ public static class LoggerFactoryTests
     public static void ReloadOnConfigChangeTrueFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
             .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName! },
                 { "RockLib.Logging:Value:Name", "foo" }
@@ -434,7 +501,11 @@ public static class LoggerFactoryTests
     public static void ReloadOnConfigChangeFalseFunctionsProperly()
     {
         var config = new ConfigurationBuilder()
+#if NET8_0_OR_GREATER
+            .AddInMemoryCollection(new Dictionary<string, string?>
+#else
             .AddInMemoryCollection(new Dictionary<string, string>
+#endif
             {
                 { "RockLib.Logging:Type", typeof(TestLogger).AssemblyQualifiedName! },
                 { "RockLib.Logging:Value:Name", "foo" }
@@ -493,11 +564,8 @@ public static class LoggerFactoryTests
         }
     }
 
-    private static Semimutable<IConfiguration> GetSemimutableConfigurationField()
-    {
-        var field = typeof(LoggerFactory).GetField("_configuration", BindingFlags.NonPublic | BindingFlags.Static)!;
-        return (Semimutable<IConfiguration>)field.GetValue(null)!;
-    }
+    private static FieldInfo GetConfigurationSetField() =>
+        typeof(LoggerFactory).GetField("_configurationSet", BindingFlags.NonPublic | BindingFlags.Static)!;
 
 #pragma warning disable CA1812
     private sealed class TestLogger : ILogger

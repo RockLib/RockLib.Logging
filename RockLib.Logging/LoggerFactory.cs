@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using RockLib.Configuration;
 using RockLib.Configuration.ObjectFactory;
-using RockLib.Immutable;
 using System;
 using System.Collections.Generic;
 using Resolver = RockLib.Configuration.ObjectFactory.Resolver;
@@ -24,8 +23,10 @@ public static class LoggerFactory
     /// </summary>
     public const string AlternateSectionName = "RockLib_Logging";
 
-    private static readonly Semimutable<IConfiguration> _configuration =
-        new(() => Config.Root!.GetCompositeSection(AlternateSectionName, SectionName));
+    // We no longer have Semimutable...but we don't need it either,
+    // this should be sufficient.
+    private static bool _configurationSet;
+    private static IConfiguration? _configuration;
 
     /// <summary>
     /// Sets the instance of <see cref="IConfiguration"/> that defines the loggers that can be created
@@ -36,7 +37,15 @@ public static class LoggerFactory
     /// An instance of <see cref="IConfiguration"/> that defines the loggers that can be retrieved. The
     /// configuration can define a single logger object or a list of logger objects.
     /// </param>
-    public static void SetConfiguration(IConfiguration configuration) => _configuration.Value = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    public static void SetConfiguration(IConfiguration configuration)
+    {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(configuration);
+#else
+        if (configuration is null) { throw new ArgumentNullException(nameof(configuration)); }
+#endif
+        Configuration = configuration;
+    }
 
     /// <summary>
     /// Gets the instance of <see cref="IConfiguration"/> that defines the loggers that can be created
@@ -46,7 +55,29 @@ public static class LoggerFactory
     /// Only the extension methods in this class that do not have an <see cref="IConfiguration"/> parameter
     /// use this property.
     /// </remarks>
-    public static IConfiguration Configuration => _configuration.Value!;
+    public static IConfiguration Configuration
+    {
+        get
+        {
+            if (!_configurationSet)
+            {
+                _configuration = Config.Root!.GetCompositeSection(AlternateSectionName, SectionName);
+                _configurationSet = true;
+            }
+
+            return _configuration!;
+        }
+        private set
+        {
+            if (_configurationSet)
+            {
+                throw new InvalidOperationException("Configuration has already been set.");
+            }
+
+            _configuration = value;
+            _configurationSet = true;
+        }
+    }
 
     /// <summary>
     /// Gets a cached instance of <see cref="ILogger"/> with a name matching the <paramref name="name"/>
