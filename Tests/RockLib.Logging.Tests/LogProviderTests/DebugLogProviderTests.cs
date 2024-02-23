@@ -89,7 +89,7 @@ public static class DebugLogProviderTests
     [Fact]
     public static async Task WriteLineAsyncFormatsTheLogEntryAndWritesItToDebug()
     {
-        var mockDebugLogProvider = new Mock<DebugLogProvider>("{level}:{message}", LogLevel.NotSet, null);
+        var mockDebugLogProvider = new Mock<DebugLogProvider>("{level}:{message}", LogLevel.NotSet, null!);
         mockDebugLogProvider.Protected().As<IProtected>()
             .Setup(m => m.WriteToDebug(It.IsAny<string>()));
 

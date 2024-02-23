@@ -38,7 +38,7 @@ public class LoggingActionFilterAttributeTests
     [Fact(DisplayName = "Constructor sets properties from null parameters")]
     public void ConstructorHappyPath2()
     {
-        var loggingActionFilter = new Mock<LoggingActionFilterAttribute>(null, null, LogLevel.Error).Object;
+        var loggingActionFilter = new Mock<LoggingActionFilterAttribute>(null!, null!, LogLevel.Error).Object;
 
         loggingActionFilter.MessageFormat.Should().Be(DefaultMessageFormat);
         loggingActionFilter.LoggerName.Should().Be(DefaultName);
@@ -53,7 +53,7 @@ public class LoggingActionFilterAttributeTests
         const string actionArgumentName = "foo";
         const int actionArgument = 123;
 
-        IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null, logLevel).Object;
+        IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null!, logLevel).Object;
 
         var mockLogger = new MockLogger();
 
@@ -86,7 +86,7 @@ public class LoggingActionFilterAttributeTests
         const string actionArgumentName = "foo";
         const int actionArgument = 123;
 
-        var mockActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null, logLevel);
+        var mockActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null!, logLevel);
         mockActionFilter.Object.ExceptionMessageFormat = exceptionMessageFormat;
         mockActionFilter.Object.ExceptionLogLevel = exceptionLogLevel;
 
@@ -120,7 +120,7 @@ public class LoggingActionFilterAttributeTests
         const int actionArgument = 123;
         const int resultObject = 123;
 
-        IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null, logLevel).Object;
+        IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null!, logLevel).Object;
 
         var mockLogger = new MockLogger();
 
@@ -151,7 +151,7 @@ public class LoggingActionFilterAttributeTests
         const string actionArgumentName = "foo";
         const int actionArgument = 123;
 
-        IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null, logLevel).Object;
+        IAsyncActionFilter loggingActionFilter = new Mock<LoggingActionFilterAttribute>(messageFormat, null!, logLevel).Object;
 
         var mockLogger = new MockLogger();
 
