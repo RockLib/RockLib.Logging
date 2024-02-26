@@ -11,10 +11,10 @@
 		<PackageReleaseNotes>A changelog is available at https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging.Microsoft.Extensions/CHANGELOG.md.</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>RockLib Logging Logger Microsoft Extensions</PackageTags>
-		<PackageVersion>3.1.0-alpha.1</PackageVersion>
+		<PackageVersion>3.1.0</PackageVersion>
 		<PublishRepositoryUrl>True</PublishRepositoryUrl>
 		<RootNamespace>RockLib.Logging</RootNamespace>
-		<Version>3.1.0-alpha.1</Version>
+		<Version>3.1.0</Version>
 	</PropertyGroup>
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
@@ -27,7 +27,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-		<PackageReference Include="RockLib.Logging" Version="5.1.0-alpha.1" />
+		<PackageReference Include="RockLib.Logging" Version="5.1.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\LICENSE.md" Pack="true" PackagePath="" />
