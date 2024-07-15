@@ -18,3 +18,7 @@ jobs:
     name: Call unit-test workflow
     uses: RockLib/RockLib.Workflows/.github/workflows/unit-test.yml@main
     secrets: inherit
+  call_snyk_test:
+    name: Call snyk-test workflow
+    uses: RockLib/RockLib.Workflows/.github/workflows/snyk-test.yml@snyk-dotnet-runtime-resolution
+    secrets: inherit
