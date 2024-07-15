@@ -22,4 +22,4 @@ jobs:
     name: Call snyk-test workflow
     uses: RockLib/RockLib.Workflows/.github/workflows/snyk-test.yml@snyk-dotnet-runtime-resolution
     secrets: inherit
-    needs: call_unit_tests
+    needs: call_unit_test
