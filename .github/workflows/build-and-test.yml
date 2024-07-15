@@ -7,6 +7,7 @@ on:
   # Workflow will run on pull requests to the main branch.
   pull_request:
     branches: [ main ]
+  push:
 
 ####################################################################################################
 ##  WORKFLOW JOBS
