@@ -47,3 +47,4 @@ Extensions for verifying logging operations with Moq.
   - [RockLib.Logging.AspNetCore](https://www.fuget.org/packages/RockLib.Logging.AspNetCore)
   - [RockLib.Logging.Microsoft.Extensions](https://www.fuget.org/packages/RockLib.Logging.Microsoft.Extensions)
   - [RockLib.Logging.Moq](https://www.fuget.org/packages/RockLib.Logging.Moq)
+
