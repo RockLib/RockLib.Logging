@@ -16,5 +16,5 @@ jobs:
   # Calls the shared snyk-test workflow.
   call_snyk_test:
     name: Call snyk-test workflow
-    uses: RockLib/RockLib.Workflows/.github/workflows/snyk-test.yml@main
+    uses: RockLib/RockLib.Workflows/.github/workflows/snyk-test.yml@snyk-dotnet-runtime-resolution
     secrets: inherit
