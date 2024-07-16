@@ -8,12 +8,12 @@
 		<PackageId>RockLib.Logging</PackageId>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/RockLib/RockLib.Logging</PackageProjectUrl>
-		<PackageVersion>5.1.0</PackageVersion>
+		<PackageVersion>5.1.1</PackageVersion>
 		<PackageReleaseNotes>A changelog is available at https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging/CHANGELOG.md.</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>RockLib Logging Logger</PackageTags>
 		<PublishRepositoryUrl>True</PublishRepositoryUrl>
-		<Version>5.1.0</Version>
+		<Version>5.1.1</Version>
 	</PropertyGroup>
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
@@ -25,7 +25,7 @@
 		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.1" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="RockLib.Diagnostics" Version="3.0.0" />
+		<PackageReference Include="RockLib.Diagnostics" Version="3.0.1" />
 		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
 	<ItemGroup>
