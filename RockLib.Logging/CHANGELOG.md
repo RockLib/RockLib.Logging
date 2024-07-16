@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 5.1.1 - 2024-07-16
 
 #### Changed
-RockLib.Configuration.4.0.0 -> RockLib.Configuration.4.0.1 to fix vulnerability
+RockLib.Diagnostics.3.0.0 -> RockLib.Diagnostics.3.0.1 to fix vulnerability
 
 ## 5.1.0 - 2024-02-26
 
