@@ -5,8 +5,6 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging", "RockLib.Logging\RockLib.Logging.csproj", "{0F6F91D3-E6A9-4694-9598-D0CAC6B115B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Tests", "Tests\RockLib.Logging.Tests\RockLib.Logging.Tests.csproj", "{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq", "RockLib.Logging.Moq\RockLib.Logging.Moq.csproj", "{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3551DC4D-4E50-4108-BDE6-7AC261366358}"
@@ -38,8 +36,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore", "RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj", "{6E8004A0-ACF8-4F0B-9D42-98B9DFCC50A8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "Tests\RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,10 +46,6 @@ Global
 		{0F6F91D3-E6A9-4694-9598-D0CAC6B115B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F6F91D3-E6A9-4694-9598-D0CAC6B115B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F6F91D3-E6A9-4694-9598-D0CAC6B115B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,17 +58,9 @@ Global
 		{6E8004A0-ACF8-4F0B-9D42-98B9DFCC50A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E8004A0-ACF8-4F0B-9D42-98B9DFCC50A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E8004A0-ACF8-4F0B-9D42-98B9DFCC50A8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{280C39C8-EB1D-4DE2-A24F-1462F77FF0C7} = {C29F653B-26C7-4896-AD4B-101519786379}
-		{D7C1E260-999C-4D6D-8BB9-36C8F93301AA} = {C29F653B-26C7-4896-AD4B-101519786379}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {806D89B7-78D1-4038-944B-AFFE3C7A0F00}
