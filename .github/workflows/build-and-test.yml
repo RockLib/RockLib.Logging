@@ -23,4 +23,3 @@ jobs:
     uses: RockLib/RockLib.Workflows/.github/workflows/snyk-test.yml@snyk-dotnet-runtime-resolution
     secrets: inherit
     needs: call_unit_test
-    
