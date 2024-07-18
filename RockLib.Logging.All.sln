@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Tests", "Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq", "RockLib.Logging.Moq\RockLib.Logging.Moq.csproj", "{1781C3A1-5CC5-4338-9D68-B86D7C4C7356}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Moq.Tests", "Tests\RockLib.Logging.Moq.Tests\RockLib.Logging.Moq.Tests.csproj", "{86EFB7D5-CF52-476D-BA9F-1D94778517C9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3551DC4D-4E50-4108-BDE6-7AC261366358}"
 	ProjectSection(SolutionItems) = preProject
 		docs\AspNetCore.md = docs\AspNetCore.md
@@ -36,25 +34,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{3551DC4D-4
 		docs\Tracing.md = docs\Tracing.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{4E9347EA-62E7-4C45-8186-F0767B8303DA}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Logging", "Examples\Example.Logging\Example.Logging.csproj", "{4C6737B1-8404-4A43-A7B0-929DA58154B1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Logging.Appsettings", "Examples\Example.Logging.Appsettings\Example.Logging.Appsettings.csproj", "{DBD30467-311B-4C2F-A614-730535F0C71D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions", "RockLib.Logging.Microsoft.Extensions\RockLib.Logging.Microsoft.Extensions.csproj", "{E581497D-5D5A-4788-BDF3-C40097BAAA32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.Microsoft.Extensions.Tests", "Tests\RockLib.Logging.Microsoft.Extensions.Tests\RockLib.Logging.Microsoft.Extensions.Tests.csproj", "{F0320E13-ADB6-4067-B749-2DB67ED79F30}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Logging.Microsoft.Extensions", "Examples\Example.Logging.Microsoft.Extensions\Example.Logging.Microsoft.Extensions.csproj", "{CC271C12-367D-4C6A-A9C8-0EC9FE210FF6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore", "RockLib.Logging.AspNetCore\RockLib.Logging.AspNetCore.csproj", "{6E8004A0-ACF8-4F0B-9D42-98B9DFCC50A8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RockLib.Logging.AspNetCore.Tests", "Tests\RockLib.Logging.AspNetCore.Tests\RockLib.Logging.AspNetCore.Tests.csproj", "{D7C1E260-999C-4D6D-8BB9-36C8F93301AA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C29F653B-26C7-4896-AD4B-101519786379}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Logging.AspNetCore", "Examples\Example.Logging.AspNetCore\Example.Logging.AspNetCore.csproj", "{4EC96A12-65AA-4879-B55E-F97BFA4896E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
