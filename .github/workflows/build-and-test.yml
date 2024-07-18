@@ -16,7 +16,7 @@ jobs:
   # Calls the shared unit-test workflow.
   call_unit_test:
     name: Call unit-test workflow
-    uses: RockLib/RockLib.Workflows/.github/workflows/unit-test.yml@main
+    uses: RockLib/RockLib.Workflows/.github/workflows/unit-test.yml@snyk-dotnet-runtime-resolution
     secrets: inherit
   call_snyk_test:
     name: Call snyk-test workflow
