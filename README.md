@@ -43,7 +43,7 @@ Extensions for verifying logging operations with Moq.
   - [Change a logger's settings "on the fly" (in a running application)](docs/Reloading.md)
   - [Test logging in an application using RockLib.Logging.Moq](docs/Moq.md)
 - API Reference:
-  - [RockLib.Logging](https://www.fuget.org/packages/RockLib.Logging)
+  - [RockLib.Logging](https://www.nuget.org/packages/RockLib.Logging)
   - [RockLib.Logging.AspNetCore](https://www.fuget.org/packages/RockLib.Logging.AspNetCore)
   - [RockLib.Logging.Microsoft.Extensions](https://www.fuget.org/packages/RockLib.Logging.Microsoft.Extensions)
   - [RockLib.Logging.Moq](https://www.fuget.org/packages/RockLib.Logging.Moq)
