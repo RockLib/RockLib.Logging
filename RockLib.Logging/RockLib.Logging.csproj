@@ -8,12 +8,12 @@
 		<PackageId>RockLib.Logging</PackageId>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/RockLib/RockLib.Logging</PackageProjectUrl>
-		<PackageVersion>5.1.1</PackageVersion>
+		<PackageVersion>5.1.2</PackageVersion>
 		<PackageReleaseNotes>A changelog is available at https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging/CHANGELOG.md.</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>RockLib Logging Logger</PackageTags>
 		<PublishRepositoryUrl>True</PublishRepositoryUrl>
-		<Version>5.1.1</Version>
+		<Version>5.1.2</Version>
 	</PropertyGroup>
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
