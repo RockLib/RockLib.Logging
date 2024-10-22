@@ -11,10 +11,10 @@
 		<PackageReleaseNotes>A changelog is available at https://github.com/RockLib/RockLib.Logging/blob/main/RockLib.Logging.Microsoft.Extensions/CHANGELOG.md.</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>RockLib Logging Logger Microsoft Extensions</PackageTags>
-		<PackageVersion>3.1.1</PackageVersion>
+		<PackageVersion>3.1.2</PackageVersion>
 		<PublishRepositoryUrl>True</PublishRepositoryUrl>
 		<RootNamespace>RockLib.Logging</RootNamespace>
-		<Version>3.1.1</Version>
+		<Version>3.1.2</Version>
 	</PropertyGroup>
 	<PropertyGroup>
 		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(PackageId).xml</DocumentationFile>
