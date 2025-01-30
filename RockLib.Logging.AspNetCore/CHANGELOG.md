@@ -12,8 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated the following package references
 	- RockLib.Logging - 6.0.0-alpha.1
 	- RockLib.DistributedTracing.AspNetCore - 4.0.0
-	- Microsoft.AspNetCore.Mvc.Core - 2.3.0
-	- Microsoft.AspNetCore.Routing - 2.3.0
 
 ## 5.1.2 - 2024-10-22
 
