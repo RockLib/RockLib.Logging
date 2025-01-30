@@ -154,11 +154,13 @@ public static class SanitizeEngine
         return new DictionaryEntry(item.Key, Sanitize(item.Value));
     }
 
+#pragma warning disable CA1859
     private static object SanitizeKeyValuePair<TKey, TValue>(object value)
     {
         var item = (KeyValuePair<TKey, TValue>)value;
         return new KeyValuePair<TKey, object>(item.Key, Sanitize(item.Value)!);
     }
+#pragma warning restore CA1859
 
     private static object SanitizeStringDictionary(object value) =>
         ((IEnumerable)SanitizeCollection(value))
